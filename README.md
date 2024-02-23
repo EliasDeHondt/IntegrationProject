@@ -1,7 +1,7 @@
-# Integration Project 1
+# IntegrationProject1-Development
 
 
-## Project [Integration Project 1] Second year exercises of training applied computer science at KdG.
+## Project [Integration Project 1 - Development] Second year exercises of training applied computer science at KdG.
 
 
 ## 3️⃣ Sprint
