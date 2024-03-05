@@ -3,4 +3,15 @@
 public class Video : IInformation
 {
     
+    public string FilePath { get; set; }
+
+    public Video(string filePath)
+    {
+        FilePath = filePath;
+    }
+
+    public string GetInformation()
+    {
+        return FilePath;
+    }
 }

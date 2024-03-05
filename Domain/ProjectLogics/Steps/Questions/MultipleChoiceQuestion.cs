@@ -1,18 +1,30 @@
 ﻿namespace Domain.ProjectLogics.Steps.Questions;
 
-public class MultipleChoiceQuestion : IQuestion<List<string>>
+public class MultipleChoiceQuestion : IQuestion<IEnumerable<string>>
 {
     
     public IEnumerable<string> Choices { get; set; }
     public string Question { get; set; }
+
+    public MultipleChoiceQuestion(string question, IEnumerable<string> choices)
+    {
+        Question = question;
+        Choices = choices;
+    }
     
-    private List<string> SelectMultiple()
+    private IEnumerable<string> SelectMultiple()
     {
         throw new NotImplementedException();
     }
     
-    public List<string> Answer()
+    public IEnumerable<string> Answer()
     {
         throw new NotImplementedException();
     }
+    
+    public IEnumerable<string> GetChoices()
+    {
+        return Choices;
+    }
+    
 }

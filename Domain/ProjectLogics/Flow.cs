@@ -10,15 +10,37 @@ public class Flow
     public IEnumerable<ISteps> Steps { get; set; }
     
     public IEnumerable<Participation> Participations { get; set; }
+    
+    private bool FlowStopped { get; set; }
+
+    public Flow(FlowType flowType)
+    {
+        FlowType = flowType;
+    }
 
     public void StartFlow()
     {
-        throw new NotImplementedException();
+        PlayFlow();
+        if (FlowType == FlowType.CIRCULAR && !FlowStopped)
+        {
+            StartFlow();
+        }
+
+        FlowStopped = false;
     }
 
+    private void PlayFlow()
+    {
+        using var stepEnumerator = Steps.GetEnumerator();
+        while (stepEnumerator.MoveNext() && !FlowStopped)
+        {
+            //TODO
+        }
+    }
+    
     public void StopFlow()
     {
-        throw new NotImplementedException();
+        FlowStopped = true;
     }
     
     

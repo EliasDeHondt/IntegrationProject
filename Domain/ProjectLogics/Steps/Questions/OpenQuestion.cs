@@ -2,9 +2,14 @@
 
 public class OpenQuestion : IQuestion<string>
 {
-    
-    public string TextField { get; set; }
+
+    public string TextField { get; set; } = string.Empty;
     public string Question { get; set; }
+
+    public OpenQuestion(string question)
+    {
+        Question = question;
+    }
 
     private string SelectOne()
     {
@@ -15,4 +20,10 @@ public class OpenQuestion : IQuestion<string>
     {
         throw new NotImplementedException();
     }
+    
+    public IEnumerable<string> GetChoices()
+    {
+        return new []{TextField};
+    }
+    
 }

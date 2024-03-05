@@ -2,5 +2,7 @@
 
 public interface IInformation
 {
-    
+
+    string GetInformation();
+
 }

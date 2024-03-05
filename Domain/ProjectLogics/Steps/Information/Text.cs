@@ -2,5 +2,15 @@
 
 public class Text : IInformation
 {
+    public string InformationText { get; set; }
     
+    public Text(string informationText)
+    {
+        InformationText = informationText;
+    }
+
+    public string GetInformation()
+    {
+        return InformationText;
+    }
 }
