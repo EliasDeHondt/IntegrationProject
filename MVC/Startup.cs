@@ -1,4 +1,6 @@
 ﻿using System.Text.Json.Serialization;
+using Business_Layer;
+using Domain.ProjectLogics;
 
 namespace MVC;
 
@@ -15,6 +17,9 @@ public class Startup
     {
         // TODO: implementeer dependency injection
 
+        services.AddScoped<FlowManager, FlowManager>();
+        services.AddScoped<IManager<Project>, ProjectManager>();
+        
         using var serviceScope = services.BuildServiceProvider().CreateScope();
         
         // TODO: Initializeer dbcontext

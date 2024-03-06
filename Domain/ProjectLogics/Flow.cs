@@ -4,7 +4,7 @@ namespace Domain.ProjectLogics;
 
 public class Flow
 {
-    
+    public long Id { get; set; }
     public FlowType FlowType { get; set; }
     
     public IEnumerable<ISteps> Steps { get; set; }
@@ -13,9 +13,18 @@ public class Flow
     
     private bool FlowStopped { get; set; }
 
+    public Flow(FlowType flowTye, IEnumerable<ISteps> steps, IEnumerable<Participation> participations)
+    {
+        FlowType = flowTye;
+        Steps = steps;
+        Participations = participations;
+    }
+    
     public Flow(FlowType flowType)
     {
         FlowType = flowType;
+        Steps = new List<ISteps>();
+        Participations = new List<Participation>();
     }
 
     public void StartFlow()

@@ -2,9 +2,10 @@ namespace Domain.Accounts;
 
 public interface IUser
 {
-    public String Name { get; set; }
-    public String Email { get; set; }
-    public String Password { get; set; }
+    public long Id { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public string Password { get; set; }
 
     void Login()
     {

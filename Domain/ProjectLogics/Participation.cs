@@ -3,4 +3,6 @@
 public class Participation
 {
     
+    public long Id { get; set; }
+    
 }

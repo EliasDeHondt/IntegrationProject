@@ -1,4 +1,4 @@
-﻿using Domain.Facilitator;
+﻿using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics.Steps.Information;
 using Domain.ProjectLogics.Steps.Questions;
 
