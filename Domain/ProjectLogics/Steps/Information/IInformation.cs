@@ -2,7 +2,7 @@
 
 public interface IInformation
 {
-
+    
     IStep Step { get; set; }
     string GetInformation();
     

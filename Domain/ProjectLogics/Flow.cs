@@ -6,9 +6,8 @@ public class Flow
 {
     public long Id { get; set; }
     public FlowType FlowType { get; set; }
-    
+    public ITheme Theme { get; set; }
     public IEnumerable<IStep> Steps { get; set; }
-    
     public IEnumerable<Participation> Participations { get; set; }
     
     private bool FlowStopped { get; set; }

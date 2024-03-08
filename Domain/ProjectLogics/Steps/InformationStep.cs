@@ -6,6 +6,7 @@ namespace Domain.ProjectLogics.Steps;
 public class InformationStep : IStep
 {
     public int StepNumber { get; set; }
+    public long Id { get; set; }
     public Note Note { get; set; } = new();
     public Flow Flow { get; set; }
     
