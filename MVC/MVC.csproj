@@ -4,31 +4,81 @@
         <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <IsPackable>false</IsPackable>
+        <MpaRoot>ClientApp</MpaRoot>
+        <WWWRoot>wwwroot\</WWWRoot>
+        <DefaultItemExcludes>$(DefaultItemExcludes);$(MpaRoot)node_modules\**</DefaultItemExcludes>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BL\BL.csproj" />
-      <ProjectReference Include="..\DAL\DAL.csproj" />
-      <ProjectReference Include="..\Domain\Domain.csproj" />
+        <ProjectReference Include="..\BL\BL.csproj"/>
+        <ProjectReference Include="..\DAL\DAL.csproj"/>
+        <ProjectReference Include="..\Domain\Domain.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Views\Projects\" />
+        <Folder Include="Views\Projects\"/>
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Views\Flow\Step.cshtml" />
+        <AdditionalFiles Include="Views\Flow\Step.cshtml"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Update="ClientApp\src\css\site.css">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
+        <Content Update="ClientApp\src\css\site.css">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="wwwroot\js\site.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\js\site.js"/>
     </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.16"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Remove="$(MpaRoot)**"/>
+        <None Remove="$(MpaRoot)**"/>
+        <None Include="$(MpaRoot)**" Exclude="$(MpaRoot)node_modules\**"/>
+
+    </ItemGroup>
+
+    <Target Name="NpmInstall" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(MpaRoot)node_modules') ">
+        <!-- Ensure Node.js is installed -->
+        <Exec Command="node --version" ContinueOnError="true">
+            <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+        </Exec>
+        <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE."/>
+        <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..."/>
+        <Exec WorkingDirectory="$(MpaRoot)" Command="npm install"/>
+    </Target>
+
+    <Target Name="NpmRunBuild" BeforeTargets="Build" DependsOnTargets="NpmInstall">
+        <Exec WorkingDirectory="$(MpaRoot)" Command="npm run build"/>
+    </Target>
+
+    <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+        <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+        <Exec WorkingDirectory="$(MpaRoot)" Command="npm install"/>
+        <Exec WorkingDirectory="$(MpaRoot)" Command="npm run build"/>
+
+        <!-- Include the newly-built files in the publish output -->
+        <ItemGroup>
+            <DistFiles Include="$(WWWRoot)dist\**"/>
+            <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+                <RelativePath>%(DistFiles.Identity)</RelativePath>
+                <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+                <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            </ResolvedFileToPublish>
+        </ItemGroup>
+    </Target>
+
+    <Target Name="NpmClean" BeforeTargets="Clean">
+        <RemoveDir Directories="$(WWWRoot)dist"/>
+        <RemoveDir Directories="$(MpaRoot)node_modules"/>
+    </Target>
 
 </Project>
