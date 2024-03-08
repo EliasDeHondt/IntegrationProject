@@ -6,6 +6,7 @@ using Domain.ProjectLogics.Steps.Information;
 using Domain.ProjectLogics.Steps.Questions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Data_Access_Layer;
 
@@ -33,7 +34,7 @@ public class CodeForgeDbContext : IdentityDbContext<User>
     {
        if (!optionsBuilder.IsConfigured) optionsBuilder.UseNpgsql();
         optionsBuilder.UseLazyLoadingProxies(false);
-        optionsBuilder.LogTo(message => Debug.WriteLine(message));
+        optionsBuilder.LogTo(message => Debug.WriteLine(message), LogLevel.Information);
     }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -48,6 +49,9 @@ public class CodeForgeDbContext : IdentityDbContext<User>
             .HasMany(flow => flow.Steps)
             .WithOne(step => step.Flow);
         
+        modelBuilder.Entity<ProjectOrganizer>()
+            .HasOne(p => p.Note)
+            .WithMany();
     }
     
     public bool CreateDatabase(bool dropDatabase)
