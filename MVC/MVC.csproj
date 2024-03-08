@@ -17,10 +17,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Views\Projects\"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <AdditionalFiles Include="Views\Flow\Step.cshtml"/>
     </ItemGroup>
 
