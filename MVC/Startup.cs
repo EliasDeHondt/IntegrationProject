@@ -1,6 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 using Business_Layer;
+using Data_Access_Layer;
 using Domain.ProjectLogics;
+using Microsoft.EntityFrameworkCore;
 
 namespace MVC;
 
@@ -17,8 +19,12 @@ public class Startup
     {
         // TODO: implementeer dependency injection
 
+        services.AddDbContext<CodeForgeDbContext>(options =>
+            //"Host=34.77.23.244;Port=5432;Database=codeforge;Username=admin;Password=123"
+            options.UseNpgsql("bin/CodeForge.db"));
         services.AddScoped<FlowManager, FlowManager>();
         services.AddScoped<ProjectManager, ProjectManager>();
+        
         
         using var serviceScope = services.BuildServiceProvider().CreateScope();
         

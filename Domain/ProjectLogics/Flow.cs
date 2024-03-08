@@ -7,13 +7,13 @@ public class Flow
     public long Id { get; set; }
     public FlowType FlowType { get; set; }
     
-    public IEnumerable<ISteps> Steps { get; set; }
+    public IEnumerable<IStep> Steps { get; set; }
     
     public IEnumerable<Participation> Participations { get; set; }
     
     private bool FlowStopped { get; set; }
 
-    public Flow(FlowType flowTye, IEnumerable<ISteps> steps, IEnumerable<Participation> participations)
+    public Flow(FlowType flowTye, IEnumerable<IStep> steps, IEnumerable<Participation> participations)
     {
         FlowType = flowTye;
         Steps = steps;
@@ -23,7 +23,7 @@ public class Flow
     public Flow(FlowType flowType)
     {
         FlowType = flowType;
-        Steps = new List<ISteps>();
+        Steps = new List<IStep>();
         Participations = new List<Participation>();
     }
 

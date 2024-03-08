@@ -3,6 +3,7 @@
 public class Text : IInformation
 {
     public string InformationText { get; set; }
+    public IStep Step { get; set; }
     
     public Text(string informationText)
     {

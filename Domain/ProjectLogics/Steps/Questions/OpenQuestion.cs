@@ -5,6 +5,7 @@ public class OpenQuestion : IQuestion<string>
 
     public string TextField { get; set; } = string.Empty;
     public string Question { get; set; }
+    public IStep Step { get; set; }
 
     public OpenQuestion(string question)
     {

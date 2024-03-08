@@ -3,10 +3,11 @@ using Domain.ProjectLogics.Steps.Questions;
 
 namespace Domain.ProjectLogics.Steps;
 
-public class QuestionStep<T> : ISteps
+public class QuestionStep<T> : IStep
 {
     public int StepNumber { get; set; }
-    public Note note { get; set; } = new();
+    public Note Note { get; set; } = new();
+    public Flow Flow { get; set; }
 
     public IQuestion<T> Question { get; set; }
     

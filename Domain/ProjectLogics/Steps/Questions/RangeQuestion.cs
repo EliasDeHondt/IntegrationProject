@@ -5,6 +5,7 @@ public class RangeQuestion : IQuestion<int>
     
     public IEnumerable<string> Choices { get; set; }
     public string Question { get; set; }
+    public IStep Step { get; set; }
     
     public RangeQuestion(string question, IEnumerable<string> choices)
     {

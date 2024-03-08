@@ -3,5 +3,5 @@
 public class Project
 {
     public long Id { get; set; }
-    public Theme Theme { get; set; }
+    public MainTheme MainTheme { get; set; }
 }

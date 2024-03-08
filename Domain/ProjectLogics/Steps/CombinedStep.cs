@@ -4,10 +4,11 @@ using Domain.ProjectLogics.Steps.Questions;
 
 namespace Domain.ProjectLogics.Steps;
 
-public class CombinedStep<T> : ISteps
+public class CombinedStep<T> : IStep
 {
     public int StepNumber { get; set; }
-    public Note note { get; set; } = new();
+    public Note Note { get; set; } = new();
+    public Flow Flow { get; set; }
 
     public IInformation Information { get; set; }
     

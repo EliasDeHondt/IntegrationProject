@@ -4,6 +4,7 @@ public class MultipleChoiceQuestion : IQuestion<IEnumerable<string>>
 {
     
     public IEnumerable<string> Choices { get; set; }
+    public IStep Step { get; set; }
     public string Question { get; set; }
 
     public MultipleChoiceQuestion(string question, IEnumerable<string> choices)

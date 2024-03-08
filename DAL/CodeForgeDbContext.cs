@@ -14,8 +14,13 @@ public class CodeForgeDbContext : IdentityDbContext<User>
     
     public DbSet<Flow> Flows { get; set; }
     public DbSet<Project> Projects { get; set; }
-    public DbSet<ISteps> Steps { get; set; }
-    public DbSet<IQuestion<object>> Questions { get; set; }
+    public DbSet<InformationStep> InformationSteps { get; set; }
+    public DbSet<CombinedStep<object>> CombinedSteps { get; set; }
+    public DbSet<QuestionStep<object>> QuestionSteps { get; set; }
+    public DbSet<MultipleChoiceQuestion> MultipleChoiceQuestions { get; set; }
+    public DbSet<OpenQuestion> OpenQuestions { get; set; }
+    public DbSet<RangeQuestion> RangeQuestions { get; set; }
+    public DbSet<SingleChoiceQuestion> SingleChoiceQuestions { get; set; }
     public DbSet<IInformation> Informations { get; set; }
 
     
@@ -26,7 +31,7 @@ public class CodeForgeDbContext : IdentityDbContext<User>
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-       // if (!optionsBuilder.IsConfigured) optionsBuilder.UseSqlite("Data Source=../GameDb.sqlite");
+       if (!optionsBuilder.IsConfigured) optionsBuilder.UseNpgsql();
         optionsBuilder.UseLazyLoadingProxies(false);
         optionsBuilder.LogTo(message => Debug.WriteLine(message));
     }
@@ -36,10 +41,12 @@ public class CodeForgeDbContext : IdentityDbContext<User>
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Project>()
-            .HasOne(project => project.Theme);
+            .HasOne(project => project.MainTheme)
+            .WithOne(mainTheme => mainTheme.Project);
         
         modelBuilder.Entity<Flow>()
-            .HasMany(flow => flow.Steps);
+            .HasMany(flow => flow.Steps)
+            .WithOne(step => step.Flow);
         
     }
     

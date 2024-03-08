@@ -3,10 +3,12 @@ using Domain.ProjectLogics.Steps.Information;
 
 namespace Domain.ProjectLogics.Steps;
 
-public class InformationStep : ISteps
+public class InformationStep : IStep
 {
     public int StepNumber { get; set; }
-    public Note note { get; set; } = new();
+    public Note Note { get; set; } = new();
+    public Flow Flow { get; set; }
+    
 
     public IInformation Information { get; set; }
     

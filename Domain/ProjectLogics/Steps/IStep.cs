@@ -2,10 +2,12 @@
 
 namespace Domain.ProjectLogics.Steps;
 
-public interface ISteps
+public interface IStep
 {
     int StepNumber { get; set; }
 
-    Note note { get; set; }
+    Note Note { get; set; }
 
+    Flow Flow { get; set; }
+    
 }
