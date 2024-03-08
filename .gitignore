@@ -258,3 +258,4 @@ fabric.properties
 *.db
 *.db-shm
 *.db-wal
+*/wwwroot/dist/
