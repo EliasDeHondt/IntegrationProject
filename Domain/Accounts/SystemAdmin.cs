@@ -1,10 +1,9 @@
 namespace Domain.Accounts;
 
-public class SystemAdmin: IUser
+public class SystemAdmin: User
 {
-    public long Id { get; set; }
-    public string Name { get; set; }
-    public string Email { get; set; }
-    public string Password { get; set; }
-    
+    public override long Id { get; set; }
+    public override string Name { get; set; }
+    public override string Email { get; set; }
+    public override string Password { get; set; }
 }

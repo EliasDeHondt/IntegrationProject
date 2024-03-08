@@ -2,7 +2,7 @@
 
 namespace Business_Layer;
 
-public class FlowManager : IManager<Flow>
+public class FlowManager
 {
     public Flow Add(Flow item)
     {
@@ -25,11 +25,6 @@ public class FlowManager : IManager<Flow>
     }
 
     public List<Flow> GetAll()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Flow Test()
     {
         throw new NotImplementedException();
     }

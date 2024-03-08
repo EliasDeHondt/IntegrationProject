@@ -2,13 +2,13 @@ using Domain.WebApp;
 
 namespace Domain.Accounts;
 
-public class Respondent : IUser
+public class Respondent : User
 {
     
-    public long Id { get; set; }
-    public String Name { get; set; }
-    public String Email { get; set; }
-    public string Password { get; set; }
+    public override long Id { get; set; }
+    public override String Name { get; set; }
+    public override String Email { get; set; }
+    public override string Password { get; set; }
     
     public List<Idea> Ideas { get; set; }
     public List<Reaction> Reactions { get; set; }

@@ -18,7 +18,7 @@ public class Startup
         // TODO: implementeer dependency injection
 
         services.AddScoped<FlowManager, FlowManager>();
-        services.AddScoped<IManager<Project>, ProjectManager>();
+        services.AddScoped<ProjectManager, ProjectManager>();
         
         using var serviceScope = services.BuildServiceProvider().CreateScope();
         

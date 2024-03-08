@@ -2,8 +2,8 @@
 
 public class Theme
 {
-    public long id { get; set; }
-    public Flow flow { get; set; }
-    public Theme? theme { get; set; }
+    public long Id { get; set; }
+    public Flow Flow { get; set; }
+    public IEnumerable<Theme> Themes { get; set; }
     
 }

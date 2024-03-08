@@ -5,5 +5,5 @@ namespace Domain.WebApp;
 public class Like
 {
     public Idea Idea { get; set; }
-    public IUser User { get; set; }
+    public User User { get; set; }
 }

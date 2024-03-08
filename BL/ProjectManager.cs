@@ -2,8 +2,7 @@
 
 namespace Business_Layer;
 
-public class ProjectManager : IManager<Project>
-{
+public class ProjectManager{
     public Project Add(Project item)
     {
         throw new NotImplementedException();
