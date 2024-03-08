@@ -1,18 +1,31 @@
-﻿@model Domain.ProjectLogics.Flow
+﻿@model Domain.ProjectLogics.Steps.IStep
 
 @{
     Layout = null;
+    ViewData["Title"] = "TempFlow";
+    @await RenderSectionAsync("Scripts", required: false)
 }
 
 <!DOCTYPE html>
 
-<html>
+<html lang="">
 <head>
-    <title>title</title>
+    <title>@ViewData["Title"]</title>
 </head>
 <body>
 <div>
-      
+    <div class="container" id="informationContainer">
+        
+    </div>
 </div>
 </body>
+<footer>
+    <button id="butNextStep">Next step</button>
+</footer>
 </html>
+
+@section Scripts{
+    
+    <script src="/dist/step.entry.js" defer></script>
+    
+}

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Data_Access_Layer;
+namespace Data_Access_Layer.DbContext;
 
 public class CodeForgeDbContext : IdentityDbContext<User>
 {
@@ -16,9 +16,7 @@ public class CodeForgeDbContext : IdentityDbContext<User>
     public DbSet<Project> Projects { get; set; }
     public DbSet<MainTheme> MainThemes { get; set; }
     public DbSet<SubTheme> SubThemes { get; set; }
-    public DbSet<InformationStep> InformationSteps { get; set; }
-    public DbSet<CombinedStep> CombinedSteps { get; set; }
-    public DbSet<QuestionStep> QuestionSteps { get; set; }
+    public DbSet<IStep> Steps { get; set; }
     public DbSet<MultipleChoiceQuestion> MultipleChoiceQuestions { get; set; }
     public DbSet<OpenQuestion> OpenQuestions { get; set; }
     public DbSet<RangeQuestion> RangeQuestions { get; set; }
@@ -63,55 +61,20 @@ public class CodeForgeDbContext : IdentityDbContext<User>
             .WithOne(step => step.Flow)
             .HasForeignKey("FK_Step_FlowId");
 
-        modelBuilder.Entity<InformationStep>()
+        modelBuilder.Entity<IStep>()
             .HasOne(step => step.Information)
-            .WithOne()
-            .HasForeignKey("FK_Information_InformationId");
-
-        modelBuilder.Entity<QuestionStep>()
-            .HasOne(step => step.Question)
-            .WithOne()
-            .HasForeignKey("FK_Question_QuestionId");
-        
-        modelBuilder.Entity<CombinedStep>()
-            .HasOne(step => step.Question)
-            .WithOne()
-            .HasForeignKey("FK_Question_QuestionId");
-        
-        modelBuilder.Entity<CombinedStep>()
-            .HasOne(step => step.Information)
-            .WithOne()
-            .HasForeignKey("FK_Information_InformationId");
+            .WithOne(information => information.Step)
+            .HasForeignKey("FK_Step_StepId");
             
-        modelBuilder.Entity<IInformation>()
-            .HasOne(information => information.Step)
-            .WithOne()
+        modelBuilder.Entity<IStep>()
+            .HasOne(step => step.Question)
+            .WithOne(question => question.Step)
             .HasForeignKey("FK_Step_StepId");
 
         modelBuilder.Entity<Participation>()
             .HasOne(participation => participation.Flow)
             .WithMany(flow => flow.Participations)
             .HasForeignKey("FK_Flow_FlowId");
-        
-        modelBuilder.Entity<MultipleChoiceQuestion>()
-            .HasOne(question => question.Step)
-            .WithOne()
-            .HasForeignKey("FK_Step_StepId");
-        
-        modelBuilder.Entity<SingleChoiceQuestion>()
-            .HasOne(question => question.Step)
-            .WithOne()
-            .HasForeignKey("FK_Step_StepId");
-        
-        modelBuilder.Entity<RangeQuestion>()
-            .HasOne(question => question.Step)
-            .WithOne()
-            .HasForeignKey("FK_Step_StepId");
-        
-        modelBuilder.Entity<OpenQuestion>()
-            .HasOne(question => question.Step)
-            .WithOne()
-            .HasForeignKey("FK_Step_StepId");
         
         modelBuilder.Entity<Answer>()
             .HasOne(answer => answer.Question)

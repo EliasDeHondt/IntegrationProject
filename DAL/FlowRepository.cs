@@ -1,4 +1,6 @@
-﻿namespace Data_Access_Layer;
+﻿using Data_Access_Layer.DbContext;
+
+namespace Data_Access_Layer;
 
 public class FlowRepository
 {
@@ -8,6 +10,7 @@ public class FlowRepository
     {
         _context = context;
     }
+
     
     
 }
