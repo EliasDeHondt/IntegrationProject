@@ -12,7 +12,7 @@ public interface IStep
     
     IInformation? Information { get; set; }
     
-    IQuestion<object>? Question { get; set; }
+    IQuestion? Question { get; set; }
     
     Note Note { get; set; }
 

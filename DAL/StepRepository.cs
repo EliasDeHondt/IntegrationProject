@@ -14,14 +14,33 @@ public class StepRepository
         _ctx = ctx;
     }
 
-    public IStep Read(long id)
-    {
-        return _ctx.Steps.Find(id);
+    public IStep Read(long id, Type stepType)
+    { 
+        if(stepType == typeof(InformationStep))
+        {
+            return _ctx.InformationSteps.Find(id);
+        }
+
+        if (stepType == typeof(CombinedStep))
+        {
+            return _ctx.CombinedSteps.Find(id);
+        }
+
+        if (stepType == typeof(QuestionStep))
+        {
+            return _ctx.QuestionSteps.Find(id);
+        }
+
+        return null;
     }
     
     public IStep ReadStepForFlowByNumber(long flowId, int stepNumber)
     {
-        return _ctx.Steps.FirstOrDefault(step => step.StepNumber == stepNumber && step.Flow.Id == flowId);
+
+        return _ctx.Flows.Include(flow => flow.Steps)
+            .First(flow => flow.Id == flowId)
+            .Steps.First(step => step.StepNumber == stepNumber);
+        
     }
     
 }

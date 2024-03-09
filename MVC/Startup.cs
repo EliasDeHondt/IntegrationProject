@@ -30,6 +30,11 @@ public class Startup
         using var serviceScope = services.BuildServiceProvider().CreateScope();
         
         // TODO: Initializeer dbcontext
+        var dbContext = serviceScope.ServiceProvider.GetRequiredService<CodeForgeDbContext>();
+        if (dbContext.CreateDatabase(true))
+        {
+            DataSeeder.Seed(dbContext);
+        }
         
         services.AddControllersWithViews().AddXmlSerializerFormatters().AddJsonOptions(options =>
         {

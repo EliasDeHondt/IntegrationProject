@@ -2,6 +2,7 @@
 
 public enum FlowType
 {
+    UNKNOWN,
     CIRCULAR,
     LINEAR
 }

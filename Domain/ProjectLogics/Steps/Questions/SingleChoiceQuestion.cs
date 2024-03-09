@@ -1,17 +1,38 @@
-﻿namespace Domain.ProjectLogics.Steps.Questions;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class SingleChoiceQuestion : IQuestion<string>
+namespace Domain.ProjectLogics.Steps.Questions;
+
+public class SingleChoiceQuestion : IQuestion
 {
-    public IEnumerable<string> Choices { get; set; }
+    [Required]
+    public ICollection<Choice> Choices { get; set; }
+    [Required]
+    [MaxLength(150)]
     public string Question { get; set; }
+    [Key]
     public long Id { get; set; }
-    public IStep Step { get; set; }
-    public IEnumerable<Answer> Answers { get; set; }
+    [Required]
+    public ICollection<Answer> Answers { get; set; }
 
-    public SingleChoiceQuestion(string question, IEnumerable<string> choices)
+    public SingleChoiceQuestion(string question, ICollection<Choice> choices, ICollection<Answer> answers, long id = 0) : this(question, choices, id)
     {
+        Answers = answers;
+    }
+    
+    public SingleChoiceQuestion(string question, ICollection<Choice> choices, long id = 0)
+    {
+        Id = id;
         Question = question;
         Choices = choices;
+        Answers = new List<Answer>();
+    }
+    
+    public SingleChoiceQuestion()
+    {
+        Id = default;
+        Question = string.Empty;
+        Choices = new List<Choice>();
+        Answers = new List<Answer>();
     }
     
     private string SelectOne()
@@ -19,13 +40,13 @@ public class SingleChoiceQuestion : IQuestion<string>
         throw new NotImplementedException();
     }
 
-    public string Answer()
+    public object Answer()
     {
         throw new NotImplementedException();
     }
 
     public IEnumerable<string> GetChoices()
     {
-        return Choices;
+        throw new NotImplementedException();
     }
 }

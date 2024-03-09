@@ -1,30 +1,40 @@
-﻿namespace Domain.ProjectLogics;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Domain.ProjectLogics;
 
 public class MainTheme : ITheme
 {
+    [Key]
     public long Id { get; set; }
+    [MaxLength(50)]
     public string Subject { get; set; }
-    public IEnumerable<Flow> Flows { get; set; }
-   // public Project Project { get; set; }
+    [Required]
+    public ICollection<Flow> Flows { get; set; }
+    [Required]
     public IEnumerable<SubTheme> Themes { get; set; }
-
-    //public MainTheme(long id, string subject, IEnumerable<Flow> flows, Project project, IEnumerable<SubTheme> themes)
-    public MainTheme(long id, string subject, IEnumerable<Flow> flows, Project project, IEnumerable<SubTheme> themes)
+    
+    public MainTheme(string subject, ICollection<Flow> flows, IEnumerable<SubTheme> themes, long id = 0)
     {
         Id = id;
         Subject = subject;
         Flows = flows;
-        //Project = project;
         Themes = themes;
     }
     
-    //public MainTheme(long id, string subject, Project project)
-    public MainTheme(long id, string subject)
+    public MainTheme(string subject, long id = 0)
     {
         Id = id;
         Subject = subject;
         Flows = new List<Flow>();
-        //Project = project;
         Themes = new List<SubTheme>();
     }
+
+    public MainTheme()
+    {
+        Id = default;
+        Subject = string.Empty;
+        Flows = new List<Flow>();
+        Themes = new List<SubTheme>();
+    }
+    
 }

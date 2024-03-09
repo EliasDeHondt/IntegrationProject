@@ -1,13 +1,12 @@
 ﻿namespace Domain.ProjectLogics.Steps.Questions;
 
-public interface IQuestion<out T>
+public interface IQuestion
 {
 
     long Id { get; set; }
-    IStep Step { get; set; }
-    IEnumerable<Answer> Answers { get; set; }
+    ICollection<Answer> Answers { get; set; }
     string Question { get; set; }
-    T Answer();
+    object Answer();
     IEnumerable<string> GetChoices();
 
 }

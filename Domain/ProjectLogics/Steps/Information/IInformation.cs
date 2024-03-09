@@ -2,8 +2,7 @@
 
 public interface IInformation
 {
-    
-    IStep Step { get; set; }
+    long Id { get; set; }
     string GetInformation();
     
 }
