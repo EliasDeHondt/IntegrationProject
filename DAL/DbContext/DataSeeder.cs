@@ -14,7 +14,7 @@ public class DataSeeder
         MainTheme mainTheme1 = new MainTheme("Climate Change");
         Flow flow = new Flow(FlowType.LINEAR, mainTheme1);
         Text textInfo = new Text("This is an information text");
-        Image imageInfo = new Image("../../MVC/Assets/Images/TestImage.png");
+        Image imageInfo = new Image("../MVC/Assets/Images/TestImage.jpg");
         SingleChoiceQuestion question = new SingleChoiceQuestion("", new List<Choice>());
         InformationStep step1 = new InformationStep(1, textInfo, flow);
         InformationStep step2 = new InformationStep(2, imageInfo, flow);
@@ -22,6 +22,7 @@ public class DataSeeder
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
         flow.Steps.Add(step3);
+        mainTheme1.Flows.Add(flow);
         Project project1 = new Project(mainTheme1);
 
         ctx.MainThemes.Add(mainTheme1);

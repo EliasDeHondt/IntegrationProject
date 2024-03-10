@@ -20,9 +20,7 @@ public class Startup
     {
         // TODO: implementeer dependency injection
 
-        services.AddDbContext<CodeForgeDbContext>(options =>
-            //"Host=34.77.23.244;Port=5432;Database=codeforge;Username=admin;Password=123"
-            options.UseNpgsql("bin/CodeForge.db"));
+        services.AddDbContext<CodeForgeDbContext>();
         services.AddScoped<FlowManager, FlowManager>();
         services.AddScoped<ProjectManager, ProjectManager>();
         

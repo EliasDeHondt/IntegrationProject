@@ -1,14 +1,10 @@
 using Domain.WebApp;
+using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Accounts;
 
-public class Respondent : User
+public class Respondent : IdentityUser
 {
-    
-    public override long Id { get; set; }
-    public override String Name { get; set; }
-    public override String Email { get; set; }
-    public override string Password { get; set; }
     
     public List<Idea> Ideas { get; set; }
     public List<Reaction> Reactions { get; set; }

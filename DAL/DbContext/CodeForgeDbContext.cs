@@ -5,13 +5,14 @@ using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
 using Domain.ProjectLogics.Steps.Questions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Data_Access_Layer.DbContext;
 
-public class CodeForgeDbContext : IdentityDbContext<User>
+public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
 {
     public DbSet<Flow> Flows { get; set; }
     public DbSet<Project> Projects { get; set; }
@@ -37,7 +38,28 @@ public class CodeForgeDbContext : IdentityDbContext<User>
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        if (!optionsBuilder.IsConfigured) optionsBuilder.UseNpgsql();
+        if (!optionsBuilder.IsConfigured)
+        {
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var host = Environment.GetEnvironmentVariable("ASPNETCORE_POSTGRES_HOST");
+            var port = Environment.GetEnvironmentVariable("ASPNETCORE_POSTGRES_PORT");
+            var database = Environment.GetEnvironmentVariable("ASPNETCORE_POSTGRES_DATABASE");
+            var username = Environment.GetEnvironmentVariable("ASPNETCORE_POSTGRES_USER");
+            var password = Environment.GetEnvironmentVariable("ASPNETCORE_POSTGRES_PASSWORD");
+            
+            switch (environment)
+            {
+                case "Development":
+                    optionsBuilder.UseSqlite(@"Data Source=..\CodeForge.db");
+                    break;
+                case "Production":
+                {
+                    string connectionString = $"Host={host};Port={port};Database={database};Username={username};Password={password}";
+                    optionsBuilder.UseNpgsql(connectionString);
+                    break;
+                }
+            }
+        }
         optionsBuilder.UseLazyLoadingProxies(false);
         optionsBuilder.LogTo(message => Debug.WriteLine(message), LogLevel.Information);
     }
@@ -45,7 +67,6 @@ public class CodeForgeDbContext : IdentityDbContext<User>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
         
         modelBuilder.Entity<Project>()
             .HasOne(project => project.MainTheme);
@@ -56,9 +77,12 @@ public class CodeForgeDbContext : IdentityDbContext<User>
             .HasForeignKey("FK_Theme_Id");
 
         modelBuilder.Entity<MainTheme>()
-            .HasMany(mainTheme => mainTheme.Flows)
-            .WithOne()
-            .HasForeignKey("FK_Flow_Id");
+            .HasMany(theme => theme.Flows)
+            .WithOne(flow => (MainTheme)flow.Theme);
+
+        modelBuilder.Entity<SubTheme>()
+            .HasMany(theme => theme.Flows)
+            .WithOne(flow => (SubTheme)flow.Theme);
         
         modelBuilder.Entity<Flow>()
             .HasMany(flow => (ICollection<InformationStep>)flow.Steps)
@@ -75,7 +99,7 @@ public class CodeForgeDbContext : IdentityDbContext<User>
             .WithOne(step => step.Flow)
             .HasForeignKey("FK_Step_FlowId");
 
-        modelBuilder.Entity<Flow>()
+        /*modelBuilder.Entity<Flow>()
             .HasOne(flow => (MainTheme)flow.Theme)
             .WithMany(theme => theme.Flows)
             .HasForeignKey("FK_Theme_Id");
@@ -83,7 +107,7 @@ public class CodeForgeDbContext : IdentityDbContext<User>
         modelBuilder.Entity<Flow>()
             .HasOne(flow => (SubTheme)flow.Theme)
             .WithMany(theme => theme.Flows)
-            .HasForeignKey("FK_Theme_Id");
+            .HasForeignKey("FK_Theme_Id");*/
         
         modelBuilder.Entity<Participation>()
             .HasOne(participation => participation.Flow)
@@ -111,109 +135,67 @@ public class CodeForgeDbContext : IdentityDbContext<User>
             .HasForeignKey("FK_Answer_Id");
 
         modelBuilder.Entity<CombinedStep>()
-            .HasOne(step => (Text)step.Information)
-            .WithOne()
-            .HasForeignKey("FK_Text_Id");
+            .HasOne(step => (Text)step.Information);
 
         modelBuilder.Entity<CombinedStep>()
-            .HasOne(step => (Image)step.Information)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (Image)step.Information);
 
         modelBuilder.Entity<CombinedStep>()
-            .HasOne(step => (Video)step.Information)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (Video)step.Information);
         
         modelBuilder.Entity<CombinedStep>()
-            .HasOne(step => (MultipleChoiceQuestion)step.Question)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (MultipleChoiceQuestion)step.Question);
 
         modelBuilder.Entity<CombinedStep>()
-            .HasOne(step => (RangeQuestion)step.Question)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (RangeQuestion)step.Question);
         
         modelBuilder.Entity<CombinedStep>()
-            .HasOne(step => (SingleChoiceQuestion)step.Question)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (SingleChoiceQuestion)step.Question);
         
         modelBuilder.Entity<CombinedStep>()
-            .HasOne(step => (OpenQuestion)step.Question)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (OpenQuestion)step.Question);
         
         modelBuilder.Entity<InformationStep>()
-            .HasOne(step => (Video)step.Information)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (Video)step.Information);
 
         modelBuilder.Entity<InformationStep>()
-            .HasOne(step => (Image)step.Information)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (Image)step.Information);
 
         modelBuilder.Entity<InformationStep>()
-            .HasOne(step => (Text)step.Information)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (Text)step.Information);
         
         modelBuilder.Entity<InformationStep>()
-            .HasOne(step => (MultipleChoiceQuestion)step.Question)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (MultipleChoiceQuestion)step.Question);
         
         modelBuilder.Entity<InformationStep>()
-            .HasOne(step => (RangeQuestion)step.Question)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (RangeQuestion)step.Question);
         
         modelBuilder.Entity<InformationStep>()
-            .HasOne(step => (OpenQuestion)step.Question)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (OpenQuestion)step.Question);
         
         modelBuilder.Entity<InformationStep>()
-            .HasOne(step => (SingleChoiceQuestion)step.Question)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (SingleChoiceQuestion)step.Question);
         
         modelBuilder.Entity<QuestionStep>()
-            .HasOne(step => (Video)step.Information)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (Video)step.Information);
 
         modelBuilder.Entity<QuestionStep>()
-            .HasOne(step => (Image)step.Information)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (Image)step.Information);
 
         modelBuilder.Entity<QuestionStep>()
-            .HasOne(step => (Text)step.Information)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (Text)step.Information);
         
         modelBuilder.Entity<QuestionStep>()
-            .HasOne(step => (MultipleChoiceQuestion)step.Question)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (MultipleChoiceQuestion)step.Question);
         
         modelBuilder.Entity<QuestionStep>()
-            .HasOne(step => (RangeQuestion)step.Question)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (RangeQuestion)step.Question);
         
         modelBuilder.Entity<QuestionStep>()
-            .HasOne(step => (OpenQuestion)step.Question)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (OpenQuestion)step.Question);
         
         modelBuilder.Entity<QuestionStep>()
-            .HasOne(step => (SingleChoiceQuestion)step.Question)
-            .WithOne()
-            .HasForeignKey("FK_Step_Id");
+            .HasOne(step => (SingleChoiceQuestion)step.Question);
         
         modelBuilder.Entity<Project>().HasKey(project => project.Id);
         modelBuilder.Entity<MainTheme>().HasKey(mainTheme => mainTheme.Id);
