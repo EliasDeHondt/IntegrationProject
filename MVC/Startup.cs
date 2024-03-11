@@ -23,15 +23,19 @@ public class Startup
         services.AddDbContext<CodeForgeDbContext>();
         services.AddScoped<FlowManager, FlowManager>();
         services.AddScoped<ProjectManager, ProjectManager>();
+        services.AddScoped<UnitOfWork, UnitOfWork>();
         
         
         using var serviceScope = services.BuildServiceProvider().CreateScope();
         
         // TODO: Initializeer dbcontext
         var dbContext = serviceScope.ServiceProvider.GetRequiredService<CodeForgeDbContext>();
+        var uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWork>();
         if (dbContext.CreateDatabase(true))
         {
+            uow.BeginTransaction();
             DataSeeder.Seed(dbContext);
+            uow.Commit();
         }
         
         services.AddControllersWithViews().AddXmlSerializerFormatters().AddJsonOptions(options =>

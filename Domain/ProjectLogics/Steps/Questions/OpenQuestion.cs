@@ -2,37 +2,22 @@
 
 namespace Domain.ProjectLogics.Steps.Questions;
 
-public class OpenQuestion : IQuestion
+public class OpenQuestion : QuestionBase
 {
     [Required]
     [MaxLength(600)]
     public string TextField { get; set; } = string.Empty;
-    [Required]
-    [MaxLength(150)]
-    public string Question { get; set; }
-    [Key]
-    public long Id { get; set; }
-    [Required]
-    public ICollection<Answer> Answers { get; set; }
 
-    public OpenQuestion(string question, ICollection<Answer> answers, long id = 0) : this(question, id)
+    public OpenQuestion(string question, ICollection<Answer> answers, long id = 0) : base(answers, question, id)
     {
-        Answers = answers;
     }
     
-    public OpenQuestion(string question, long id = 0)
+    public OpenQuestion(string question, long id = 0) : base(question, id)
     {
-        Id = id;
-        Question = question;
-        Answers = new List<Answer>();
     }
 
     public OpenQuestion()
     {
-        Id = default;
-        Question = string.Empty;
-        TextField = string.Empty;
-        Answers = new List<Answer>();
     }
     
     private string SelectOne()
@@ -40,12 +25,12 @@ public class OpenQuestion : IQuestion
         throw new NotImplementedException();
     }
 
-    public object Answer()
+    public override object Answer()
     {
         throw new NotImplementedException();
     }
     
-    public IEnumerable<string> GetChoices()
+    public override IEnumerable<string> GetChoices()
     {
         return new []{TextField};
     }

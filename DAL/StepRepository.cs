@@ -14,7 +14,7 @@ public class StepRepository
         _ctx = ctx;
     }
 
-    public IStep Read(long id, Type stepType)
+    public StepBase Read(long id, Type stepType)
     { 
         if(stepType == typeof(InformationStep))
         {
@@ -34,7 +34,7 @@ public class StepRepository
         return null;
     }
     
-    public IStep ReadStepForFlowByNumber(long flowId, int stepNumber)
+    public StepBase ReadStepForFlowByNumber(long flowId, int stepNumber)
     {
 
         return _ctx.Flows.Include(flow => flow.Steps)

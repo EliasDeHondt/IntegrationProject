@@ -12,7 +12,7 @@ public class StepManager
         _repo = repo;
     }
     
-    public IStep GetStepForFlowByNumber(long flowId, int stepNumber)
+    public StepBase GetStepForFlowByNumber(long flowId, int stepNumber)
     {
         return _repo.ReadStepForFlowByNumber(flowId, stepNumber);
     }

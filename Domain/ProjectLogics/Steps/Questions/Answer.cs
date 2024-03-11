@@ -7,18 +7,18 @@ public class Answer
     [Key]
     public long Id { get; set; }
     [Required]
-    public IQuestion Question { get; set; }
+    public QuestionBase QuestionBase { get; set; }
     
-    public Answer(IQuestion question, long id = 0)
+    public Answer(QuestionBase questionBase, long id = 0)
     {
         Id = id;
-        Question = question;
+        QuestionBase = questionBase;
     }
     
     public Answer()
     {
         Id = default;
-        Question = new SingleChoiceQuestion();
+        QuestionBase = new SingleChoiceQuestion();
     }
     
 }

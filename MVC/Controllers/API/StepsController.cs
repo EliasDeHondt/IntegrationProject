@@ -19,9 +19,9 @@ public class StepsController : Controller
     [HttpGet("GetNextStep/{stepNumber:int}/{flowId:long}")]
     public ActionResult GetNextStep(int stepNumber, long flowId)
     {
-        IStep step = _manager.GetStepForFlowByNumber(flowId, stepNumber);
-        if (step == null) return NoContent();
-        return Ok(step);
+        StepBase stepBase = _manager.GetStepForFlowByNumber(flowId, stepNumber);
+        if (stepBase == null) return NoContent();
+        return Ok(stepBase);
     }
     
 }

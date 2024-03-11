@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Diagnostics;
-using Domain.Accounts;
+﻿using System.Diagnostics;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
@@ -67,6 +65,22 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<MainTheme>().HasBaseType<ThemeBase>();
+        modelBuilder.Entity<SubTheme>().HasBaseType<ThemeBase>();
+
+        modelBuilder.Entity<Image>().HasBaseType<InformationBase>();
+        modelBuilder.Entity<Text>().HasBaseType<InformationBase>();
+        modelBuilder.Entity<Video>().HasBaseType<InformationBase>();
+
+        modelBuilder.Entity<MultipleChoiceQuestion>().HasBaseType<QuestionBase>();
+        modelBuilder.Entity<SingleChoiceQuestion>().HasBaseType<QuestionBase>();
+        modelBuilder.Entity<RangeQuestion>().HasBaseType<QuestionBase>();
+        modelBuilder.Entity<OpenQuestion>().HasBaseType<QuestionBase>();
+
+        modelBuilder.Entity<QuestionStep>().HasBaseType<StepBase>();
+        modelBuilder.Entity<InformationStep>().HasBaseType<StepBase>();
+        modelBuilder.Entity<CombinedStep>().HasBaseType<StepBase>();
         
         modelBuilder.Entity<Project>()
             .HasOne(project => project.MainTheme);
@@ -74,141 +88,33 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         modelBuilder.Entity<MainTheme>()
             .HasMany(mainTheme => mainTheme.Themes)
             .WithOne(theme => theme.MainTheme)
-            .HasForeignKey("FK_Theme_Id");
+            .HasForeignKey("FK_MainTheme_Id");
 
         modelBuilder.Entity<MainTheme>()
             .HasMany(theme => theme.Flows)
             .WithOne(flow => (MainTheme)flow.Theme);
 
+        modelBuilder.Entity<Flow>()
+            .HasMany(flow => flow.Steps)
+            .WithOne(step => step.Flow)
+            .HasForeignKey("FK_Step_Id");
+        
         modelBuilder.Entity<SubTheme>()
             .HasMany(theme => theme.Flows)
             .WithOne(flow => (SubTheme)flow.Theme);
-        
-        modelBuilder.Entity<Flow>()
-            .HasMany(flow => (ICollection<InformationStep>)flow.Steps)
-            .WithOne(step => step.Flow)
-            .HasForeignKey("FK_Step_FlowId");
-        
-        modelBuilder.Entity<Flow>()
-            .HasMany(flow => (ICollection<QuestionStep>)flow.Steps)
-            .WithOne(step => step.Flow)
-            .HasForeignKey("FK_Step_FlowId");
-        
-        modelBuilder.Entity<Flow>()
-            .HasMany(flow => (ICollection<CombinedStep>)flow.Steps)
-            .WithOne(step => step.Flow)
-            .HasForeignKey("FK_Step_FlowId");
-
-        /*modelBuilder.Entity<Flow>()
-            .HasOne(flow => (MainTheme)flow.Theme)
-            .WithMany(theme => theme.Flows)
-            .HasForeignKey("FK_Theme_Id");
-
-        modelBuilder.Entity<Flow>()
-            .HasOne(flow => (SubTheme)flow.Theme)
-            .WithMany(theme => theme.Flows)
-            .HasForeignKey("FK_Theme_Id");*/
         
         modelBuilder.Entity<Participation>()
             .HasOne(participation => participation.Flow)
             .WithMany(flow => flow.Participations)
             .HasForeignKey("FK_Flow_Id");
         
-        modelBuilder.Entity<Answer>()
-            .HasOne(answer => (SingleChoiceQuestion)answer.Question)
-            .WithMany(question => question.Answers)
-            .HasForeignKey("FK_Answer_Id");
-
-        modelBuilder.Entity<Answer>()
-            .HasOne(answer => (MultipleChoiceQuestion)answer.Question)
-            .WithMany(question => question.Answers)
-            .HasForeignKey("FK_Answer_Id");
-        
-        modelBuilder.Entity<Answer>()
-            .HasOne(answer => (RangeQuestion)answer.Question)
-            .WithMany(question => question.Answers)
-            .HasForeignKey("FK_Answer_Id");
-        
-        modelBuilder.Entity<Answer>()
-            .HasOne(answer => (OpenQuestion)answer.Question)
-            .WithMany(question => question.Answers)
-            .HasForeignKey("FK_Answer_Id");
-
-        modelBuilder.Entity<CombinedStep>()
-            .HasOne(step => (Text)step.Information);
-
-        modelBuilder.Entity<CombinedStep>()
-            .HasOne(step => (Image)step.Information);
-
-        modelBuilder.Entity<CombinedStep>()
-            .HasOne(step => (Video)step.Information);
-        
-        modelBuilder.Entity<CombinedStep>()
-            .HasOne(step => (MultipleChoiceQuestion)step.Question);
-
-        modelBuilder.Entity<CombinedStep>()
-            .HasOne(step => (RangeQuestion)step.Question);
-        
-        modelBuilder.Entity<CombinedStep>()
-            .HasOne(step => (SingleChoiceQuestion)step.Question);
-        
-        modelBuilder.Entity<CombinedStep>()
-            .HasOne(step => (OpenQuestion)step.Question);
-        
-        modelBuilder.Entity<InformationStep>()
-            .HasOne(step => (Video)step.Information);
-
-        modelBuilder.Entity<InformationStep>()
-            .HasOne(step => (Image)step.Information);
-
-        modelBuilder.Entity<InformationStep>()
-            .HasOne(step => (Text)step.Information);
-        
-        modelBuilder.Entity<InformationStep>()
-            .HasOne(step => (MultipleChoiceQuestion)step.Question);
-        
-        modelBuilder.Entity<InformationStep>()
-            .HasOne(step => (RangeQuestion)step.Question);
-        
-        modelBuilder.Entity<InformationStep>()
-            .HasOne(step => (OpenQuestion)step.Question);
-        
-        modelBuilder.Entity<InformationStep>()
-            .HasOne(step => (SingleChoiceQuestion)step.Question);
-        
-        modelBuilder.Entity<QuestionStep>()
-            .HasOne(step => (Video)step.Information);
-
-        modelBuilder.Entity<QuestionStep>()
-            .HasOne(step => (Image)step.Information);
-
-        modelBuilder.Entity<QuestionStep>()
-            .HasOne(step => (Text)step.Information);
-        
-        modelBuilder.Entity<QuestionStep>()
-            .HasOne(step => (MultipleChoiceQuestion)step.Question);
-        
-        modelBuilder.Entity<QuestionStep>()
-            .HasOne(step => (RangeQuestion)step.Question);
-        
-        modelBuilder.Entity<QuestionStep>()
-            .HasOne(step => (OpenQuestion)step.Question);
-        
-        modelBuilder.Entity<QuestionStep>()
-            .HasOne(step => (SingleChoiceQuestion)step.Question);
-        
         modelBuilder.Entity<Project>().HasKey(project => project.Id);
-        modelBuilder.Entity<MainTheme>().HasKey(mainTheme => mainTheme.Id);
-        modelBuilder.Entity<SubTheme>().HasKey(subTheme => subTheme.Id);
+        modelBuilder.Entity<ThemeBase>().HasKey(theme => theme.Id);
+        modelBuilder.Entity<QuestionBase>().HasKey(question => question.Id);
+        modelBuilder.Entity<InformationBase>().HasKey(information => information.Id);
+        modelBuilder.Entity<StepBase>().HasKey(step => step.Id);
         modelBuilder.Entity<Flow>().HasKey(flow => flow.Id);
         modelBuilder.Entity<Participation>().HasKey(participation => participation.Id);
-        modelBuilder.Entity<InformationStep>().HasKey(step => step.Id);
-        modelBuilder.Entity<CombinedStep>().HasKey(step => step.Id);
-        modelBuilder.Entity<QuestionStep>().HasKey(step => step.Id);
-        modelBuilder.Entity<MultipleChoiceQuestion>().HasKey(question => question.Id);
-        modelBuilder.Entity<SingleChoiceQuestion>().HasKey(question => question.Id);
-        modelBuilder.Entity<RangeQuestion>().HasKey(question => question.Id);
-        modelBuilder.Entity<OpenQuestion>().HasKey(question => question.Id);
         modelBuilder.Entity<Answer>().HasKey(answer => answer.Id);
 
 

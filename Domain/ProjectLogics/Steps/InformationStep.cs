@@ -5,38 +5,19 @@ using Domain.ProjectLogics.Steps.Questions;
 
 namespace Domain.ProjectLogics.Steps;
 
-public class InformationStep : IStep
+public class InformationStep : StepBase
 {
     [Required]
-    [Range(0, int.MaxValue)]
-    public int StepNumber { get; set; }
-    [Key]
-    public long Id { get; set; }
+    public InformationBase InformationBase { get; set; }
     
-    [Required]
-    public IInformation Information { get; set; }
-    public IQuestion? Question { get; set; }
-    [Required]
-    public Note Note { get; set; } = new();
-    [Required]
-    public Flow Flow { get; set; }
-    
-    
-    
-    public InformationStep(int stepNumber, IInformation information, Flow flow, long id = 0)
+    public InformationStep(int stepNumber, InformationBase informationBase, Flow flow, long id = 0) : base(stepNumber, flow, id)
     {
-        Id = id;
-        StepNumber = stepNumber;
-        Information = information;
-        Flow = flow;
+        InformationBase = informationBase;
     }
 
     public InformationStep()
     {
-        Id = default;
-        StepNumber = default;
-        Information = new Text();
-        Flow = new Flow();
+        InformationBase = new Text();
     }
     
 }

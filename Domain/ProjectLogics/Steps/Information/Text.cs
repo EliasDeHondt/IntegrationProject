@@ -2,27 +2,23 @@
 
 namespace Domain.ProjectLogics.Steps.Information;
 
-public class Text : IInformation
+public class Text : InformationBase
 {
-    [Key]
-    public long Id { get; set; }
     [Required]
     [MaxLength(600)]
     public string InformationText { get; set; }
     
-    public Text(string informationText, long id = 0)
+    public Text(string informationText, long id = 0) : base(id)
     {
-        Id = id;
         InformationText = informationText;
     }
 
     public Text()
     {
-        Id = default;
         InformationText = string.Empty;
     }
 
-    public string GetInformation()
+    public override string GetInformation()
     {
         return InformationText;
     }
