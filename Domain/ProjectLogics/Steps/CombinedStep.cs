@@ -1,4 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************/
+
+using System.ComponentModel.DataAnnotations;
 using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics.Steps.Information;
 using Domain.ProjectLogics.Steps.Questions;
@@ -24,5 +31,4 @@ public class CombinedStep : StepBase
         InformationBase = new Text();
         QuestionBase = new SingleChoiceQuestion();
     }
-    
 }

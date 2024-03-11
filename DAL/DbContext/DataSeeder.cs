@@ -1,4 +1,11 @@
-﻿using Domain.ProjectLogics;
+﻿/***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************/
+
+using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
 using Domain.ProjectLogics.Steps.Questions;
@@ -9,8 +16,7 @@ public class DataSeeder
 {
     public static void Seed(CodeForgeDbContext ctx)
     {  
-        
-        //Seed Project and Main theme
+        // Seed Project and Main theme
         MainTheme mainTheme1 = new MainTheme("Climate Change");
         Flow flow = new Flow(FlowType.LINEAR, mainTheme1);
         Text textInfo = new Text("This is an information text");
@@ -36,7 +42,5 @@ public class DataSeeder
         ctx.CombinedSteps.Add(step3);
         ctx.SaveChanges();
         ctx.ChangeTracker.Clear();
-
     }
-    
 }

@@ -1,4 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿/***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************/
+
+using System.Text.Json.Serialization;
 using Business_Layer;
 using Data_Access_Layer;
 using Data_Access_Layer.DbContext;
@@ -62,8 +69,5 @@ public class Startup
             endpoints.MapControllerRoute(name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
         });
-
-
     }
-    
 }

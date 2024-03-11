@@ -1,4 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************/
+
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Domain.ProjectLogics.Steps;
 
@@ -71,6 +78,4 @@ public class Flow
     {
         FlowStopped = true;
     }
-    
-    
 }

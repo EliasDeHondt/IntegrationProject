@@ -1,4 +1,11 @@
-﻿using System.Diagnostics;
+﻿/***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************/
+
+using System.Diagnostics;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
@@ -116,8 +123,6 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         modelBuilder.Entity<Flow>().HasKey(flow => flow.Id);
         modelBuilder.Entity<Participation>().HasKey(participation => participation.Id);
         modelBuilder.Entity<Answer>().HasKey(answer => answer.Id);
-
-
     }
 
     public bool CreateDatabase(bool dropDatabase)

@@ -1,4 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************/
+
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.ProjectLogics.Steps.Information;
 
@@ -30,5 +37,4 @@ public class Image : InformationBase
         byte[] imageBytes = File.ReadAllBytes(path);
         return Convert.ToBase64String(imageBytes);
     }
-    
 }

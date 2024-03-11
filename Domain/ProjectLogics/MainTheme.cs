@@ -1,4 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************/
+
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.ProjectLogics;
 
@@ -21,5 +28,4 @@ public class MainTheme : ThemeBase
     {
         Themes = new List<SubTheme>();
     }
-    
 }

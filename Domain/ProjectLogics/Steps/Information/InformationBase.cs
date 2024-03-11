@@ -1,4 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************/
+
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.ProjectLogics.Steps.Information;
 
@@ -17,6 +24,4 @@ public abstract class InformationBase
     {
         Id = default;
     }
-    
-    
 }

@@ -1,6 +1,12 @@
 ﻿using Data_Access_Layer.DbContext;
 using Domain.ProjectLogics.Steps;
 using Microsoft.EntityFrameworkCore;
+/***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************/
 
 namespace Data_Access_Layer;
 
@@ -36,11 +42,8 @@ public class StepRepository
     
     public StepBase ReadStepForFlowByNumber(long flowId, int stepNumber)
     {
-
         return _ctx.Flows.Include(flow => flow.Steps)
             .First(flow => flow.Id == flowId)
             .Steps.First(step => step.StepNumber == stepNumber);
-        
     }
-    
 }

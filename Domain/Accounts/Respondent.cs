@@ -1,3 +1,10 @@
+/***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************/
+
 using Domain.WebApp;
 using Microsoft.AspNetCore.Identity;
 

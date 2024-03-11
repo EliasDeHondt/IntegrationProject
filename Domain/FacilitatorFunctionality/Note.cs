@@ -1,5 +1,11 @@
+/***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************/
+
 using System.ComponentModel.DataAnnotations;
-using Domain.ProjectLogics.Steps;
 
 namespace Domain.FacilitatorFunctionality;
 
@@ -16,5 +22,4 @@ public class Note
         Id = default;
         Textfield = string.Empty;
     }
-    
 }
