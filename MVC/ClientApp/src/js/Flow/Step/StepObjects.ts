@@ -10,7 +10,7 @@ export interface Information {
     informationType: string;
 }
 
-export interface Question {
+export interface Question { // TODO: voor Matthias
     Question: string;
     Choices: string[];
 }

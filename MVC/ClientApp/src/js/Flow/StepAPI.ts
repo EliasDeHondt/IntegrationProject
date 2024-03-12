@@ -3,7 +3,7 @@ import { Step } from "./Step/StepObjects";
 let nextStepButton = document.getElementById("butNextStep") as HTMLButtonElement;
 let informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
 let currentStepNumber: number = 0;
-let flowId: number;
+let flowId: number; // TODO: voor later multiple flows
 
 function GetNextStep(stepNumber: number, flowId: number) {
 

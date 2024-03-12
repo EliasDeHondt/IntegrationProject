@@ -25,8 +25,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        // TODO: implementeer dependency injection
-
+        //dependency injection
         services.AddDbContext<CodeForgeDbContext>();
         services.AddScoped<FlowManager, FlowManager>();
         services.AddScoped<ProjectManager, ProjectManager>();
@@ -37,7 +36,7 @@ public class Startup
         
         using var serviceScope = services.BuildServiceProvider().CreateScope();
         
-        // TODO: Initializeer dbcontext
+        //init dbcontext
         var dbContext = serviceScope.ServiceProvider.GetRequiredService<CodeForgeDbContext>();
         var uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWork>();
         if (dbContext.CreateDatabase(true))
