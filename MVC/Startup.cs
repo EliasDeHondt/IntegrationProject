@@ -30,6 +30,8 @@ public class Startup
         services.AddDbContext<CodeForgeDbContext>();
         services.AddScoped<FlowManager, FlowManager>();
         services.AddScoped<ProjectManager, ProjectManager>();
+        services.AddScoped<StepRepository, StepRepository>();
+        services.AddScoped<StepManager, StepManager>();
         services.AddScoped<UnitOfWork, UnitOfWork>();
         
         
@@ -47,7 +49,7 @@ public class Startup
         
         services.AddControllersWithViews().AddXmlSerializerFormatters().AddJsonOptions(options =>
         {
-            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
     }

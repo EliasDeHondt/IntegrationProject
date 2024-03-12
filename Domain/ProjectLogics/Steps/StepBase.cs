@@ -7,8 +7,6 @@
 
 using System.ComponentModel.DataAnnotations;
 using Domain.FacilitatorFunctionality;
-using Domain.ProjectLogics.Steps.Information;
-using Domain.ProjectLogics.Steps.Questions;
 
 namespace Domain.ProjectLogics.Steps;
 
