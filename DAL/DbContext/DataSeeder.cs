@@ -21,13 +21,16 @@ public class DataSeeder
         Flow flow = new Flow(FlowType.LINEAR, mainTheme1);
         Text textInfo = new Text("This is an information text");
         Image imageInfo = new Image("../MVC/Assets/Images/TestImage.jpg");
+        Video videoInfo = new Video("/Assets/Videos/Rocket league in Wheelchair meme.mp4");
         SingleChoiceQuestion question = new SingleChoiceQuestion("", new List<Choice>());
         InformationStep step1 = new InformationStep(1, textInfo, flow);
         InformationStep step2 = new InformationStep(2, imageInfo, flow);
         CombinedStep step3 = new CombinedStep(3, textInfo, question, flow);
+        InformationStep step4 = new InformationStep(4, videoInfo, flow);
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
         flow.Steps.Add(step3);
+        flow.Steps.Add(step4);
         mainTheme1.Flows.Add(flow);
         Project project1 = new Project(mainTheme1);
 
@@ -40,6 +43,7 @@ public class DataSeeder
         ctx.InformationSteps.Add(step1);
         ctx.InformationSteps.Add(step2);
         ctx.CombinedSteps.Add(step3);
+        ctx.InformationSteps.Add(step4);
         ctx.SaveChanges();
         ctx.ChangeTracker.Clear();
     }

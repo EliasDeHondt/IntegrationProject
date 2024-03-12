@@ -3,7 +3,6 @@
 @{
     Layout = null;
     ViewData["Title"] = "TempFlow";
-    @await RenderSectionAsync("Scripts", required: false)
 }
 
 <!DOCTYPE html>
@@ -24,8 +23,5 @@
 </footer>
 </html>
 
-@section Scripts{
     
-    <script src="/dist/step.entry.js" defer></script>
-    
-}
+<script src="/dist/step.entry.js" defer></script>

@@ -46,11 +46,6 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         if (!optionsBuilder.IsConfigured)
         {
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            var host = Environment.GetEnvironmentVariable("ASPNETCORE_POSTGRES_HOST");
-            var port = Environment.GetEnvironmentVariable("ASPNETCORE_POSTGRES_PORT");
-            var database = Environment.GetEnvironmentVariable("ASPNETCORE_POSTGRES_DATABASE");
-            var username = Environment.GetEnvironmentVariable("ASPNETCORE_POSTGRES_USER");
-            var password = Environment.GetEnvironmentVariable("ASPNETCORE_POSTGRES_PASSWORD");
             
             switch (environment)
             {
@@ -59,6 +54,12 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
                     break;
                 case "Production":
                 {
+                    var host = Environment.GetEnvironmentVariable("ASPNETCORE_POSTGRES_HOST");
+                    var port = Environment.GetEnvironmentVariable("ASPNETCORE_POSTGRES_PORT");
+                    var database = Environment.GetEnvironmentVariable("ASPNETCORE_POSTGRES_DATABASE");
+                    var username = Environment.GetEnvironmentVariable("ASPNETCORE_POSTGRES_USER");
+                    var password = Environment.GetEnvironmentVariable("ASPNETCORE_POSTGRES_PASSWORD");
+                    
                     string connectionString = $"Host={host};Port={port};Database={database};Username={username};Password={password}";
                     optionsBuilder.UseNpgsql(connectionString);
                     break;

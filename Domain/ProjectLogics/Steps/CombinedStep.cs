@@ -6,6 +6,7 @@
  ***************************************/
 
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics.Steps.Information;
 using Domain.ProjectLogics.Steps.Questions;

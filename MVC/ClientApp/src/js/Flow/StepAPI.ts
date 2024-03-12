@@ -1,25 +1,13 @@
-import { Step, Information, Question } from "./Step/StepObjects";
+import { Step } from "./Step/StepObjects";
 
 let nextStepButton = document.getElementById("butNextStep") as HTMLButtonElement;
-let currentStepNumber: number;
-let flowId: number;
-
-let step: Step = {
-
-    StepNumber: 0,
-    StepType: "Information",
-    Information: {
-        GetInformation: ""
-    },
-    Question: {
-        Question: "",
-        Choices: []
-    }
-}
+let informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
+let currentStepNumber: number = 0;
+let flowId: number; // TODO: voor later multiple flows
 
 function GetNextStep(stepNumber: number, flowId: number) {
 
-    fetch("/api/Steps/GetNextStep/" + stepNumber + "/" + flowId, {
+    fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
         method: "GET",
         headers: {
             "Accept": "application/json",
@@ -31,8 +19,31 @@ function GetNextStep(stepNumber: number, flowId: number) {
         .catch(error => console.error("Error:", error))
 }
 
-function ShowStep(data: any) {
-    console.log(data);
+function ShowStep(data: Step) {
+    informationContainer.innerHTML = "";
+    switch(data.informationViewModel.informationType){
+        case "Text": {
+            let p = document.createElement("p");
+            p.innerText = data.informationViewModel.information;
+            informationContainer.appendChild(p);
+            break;
+        }
+        case "Image":{
+            let img = document.createElement("img");
+            img.src = "data:image/png;base64," + data.informationViewModel.information;
+            informationContainer.appendChild(img);
+            break;
+        }
+        case "Video":{
+            let video = document.createElement("video");
+            video.src = data.informationViewModel.information;
+            video.autoplay = true;
+            video.loop = true;
+            video.controls = false;
+            informationContainer.appendChild(video);
+            break;
+        }
+    }
 }
 
-nextStepButton.onclick = () => GetNextStep(++currentStepNumber, flowId)
+nextStepButton.onclick = () => GetNextStep(++currentStepNumber, 1)

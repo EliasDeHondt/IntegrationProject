@@ -1,17 +1,16 @@
 export interface Step {
-
-    StepNumber: number;
-    Information: Information;
-    Question: Question;
-    StepType: string;
-    
+    id:number;
+    stepNumber: number;
+    informationViewModel: Information;
 }
 
 export interface Information {
-    GetInformation: string;
+    id: number;
+    information: string;
+    informationType: string;
 }
 
-export interface Question {
+export interface Question { // TODO: voor Matthias
     Question: string;
     Choices: string[];
 }

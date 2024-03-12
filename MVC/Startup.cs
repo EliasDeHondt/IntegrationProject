@@ -25,17 +25,18 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        // TODO: implementeer dependency injection
-
+        //dependency injection
         services.AddDbContext<CodeForgeDbContext>();
         services.AddScoped<FlowManager, FlowManager>();
         services.AddScoped<ProjectManager, ProjectManager>();
+        services.AddScoped<StepRepository, StepRepository>();
+        services.AddScoped<StepManager, StepManager>();
         services.AddScoped<UnitOfWork, UnitOfWork>();
         
         
         using var serviceScope = services.BuildServiceProvider().CreateScope();
         
-        // TODO: Initializeer dbcontext
+        //init dbcontext
         var dbContext = serviceScope.ServiceProvider.GetRequiredService<CodeForgeDbContext>();
         var uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWork>();
         if (dbContext.CreateDatabase(true))
@@ -47,7 +48,7 @@ public class Startup
         
         services.AddControllersWithViews().AddXmlSerializerFormatters().AddJsonOptions(options =>
         {
-            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
     }
