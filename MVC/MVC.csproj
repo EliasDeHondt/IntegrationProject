@@ -39,7 +39,12 @@
         <Content Remove="$(MpaRoot)**"/>
         <None Remove="$(MpaRoot)**"/>
         <None Include="$(MpaRoot)**" Exclude="$(MpaRoot)node_modules\**"/>
+        <None Include="wwwroot\Assets\Videos\Rocket league in Wheelchair meme.mp4" />
 
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Assets\Videos\" />
     </ItemGroup>
 
     <Target Name="NpmInstall" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(MpaRoot)node_modules') ">

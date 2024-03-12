@@ -1,4 +1,4 @@
-import { Step, Information, Question } from "./Step/StepObjects";
+import { Step } from "./Step/StepObjects";
 
 let nextStepButton = document.getElementById("butNextStep") as HTMLButtonElement;
 let informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
@@ -36,8 +36,10 @@ function ShowStep(data: Step) {
         }
         case "Video":{
             let video = document.createElement("video");
-            video.src = "data:video/mp4;base64," + data.informationViewModel.information;
-            video.controls = true;
+            video.src = data.informationViewModel.information;
+            video.autoplay = true;
+            video.loop = true;
+            video.controls = false;
             informationContainer.appendChild(video);
             break;
         }
