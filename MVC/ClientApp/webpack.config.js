@@ -17,17 +17,19 @@ module.exports = {
     mode: 'development',
     resolve: {
         extensions: [".ts", ".js"],
-        extensionAlias: {'.js': ['.js', '.ts']}
+        extensionAlias: {
+            '.js': ['.js', '.ts'],
+        },
     },
     module: {
         rules: [
             {
-                test: /\.ts$/i,
-                use: ["ts-loader"],
+                test: /\.tsx?$/i,
+                use: 'ts-loader',
                 exclude: /node_modules/
             },
             {
-                test: /\.s?css$/,
+                test: /\.s?css$/i,
                 use: [
                     MiniCssExtractPlugin.loader,
                     "css-loader",
@@ -36,17 +38,19 @@ module.exports = {
             },
             {
                 test: /\.(png|svg|jpg|jpeg|gif|webp)$/i,
-                type: "asset"
+                type: "asset/resource"
             },
             {
                 test: /\.(eot|woff(2)?|ttf|otf|svg)$/i,
-                type: 'asset'
+                type: 'asset/resource'
+            },
+            {
+                test: /\.(mp3|wav|ogg|mp4|webm|mkv)$/i,
+                type: 'asset/resource'
             },
         ]
     },
     plugins: [
-        new MiniCssExtractPlugin({
-            filename: "[name].css"
-        })
+        new MiniCssExtractPlugin(),
     ]
 };
