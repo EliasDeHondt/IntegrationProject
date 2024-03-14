@@ -1,7 +1,6 @@
 ﻿const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -41,7 +40,7 @@ module.exports = {
             {
                 test: /\.ts?$/i,
                 use: 'ts-loader',
-                exclude: /node_modules/
+                exclude: [/node_modules/, /custom npm packages/]
             },
             {
                 test: /\.s?css$/,
