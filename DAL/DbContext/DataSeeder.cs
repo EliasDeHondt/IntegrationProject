@@ -14,7 +14,7 @@ namespace Data_Access_Layer.DbContext;
 
 public class DataSeeder
 {
-    public static void generateSingleQuestions(CodeForgeDbContext ctx)
+    public static void generateSingleQuestions(CodeForgeDbContext ctx,Flow flow)
     {
         SingleChoiceQuestion question1 = new SingleChoiceQuestion("Als jij de begroting van je stad of gemeente zou opmaken, waar zou je dan in de komende jaren vooral op inzetten? Maak 1 keuze.", 
             new List<Choice>
@@ -64,15 +64,27 @@ public class DataSeeder
                 new Choice("Slecht idee") 
             });
         
-        ctx.SingleChoiceQuestions.Add(question1);
-        ctx.SingleChoiceQuestions.Add(question2);
-        ctx.SingleChoiceQuestions.Add(question3);
-        ctx.SingleChoiceQuestions.Add(question4);
-        ctx.SingleChoiceQuestions.Add(question5);
-        ctx.SingleChoiceQuestions.Add(question6);
+        ctx.SingleChoiceQuestions.AddRange(question1, question2, question3, question4, question5, question6);
+        
+        //add to step
+        QuestionStep step1 = new QuestionStep(1, question1, flow, 10);
+        QuestionStep step2 = new QuestionStep(2, question2, flow, 20);
+        QuestionStep step3 = new QuestionStep(3, question3, flow, 30);
+        QuestionStep step4 = new QuestionStep(4, question4, flow, 40);
+        QuestionStep step5 = new QuestionStep(5, question5, flow, 50);
+        QuestionStep step6 = new QuestionStep(6, question6, flow, 60);
+        
+        flow.Steps.Add(step1);
+        flow.Steps.Add(step2);
+        flow.Steps.Add(step3);
+        flow.Steps.Add(step4);
+        flow.Steps.Add(step5);
+        flow.Steps.Add(step6);
+        
+        ctx.QuestionSteps.AddRange(step1, step2, step3, step4, step5, step6);
     }
 
-    public static void generateMultipleCQuestions(CodeForgeDbContext ctx)
+    public static void generateMultipleCQuestions(CodeForgeDbContext ctx,Flow flow)
     {
         MultipleChoiceQuestion mquestion1 = new MultipleChoiceQuestion("Wat zou jou helpen om een keuze te maken tussen de verschillende partijen?", 
             new List<Choice> 
@@ -119,16 +131,28 @@ public class DataSeeder
                 new Choice("Meer aandacht voor jeugd in de programma’s van de partijen"),
                 new Choice("Beter weten of mijn stem echt impact heeft")
             });
-
-        ctx.MultipleChoiceQuestions.Add(mquestion1);
-        ctx.MultipleChoiceQuestions.Add(mquestion2);
-        ctx.MultipleChoiceQuestions.Add(mquestion3);
-        ctx.MultipleChoiceQuestions.Add(mquestion4);
-        ctx.MultipleChoiceQuestions.Add(mquestion5);
+        
+        ctx.MultipleChoiceQuestions.AddRange(mquestion1, mquestion2, mquestion3, mquestion4, mquestion5);
+        
+        //add to step
+        QuestionStep step1 = new QuestionStep(7, mquestion1, flow, 10);
+        QuestionStep step2 = new QuestionStep(8, mquestion2, flow, 20);
+        QuestionStep step3 = new QuestionStep(9, mquestion3, flow, 30);
+        QuestionStep step4 = new QuestionStep(10, mquestion4, flow, 40);
+        QuestionStep step5 = new QuestionStep(11, mquestion5, flow, 50);
+        
+        flow.Steps.Add(step1);
+        flow.Steps.Add(step2);
+        flow.Steps.Add(step3);
+        flow.Steps.Add(step4);
+        flow.Steps.Add(step5);
+        
+        ctx.QuestionSteps.AddRange(step1, step2, step3, step4, step5);
     }
 
-    public static void generateRangeQuestions(CodeForgeDbContext ctx)
+    public static void generateRangeQuestions(CodeForgeDbContext ctx,Flow flow)
     {
+        //make questions
         RangeQuestion rquestion1 = new RangeQuestion("Ben jij van plan om te gaan stemmen bij de aankomende lokale verkiezingen?", 
             new List<Choice>
             {
@@ -173,20 +197,40 @@ public class DataSeeder
                 new Choice("Ik sta hier helemaal niet achter")
             });
 
-        ctx.RangeQuestions.Add(rquestion1);
-        ctx.RangeQuestions.Add(rquestion2);
-        ctx.RangeQuestions.Add(rquestion3);
-        ctx.RangeQuestions.Add(rquestion4);
-        ctx.RangeQuestions.Add(rquestion5);
+        ctx.RangeQuestions.AddRange(rquestion1, rquestion2, rquestion3, rquestion4, rquestion5);
+        
+        //add to step
+        QuestionStep step1 = new QuestionStep(12, rquestion1, flow, 10);
+        QuestionStep step2 = new QuestionStep(13, rquestion2, flow, 20);
+        QuestionStep step3 = new QuestionStep(14, rquestion3, flow, 30);
+        QuestionStep step4 = new QuestionStep(15, rquestion4, flow, 40);
+        QuestionStep step5 = new QuestionStep(16, rquestion5, flow, 50);
+        
+        flow.Steps.Add(step1);
+        flow.Steps.Add(step2);
+        flow.Steps.Add(step3);
+        flow.Steps.Add(step4);
+        flow.Steps.Add(step5);
+        
+        ctx.QuestionSteps.AddRange(step1, step2, step3, step4, step5);
     }
 
-    public static void generateOpenQuestions(CodeForgeDbContext ctx)
+    public static void generateOpenQuestions(CodeForgeDbContext ctx,Flow flow)
     {
+        //make questions
         OpenQuestion oquesstion1 = new OpenQuestion("Je bent schepen van onderwijs voor een dag: waar zet je dan vooral op in?",50);
         OpenQuestion oquesstion2 = new OpenQuestion("Als je één ding mag wensen voor het nieuwe stadspark, wat zou jouw droomstadspark dan zeker bevatten?",60);
 
-        ctx.OpenQuestions.Add(oquesstion1);
-        ctx.OpenQuestions.Add(oquesstion2);
+        ctx.OpenQuestions.AddRange(oquesstion1, oquesstion2);
+        
+        //add to step
+        QuestionStep step1 = new QuestionStep(17,oquesstion1, flow, 10);
+        QuestionStep step2 = new QuestionStep(18,oquesstion1, flow, 20);
+        
+        flow.Steps.Add(step1);
+        flow.Steps.Add(step2);
+
+        ctx.QuestionSteps.AddRange(step1, step2);
     }
     public static void Seed(CodeForgeDbContext ctx)
     {  
@@ -197,23 +241,37 @@ public class DataSeeder
         Image imageInfo = new Image("../MVC/Assets/Images/TestImage.jpg");
         Video videoInfo = new Video("/Assets/Videos/Rocket league in Wheelchair meme.mp4");
         
-        generateSingleQuestions(ctx);
-        generateMultipleCQuestions(ctx);
-        generateRangeQuestions(ctx);
-        generateOpenQuestions(ctx);
+        generateSingleQuestions(ctx,flow);
+        generateMultipleCQuestions(ctx,flow);
+        generateRangeQuestions(ctx,flow);
+        generateOpenQuestions(ctx,flow);
         
-        // ctx.SaveChanges();
+        //ctx.SaveChanges();
         // ctx.ChangeTracker.Clear();
         
-        InformationStep step1 = new InformationStep(1, textInfo, flow);
-        InformationStep step2 = new InformationStep(2, imageInfo, flow);
-        CombinedStep step3 = new CombinedStep(3, textInfo, ctx.SingleChoiceQuestions.First(), flow);//no elements
-        InformationStep step4 = new InformationStep(4, videoInfo, flow);
+        // SingleChoiceQuestion questionBase = new SingleChoiceQuestion("Als jij de begroting van je stad of gemeente zou opmaken, waar zou je dan in de komende jaren vooral op inzetten? Maak 1 keuze.", 
+        //     new List<Choice>
+        //     {
+        //         new Choice("Natuur en ecologie"),
+        //         new Choice("Vrije tijd, sport, cultuur"),
+        //         new Choice("Huisvesting"),
+        //         new Choice("Onderwijs en kinderopvang"),
+        //         new Choice("Gezondheidszorg en welzijn"),
+        //         new Choice("Verkeersveiligheid en mobiliteit"),
+        //         new Choice("Ondersteunen van lokale handel")
+        //     });
         
-        flow.Steps.Add(step1);
-        flow.Steps.Add(step2);
-        flow.Steps.Add(step3);
-        flow.Steps.Add(step4);
+        // InformationStep step1 = new InformationStep(1, textInfo, flow);
+        // InformationStep step2 = new InformationStep(2, imageInfo, flow);
+        // QuestionStep step = new QuestionStep(5,questionBase, flow, 10);
+        // CombinedStep step3 = new CombinedStep(3, textInfo, questionBase, flow);//no elements
+        // InformationStep step4 = new InformationStep(4, videoInfo, flow);
+        //
+        // flow.Steps.Add(step1);
+        // flow.Steps.Add(step2);
+        // flow.Steps.Add(step3);
+        // flow.Steps.Add(step4);
+        // flow.Steps.Add(step);
         mainTheme1.Flows.Add(flow);
         Project project1 = new Project(mainTheme1);
 
@@ -222,11 +280,12 @@ public class DataSeeder
         ctx.Projects.Add(project1);
         ctx.Texts.Add(textInfo);
         ctx.Images.Add(imageInfo);
-        
-        ctx.InformationSteps.Add(step1);
-        ctx.InformationSteps.Add(step2);
-        ctx.CombinedSteps.Add(step3);
-        ctx.InformationSteps.Add(step4);
+
+        // ctx.QuestionSteps.Add(step);
+        // ctx.InformationSteps.Add(step1);
+        // ctx.InformationSteps.Add(step2);
+        // ctx.CombinedSteps.Add(step3);
+        // ctx.InformationSteps.Add(step4);
         ctx.SaveChanges();
         ctx.ChangeTracker.Clear();
     }
