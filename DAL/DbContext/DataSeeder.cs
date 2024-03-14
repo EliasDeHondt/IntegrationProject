@@ -135,11 +135,11 @@ public class DataSeeder
         ctx.MultipleChoiceQuestions.AddRange(mquestion1, mquestion2, mquestion3, mquestion4, mquestion5);
         
         //add to step
-        QuestionStep step1 = new QuestionStep(7, mquestion1, flow, 10);
-        QuestionStep step2 = new QuestionStep(8, mquestion2, flow, 20);
-        QuestionStep step3 = new QuestionStep(9, mquestion3, flow, 30);
-        QuestionStep step4 = new QuestionStep(10, mquestion4, flow, 40);
-        QuestionStep step5 = new QuestionStep(11, mquestion5, flow, 50);
+        QuestionStep step1 = new QuestionStep(7, mquestion1, flow, 70);
+        QuestionStep step2 = new QuestionStep(8, mquestion2, flow, 80);
+        QuestionStep step3 = new QuestionStep(9, mquestion3, flow, 90);
+        QuestionStep step4 = new QuestionStep(10, mquestion4, flow, 100);
+        QuestionStep step5 = new QuestionStep(11, mquestion5, flow, 110);
         
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
@@ -200,11 +200,11 @@ public class DataSeeder
         ctx.RangeQuestions.AddRange(rquestion1, rquestion2, rquestion3, rquestion4, rquestion5);
         
         //add to step
-        QuestionStep step1 = new QuestionStep(12, rquestion1, flow, 10);
-        QuestionStep step2 = new QuestionStep(13, rquestion2, flow, 20);
-        QuestionStep step3 = new QuestionStep(14, rquestion3, flow, 30);
-        QuestionStep step4 = new QuestionStep(15, rquestion4, flow, 40);
-        QuestionStep step5 = new QuestionStep(16, rquestion5, flow, 50);
+        QuestionStep step1 = new QuestionStep(12, rquestion1, flow, 120);
+        QuestionStep step2 = new QuestionStep(13, rquestion2, flow, 130);
+        QuestionStep step3 = new QuestionStep(14, rquestion3, flow, 140);
+        QuestionStep step4 = new QuestionStep(15, rquestion4, flow, 150);
+        QuestionStep step5 = new QuestionStep(16, rquestion5, flow, 160);
         
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
@@ -224,8 +224,8 @@ public class DataSeeder
         ctx.OpenQuestions.AddRange(oquesstion1, oquesstion2);
         
         //add to step
-        QuestionStep step1 = new QuestionStep(17,oquesstion1, flow, 10);
-        QuestionStep step2 = new QuestionStep(18,oquesstion1, flow, 20);
+        QuestionStep step1 = new QuestionStep(17,oquesstion1, flow, 170);
+        QuestionStep step2 = new QuestionStep(18,oquesstion1, flow, 180);
         
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
@@ -237,30 +237,18 @@ public class DataSeeder
         // Seed Project and Main theme
         MainTheme mainTheme1 = new MainTheme("Lokale Verkiezingen");
         Flow flow = new Flow(FlowType.LINEAR, mainTheme1);
-        Text textInfo = new Text("This is example text");
-        Image imageInfo = new Image("../MVC/Assets/Images/TestImage.jpg");
+        Text textInfo = new Text("Lokale Verkiezingen");
+        Image imageInfo = new Image("../MVC/Assets/Images/verkiezingen.PNG");
         Video videoInfo = new Video("/Assets/Videos/Rocket league in Wheelchair meme.mp4");
+        // Image imageInfo = new Image("../MVC/Assets/Images/TestImage.jpg");
+        // Video videoInfo = new Video("/Assets/Videos/Rocket league in Wheelchair meme.mp4");
         
         generateSingleQuestions(ctx,flow);
         generateMultipleCQuestions(ctx,flow);
         generateRangeQuestions(ctx,flow);
         generateOpenQuestions(ctx,flow);
         
-        //ctx.SaveChanges();
-        // ctx.ChangeTracker.Clear();
-        
-        // SingleChoiceQuestion questionBase = new SingleChoiceQuestion("Als jij de begroting van je stad of gemeente zou opmaken, waar zou je dan in de komende jaren vooral op inzetten? Maak 1 keuze.", 
-        //     new List<Choice>
-        //     {
-        //         new Choice("Natuur en ecologie"),
-        //         new Choice("Vrije tijd, sport, cultuur"),
-        //         new Choice("Huisvesting"),
-        //         new Choice("Onderwijs en kinderopvang"),
-        //         new Choice("Gezondheidszorg en welzijn"),
-        //         new Choice("Verkeersveiligheid en mobiliteit"),
-        //         new Choice("Ondersteunen van lokale handel")
-        //     });
-        
+        //old
         // InformationStep step1 = new InformationStep(1, textInfo, flow);
         // InformationStep step2 = new InformationStep(2, imageInfo, flow);
         // QuestionStep step = new QuestionStep(5,questionBase, flow, 10);
@@ -271,7 +259,7 @@ public class DataSeeder
         // flow.Steps.Add(step2);
         // flow.Steps.Add(step3);
         // flow.Steps.Add(step4);
-        // flow.Steps.Add(step);
+        
         mainTheme1.Flows.Add(flow);
         Project project1 = new Project(mainTheme1);
 
@@ -281,7 +269,6 @@ public class DataSeeder
         ctx.Texts.Add(textInfo);
         ctx.Images.Add(imageInfo);
 
-        // ctx.QuestionSteps.Add(step);
         // ctx.InformationSteps.Add(step1);
         // ctx.InformationSteps.Add(step2);
         // ctx.CombinedSteps.Add(step3);
