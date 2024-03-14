@@ -239,7 +239,7 @@ public class DataSeeder
         Flow flow = new Flow(FlowType.LINEAR, mainTheme1);
         Text textInfo = new Text("Lokale Verkiezingen");
         Image imageInfo = new Image("../MVC/Assets/Images/verkiezingen.PNG");
-        Video videoInfo = new Video("/Assets/Videos/Rocket league in Wheelchair meme.mp4");
+        Video videoInfo = new Video("/Assets/Videos/screensaver.mp4");
         // Image imageInfo = new Image("../MVC/Assets/Images/TestImage.jpg");
         // Video videoInfo = new Video("/Assets/Videos/Rocket league in Wheelchair meme.mp4");
         
@@ -248,31 +248,22 @@ public class DataSeeder
         generateRangeQuestions(ctx,flow);
         generateOpenQuestions(ctx,flow);
         
-        //old
-        // InformationStep step1 = new InformationStep(1, textInfo, flow);
-        // InformationStep step2 = new InformationStep(2, imageInfo, flow);
-        // QuestionStep step = new QuestionStep(5,questionBase, flow, 10);
-        // CombinedStep step3 = new CombinedStep(3, textInfo, questionBase, flow);//no elements
-        // InformationStep step4 = new InformationStep(4, videoInfo, flow);
-        //
-        // flow.Steps.Add(step1);
-        // flow.Steps.Add(step2);
-        // flow.Steps.Add(step3);
-        // flow.Steps.Add(step4);
+        InformationStep step1 = new InformationStep(19, imageInfo, flow);
+        InformationStep step2 = new InformationStep(20, videoInfo, flow);
+        
+        flow.Steps.Add(step1);
+        flow.Steps.Add(step2);
         
         mainTheme1.Flows.Add(flow);
         Project project1 = new Project(mainTheme1);
-
         ctx.MainThemes.Add(mainTheme1);
         ctx.Flows.Add(flow);
         ctx.Projects.Add(project1);
         ctx.Texts.Add(textInfo);
         ctx.Images.Add(imageInfo);
 
-        // ctx.InformationSteps.Add(step1);
-        // ctx.InformationSteps.Add(step2);
-        // ctx.CombinedSteps.Add(step3);
-        // ctx.InformationSteps.Add(step4);
+        ctx.InformationSteps.AddRange(step1,step2);
+        
         ctx.SaveChanges();
         ctx.ChangeTracker.Clear();
     }
