@@ -6,7 +6,8 @@ module.exports = {
         site: './src/js/site.ts',
         validation: './src/js/validation.ts',
         index: './src/js/index.ts',
-        step: './src/js/Flow/StepAPI.ts'
+        step: './src/js/Flow/StepAPI.ts',
+        theme: './src/js/Theme/ThemeAPI.ts',
     },
     output: {
         filename: '[name].entry.js',
