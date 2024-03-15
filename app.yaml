@@ -10,11 +10,11 @@ runtime: custom
 service: default
 manual_scaling:
   instances: 1
-  
+
 # Secret configuration
 env_variables:
   ASPNETCORE_ENVIRONMENT: 'Production'
-  ASPNETCORE_POSTGRES_HOST: '34.38.114.254'
+  ASPNETCORE_POSTGRES_HOST: '35.195.85.228'
   ASPNETCORE_POSTGRES_PORT: '5432'
   ASPNETCORE_POSTGRES_DATABASE: 'codeforge'
   ASPNETCORE_POSTGRES_USER: 'admin'
