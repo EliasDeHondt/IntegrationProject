@@ -9,9 +9,6 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "baseUrl": "./",
-    "paths": {
-      "jsfeat.js": ["./node_modules/jsfeat/build/jsfeat.js"],
-    }
   },
   "outDir": "../wwwroot/dist",
   "rootDir": "./src",
