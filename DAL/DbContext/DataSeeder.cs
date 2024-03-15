@@ -14,7 +14,7 @@ namespace Data_Access_Layer.DbContext;
 
 public class DataSeeder
 {
-    public static void generateSingleQuestions(CodeForgeDbContext ctx,Flow flow)
+    private static void GenerateSingleQuestions(CodeForgeDbContext ctx,Flow flow)
     {
         SingleChoiceQuestion question1 = new SingleChoiceQuestion("Als jij de begroting van je stad of gemeente zou opmaken, waar zou je dan in de komende jaren vooral op inzetten? Maak 1 keuze.", 
             new List<Choice>
@@ -67,12 +67,12 @@ public class DataSeeder
         ctx.SingleChoiceQuestions.AddRange(question1, question2, question3, question4, question5, question6);
         
         //add to step
-        QuestionStep step1 = new QuestionStep(1, question1, flow, 10);
-        QuestionStep step2 = new QuestionStep(2, question2, flow, 20);
-        QuestionStep step3 = new QuestionStep(3, question3, flow, 30);
-        QuestionStep step4 = new QuestionStep(4, question4, flow, 40);
-        QuestionStep step5 = new QuestionStep(5, question5, flow, 50);
-        QuestionStep step6 = new QuestionStep(6, question6, flow, 60);
+        QuestionStep step1 = new QuestionStep(1, question1, flow);
+        QuestionStep step2 = new QuestionStep(2, question2, flow);
+        QuestionStep step3 = new QuestionStep(3, question3, flow);
+        QuestionStep step4 = new QuestionStep(4, question4, flow);
+        QuestionStep step5 = new QuestionStep(5, question5, flow);
+        QuestionStep step6 = new QuestionStep(6, question6, flow);
         
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
@@ -84,7 +84,7 @@ public class DataSeeder
         ctx.QuestionSteps.AddRange(step1, step2, step3, step4, step5, step6);
     }
 
-    public static void generateMultipleCQuestions(CodeForgeDbContext ctx,Flow flow)
+    private static void GenerateMultipleCQuestions(CodeForgeDbContext ctx,Flow flow)
     {
         MultipleChoiceQuestion mquestion1 = new MultipleChoiceQuestion("Wat zou jou helpen om een keuze te maken tussen de verschillende partijen?", 
             new List<Choice> 
@@ -135,11 +135,11 @@ public class DataSeeder
         ctx.MultipleChoiceQuestions.AddRange(mquestion1, mquestion2, mquestion3, mquestion4, mquestion5);
         
         //add to step
-        QuestionStep step1 = new QuestionStep(7, mquestion1, flow, 70);
-        QuestionStep step2 = new QuestionStep(8, mquestion2, flow, 80);
-        QuestionStep step3 = new QuestionStep(9, mquestion3, flow, 90);
-        QuestionStep step4 = new QuestionStep(10, mquestion4, flow, 100);
-        QuestionStep step5 = new QuestionStep(11, mquestion5, flow, 110);
+        QuestionStep step1 = new QuestionStep(7, mquestion1, flow);
+        QuestionStep step2 = new QuestionStep(8, mquestion2, flow);
+        QuestionStep step3 = new QuestionStep(9, mquestion3, flow);
+        QuestionStep step4 = new QuestionStep(10, mquestion4, flow);
+        QuestionStep step5 = new QuestionStep(11, mquestion5, flow);
         
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
@@ -150,7 +150,7 @@ public class DataSeeder
         ctx.QuestionSteps.AddRange(step1, step2, step3, step4, step5);
     }
 
-    public static void generateRangeQuestions(CodeForgeDbContext ctx,Flow flow)
+    private static void GenerateRangeQuestions(CodeForgeDbContext ctx,Flow flow)
     {
         //make questions
         RangeQuestion rquestion1 = new RangeQuestion("Ben jij van plan om te gaan stemmen bij de aankomende lokale verkiezingen?", 
@@ -200,11 +200,11 @@ public class DataSeeder
         ctx.RangeQuestions.AddRange(rquestion1, rquestion2, rquestion3, rquestion4, rquestion5);
         
         //add to step
-        QuestionStep step1 = new QuestionStep(12, rquestion1, flow, 120);
-        QuestionStep step2 = new QuestionStep(13, rquestion2, flow, 130);
-        QuestionStep step3 = new QuestionStep(14, rquestion3, flow, 140);
-        QuestionStep step4 = new QuestionStep(15, rquestion4, flow, 150);
-        QuestionStep step5 = new QuestionStep(16, rquestion5, flow, 160);
+        QuestionStep step1 = new QuestionStep(12, rquestion1, flow);
+        QuestionStep step2 = new QuestionStep(13, rquestion2, flow);
+        QuestionStep step3 = new QuestionStep(14, rquestion3, flow);
+        QuestionStep step4 = new QuestionStep(15, rquestion4, flow);
+        QuestionStep step5 = new QuestionStep(16, rquestion5, flow);
         
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
@@ -215,17 +215,17 @@ public class DataSeeder
         ctx.QuestionSteps.AddRange(step1, step2, step3, step4, step5);
     }
 
-    public static void generateOpenQuestions(CodeForgeDbContext ctx,Flow flow)
+    private static void GenerateOpenQuestions(CodeForgeDbContext ctx,Flow flow)
     {
         //make questions
-        OpenQuestion oquesstion1 = new OpenQuestion("Je bent schepen van onderwijs voor een dag: waar zet je dan vooral op in?",50);
-        OpenQuestion oquesstion2 = new OpenQuestion("Als je één ding mag wensen voor het nieuwe stadspark, wat zou jouw droomstadspark dan zeker bevatten?",60);
+        OpenQuestion oquesstion1 = new OpenQuestion("Je bent schepen van onderwijs voor een dag: waar zet je dan vooral op in?");
+        OpenQuestion oquesstion2 = new OpenQuestion("Als je één ding mag wensen voor het nieuwe stadspark, wat zou jouw droomstadspark dan zeker bevatten?");
 
         ctx.OpenQuestions.AddRange(oquesstion1, oquesstion2);
         
         //add to step
-        QuestionStep step1 = new QuestionStep(17,oquesstion1, flow, 170);
-        QuestionStep step2 = new QuestionStep(18,oquesstion1, flow, 180);
+        QuestionStep step1 = new QuestionStep(17,oquesstion1, flow);
+        QuestionStep step2 = new QuestionStep(18,oquesstion1, flow);
         
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
@@ -243,10 +243,10 @@ public class DataSeeder
         // Image imageInfo = new Image("../MVC/Assets/Images/TestImage.jpg");
         // Video videoInfo = new Video("/Assets/Videos/Rocket league in Wheelchair meme.mp4");
         
-        generateSingleQuestions(ctx,flow);
-        generateMultipleCQuestions(ctx,flow);
-        generateRangeQuestions(ctx,flow);
-        generateOpenQuestions(ctx,flow);
+        GenerateSingleQuestions(ctx,flow);
+        GenerateMultipleCQuestions(ctx,flow);
+        GenerateRangeQuestions(ctx,flow);
+        GenerateOpenQuestions(ctx,flow);
         
         InformationStep step1 = new InformationStep(19, imageInfo, flow);
         InformationStep step2 = new InformationStep(20, videoInfo, flow);
