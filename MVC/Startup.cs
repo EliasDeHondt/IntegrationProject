@@ -9,8 +9,8 @@ using System.Text.Json.Serialization;
 using Business_Layer;
 using Data_Access_Layer;
 using Data_Access_Layer.DbContext;
-using Domain.ProjectLogics;
-using Microsoft.EntityFrameworkCore;
+using Google.Apis.Storage.v1.Data;
+using Google.Cloud.Storage.V1;
 
 namespace MVC;
 
@@ -25,14 +25,10 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-
-        var options = new CloudStorageOptions
-        {
-            BucketName = Configuration["codeforge-bucket-videos"]
-        };
+        string bucketName = "codeforge-bucket-videos";
         
-        if (Configuration["codeforge-bucket-videos"] is not null) options.ObjectName = Configuration["codeforge-bucket-videos"];
-        
+        var options = new CloudStorageOptions { BucketName = bucketName };
+        options.ObjectName = bucketName;
         
         //dependency injection
         services.AddDbContext<CodeForgeDbContext>();

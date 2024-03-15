@@ -9,6 +9,8 @@ using Business_Layer;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
 using Google;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Storage.v1.Data;
 using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
@@ -27,7 +29,9 @@ public class StepsController : Controller
     {
         _manager = manager;
         _options = options;
-        _storage = StorageClient.Create();
+        
+        GoogleCredential credential = GoogleCredential.GetApplicationDefaultAsync().Result;
+        _storage = StorageClient.Create(credential);
     }
 
     [HttpGet("GetNextStep/{flowId:int}/{stepNumber:long}")]
