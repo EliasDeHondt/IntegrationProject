@@ -25,6 +25,15 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+
+        var options = new CloudStorageOptions
+        {
+            BucketName = Configuration["codeforge-bucket-videos"]
+        };
+        
+        if (Configuration["codeforge-bucket-videos"] is not null) options.ObjectName = Configuration["codeforge-bucket-videos"];
+        
+        
         //dependency injection
         services.AddDbContext<CodeForgeDbContext>();
         services.AddScoped<FlowManager, FlowManager>();
@@ -32,7 +41,7 @@ public class Startup
         services.AddScoped<StepRepository, StepRepository>();
         services.AddScoped<StepManager, StepManager>();
         services.AddScoped<UnitOfWork, UnitOfWork>();
-        
+        services.AddSingleton(options);
         
         using var serviceScope = services.BuildServiceProvider().CreateScope();
         

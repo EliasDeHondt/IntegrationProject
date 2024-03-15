@@ -28,6 +28,10 @@
         <Content Include="..\..\..\Downloads\screensaver.mp4">
           <Link>Assets\Videos\screensaver.mp4</Link>
         </Content>
+        <Content Update="Assets\Rocket league in Wheelchair meme.mp4">
+          <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+          <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
@@ -35,6 +39,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Google.Cloud.Storage.V1" Version="4.9.0" />
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.16"/>
     </ItemGroup>
 
@@ -44,6 +49,10 @@
         <None Include="$(MpaRoot)**" Exclude="$(MpaRoot)node_modules\**"/>
         <None Include="wwwroot\Assets\Videos\Rocket league in Wheelchair meme.mp4" />
 
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\Assets\Videos\" />
     </ItemGroup>
 
     <Target Name="NpmInstall" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(MpaRoot)node_modules') ">

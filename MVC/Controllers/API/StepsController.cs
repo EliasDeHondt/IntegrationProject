@@ -8,6 +8,8 @@
 using Business_Layer;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
+using Google;
+using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 
@@ -18,17 +20,21 @@ namespace MVC.Controllers.API;
 public class StepsController : Controller
 {
     private readonly StepManager _manager;
+    private readonly CloudStorageOptions _options;
+    private readonly StorageClient _storage;
 
-    public StepsController(StepManager manager)
+    public StepsController(StepManager manager, CloudStorageOptions options)
     {
         _manager = manager;
+        _options = options;
+        _storage = StorageClient.Create();
     }
 
     [HttpGet("GetNextStep/{flowId:int}/{stepNumber:long}")]
     public ActionResult GetNextStep(int stepNumber, long flowId)
     {
         StepBase stepBase = _manager.GetStepForFlowByNumber(flowId, stepNumber);
-
+        
         switch (stepBase)
         {
             case CombinedStep cStep:
@@ -49,8 +55,30 @@ public class StepsController : Controller
         }
     }
 
-    private InformationViewModel CreateInformationViewModel(InformationBase information)
+    private async Task<InformationViewModel> CreateInformationViewModel(InformationBase information)
     {
+        if (typeof(InformationBase) == typeof(Video))
+        {
+            _options.ObjectName = information.GetInformation();
+            if (new[] { null, "", "codeforge-bucket-videos" }.Contains(_options.BucketName)) return new InformationViewModel();
+            
+            try
+            {
+                await using MemoryStream m = new();
+                string filePath = $"/wwwroot/Assets/Videos/{_options.ObjectName}";
+                await using FileStream fs = System.IO.File.Create(filePath);
+                await _storage.DownloadObjectAsync(_options.BucketName, _options.ObjectName, m);
+                m.CopyTo(fs);
+            }
+            catch (GoogleApiException e)
+                when (e.HttpStatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                // Does not exist yet.  No problem.
+            }
+            
+        }
+        
+        
         return new InformationViewModel
         {
             Id = information.Id,
@@ -64,7 +92,7 @@ public class StepsController : Controller
         return new CombinedStepViewModel
         {
             Id = step.Id,
-            InformationViewModel = CreateInformationViewModel(step.InformationBase),
+            InformationViewModel = CreateInformationViewModel(step.InformationBase).Result,
             StepNumber = step.StepNumber
         };
     }
@@ -74,7 +102,7 @@ public class StepsController : Controller
         return new InformationStepViewModel
         {
             Id = step.Id,
-            InformationViewModel = CreateInformationViewModel(step.InformationBase),
+            InformationViewModel = CreateInformationViewModel(step.InformationBase).Result,
             StepNumber = step.StepNumber
         };
     }
