@@ -38,8 +38,8 @@ public class RangeQuestion : QuestionBase
         throw new NotImplementedException();
     }
     
-    public override IEnumerable<string> GetChoices()
+    /*public override ICollection<Choice> GetChoices()
     {
-        throw new NotImplementedException();
-    }
+        return Choices;
+    }*/
 }

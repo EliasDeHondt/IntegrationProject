@@ -239,7 +239,7 @@ public class DataSeeder
         Flow flow = new Flow(FlowType.LINEAR, mainTheme1);
         Text textInfo = new Text("Lokale Verkiezingen");
         Image imageInfo = new Image("../MVC/Assets/Images/verkiezingen.PNG");
-        Video videoInfo = new Video("/Assets/Videos/screensaver.mp4");
+        Video videoInfo = new Video("/Assets/Videos/Rocket_League_in_Wheelchair_meme.mp4");
         // Image imageInfo = new Image("../MVC/Assets/Images/TestImage.jpg");
         // Video videoInfo = new Video("/Assets/Videos/Rocket league in Wheelchair meme.mp4");
         

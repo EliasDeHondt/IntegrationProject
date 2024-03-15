@@ -8,6 +8,7 @@
 using Business_Layer;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
+using Domain.ProjectLogics.Steps.Questions;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 
@@ -33,12 +34,18 @@ public class StepsController : Controller
         {
             case CombinedStep cStep:
             {
-                CombinedStepViewModel stepViewModel = CreateCominedStepViewModel(cStep);
+                CombinedStepViewModel stepViewModel = CreateCombinedStepViewModel(cStep);
                 return Ok(stepViewModel);
             }
             case InformationStep iStep:
             {
                 InformationStepViewModel stepViewModel = CreateInformationStepViewModel(iStep);
+
+                return Ok(stepViewModel);
+            }
+            case QuestionStep qStep:
+            {
+                QuestionStepViewModel stepViewModel = CreateQuestionStepViewModel(qStep);
 
                 return Ok(stepViewModel);
             }
@@ -48,18 +55,8 @@ public class StepsController : Controller
                 return Ok(stepBase);
         }
     }
-
-    private InformationViewModel CreateInformationViewModel(InformationBase information)
-    {
-        return new InformationViewModel
-        {
-            Id = information.Id,
-            Information = information.GetInformation(),
-            InformationType = information.GetType().Name
-        };
-    }
-
-    private CombinedStepViewModel CreateCominedStepViewModel(CombinedStep step)
+    
+    private CombinedStepViewModel CreateCombinedStepViewModel(CombinedStep step)
     {
         return new CombinedStepViewModel
         {
@@ -78,5 +75,35 @@ public class StepsController : Controller
             StepNumber = step.StepNumber
         };
     }
-    
+
+    private InformationViewModel CreateInformationViewModel(InformationBase information)
+    {
+        return new InformationViewModel
+        {
+            Id = information.Id,
+            Information = information.GetInformation(),
+            InformationType = information.GetType().Name
+        };
+    }
+
+    private QuestionStepViewModel CreateQuestionStepViewModel(QuestionStep step)
+    {
+        return new QuestionStepViewModel
+        {
+            Id = step.Id,
+            QuestionViewModel = CreateQuestionViewModel(step.QuestionBase),
+            StepNumber = step.StepNumber
+        };
+    }
+
+    private QuestionViewModel CreateQuestionViewModel(QuestionBase question)
+    {
+        return new QuestionViewModel
+        {
+            Id = question.Id,
+            Question = question.Question,
+            QuestionType = question.GetType().Name,
+            Choices = question.Choices
+        };
+    }
 }

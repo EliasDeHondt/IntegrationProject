@@ -37,8 +37,8 @@ public class OpenQuestion : QuestionBase
         throw new NotImplementedException();
     }
     
-    public override IEnumerable<string> GetChoices()
+    /*public override ICollection<Choice> GetChoices()
     {
-        return new []{TextField};
-    }
+        return new List<Choice>();
+    }*/
 }

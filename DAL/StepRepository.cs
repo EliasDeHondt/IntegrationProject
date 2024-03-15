@@ -52,7 +52,7 @@ public class StepRepository
             case InformationStep i: 
                 return _ctx.InformationSteps.Include(step => step.InformationBase).First(step => step.Id == i.Id); 
             case QuestionStep q:
-                return _ctx.QuestionSteps.Include(step => step.QuestionBase).First(step => step.Id == q.Id);
+                return _ctx.QuestionSteps.Include(step => step.QuestionBase).ThenInclude(question => question.Choices).First(step => step.Id == q.Id);
             case CombinedStep c:
                 return _ctx.CombinedSteps.Include(step => step.InformationBase).Include(step => step.QuestionBase)
                     .First(step => step.Id == c.Id);
