@@ -1,17 +1,9 @@
 ﻿import * as tf from "@tensorflow/tfjs";
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 
-console.log(tf.version);
-const FPS: number = 30;
-const height: number = 480;
-const width: number = 640;
-
 let video: HTMLVideoElement = document.getElementById("vidInput") as HTMLVideoElement;
 let ct: HTMLCanvasElement = document.getElementById("canvasTransfer") as HTMLCanvasElement;
-ct.width = video.videoWidth;
-ct.height = video.videoHeight;
-let canvas: HTMLCanvasElement = document.getElementById("canvasCV") as HTMLCanvasElement;
-let context: CanvasRenderingContext2D | null = ct.getContext("2d");
+let context: CanvasRenderingContext2D= ct.getContext("2d") ?? new CanvasRenderingContext2D();
 let liveview: HTMLDivElement = document.getElementById("liveview") as HTMLDivElement;
 
 video.disablePictureInPicture = true;
@@ -35,13 +27,13 @@ navigator.mediaDevices.getUserMedia({video: true, audio: false})
 let children:any[] = [];
 
 function predictWebcam(){
-    context?.drawImage(video, 0, 0, ct.width, ct.height);
     model.detect(video).then(predictions => {
-        context?.clearRect(0, 0, ct.width, ct.height);
+        context.clearRect(0, 0, ct.width, ct.height);
         for(let i = 0; i < children.length; i++){
             liveview.removeChild(children[i])
         }
         children.splice(0);
+        context.drawImage(video, 0, 0, ct.width, ct.height);
         predictions.forEach(prediction => {
             if(prediction.score > 0.66 && prediction.class === "person"){
                 /*const highlighter = document.createElement('div');
@@ -54,9 +46,11 @@ function predictWebcam(){
                 liveview.appendChild(highlighter);
                 children.push(highlighter);*/
                 let box = prediction.bbox;
-                context?.strokeRect(box[0], box[1], box[2], box[3]);
+                context.strokeStyle = 'red';
+                context.strokeRect(box[0], box[1], box[2], box[3]);
             }
         })
+        
         window.requestAnimationFrame(predictWebcam);
     })
 }
