@@ -32,6 +32,10 @@
 
     <ItemGroup>
         <_ContentIncludedByDefault Remove="wwwroot\js\site.js"/>
+        <_ContentIncludedByDefault Remove="custom npm packages\opencv-ts\.eslintrc.json" />
+        <_ContentIncludedByDefault Remove="custom npm packages\opencv-ts\package.json" />
+        <_ContentIncludedByDefault Remove="custom npm packages\opencv-ts\tsconfig.json" />
+        <_ContentIncludedByDefault Remove="custom npm packages\opencv-ts\tsconfig.test.json" />
     </ItemGroup>
 
     <ItemGroup>
@@ -43,6 +47,7 @@
         <None Remove="$(MpaRoot)**"/>
         <None Include="$(MpaRoot)**" Exclude="$(MpaRoot)node_modules\**"/>
         <None Include="wwwroot\Assets\Videos\Rocket league in Wheelchair meme.mp4" />
+        <None Remove="custom npm packages\**" />
 
     </ItemGroup>
 
