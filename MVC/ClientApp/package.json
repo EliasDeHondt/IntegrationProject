@@ -20,7 +20,7 @@
     "css-loader": "^6.7.1",
     "mini-css-extract-plugin": "^2.8.0",
     "mirada": "^0.0.15",
-    "sass": "^1.71.1",
+    "sass": "^1.72.0",
     "sass-loader": "^14.1.1",
     "ts-loader": "^9.5.1",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
@@ -30,7 +30,7 @@
   },
   "type": "commonjs",
   "scripts": {
-    "build": "webpack",
-    "watch": "webpack --watch"
+    "build": "npm rebuild && webpack",
+    "watch": "npm rebuild && webpack --watch"
   }
 }
