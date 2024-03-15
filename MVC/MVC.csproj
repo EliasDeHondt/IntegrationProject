@@ -25,7 +25,9 @@
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
             <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         </Content>
-        <Content Remove="custom npm packages\**" />
+        <Content Include="..\..\..\Downloads\screensaver.mp4">
+          <Link>Assets\Videos\screensaver.mp4</Link>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
@@ -47,18 +49,6 @@
         <None Include="wwwroot\Assets\Videos\Rocket league in Wheelchair meme.mp4" />
         <None Remove="custom npm packages\**" />
 
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Assets\Videos\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="custom npm packages\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Remove="custom npm packages\**" />
     </ItemGroup>
 
     <Target Name="NpmInstall" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(MpaRoot)node_modules') ">
