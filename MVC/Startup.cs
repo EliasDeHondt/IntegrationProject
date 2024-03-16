@@ -25,7 +25,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        string bucketName = "codeforge-bucket-videos";
+        string bucketName = Environment.GetEnvironmentVariable("BUCKET_NAME_VIDEO") ?? "";
         
         var options = new CloudStorageOptions { BucketName = bucketName };
         options.ObjectName = bucketName;
