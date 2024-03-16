@@ -22,8 +22,8 @@ namespace MVC.Controllers.API;
 public class StepsController : Controller
 {
     private readonly StepManager _manager;
-    private readonly CloudStorageOptions _options;
-    private readonly StorageClient _storage;
+    private readonly CloudStorageOptions _options; // Google Cloud Storage Options
+    private readonly StorageClient _storage; // Google Cloud Storage Client
 
     public StepsController(StepManager manager, CloudStorageOptions options)
     {

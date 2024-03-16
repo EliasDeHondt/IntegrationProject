@@ -241,9 +241,7 @@ public class DataSeeder
         Image imageInfo = new Image(""); // Runtime environment cannot access undefined pictures.
         Video videoInfo = new Video(""); // Runtime environment cannot access undefined videos.
         //Image imageInfo = new Image("../MVC/Assets/Images/verkiezingen.png");
-        //Video videoInfo = new Video("Rocket-league-in-Wheelchair-meme.mp4");
-        // Image imageInfo = new Image("../MVC/Assets/Images/TestImage.png");
-        // Video videoInfo = new Video("/Assets/Videos/Rocket league in Wheelchair meme.mp4");
+        //Video videoInfo = new Video("../MVC/Assets/Videos/rocket_league_meme.mp4");
         
         GenerateSingleQuestions(ctx,flow);
         GenerateMultipleCQuestions(ctx,flow);
