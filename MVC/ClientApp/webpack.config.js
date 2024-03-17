@@ -1,4 +1,4 @@
-﻿const path = require('path');
+const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 
@@ -8,6 +8,9 @@ module.exports = {
         validation: './src/js/validation.ts',
         index: './src/js/index.ts',
         step: './src/js/Flow/StepAPI.ts',
+        theme: './src/js/Theme/ThemeAPI.ts',
+        mainThemeDetails: './src/js/Theme/MainThemeDetailsAPI.ts',
+        subThemeDetails: './src/js/Theme/SubThemeDetailsAPI.ts',
         webcam: './src/js/Webcam/WebCamDetection.ts',
     },
     output: {

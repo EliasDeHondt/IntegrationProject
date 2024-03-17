@@ -1,0 +1,40 @@
+﻿@***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************@
+
+@using Domain.ProjectLogics
+@model SubTheme
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = $"Theme {Model.Id}";
+}
+
+<!DOCTYPE html>
+
+<html lang="">
+<head>
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+<h1>Theme <span id="subThemeId">@Model.Id</span> - @Model.Subject</h1>
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Flow ID</th><th>Flow Type</th><th>Start</th>
+        </tr>
+        </thead>
+        <tbody id="flowContainer"></tbody>
+    </table>
+</div>
+</body>
+<footer>
+
+</footer>
+</html>
+
+<script src="/dist/subThemeDetails.entry.js" defer></script>

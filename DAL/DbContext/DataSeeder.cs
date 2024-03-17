@@ -261,8 +261,22 @@ public class DataSeeder
         ctx.Projects.Add(project1);
         ctx.Texts.Add(textInfo);
         ctx.Images.Add(imageInfo);
+        ctx.SingleChoiceQuestions.Add(question);
+        ctx.InformationSteps.Add(step1);
+        ctx.InformationSteps.Add(step2);
+        ctx.CombinedSteps.Add(step3);
+        ctx.InformationSteps.Add(step4);
 
-        ctx.InformationSteps.AddRange(step1,step2);
+        // Seed subtheme and extra main theme
+        SubTheme subTheme1 = new SubTheme("Causes", mainTheme1);
+        subTheme1.MainTheme = mainTheme1;
+        subTheme1.Flows.Add(flow);
+        mainTheme1.Themes.Add(subTheme1);
+        ctx.SubThemes.Add(subTheme1);
+        MainTheme mainTheme2 = new MainTheme("Renewable energy");
+        Project project2 = new Project(mainTheme2);
+        ctx.MainThemes.Add(mainTheme2);
+        ctx.Projects.Add(project2);
         
         ctx.SaveChanges();
         ctx.ChangeTracker.Clear();
