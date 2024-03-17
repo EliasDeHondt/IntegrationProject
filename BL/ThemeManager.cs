@@ -29,13 +29,18 @@ public class ThemeManager
         return _repository.ReadMainThemeById(id);
     }
 
+    public SubTheme GetSubThemeById(long id)
+    {
+        return _repository.ReadSubThemeById(id);
+    }
+
     public IEnumerable<SubTheme> GetSubThemesOfMainThemeById(long id)
     {
-        return _repository.ReadSubThemesOfMainThemeById(id);
+        return _repository.ReadSubThemesOfMainTheme(id);
     }
-    
-    public IEnumerable<Flow> GetFlowsOfMainThemeById(long id)
+
+    public IEnumerable<Flow> GetFlowsOfSubThemeById(long id)
     {
-        return _repository.ReadFlowsOfMainThemeById(id);
+        return _repository.ReadFlowsOfSubThemeById(id);
     }
 }

@@ -6,27 +6,26 @@
  ***************************************/
 
 using Business_Layer;
+using Domain.ProjectLogics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MVC.Controllers;
 
-public class ThemeController : Controller
+public class MainThemeController : Controller
 {
     private readonly ThemeManager _manager;
 
-    public ThemeController(ThemeManager manager)
+    public MainThemeController(ThemeManager manager)
     {
         _manager = manager;
     }
 
-    [HttpGet]
     public IActionResult MainThemes()
     {
-        var mainThemes = _manager.GetAllMainThemes();
-        return View(mainThemes);
+        return View();
     }
-    
-    public IActionResult Details(int id)
+
+    public IActionResult MainTheme(long id)
     {
         var mainTheme = _manager.GetMainThemeById(id);
         return View(mainTheme);

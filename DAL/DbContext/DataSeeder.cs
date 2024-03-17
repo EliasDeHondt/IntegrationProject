@@ -31,7 +31,6 @@ public class DataSeeder
         flow.Steps.Add(step2);
         flow.Steps.Add(step3);
         flow.Steps.Add(step4);
-        mainTheme1.Flows.Add(flow);
         Project project1 = new Project(mainTheme1);
 
         ctx.MainThemes.Add(mainTheme1);
@@ -48,6 +47,7 @@ public class DataSeeder
         // Seed subtheme and extra main theme
         SubTheme subTheme1 = new SubTheme("Causes", mainTheme1);
         subTheme1.MainTheme = mainTheme1;
+        subTheme1.Flows.Add(flow);
         mainTheme1.Themes.Add(subTheme1);
         ctx.SubThemes.Add(subTheme1);
         MainTheme mainTheme2 = new MainTheme("Renewable energy");

@@ -1,22 +1,18 @@
-﻿/***************************************
- *                                     *
- * Created by CodeForge                *
- * Visit https://codeforge.eliasdh.com *
- *                                     *
- ***************************************/
-
-export interface Theme {
+﻿export interface MainTheme {
     id: number;
     subject: string;
-    flows: number[];
-}
-
-export interface MainTheme {
-    theme: Theme;
-    subthemes: number[];
+    flows: Flow[];
+    themes: SubTheme[];
 }
 
 export interface SubTheme {
-    theme: Theme;
-    maintheme: number;
+    id: number;
+    subject: string;
+    flows: Flow[];
+    mainTheme: number;
+}
+
+export interface Flow {
+    id: number;
+    flowType: string;
 }

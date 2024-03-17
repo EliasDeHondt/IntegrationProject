@@ -1,38 +1,32 @@
-﻿/***************************************
- *                                     *
- * Created by CodeForge                *
- * Visit https://codeforge.eliasdh.com *
- *                                     *
- ***************************************/
+﻿import {MainTheme} from "./ThemeObjects";
 
-let subThemeList = document.getElementById('subthemeContainer') as HTMLTableElement;
-let flowList = document.getElementById('flowContainer') as HTMLTableElement;
-let themeId = Number((document.getElementById("themeId") as HTMLHeadingElement).innerText);
+const mainThemeContainer = document.getElementById("mainThemeContainer") as HTMLTableSectionElement;
 
-function loadSubThemes(id: number) {
-    fetch(`/api/Themes/${id}/SubThemes`, {
+function loadMainThemes() {
+    fetch("/api/MainThemes", {
         method: "GET",
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json"
         }
     })
-        .then(response => {
-            if (response.ok) return response.json();
-        })
-        .then(themes => {
-            let subthemes = "";
-            for (const theme of themes) {
-                subthemes += `
-                    <tr>
-                        <td>${theme.id}</td>
-                        <td>${theme.subject}</td>
-                    </tr>
-                `
-            }
-            subThemeList.innerHTML += subthemes;
-        })
+        .then(response => response.json())
+        .then(data => showMainThemes(data))
         .catch(error => console.error("Error:", error))
 }
 
-loadSubThemes(themeId);
+
+function showMainThemes(mainThemes: MainTheme[]) {
+    mainThemeContainer.innerHTML = "";
+    mainThemes.forEach(theme => addMainTheme(theme));
+}
+
+function addMainTheme(theme: MainTheme) {
+    mainThemeContainer.innerHTML += `<tr>
+                                        <td>${theme.id}</td>
+                                        <td>${theme.subject}</td>
+                                        <td><a href="/MainTheme/MainTheme/${theme.id}"">Details</a></td>
+                                     </tr>`
+}
+
+window.onload = () => loadMainThemes()

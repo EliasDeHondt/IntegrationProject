@@ -18,4 +18,6 @@ public class SubThemeViewModel
     public string Subject { get; set; }
     [Required]
     public IEnumerable<Flow> Flows { get; set; }
+    [Required]
+    public long MainTheme { get; set; }
 }

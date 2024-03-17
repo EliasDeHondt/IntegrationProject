@@ -5,8 +5,10 @@
  *                                     *
  ***************************************/
 
+using System.Collections;
 using Data_Access_Layer.DbContext;
 using Domain.ProjectLogics;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data_Access_Layer;
 
@@ -44,16 +46,29 @@ public class ThemeRepository
         return _context.MainThemes.Find(id);
     }
 
-    public IEnumerable<SubTheme> ReadSubThemesOfMainThemeById(long id)
+
+    public SubTheme ReadSubThemeById(long id)
     {
-        MainTheme theme = _context.MainThemes.Find(id);
-        _context.Entry(theme).Collection(theme => theme.Themes).Load();
-        return theme.Themes;
+        return _context.SubThemes.Find(id);
+    }
+
+    public IEnumerable<SubTheme> ReadSubThemesOfMainTheme(long id)
+    {
+        return _context.SubThemes
+            .Include(theme => theme.MainTheme)
+            .Where(theme => theme.MainTheme.Id.Equals(id));
     }
 
     public IEnumerable<Flow> ReadFlowsOfMainThemeById(long id)
     {
         MainTheme theme = _context.MainThemes.Find(id);
+        _context.Entry(theme).Collection(theme => theme.Flows).Load();
+        return theme.Flows;
+    }
+
+    public IEnumerable<Flow> ReadFlowsOfSubThemeById(long id)
+    {
+        SubTheme theme = _context.SubThemes.Find(id);
         _context.Entry(theme).Collection(theme => theme.Flows).Load();
         return theme.Flows;
     }

@@ -8,6 +8,8 @@ module.exports = {
         index: './src/js/index.ts',
         step: './src/js/Flow/StepAPI.ts',
         theme: './src/js/Theme/ThemeAPI.ts',
+        mainThemeDetails: './src/js/Theme/MainThemeDetailsAPI.ts',
+        subThemeDetails: './src/js/Theme/SubThemeDetailsAPI.ts'
     },
     output: {
         filename: '[name].entry.js',
