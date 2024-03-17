@@ -36,7 +36,7 @@ function ShowStep(data: Step) {
         }
         case "Video":{
             let video = document.createElement("video");
-            video.src = data.informationViewModel.information;
+            video.src = "/Assets/Videos/" + data.informationViewModel.information;
             video.autoplay = true;
             video.loop = true;
             video.controls = false;

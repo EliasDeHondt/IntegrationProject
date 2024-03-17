@@ -29,7 +29,7 @@ public class StepsController : Controller
     {
         _manager = manager;
         _options = options;
-        
+        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../service-account-key.json");
         GoogleCredential credential = GoogleCredential.GetApplicationDefaultAsync().Result;
         _storage = StorageClient.Create(credential);
     }
@@ -61,17 +61,22 @@ public class StepsController : Controller
 
     private async Task<InformationViewModel> CreateInformationViewModel(InformationBase information)
     {
-        if (typeof(InformationBase) == typeof(Video))
+        string info = information.GetInformation();
+        if (information.GetType().Name == "Video")
         {
-            _options.ObjectName = information.GetInformation();
-            if (new[] { null, "", "codeforge-bucket-videos" }.Contains(_options.BucketName)) return new InformationViewModel();
+            _options.ObjectName = info;
+            _options.BucketName = "codeforge-bucket-videos";
+            //if (new[] { null, "", "codeforge-bucket-videos" }.Contains(_options.BucketName)) return new InformationViewModel();
             
             try
             {
-                await using MemoryStream m = new();
-                string filePath = $"/wwwroot/Assets/Videos/{_options.ObjectName}";
-                await using FileStream fs = System.IO.File.Create(filePath);
+                using MemoryStream m = new();
+                string filePath = $"./wwwroot/Assets/Videos/{_options.ObjectName}";
+                await _storage.GetBucketAsync(_options.BucketName); 
                 await _storage.DownloadObjectAsync(_options.BucketName, _options.ObjectName, m);
+                m.Position = 0;
+
+                await using FileStream fs = new(filePath, FileMode.Create); 
                 m.CopyTo(fs);
             }
             catch (GoogleApiException e)
@@ -86,7 +91,7 @@ public class StepsController : Controller
         return new InformationViewModel
         {
             Id = information.Id,
-            Information = information.GetInformation(),
+            Information = info,
             InformationType = information.GetType().Name
         };
     }
