@@ -26,8 +26,8 @@ function addFlow(flow: Flow) {
     flowContainer.innerHTML += `<tr>
                                    <td>${flow.id}</td>
                                    <td>${flow.flowType.toString()}</td>
-                                   <td><a href="">Start Flow</a></td>
+                                   <td><a href="/Flow/Step/${flow.id}">Start Flow</a></td>
                                 </tr>`
 }
 
-window.onload = () => loadFlows(3)
+window.onload = () => loadFlows(themeId)

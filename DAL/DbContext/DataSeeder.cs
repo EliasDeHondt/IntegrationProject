@@ -32,6 +32,20 @@ public class DataSeeder
         flow.Steps.Add(step3);
         flow.Steps.Add(step4);
         Project project1 = new Project(mainTheme1);
+        
+        Flow flow2 = new Flow(FlowType.LINEAR, mainTheme1);
+        Text textInfo2 = new Text("This is more information text");
+        Image imageInfo2 = new Image("../MVC/Assets/Images/TestImage2.png");
+        Video videoInfo2 = new Video("/Assets/Videos/Rocket league in Wheelchair meme.mp4");
+        SingleChoiceQuestion question2 = new SingleChoiceQuestion("", new List<Choice>());
+        InformationStep step5 = new InformationStep(1, textInfo2, flow2);
+        InformationStep step6 = new InformationStep(2, imageInfo2, flow2);
+        CombinedStep step7 = new CombinedStep(3, textInfo2, question2, flow2);
+        InformationStep step8 = new InformationStep(4, videoInfo2, flow2);
+        flow2.Steps.Add(step5);
+        flow2.Steps.Add(step6);
+        flow2.Steps.Add(step7);
+        flow2.Steps.Add(step8);
 
         ctx.MainThemes.Add(mainTheme1);
         ctx.Flows.Add(flow);
@@ -48,6 +62,9 @@ public class DataSeeder
         SubTheme subTheme1 = new SubTheme("Causes", mainTheme1);
         subTheme1.MainTheme = mainTheme1;
         subTheme1.Flows.Add(flow);
+        flow.Theme = subTheme1;
+        subTheme1.Flows.Add(flow2);
+        flow2.Theme = subTheme1;
         mainTheme1.Themes.Add(subTheme1);
         ctx.SubThemes.Add(subTheme1);
         MainTheme mainTheme2 = new MainTheme("Renewable energy");
