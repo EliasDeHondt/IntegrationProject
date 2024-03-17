@@ -261,11 +261,6 @@ public class DataSeeder
         ctx.Projects.Add(project1);
         ctx.Texts.Add(textInfo);
         ctx.Images.Add(imageInfo);
-        ctx.SingleChoiceQuestions.Add(question);
-        ctx.InformationSteps.Add(step1);
-        ctx.InformationSteps.Add(step2);
-        ctx.CombinedSteps.Add(step3);
-        ctx.InformationSteps.Add(step4);
 
         // Seed subtheme and extra main theme
         SubTheme subTheme1 = new SubTheme("Causes", mainTheme1);
