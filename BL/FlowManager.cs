@@ -40,6 +40,11 @@ public class FlowManager
         return _repository.ReadFlowById(id);
     }
 
+    public Flow GetFlowByIdWithTheme(long id)
+    {
+        return _repository.ReadFlowByIdIncludingTheme(id);
+    }
+    
     public List<Flow> GetAll()
     {
         throw new NotImplementedException();

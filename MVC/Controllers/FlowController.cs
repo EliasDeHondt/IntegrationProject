@@ -23,7 +23,7 @@ public class FlowController : Controller
     
     public IActionResult Step(long id)
     {
-        var flow = _manager.GetFlowById(id);
+        var flow = _manager.GetFlowByIdWithTheme(id);
         return View(flow);
     }
 }

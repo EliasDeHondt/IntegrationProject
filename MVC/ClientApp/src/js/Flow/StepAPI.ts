@@ -4,7 +4,6 @@ import {Flow} from "./FlowObjects";
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
 const btnNextStep = document.getElementById("btnNextStep") as HTMLButtonElement;
 const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonElement;
-const aExitFlow = document.getElementById("aExitFlow") as HTMLAnchorElement;
 let currentStepNumber: number = 0;
 let flowId = Number((document.getElementById("flowId") as HTMLSpanElement).innerText);
 let themeId = Number((document.getElementById("theme") as HTMLSpanElement).innerText);
@@ -23,7 +22,7 @@ function GetNextStep(stepNumber: number, flowId: number) {
 }
 
 function ShowStep(data: Step) {
-    (document.getElementById("stepNr") as HTMLSpanElement).innerText = currentStepNumber.toString();
+    //(document.getElementById("stepNr") as HTMLSpanElement).innerText = currentStepNumber.toString();
     
     informationContainer.innerHTML = "";
     switch (data.informationViewModel.informationType) {
@@ -50,8 +49,6 @@ function ShowStep(data: Step) {
         }
     }
 }
-
-window.onload = () => aExitFlow.href = `/Subtheme/Subtheme/3`
 btnNextStep.onclick = () => GetNextStep(++currentStepNumber, flowId)
 btnRestartFlow.onclick = () => {
     currentStepNumber = 0;

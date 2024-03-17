@@ -25,4 +25,12 @@ public class FlowRepository
     {
         return _context.Flows.Find(id);
     }
+    
+    public Flow ReadFlowByIdIncludingTheme(long id)
+    {
+        return _context.Flows
+            .Include(f => f.Theme)
+            .FirstOrDefault(f => f.Id == id);
+    }
+    
 }

@@ -24,7 +24,16 @@
 <footer>
     <button id="btnNextStep">Next step</button>
     <button id="btnRestartFlow">Restart flow</button>
-    <a id="aExitFlow">Exit flow</a>
+    <span>@Model.Theme.GetType() @Model.Theme.Id</span>
+    @if (Model.Theme.GetType() == typeof(SubTheme))
+    {
+        <a class="nav-item" id="butExitFlow" asp-area="" asp-controller="SubTheme" asp-action="SubTheme" asp-route-id="@Model.Theme.Id">Exit flow</a>
+    }
+    else
+    {
+        <a class="nav-item" id="butExitFlow" asp-area="" asp-controller="MainTheme" asp-action="MainTheme" asp-route-id="@Model.Theme.Id">Exit flow</a>
+    }
+    
 </footer>
 </html>
 
