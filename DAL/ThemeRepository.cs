@@ -59,17 +59,10 @@ public class ThemeRepository
             .Where(theme => theme.MainTheme.Id.Equals(id));
     }
 
-    public IEnumerable<Flow> ReadFlowsOfMainThemeById(long id)
-    {
-        MainTheme theme = _context.MainThemes.Find(id);
-        _context.Entry(theme).Collection(theme => theme.Flows).Load();
-        return theme.Flows;
-    }
-
     public IEnumerable<Flow> ReadFlowsOfSubThemeById(long id)
     {
-        SubTheme theme = _context.SubThemes.Find(id);
-        _context.Entry(theme).Collection(theme => theme.Flows).Load();
-        return theme.Flows;
+        return _context.Flows
+            .Include(flow => flow.Theme)
+            .Where(flow => flow.Theme.Id.Equals(id));
     }
 }

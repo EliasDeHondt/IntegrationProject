@@ -1,10 +1,10 @@
-import {Flow} from "./ThemeObjects";
+import {Flow} from "../Flow/FlowObjects";
 
-const flowContainer = document.getElementById("subThemeContainer") as HTMLTableSectionElement;
-let subThemeId = Number((document.getElementById("subThemeId") as HTMLSpanElement).innerText);
+const flowContainer = document.getElementById("flowContainer") as HTMLTableSectionElement;
+let themeId = Number((document.getElementById("subThemeId") as HTMLSpanElement).innerText);
 
-function loadFlows(subId: number) {
-    fetch(`/api/SubThemes/${subId}`, {
+function loadFlows(id: number) {
+    fetch(`/api/SubThemes/${id}/Flows`, {
         method: "GET",
         headers: {
             "Accept": "application/json",
@@ -25,9 +25,9 @@ function showFlows(flows: Flow[]) {
 function addFlow(flow: Flow) {
     flowContainer.innerHTML += `<tr>
                                    <td>${flow.id}</td>
-                                   <td>${flow.flowType}</td>
+                                   <td>${flow.flowType.toString()}</td>
                                    <td><a href="">Start Flow</a></td>
                                 </tr>`
 }
 
-window.onload = () => loadFlows(subThemeId)
+window.onload = () => loadFlows(3)

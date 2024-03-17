@@ -1,5 +1,4 @@
 import {SubTheme} from "./ThemeObjects";
-import {Flow} from "./ThemeObjects";
 
 const subThemeContainer = document.getElementById("subThemeContainer") as HTMLTableSectionElement;
 const linearFlowBtn = document.getElementById("linearBtn") as HTMLButtonElement;

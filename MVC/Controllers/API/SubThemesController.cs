@@ -15,10 +15,10 @@ public class SubThemesController : ControllerBase
         _manager = manager;
     }
 
-    [HttpGet("{subThemeId}/Flows")]
-    public ActionResult GetSubThemesOfMainTheme(long mainThemeId, long subThemeId)
+    [HttpGet("{id}/Flows")]
+    public ActionResult GetFlowsOfSubTheme(long id)
     {
-        var flows = _manager.GetFlowsOfSubThemeById(subThemeId);
+        var flows = _manager.GetFlowsOfSubThemeById(id);
 
         if (!flows.Any())
             return NoContent();

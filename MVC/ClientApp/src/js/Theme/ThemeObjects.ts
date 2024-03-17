@@ -1,4 +1,6 @@
-﻿export interface MainTheme {
+﻿import {Flow} from "../Flow/FlowObjects";
+
+export interface MainTheme {
     id: number;
     subject: string;
     flows: Flow[];
@@ -10,9 +12,4 @@ export interface SubTheme {
     subject: string;
     flows: Flow[];
     mainTheme: number;
-}
-
-export interface Flow {
-    id: number;
-    flowType: string;
 }
