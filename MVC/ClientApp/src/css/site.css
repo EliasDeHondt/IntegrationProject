@@ -66,3 +66,18 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+
+.highlighter{
+  background: rgba(0, 255, 0, 0.25);
+  border: 1px dashed #fff;
+  z-index: 1;
+  position: absolute;
+}
+
+.camView {
+  position: relative;
+  float: left;
+  width: calc(100% - 20px);
+  margin: 10px;
+  cursor: pointer;
+}
