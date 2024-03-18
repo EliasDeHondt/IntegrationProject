@@ -22,7 +22,7 @@ function GetNextStep(stepNumber: number, flowId: number) {
 }
 
 function ShowStep(data: Step) {
-    //(document.getElementById("stepNr") as HTMLSpanElement).innerText = currentStepNumber.toString();
+    (document.getElementById("stepNr") as HTMLSpanElement).innerText = currentStepNumber.toString();
     
     informationContainer.innerHTML = "";
     switch (data.informationViewModel.informationType) {
