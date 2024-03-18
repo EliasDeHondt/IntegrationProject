@@ -14,7 +14,7 @@ public class SubThemeController : Controller
     
     public IActionResult SubTheme(long id)
     {
-        var subTheme = _manager.GetSubThemeById(id);
+        var subTheme = _manager.GetSubThemeByIdWithMainTheme(id);
         return View(subTheme);
     }
 }

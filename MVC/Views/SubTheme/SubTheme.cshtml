@@ -21,6 +21,7 @@
 </head>
 <body>
 <h1>Theme <span id="subThemeId">@Model.Id</span> - @Model.Subject</h1>
+<a asp-controller="MainTheme" asp-action="MainTheme" asp-route-id="@Model.MainTheme.Id">Back to Sub-Themes</a>
 <div>
     <table class="table">
         <thead>
