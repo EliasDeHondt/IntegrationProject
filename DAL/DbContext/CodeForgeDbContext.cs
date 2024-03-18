@@ -6,7 +6,6 @@
  ***************************************/
 
 using System.Diagnostics;
-using System.Net.Mime;
 using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
