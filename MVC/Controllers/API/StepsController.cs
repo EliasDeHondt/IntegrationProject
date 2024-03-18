@@ -6,6 +6,7 @@
  ***************************************/
 
 using Business_Layer;
+using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +29,17 @@ public class StepsController : Controller
     public ActionResult GetNextStep(int stepNumber, long flowId)
     {
         StepBase stepBase = _manager.GetStepForFlowByNumber(flowId, stepNumber);
-
+        // if (stepBase.Flow.FlowType.GetType().Name == FlowType.CIRCULAR.GetType().Name)
+        // {
+        //     
+        // }
+       // while (stepBase == null && _manager.GetFlowType(flowId) == FlowType.CIRCULAR)
+       // if (stepBase.Flow.FlowType.GetType().Name == FlowType.CIRCULAR.GetType().Name)
+        // if (stepNumber == 3)
+        // {
+        //     stepNumber = 1;
+        //     stepBase = _manager.GetStepForFlowByNumber(flowId, stepNumber);
+        // }
         switch (stepBase)
         {
             case CombinedStep cStep:
@@ -43,6 +54,10 @@ public class StepsController : Controller
                 return Ok(stepViewModel);
             }
             case null:
+                // if (stepBase.Flow.FlowType.GetType().Name == FlowType.CIRCULAR.GetType().Name)
+                // {
+                //     stepNumber = 1;
+                // }
                 return NoContent();
             default:
                 return Ok(stepBase);

@@ -13,7 +13,8 @@
     <title>@ViewData["Title"]</title>
 </head>
 <body>
-<h1>Flow <span id="flowId">@Model.Id</span> - Step <span id="stepNr"></span></h1>
+<h1><span id="flowtype">@Model.FlowType.ToString()</span> Flow <span id="flowId">@Model.Id</span> - Step <span id="stepNr"></span></h1>
+<span id="steptotal">@Model.getStepCount()</span>
 <p>Theme <span id="theme">@Model.Theme.Id</span> - @Model.Theme.Subject</p>
 <div>
     <div class="container" id="informationContainer">

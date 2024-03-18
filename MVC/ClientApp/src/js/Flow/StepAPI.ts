@@ -7,6 +7,8 @@ const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonEl
 let currentStepNumber: number = 0;
 let flowId = Number((document.getElementById("flowId") as HTMLSpanElement).innerText);
 let themeId = Number((document.getElementById("theme") as HTMLSpanElement).innerText);
+let steptotal = Number((document.getElementById("steptotal") as HTMLSpanElement).innerText);
+let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerText;
 
 function GetNextStep(stepNumber: number, flowId: number) {
     fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
@@ -49,7 +51,16 @@ function ShowStep(data: Step) {
         }
     }
 }
-btnNextStep.onclick = () => GetNextStep(++currentStepNumber, flowId)
+// btnNextStep.onclick = () => GetNextStep(++currentStepNumber, flowId)
+btnNextStep.onclick = () => {
+    currentStepNumber++;
+    GetNextStep(currentStepNumber, flowId);
+    
+    if (flowtype == "CIRCULAR" && currentStepNumber > steptotal) {
+        currentStepNumber = 0;
+        GetNextStep(++currentStepNumber, flowId);
+    }
+}
 btnRestartFlow.onclick = () => {
     currentStepNumber = 0;
     GetNextStep(++currentStepNumber, flowId);

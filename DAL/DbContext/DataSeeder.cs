@@ -268,10 +268,24 @@ public class DataSeeder
         flow.Theme = subTheme1;
         mainTheme1.Themes.Add(subTheme1);
         ctx.SubThemes.Add(subTheme1);
-        MainTheme mainTheme2 = new MainTheme("Renewable energy");
+        
+        // Seed main theme 2
+        MainTheme mainTheme2 = new MainTheme("Lokale Verkiezingen - circulair");
         Project project2 = new Project(mainTheme2);
+        SubTheme subTheme2 = new SubTheme("SubTheme", mainTheme2);
+        Flow flow2 = new Flow(FlowType.CIRCULAR, subTheme2);
+        
+        GenerateSingleQuestions(ctx,flow2);
+       // GenerateRangeQuestions(ctx,flow2);
+        
+        flow2.Theme = subTheme2;
+        mainTheme2.Themes.Add(subTheme2);
+        ctx.SubThemes.Add(subTheme2);
+        
         ctx.MainThemes.Add(mainTheme2);
+        ctx.Flows.Add(flow2);
         ctx.Projects.Add(project2);
+        
         
         ctx.SaveChanges();
         ctx.ChangeTracker.Clear();

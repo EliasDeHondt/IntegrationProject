@@ -78,4 +78,10 @@ public class Flow
     {
         FlowStopped = true;
     }
+
+    public int getStepCount()
+    {
+        return 5;
+        //return Steps.Count;
+    }
 }
