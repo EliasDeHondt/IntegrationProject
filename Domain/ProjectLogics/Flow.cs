@@ -81,13 +81,13 @@ public class Flow
 
     public int getStepCount()
     {
-        //return 5;
+        //return Steps.Count; //todo --> dit in de step.cshtml doen
         int stepsCount = 0;
         foreach (var step in Steps)
         {
             stepsCount++;
         }
-
+        
         return stepsCount;
     }
 }
