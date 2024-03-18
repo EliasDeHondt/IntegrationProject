@@ -1,12 +1,14 @@
-import { Step } from "./Step/StepObjects";
+import {Step} from "./Step/StepObjects";
+import {Flow} from "./FlowObjects";
 
-let nextStepButton = document.getElementById("butNextStep") as HTMLButtonElement;
-let informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
+const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
+const btnNextStep = document.getElementById("btnNextStep") as HTMLButtonElement;
+const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonElement;
 let currentStepNumber: number = 0;
-let flowId: number; // TODO: voor later multiple flows
+let flowId = Number((document.getElementById("flowId") as HTMLSpanElement).innerText);
+let themeId = Number((document.getElementById("theme") as HTMLSpanElement).innerText);
 
 function GetNextStep(stepNumber: number, flowId: number) {
-
     fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
         method: "GET",
         headers: {
@@ -20,21 +22,23 @@ function GetNextStep(stepNumber: number, flowId: number) {
 }
 
 function ShowStep(data: Step) {
+    (document.getElementById("stepNr") as HTMLSpanElement).innerText = currentStepNumber.toString();
+    
     informationContainer.innerHTML = "";
-    switch(data.informationViewModel.informationType){
+    switch (data.informationViewModel.informationType) {
         case "Text": {
             let p = document.createElement("p");
             p.innerText = data.informationViewModel.information;
             informationContainer.appendChild(p);
             break;
         }
-        case "Image":{
+        case "Image": {
             let img = document.createElement("img");
             img.src = "data:image/png;base64," + data.informationViewModel.information;
             informationContainer.appendChild(img);
             break;
         }
-        case "Video":{
+        case "Video": {
             let video = document.createElement("video");
             video.src = data.informationViewModel.information;
             video.autoplay = true;
@@ -45,5 +49,8 @@ function ShowStep(data: Step) {
         }
     }
 }
-
-nextStepButton.onclick = () => GetNextStep(++currentStepNumber, 1)
+btnNextStep.onclick = () => GetNextStep(++currentStepNumber, flowId)
+btnRestartFlow.onclick = () => {
+    currentStepNumber = 0;
+    GetNextStep(++currentStepNumber, flowId);
+};

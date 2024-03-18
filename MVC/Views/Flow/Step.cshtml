@@ -1,8 +1,9 @@
-﻿@model Domain.ProjectLogics.Steps.StepBase
+﻿@using Domain.ProjectLogics
+@model Flow
 
 @{
     Layout = null;
-    ViewData["Title"] = "TempFlow";
+    ViewData["Title"] = $"Flow {Model.Id}";
 }
 
 <!DOCTYPE html>
@@ -12,6 +13,8 @@
     <title>@ViewData["Title"]</title>
 </head>
 <body>
+<h1>Flow <span id="flowId">@Model.Id</span> - Step <span id="stepNr"></span></h1>
+<p>Theme <span id="theme">@Model.Theme.Id</span> - @Model.Theme.Subject</p>
 <div>
     <div class="container" id="informationContainer">
         
@@ -19,7 +22,17 @@
 </div>
 </body>
 <footer>
-    <button id="butNextStep">Next step</button>
+    <button id="btnNextStep">Next step</button>
+    <button id="btnRestartFlow">Restart flow</button>
+    @if (Model.Theme.GetType() == typeof(SubTheme))
+    {
+        <a class="nav-item" id="butExitFlow" asp-area="" asp-controller="SubTheme" asp-action="SubTheme" asp-route-id="@Model.Theme.Id">Exit flow</a>
+    }
+    else
+    {
+        <a class="nav-item" id="butExitFlow" asp-area="" asp-controller="MainTheme" asp-action="MainTheme" asp-route-id="@Model.Theme.Id">Exit flow</a>
+    }
+    
 </footer>
 </html>
 

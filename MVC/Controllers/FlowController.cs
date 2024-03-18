@@ -20,10 +20,10 @@ public class FlowController : Controller
     {
         _manager = manager;
     }
-
-
-    public IActionResult Step()
+    
+    public IActionResult Step(long id)
     {
-        return View();
+        var flow = _manager.GetFlowByIdWithTheme(id);
+        return View(flow);
     }
 }
