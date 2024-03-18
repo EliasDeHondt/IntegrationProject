@@ -29,9 +29,9 @@ public class ThemeManager
         return _repository.ReadMainThemeById(id);
     }
 
-    public SubTheme GetSubThemeById(long id)
+    public SubTheme GetSubThemeByIdWithMainTheme(long id)
     {
-        return _repository.ReadSubThemeById(id);
+        return _repository.ReadSubThemeByIdWithMainTheme(id);
     }
 
     public IEnumerable<SubTheme> GetSubThemesOfMainThemeById(long id)

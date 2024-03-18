@@ -47,9 +47,11 @@ public class ThemeRepository
     }
 
 
-    public SubTheme ReadSubThemeById(long id)
+    public SubTheme ReadSubThemeByIdWithMainTheme(long id)
     {
-        return _context.SubThemes.Find(id);
+        return _context.SubThemes
+            .Include(theme => theme.MainTheme)
+            .FirstOrDefault(theme => theme.Id == id);
     }
 
     public IEnumerable<SubTheme> ReadSubThemesOfMainTheme(long id)
