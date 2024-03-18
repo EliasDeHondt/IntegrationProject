@@ -17,7 +17,7 @@ public abstract class QuestionBase
     [Required]
     public ICollection<ChoiceAnswer> Answers { get; set; }
     [Required]
-    [MaxLength(150)]
+    [MaxLength(600)]
     public string Question { get; set; }
     
     public abstract object Answer();

@@ -11,19 +11,23 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MVC.Controllers;
 
-public class FlowController : Controller
+public class MainThemeController : Controller
 {
-    
-    private FlowManager _manager;
-    
-    public FlowController(FlowManager manager)
+    private readonly ThemeManager _manager;
+
+    public MainThemeController(ThemeManager manager)
     {
         _manager = manager;
     }
-    
-    public IActionResult Step(long id)
+
+    public IActionResult MainThemes()
     {
-        var flow = _manager.GetFlowByIdWithTheme(id);
-        return View(flow);
+        return View();
+    }
+
+    public IActionResult MainTheme(long id)
+    {
+        var mainTheme = _manager.GetMainThemeById(id);
+        return View(mainTheme);
     }
 }

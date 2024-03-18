@@ -1,12 +1,16 @@
 import { Step } from "./Step/StepObjects";
+import { downloadVideoFromBucket } from "../StorageAPI";
+import {Flow} from "./FlowObjects";
 
-const nextStepButton = document.getElementById("butNextStep") as HTMLButtonElement;
-const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
+const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
+const btnNextStep = document.getElementById("btnNextStep") as HTMLButtonElement;
+const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonElement;
 let currentStepNumber: number = 0;
-let flowId: number; // TODO: voor later multiple flows
 let userAnswers: string[] = []; // Array to store user answers
 let openUserAnswer: string = "";
+let flowId = Number((document.getElementById("flowId") as HTMLSpanElement).innerText);
+let themeId = Number((document.getElementById("theme") as HTMLSpanElement).innerText);
 
 function GetNextStep(stepNumber: number, flowId: number) {
     fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
@@ -21,7 +25,8 @@ function GetNextStep(stepNumber: number, flowId: number) {
         .catch(error => console.error("Error:", error))
 }
 
-function ShowStep(data: Step) {
+async function ShowStep(data: Step) {
+    (document.getElementById("stepNr") as HTMLSpanElement).innerText = currentStepNumber.toString();
     informationContainer.innerHTML = "";
     questionContainer.innerHTML = "";
     if (data.informationViewModel != undefined) {
@@ -39,8 +44,12 @@ function ShowStep(data: Step) {
                 break;
             }
             case "Video": {
+                let path = await downloadVideoFromBucket(data.informationViewModel.information);
                 let video = document.createElement("video");
-                video.src = data.informationViewModel.information;
+                if (typeof path === "string") {
+                    path = path.substring(1, path.length - 1);
+                    video.src = path;
+                }
                 video.autoplay = true;
                 video.loop = true;
                 video.controls = false;
@@ -166,7 +175,7 @@ async function saveAnswerToDatabase(answers: string[], openAnswer: string, flowI
     }
 }
 
-nextStepButton.onclick = async () => {
+btnNextStep.onclick = async () => {
     if (userAnswers.length > 0 || openUserAnswer.length > 0) {
         // Save user answers to the database
         console.log("Saving data...");
@@ -179,5 +188,10 @@ nextStepButton.onclick = async () => {
         openUserAnswer = "";
     }
     // Proceed to the next step
-    GetNextStep(++currentStepNumber, 1);
+    GetNextStep(++currentStepNumber, flowId);
 }
+
+btnRestartFlow.onclick = () => {
+    currentStepNumber = 0;
+    GetNextStep(++currentStepNumber, flowId);
+};

@@ -1,0 +1,39 @@
+﻿@***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************@
+
+@using Domain.ProjectLogics
+@model IEnumerable<MainTheme>
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Main Themes";
+}
+
+<!DOCTYPE html>
+
+<html lang="">
+<head>
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Main Theme ID</th><th>Subject</th><th>Details</th>
+        </tr>
+        </thead>
+        <tbody id="mainThemeContainer"></tbody>
+    </table>
+</div>
+</body>
+<footer>
+
+</footer>
+</html>
+
+<script src="/dist/theme.entry.js" defer></script>

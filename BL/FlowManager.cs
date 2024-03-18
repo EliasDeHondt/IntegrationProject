@@ -5,12 +5,21 @@
  *                                     *
  ***************************************/
 
+using Data_Access_Layer;
 using Domain.ProjectLogics;
+using Domain.ProjectLogics.Steps;
 
 namespace Business_Layer;
 
 public class FlowManager
 {
+    private readonly FlowRepository _repository;
+
+    public FlowManager(FlowRepository repository)
+    {
+        _repository = repository;
+    }
+
     public Flow Add(Flow item)
     {
         throw new NotImplementedException();
@@ -26,11 +35,16 @@ public class FlowManager
         throw new NotImplementedException();
     }
 
-    public Flow Get(int id)
+    public Flow GetFlowById(long id)
     {
-        throw new NotImplementedException();
+        return _repository.ReadFlowById(id);
     }
 
+    public Flow GetFlowByIdWithTheme(long id)
+    {
+        return _repository.ReadFlowByIdIncludingTheme(id);
+    }
+    
     public List<Flow> GetAll()
     {
         throw new NotImplementedException();
