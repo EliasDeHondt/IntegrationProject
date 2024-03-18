@@ -12,9 +12,9 @@ namespace Domain.ProjectLogics;
 public class MainTheme : ThemeBase
 {
     [Required]
-    public IEnumerable<SubTheme> Themes { get; set; }
+    public ICollection<SubTheme> Themes { get; set; }
     
-    public MainTheme(string subject, ICollection<Flow> flows, IEnumerable<SubTheme> themes, long id = 0) : base(subject, flows, id)
+    public MainTheme(string subject, ICollection<Flow> flows, ICollection<SubTheme> themes, long id = 0) : base(subject, flows, id)
     {
         Themes = themes;
     }

@@ -36,6 +36,10 @@
 
     <ItemGroup>
         <_ContentIncludedByDefault Remove="wwwroot\js\site.js"/>
+        <_ContentIncludedByDefault Remove="custom npm packages\opencv-ts\.eslintrc.json" />
+        <_ContentIncludedByDefault Remove="custom npm packages\opencv-ts\package.json" />
+        <_ContentIncludedByDefault Remove="custom npm packages\opencv-ts\tsconfig.json" />
+        <_ContentIncludedByDefault Remove="custom npm packages\opencv-ts\tsconfig.test.json" />
     </ItemGroup>
 
     <ItemGroup>
