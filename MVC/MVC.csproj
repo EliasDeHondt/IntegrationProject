@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
-        <Nullable>enable</Nullable>
+        <Nullable>disable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <IsPackable>false</IsPackable>
         <MpaRoot>ClientApp</MpaRoot>
@@ -42,7 +42,6 @@
         <Content Remove="$(MpaRoot)**"/>
         <None Remove="$(MpaRoot)**"/>
         <None Include="$(MpaRoot)**" Exclude="$(MpaRoot)node_modules\**"/>
-        <None Include="wwwroot\Assets\Videos\Rocket league in Wheelchair meme.mp4" />
 
     </ItemGroup>
 

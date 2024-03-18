@@ -26,19 +26,10 @@ public class OpenQuestion : QuestionBase
     public OpenQuestion()
     {
     }
-    
-    private string SelectOne()
-    {
-        throw new NotImplementedException();
-    }
 
     public override object Answer()
     {
         throw new NotImplementedException();
     }
     
-    /*public override ICollection<Choice> GetChoices()
-    {
-        return new List<Choice>();
-    }*/
 }

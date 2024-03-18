@@ -20,8 +20,6 @@ public abstract class QuestionBase
     public string Question { get; set; }
     
     public abstract object Answer();
-    //public abstract ICollection<Choice> GetChoices();
-    public ICollection<Choice> Choices { get; set; }
 
     protected QuestionBase(ICollection<Answer> answers, string question, long id = 0)
     {

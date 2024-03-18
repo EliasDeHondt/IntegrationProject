@@ -23,6 +23,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Project> Projects { get; set; }
     public DbSet<MainTheme> MainThemes { get; set; }
     public DbSet<SubTheme> SubThemes { get; set; }
+    public DbSet<ChoiceQuestionBase> ChoiceQuestions { get; set; }
     public DbSet<InformationStep> InformationSteps { get; set; }
     public DbSet<CombinedStep> CombinedSteps { get; set; }
     public DbSet<QuestionStep> QuestionSteps { get; set; }
@@ -81,9 +82,10 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         modelBuilder.Entity<Text>().HasBaseType<InformationBase>();
         modelBuilder.Entity<Video>().HasBaseType<InformationBase>();
 
-        modelBuilder.Entity<MultipleChoiceQuestion>().HasBaseType<QuestionBase>();
-        modelBuilder.Entity<SingleChoiceQuestion>().HasBaseType<QuestionBase>();
-        modelBuilder.Entity<RangeQuestion>().HasBaseType<QuestionBase>();
+        modelBuilder.Entity<ChoiceQuestionBase>().HasBaseType<QuestionBase>();
+        modelBuilder.Entity<MultipleChoiceQuestion>().HasBaseType<ChoiceQuestionBase>();
+        modelBuilder.Entity<SingleChoiceQuestion>().HasBaseType<ChoiceQuestionBase>();
+        modelBuilder.Entity<RangeQuestion>().HasBaseType<ChoiceQuestionBase>();
         modelBuilder.Entity<OpenQuestion>().HasBaseType<QuestionBase>();
 
         modelBuilder.Entity<QuestionStep>().HasBaseType<StepBase>();

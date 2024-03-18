@@ -7,8 +7,6 @@
 
 using Business_Layer;
 using Domain.ProjectLogics.Steps;
-using Domain.ProjectLogics.Steps.Information;
-using Domain.ProjectLogics.Steps.Questions;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 
@@ -34,76 +32,27 @@ public class StepsController : Controller
         {
             case CombinedStep cStep:
             {
-                CombinedStepViewModel stepViewModel = CreateCombinedStepViewModel(cStep);
+                CombinedStepViewModel stepViewModel = StepModelFactory.CreateCombinedStepViewModel(cStep);
                 return Ok(stepViewModel);
             }
             case InformationStep iStep:
             {
-                InformationStepViewModel stepViewModel = CreateInformationStepViewModel(iStep);
+                InformationStepViewModel stepViewModel = StepModelFactory.CreateInformationStepViewModel(iStep);
 
                 return Ok(stepViewModel);
             }
             case QuestionStep qStep:
             {
-                QuestionStepViewModel stepViewModel = CreateQuestionStepViewModel(qStep);
+                QuestionStepViewModel stepViewModel = StepModelFactory.CreateQuestionStepViewModel(qStep);
 
                 return Ok(stepViewModel);
             }
             case null:
-                return NoContent();
+                return BadRequest();
             default:
                 return Ok(stepBase);
         }
     }
     
-    private CombinedStepViewModel CreateCombinedStepViewModel(CombinedStep step)
-    {
-        return new CombinedStepViewModel
-        {
-            Id = step.Id,
-            InformationViewModel = CreateInformationViewModel(step.InformationBase),
-            StepNumber = step.StepNumber
-        };
-    }
     
-    private InformationStepViewModel CreateInformationStepViewModel(InformationStep step)
-    {
-        return new InformationStepViewModel
-        {
-            Id = step.Id,
-            InformationViewModel = CreateInformationViewModel(step.InformationBase),
-            StepNumber = step.StepNumber
-        };
-    }
-
-    private InformationViewModel CreateInformationViewModel(InformationBase information)
-    {
-        return new InformationViewModel
-        {
-            Id = information.Id,
-            Information = information.GetInformation(),
-            InformationType = information.GetType().Name
-        };
-    }
-
-    private QuestionStepViewModel CreateQuestionStepViewModel(QuestionStep step)
-    {
-        return new QuestionStepViewModel
-        {
-            Id = step.Id,
-            QuestionViewModel = CreateQuestionViewModel(step.QuestionBase),
-            StepNumber = step.StepNumber
-        };
-    }
-
-    private QuestionViewModel CreateQuestionViewModel(QuestionBase question)
-    {
-        return new QuestionViewModel
-        {
-            Id = question.Id,
-            Question = question.Question,
-            QuestionType = question.GetType().Name,
-            Choices = question.Choices
-        };
-    }
 }
