@@ -50,7 +50,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
             switch (environment)
             {
                 case "Development":
-                    optionsBuilder.UseSqlite(@"Data Source=..\CodeForge.db");
+                    optionsBuilder.UseSqlite(@"Data Source=../CodeForge.db");
                     break;
                 case "Production":
                 {

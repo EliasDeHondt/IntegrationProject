@@ -1,5 +1,6 @@
-﻿const path = require('path');
+const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 
 module.exports = {
     entry: {
@@ -9,12 +10,13 @@ module.exports = {
         step: './src/js/Flow/StepAPI.ts',
         theme: './src/js/Theme/ThemeAPI.ts',
         mainThemeDetails: './src/js/Theme/MainThemeDetailsAPI.ts',
-        subThemeDetails: './src/js/Theme/SubThemeDetailsAPI.ts'
+        subThemeDetails: './src/js/Theme/SubThemeDetailsAPI.ts',
+        webcam: './src/js/Webcam/WebCamDetection.ts',
     },
     output: {
         filename: '[name].entry.js',
         path: path.resolve(__dirname, '..', 'wwwroot', 'dist'),
-        clean: true
+        clean: true,
     },
     devtool: 'source-map',
     mode: 'development',
@@ -23,16 +25,28 @@ module.exports = {
         extensionAlias: {
             '.js': ['.js', '.ts'],
         },
+        modules: ['node_modules', path.resolve(__dirname, "src")],
+        fallback: {
+            fs: false,
+            path: false,
+            crypto: false,
+        },
+        plugins: [
+            new TsconfigPathsPlugin({
+                configFile: path.resolve(__dirname, 'tsconfig.json'),
+                extensions: ['.ts', '.js'],
+            })
+        ]
     },
     module: {
         rules: [
             {
-                test: /\.tsx?$/i,
+                test: /\.ts?$/i,
                 use: 'ts-loader',
-                exclude: /node_modules/
+                exclude: [/node_modules/, /custom npm packages/]
             },
             {
-                test: /\.s?css$/i,
+                test: /\.s?css$/,
                 use: [
                     MiniCssExtractPlugin.loader,
                     "css-loader",
@@ -54,6 +68,8 @@ module.exports = {
         ]
     },
     plugins: [
-        new MiniCssExtractPlugin(),
+        new MiniCssExtractPlugin({
+            filename: "[name].css"
+        }),
     ]
 };
