@@ -81,7 +81,13 @@ public class Flow
 
     public int getStepCount()
     {
-        return 5;
-        //return Steps.Count;
+        //return 5;
+        int stepsCount = 0;
+        foreach (var step in Steps)
+        {
+            stepsCount++;
+        }
+
+        return stepsCount;
     }
 }
