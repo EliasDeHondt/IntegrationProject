@@ -6,6 +6,8 @@
  ***************************************/
 
 using System.Diagnostics;
+using System.Net.Mime;
+using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
@@ -37,9 +39,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Answer> Answers { get; set; }
     public DbSet<Choice> Choices { get; set; }
 
-    public CodeForgeDbContext(DbContextOptions<CodeForgeDbContext> options) : base(options)
-    {
-    }
+    public CodeForgeDbContext(DbContextOptions<CodeForgeDbContext> options) : base(options) {}
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -89,6 +89,13 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         modelBuilder.Entity<QuestionStep>().HasBaseType<StepBase>();
         modelBuilder.Entity<InformationStep>().HasBaseType<StepBase>();
         modelBuilder.Entity<CombinedStep>().HasBaseType<StepBase>();
+        
+        modelBuilder.Entity<Note>(entity => entity.Property(e => e.Textfield).IsRequired().HasMaxLength(15000)); // Reflects domain configuration.
+        modelBuilder.Entity<Image>(entity => entity.Property(e => e.Base64).IsRequired().HasMaxLength(65000)); // Reflects domain configuration.
+        modelBuilder.Entity<Text>(entity => entity.Property(e => e.InformationText).IsRequired().HasMaxLength(600)); // Reflects domain configuration.
+        modelBuilder.Entity<Video>(entity => entity.Property(e => e.FilePath).IsRequired().HasMaxLength(200)); // Reflects domain configuration.
+        modelBuilder.Entity<OpenQuestion>(entity => entity.Property(e => e.TextField).IsRequired().HasMaxLength(600)); // Reflects domain configuration.
+        modelBuilder.Entity<QuestionBase>(entity => entity.Property(e => e.Question).IsRequired().HasMaxLength(600)); // Reflects domain configuration.
         
         modelBuilder.Entity<Project>()
             .HasOne(project => project.MainTheme);

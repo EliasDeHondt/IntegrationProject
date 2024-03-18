@@ -9,8 +9,8 @@ using System.Text.Json.Serialization;
 using Business_Layer;
 using Data_Access_Layer;
 using Data_Access_Layer.DbContext;
-using Domain.ProjectLogics;
-using Microsoft.EntityFrameworkCore;
+using Google.Apis.Storage.v1.Data;
+using Google.Cloud.Storage.V1;
 
 namespace MVC;
 
@@ -25,6 +25,14 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        string bucketName = Environment.GetEnvironmentVariable("BUCKET_NAME_VIDEO") ?? "codeforge-bucket-videos";
+        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../service-account-key.json");
+        
+        var options = new CloudStorageOptions
+        {
+            BucketName = bucketName
+        };
+
         //dependency injection
         services.AddDbContext<CodeForgeDbContext>();
         services.AddScoped<FlowRepository, FlowRepository>();
@@ -35,7 +43,7 @@ public class Startup
         services.AddScoped<ThemeRepository, ThemeRepository>();
         services.AddScoped<ThemeManager, ThemeManager>();
         services.AddScoped<UnitOfWork, UnitOfWork>();
-        
+        services.AddSingleton(options);
         
         using var serviceScope = services.BuildServiceProvider().CreateScope();
         

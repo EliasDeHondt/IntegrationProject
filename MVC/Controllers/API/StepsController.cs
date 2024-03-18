@@ -28,7 +28,7 @@ public class StepsController : Controller
     public ActionResult GetNextStep(int stepNumber, long flowId)
     {
         StepBase stepBase = _manager.GetStepForFlowByNumber(flowId, stepNumber);
-
+        
         switch (stepBase)
         {
             case CombinedStep cStep:
