@@ -1,4 +1,5 @@
 import { Step } from "./Step/StepObjects";
+import { downloadVideoFromBucket } from "../StorageAPI";
 
 let nextStepButton = document.getElementById("butNextStep") as HTMLButtonElement;
 let informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
@@ -19,24 +20,28 @@ function GetNextStep(stepNumber: number, flowId: number) {
         .catch(error => console.error("Error:", error))
 }
 
-function ShowStep(data: Step) {
+async function ShowStep(data: Step) {
     informationContainer.innerHTML = "";
-    switch(data.informationViewModel.informationType){
+    switch (data.informationViewModel.informationType) {
         case "Text": {
             let p = document.createElement("p");
             p.innerText = data.informationViewModel.information;
             informationContainer.appendChild(p);
             break;
         }
-        case "Image":{
+        case "Image": {
             let img = document.createElement("img");
             img.src = "data:image/png;base64," + data.informationViewModel.information;
             informationContainer.appendChild(img);
             break;
         }
-        case "Video":{
+        case "Video": {
+            let path = await downloadVideoFromBucket(data.informationViewModel.information);
             let video = document.createElement("video");
-            video.src = "/Assets/Videos/" + data.informationViewModel.information;
+            if (typeof path === "string") {
+                path = path.substring(1, path.length - 1);
+                video.src = path;
+            }
             video.autoplay = true;
             video.loop = true;
             video.controls = false;

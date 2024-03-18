@@ -25,11 +25,14 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        string bucketName = Environment.GetEnvironmentVariable("BUCKET_NAME_VIDEO") ?? "";
+        string bucketName = Environment.GetEnvironmentVariable("BUCKET_NAME_VIDEO") ?? "codeforge-bucket-videos";
+        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../service-account-key.json");
         
-        var options = new CloudStorageOptions { BucketName = bucketName };
-        options.ObjectName = bucketName;
-        
+        var options = new CloudStorageOptions
+        {
+            BucketName = bucketName
+        };
+
         //dependency injection
         services.AddDbContext<CodeForgeDbContext>();
         services.AddScoped<FlowManager, FlowManager>();
