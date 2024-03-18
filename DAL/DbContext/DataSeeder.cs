@@ -236,12 +236,13 @@ public class DataSeeder
     {  
         // Seed Project and Main theme
         MainTheme mainTheme1 = new MainTheme("Lokale Verkiezingen");
-        Flow flow = new Flow(FlowType.LINEAR, mainTheme1);
+        SubTheme subTheme1 = new SubTheme("Causes", mainTheme1);
+        Flow flow = new Flow(FlowType.LINEAR, subTheme1);
         Text textInfo = new Text("Lokale Verkiezingen");
-        //Image imageInfo = new Image(""); // Runtime environment cannot access undefined pictures.
-        //Video videoInfo = new Video(""); // Runtime environment cannot access undefined videos.
-        Image imageInfo = new Image("../MVC/Assets/Images/verkiezingen.png");
-        Video videoInfo = new Video("rocket_league_meme.mp4");
+        Image imageInfo = new Image(ImageUrls.Verkiezingen);
+        // Video videoInfo = new Video("/Assets/Videos/screensaver.mp4");
+        // Image imageInfo = new Image("../MVC/Assets/Images/TestImage.jpg");
+        Video videoInfo = new Video("/Assets/Videos/Rocket league in Wheelchair meme.mp4");
         
         GenerateSingleQuestions(ctx,flow);
         GenerateMultipleCQuestions(ctx,flow);
@@ -254,7 +255,8 @@ public class DataSeeder
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
         
-        mainTheme1.Flows.Add(flow);
+        // mainTheme1.Flows.Add(flow);
+        subTheme1.Flows.Add(flow);
         Project project1 = new Project(mainTheme1);
         ctx.MainThemes.Add(mainTheme1);
         ctx.Flows.Add(flow);
@@ -263,9 +265,7 @@ public class DataSeeder
         ctx.Images.Add(imageInfo);
 
         // Seed subtheme and extra main theme
-        SubTheme subTheme1 = new SubTheme("Causes", mainTheme1);
-        subTheme1.MainTheme = mainTheme1;
-        subTheme1.Flows.Add(flow);
+        flow.Theme = subTheme1;
         mainTheme1.Themes.Add(subTheme1);
         ctx.SubThemes.Add(subTheme1);
         MainTheme mainTheme2 = new MainTheme("Renewable energy");

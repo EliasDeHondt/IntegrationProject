@@ -35,6 +35,7 @@ public class Startup
 
         //dependency injection
         services.AddDbContext<CodeForgeDbContext>();
+        services.AddScoped<FlowRepository, FlowRepository>();
         services.AddScoped<FlowManager, FlowManager>();
         services.AddScoped<ProjectManager, ProjectManager>();
         services.AddScoped<StepRepository, StepRepository>();
