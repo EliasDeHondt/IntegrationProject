@@ -5,6 +5,7 @@
  *                                     *
  ***************************************/
 
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Business_Layer;
 using Data_Access_Layer;
@@ -69,6 +70,18 @@ public class Startup
         {
             endpoints.MapControllerRoute(name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            endpoints.MapPost("api/{flowId}/{stepNumber}/answers", async context =>
+            {
+                // Handle receiving and printing answers
+                string requestBody = await new StreamReader(context.Request.Body).ReadToEndAsync();
+                List<string> answers = JsonSerializer.Deserialize<List<string>>(requestBody);
+                Console.WriteLine("Received answers:");
+                foreach (string answer in answers)
+                {
+                    Console.WriteLine(answer);
+                }
+            });
         });
     }
 }
