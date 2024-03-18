@@ -6,6 +6,7 @@
  ***************************************/
 
 using System.ComponentModel.DataAnnotations;
+using Domain.ProjectLogics.Steps.Questions.Answers;
 
 namespace Domain.ProjectLogics.Steps.Questions;
 
@@ -15,7 +16,7 @@ public class OpenQuestion : QuestionBase
     [MaxLength(600)]
     public string TextField { get; set; } = string.Empty;
 
-    public OpenQuestion(string question, ICollection<Answer> answers, long id = 0) : base(answers, question, id)
+    public OpenQuestion(string question, ICollection<ChoiceAnswer> answers, long id = 0) : base(answers, question, id)
     {
     }
     

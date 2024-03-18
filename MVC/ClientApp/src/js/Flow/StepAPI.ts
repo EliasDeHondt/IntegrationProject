@@ -1,11 +1,12 @@
 import { Step } from "./Step/StepObjects";
 
-let nextStepButton = document.getElementById("butNextStep") as HTMLButtonElement;
-let informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
-let questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
+const nextStepButton = document.getElementById("butNextStep") as HTMLButtonElement;
+const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
+const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 let currentStepNumber: number = 0;
 let flowId: number; // TODO: voor later multiple flows
 let userAnswers: string[] = []; // Array to store user answers
+let openUserAnswer: string = "";
 
 function GetNextStep(stepNumber: number, flowId: number) {
     fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
@@ -104,6 +105,7 @@ function ShowStep(data: Step) {
                 slider.max = String(data.questionViewModel.choices.length - 1);
                 slider.step = String(1);
 
+                userAnswers = [data.questionViewModel.choices[Number(slider.value)].text];
                 slider.addEventListener('input', function () {
                     // Update the label to reflect the current choice
                     userAnswers = [data.questionViewModel.choices[Number(slider.value)].text];
@@ -130,7 +132,7 @@ function ShowStep(data: Step) {
                         textInput.value = textInput.value.substring(0, 650);
                     }
                     // Capture user input
-                    userAnswers = [textInput.value];
+                    openUserAnswer = textInput.value;
                 });
 
                 questionContainer.appendChild(textInput);
@@ -142,18 +144,18 @@ function ShowStep(data: Step) {
     }
 }
 
-async function saveAnswerToDatabase(answers: string[], flowId: number, stepNumber: number): Promise<void> {
+async function saveAnswerToDatabase(answers: string[], openAnswer: string, flowId: number, stepNumber: number): Promise<void> {
     try {
-        const response = await fetch("/api/" + flowId + '/' + stepNumber + "/answers", {
+        const response = await fetch("/api/answers/addanswer/" + flowId + '/' + stepNumber, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                answers: answers
+                answers: answers,
+                answerText: openAnswer
             })
         });
-
         if (response.ok) {
             console.log("Answers saved successfully.");
         } else {
@@ -165,15 +167,16 @@ async function saveAnswerToDatabase(answers: string[], flowId: number, stepNumbe
 }
 
 nextStepButton.onclick = async () => {
-    if (userAnswers.length > 0) {
+    if (userAnswers.length > 0 || openUserAnswer.length > 0) {
         // Save user answers to the database
-        console.log("Saving data...")
-        for (var i = 0; i < userAnswers.length; i++) {
+        console.log("Saving data...");
+        for (let i = 0; i < userAnswers.length; i++) {
             console.log(userAnswers[i]);
         }
-        await saveAnswerToDatabase(userAnswers, 1, currentStepNumber);
+        await saveAnswerToDatabase(userAnswers, openUserAnswer, 1, currentStepNumber);
         // Clear the userAnswers array for the next step
         userAnswers = [];
+        openUserAnswer = "";
     }
     // Proceed to the next step
     GetNextStep(++currentStepNumber, 1);

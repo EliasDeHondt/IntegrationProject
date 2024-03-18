@@ -10,6 +10,7 @@ using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
 using Domain.ProjectLogics.Steps.Questions;
+using Domain.ProjectLogics.Steps.Questions.Answers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -27,16 +28,14 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     public DbSet<InformationStep> InformationSteps { get; set; }
     public DbSet<CombinedStep> CombinedSteps { get; set; }
     public DbSet<QuestionStep> QuestionSteps { get; set; }
-    public DbSet<MultipleChoiceQuestion> MultipleChoiceQuestions { get; set; }
     public DbSet<OpenQuestion> OpenQuestions { get; set; }
-    public DbSet<RangeQuestion> RangeQuestions { get; set; }
-    public DbSet<SingleChoiceQuestion> SingleChoiceQuestions { get; set; }
     public DbSet<Text> Texts { get; set; }
     public DbSet<Image> Images { get; set; }
     public DbSet<Video> Videos { get; set; }
     public DbSet<Participation> Participations { get; set; }
     public DbSet<Answer> Answers { get; set; }
     public DbSet<Choice> Choices { get; set; }
+    public DbSet<Selection> Selections { get; set; }
 
     public CodeForgeDbContext(DbContextOptions<CodeForgeDbContext> options) : base(options)
     {
@@ -91,6 +90,9 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         modelBuilder.Entity<QuestionStep>().HasBaseType<StepBase>();
         modelBuilder.Entity<InformationStep>().HasBaseType<StepBase>();
         modelBuilder.Entity<CombinedStep>().HasBaseType<StepBase>();
+
+        modelBuilder.Entity<ChoiceAnswer>().HasBaseType<Answer>();
+        modelBuilder.Entity<OpenAnswer>().HasBaseType<Answer>();
         
         modelBuilder.Entity<Project>()
             .HasOne(project => project.MainTheme);
@@ -117,6 +119,17 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
             .HasOne(participation => participation.Flow)
             .WithMany(flow => flow.Participations)
             .HasForeignKey("FK_Flow_Id");
+
+        modelBuilder.Entity<ChoiceAnswer>()
+            .HasMany(a => a.Answers)
+            .WithOne(s => s.ChoiceAnswer)
+            .HasForeignKey("FK_Selection_AnswerId");
+
+        modelBuilder.Entity<Choice>()
+            .HasMany(c => c.Selections)
+            .WithOne(s => s.Choice)
+            .HasForeignKey("FK_Selection_ChoiceId");
+        
         
         modelBuilder.Entity<Project>().HasKey(project => project.Id);
         modelBuilder.Entity<ThemeBase>().HasKey(theme => theme.Id);
@@ -126,6 +139,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         modelBuilder.Entity<Flow>().HasKey(flow => flow.Id);
         modelBuilder.Entity<Participation>().HasKey(participation => participation.Id);
         modelBuilder.Entity<Answer>().HasKey(answer => answer.Id);
+        modelBuilder.Entity<Selection>().HasKey("FK_Selection_AnswerId", "FK_Selection_ChoiceId");
     }
 
     public bool CreateDatabase(bool dropDatabase)

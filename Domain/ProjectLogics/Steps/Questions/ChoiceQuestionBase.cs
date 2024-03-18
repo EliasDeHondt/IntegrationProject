@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Domain.ProjectLogics.Steps.Questions.Answers;
 
 namespace Domain.ProjectLogics.Steps.Questions;
 
@@ -7,7 +8,7 @@ public abstract class ChoiceQuestionBase : QuestionBase
     [Required]
     public ICollection<Choice> Choices { get; set; }
    
-    protected ChoiceQuestionBase(ICollection<Answer> answers, string question, ICollection<Choice> choices, long id = 0) : base(answers, question, id)
+    protected ChoiceQuestionBase(ICollection<ChoiceAnswer> answers, string question, ICollection<Choice> choices, long id = 0) : base(answers, question, id)
     {
         Choices = choices;
     }

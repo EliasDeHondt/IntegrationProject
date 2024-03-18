@@ -32,6 +32,10 @@ public class Startup
         services.AddScoped<ProjectManager, ProjectManager>();
         services.AddScoped<StepRepository, StepRepository>();
         services.AddScoped<StepManager, StepManager>();
+        services.AddScoped<QuestionManager, QuestionManager>();
+        services.AddScoped<AnswerManager, AnswerManager>();
+        services.AddScoped<AnswerRepository, AnswerRepository>();
+        services.AddScoped<QuestionRepository, QuestionRepository>();
         services.AddScoped<UnitOfWork, UnitOfWork>();
         
         
