@@ -5,6 +5,7 @@
  *                                     *
  ***************************************/
 
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Business_Layer;
 using Data_Access_Layer;
@@ -40,6 +41,10 @@ public class Startup
         services.AddScoped<ProjectManager, ProjectManager>();
         services.AddScoped<StepRepository, StepRepository>();
         services.AddScoped<StepManager, StepManager>();
+        services.AddScoped<QuestionManager, QuestionManager>();
+        services.AddScoped<AnswerManager, AnswerManager>();
+        services.AddScoped<AnswerRepository, AnswerRepository>();
+        services.AddScoped<QuestionRepository, QuestionRepository>();
         services.AddScoped<ThemeRepository, ThemeRepository>();
         services.AddScoped<ThemeManager, ThemeManager>();
         services.AddScoped<UnitOfWork, UnitOfWork>();

@@ -7,7 +7,6 @@
 
 using Business_Layer;
 using Domain.ProjectLogics.Steps;
-using Domain.ProjectLogics.Steps.Information;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 
@@ -33,50 +32,27 @@ public class StepsController : Controller
         {
             case CombinedStep cStep:
             {
-                CombinedStepViewModel stepViewModel = CreateCominedStepViewModel(cStep);
+                CombinedStepViewModel stepViewModel = StepModelFactory.CreateCombinedStepViewModel(cStep);
                 return Ok(stepViewModel);
             }
             case InformationStep iStep:
             {
-                InformationStepViewModel stepViewModel = CreateInformationStepViewModel(iStep);
+                InformationStepViewModel stepViewModel = StepModelFactory.CreateInformationStepViewModel(iStep);
+
+                return Ok(stepViewModel);
+            }
+            case QuestionStep qStep:
+            {
+                QuestionStepViewModel stepViewModel = StepModelFactory.CreateQuestionStepViewModel(qStep);
 
                 return Ok(stepViewModel);
             }
             case null:
-                return NoContent();
+                return BadRequest();
             default:
                 return Ok(stepBase);
         }
     }
-
-    private InformationViewModel CreateInformationViewModel(InformationBase information)
-    {
-        return new InformationViewModel
-        {
-            Id = information.Id,
-            Information = information.GetInformation(),
-            InformationType = information.GetType().Name
-        };
-    }
-
-    private CombinedStepViewModel CreateCominedStepViewModel(CombinedStep step)
-    {
-        return new CombinedStepViewModel
-        {
-            Id = step.Id,
-            InformationViewModel = CreateInformationViewModel(step.InformationBase),
-            StepNumber = step.StepNumber
-        };
-    }
     
-    private InformationStepViewModel CreateInformationStepViewModel(InformationStep step)
-    {
-        return new InformationStepViewModel
-        {
-            Id = step.Id,
-            InformationViewModel = CreateInformationViewModel(step.InformationBase),
-            StepNumber = step.StepNumber
-        };
-    }
     
 }

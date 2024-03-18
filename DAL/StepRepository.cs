@@ -1,6 +1,6 @@
 ﻿using Data_Access_Layer.DbContext;
 using Domain.ProjectLogics.Steps;
-using Domain.ProjectLogics.Steps.Information;
+using Domain.ProjectLogics.Steps.Questions;
 using Microsoft.EntityFrameworkCore;
 /***************************************
  *                                     *
@@ -43,16 +43,28 @@ public class StepRepository
     
     public StepBase ReadStepForFlowByNumber(long flowId, int stepNumber)
     {
-        StepBase tempStep = _ctx.Flows.Include(flow => flow.Steps)
+        StepBase tempStep = _ctx.Flows
+            .Include(flow => flow.Steps)
             .First(flow => flow.Id == flowId)
             .Steps.First(step => step.StepNumber == stepNumber);
-
+        
         switch (tempStep)
         {
             case InformationStep i: 
                 return _ctx.InformationSteps.Include(step => step.InformationBase).First(step => step.Id == i.Id); 
             case QuestionStep q:
-                return _ctx.QuestionSteps.Include(step => step.QuestionBase).First(step => step.Id == q.Id);
+                var questionStep = _ctx.QuestionSteps
+                    .Include(step => step.QuestionBase)
+                    .First(step => step.Id == q.Id);
+
+                if (questionStep.QuestionBase is ChoiceQuestionBase cqBase)
+                {
+                    _ctx.Entry(cqBase)
+                        .Collection(qb => qb.Choices)
+                        .Load();
+                }
+
+                return questionStep;
             case CombinedStep c:
                 return _ctx.CombinedSteps.Include(step => step.InformationBase).Include(step => step.QuestionBase)
                     .First(step => step.Id == c.Id);

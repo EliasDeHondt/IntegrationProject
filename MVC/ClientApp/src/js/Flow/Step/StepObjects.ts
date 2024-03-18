@@ -2,6 +2,7 @@ export interface Step {
     id:number;
     stepNumber: number;
     informationViewModel: Information;
+    questionViewModel: Question;
 }
 
 export interface Information {
@@ -10,7 +11,14 @@ export interface Information {
     informationType: string;
 }
 
-export interface Question { // TODO: voor Matthias
-    Question: string;
-    Choices: string[];
+export interface Question {
+    id: number;
+    question: string;
+    questionType: string;
+    choices: Choice[];
+}
+
+export interface Choice {
+    id: number;
+    text: string;
 }
