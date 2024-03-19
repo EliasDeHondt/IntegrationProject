@@ -78,4 +78,16 @@ public class Flow
     {
         FlowStopped = true;
     }
+
+    public int getStepCount()
+    {
+        //return Steps.Count; //todo --> dit in de step.cshtml doen
+        int stepsCount = 0;
+        foreach (var step in Steps)
+        {
+            stepsCount++;
+        }
+        
+        return stepsCount;
+    }
 }

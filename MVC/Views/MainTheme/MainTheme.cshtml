@@ -23,7 +23,7 @@
 <h1>Theme <span id="themeId">@Model.Id</span> - @Model.Subject</h1>
 <div>
     <button id="linearBtn">Linear Flow</button>
-    <button id="circularBtn">Circular Flow</button>
+    <a class="btn" id="circularBtn" asp-area="" asp-controller="Flow" asp-action="Step" asp-route-id="1">Circular Flow</a>
 </div>
 <div>
     <table class="table">

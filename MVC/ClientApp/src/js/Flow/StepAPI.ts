@@ -11,6 +11,8 @@ let userAnswers: string[] = []; // Array to store user answers
 let openUserAnswer: string = "";
 let flowId = Number((document.getElementById("flowId") as HTMLSpanElement).innerText);
 let themeId = Number((document.getElementById("theme") as HTMLSpanElement).innerText);
+let steptotal = Number((document.getElementById("steptotal") as HTMLSpanElement).innerText);
+let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerText;
 
 function GetNextStep(stepNumber: number, flowId: number) {
     fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
@@ -182,13 +184,19 @@ btnNextStep.onclick = async () => {
         for (let i = 0; i < userAnswers.length; i++) {
             console.log(userAnswers[i]);
         }
-        await saveAnswerToDatabase(userAnswers, openUserAnswer, 1, currentStepNumber);
+        await saveAnswerToDatabase(userAnswers, openUserAnswer, flowId, currentStepNumber);
         // Clear the userAnswers array for the next step
         userAnswers = [];
         openUserAnswer = "";
     }
     // Proceed to the next step
-    GetNextStep(++currentStepNumber, flowId);
+    if (flowtype == "CIRCULAR" && currentStepNumber >= steptotal) {
+        currentStepNumber = 0;
+        GetNextStep(++currentStepNumber, flowId);
+    } else {
+        GetNextStep(++currentStepNumber, flowId);
+    }
+    
 }
 
 btnRestartFlow.onclick = () => {

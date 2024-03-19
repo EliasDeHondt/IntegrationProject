@@ -30,7 +30,7 @@
   },
   "type": "commonjs",
   "scripts": {
-    "build": "npm rebuild && webpack",
-    "watch": "npm rebuild && webpack --watch"
+    "build": "webpack",
+    "watch": "webpack --watch"
   }
 }
