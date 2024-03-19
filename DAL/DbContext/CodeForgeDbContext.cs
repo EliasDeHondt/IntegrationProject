@@ -93,12 +93,16 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         modelBuilder.Entity<ChoiceAnswer>().HasBaseType<Answer>();
         modelBuilder.Entity<OpenAnswer>().HasBaseType<Answer>();
         
-        modelBuilder.Entity<Note>(entity => entity.Property(e => e.Textfield).IsRequired().HasMaxLength(15000)); // Reflects domain configuration.
-        modelBuilder.Entity<Image>(entity => entity.Property(e => e.Base64).IsRequired().HasMaxLength(65000)); // Reflects domain configuration.
-        modelBuilder.Entity<Text>(entity => entity.Property(e => e.InformationText).IsRequired().HasMaxLength(600)); // Reflects domain configuration.
-        modelBuilder.Entity<Video>(entity => entity.Property(e => e.FilePath).IsRequired().HasMaxLength(200)); // Reflects domain configuration.
-        modelBuilder.Entity<OpenQuestion>(entity => entity.Property(e => e.TextField).IsRequired().HasMaxLength(600)); // Reflects domain configuration.
-        modelBuilder.Entity<QuestionBase>(entity => entity.Property(e => e.Question).IsRequired().HasMaxLength(600)); // Reflects domain configuration.
+        // Reflects domain configuration.
+        modelBuilder.Entity<Note>(entity => entity.Property(e => e.Textfield).IsRequired().HasMaxLength(15000));
+        modelBuilder.Entity<Image>(entity => entity.Property(e => e.Base64).IsRequired().HasMaxLength(900000));
+        modelBuilder.Entity<Text>(entity => entity.Property(e => e.InformationText).IsRequired().HasMaxLength(600));
+        modelBuilder.Entity<Video>(entity => entity.Property(e => e.FilePath).IsRequired().HasMaxLength(200));
+        modelBuilder.Entity<OpenQuestion>(entity => entity.Property(e => e.TextField).IsRequired().HasMaxLength(600));
+        modelBuilder.Entity<QuestionBase>(entity => entity.Property(e => e.Question).IsRequired().HasMaxLength(600));
+        modelBuilder.Entity<QuestionBase>(entity => entity.Property(e => e.Question).IsRequired().HasMaxLength(600));
+        modelBuilder.Entity<Choice>(entity => entity.Property(e => e.Text).IsRequired().HasMaxLength(50));
+        modelBuilder.Entity<ThemeBase>(entity => entity.Property(e => e.Subject).IsRequired().HasMaxLength(50));
         
         modelBuilder.Entity<Project>()
             .HasOne(project => project.MainTheme);
