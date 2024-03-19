@@ -5,6 +5,7 @@
   "license": "MIT",
   "version": "0.0.1",
   "dependencies": {
+    "@fontsource/trirong": "^5.0.19",
     "@popperjs/core": "^2.11.2",
     "@tensorflow-models/coco-ssd": "^2.2.3",
     "@tensorflow/tfjs": "^4.17.0",

@@ -1,6 +1,7 @@
 import { Step } from "./Step/StepObjects";
 import { downloadVideoFromBucket } from "../StorageAPI";
 import {Flow} from "./FlowObjects";
+import {op} from "@tensorflow/tfjs";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
@@ -36,12 +37,15 @@ async function ShowStep(data: Step) {
             case "Text": {
                 let p = document.createElement("p");
                 p.innerText = data.informationViewModel.information;
+                p.classList.add("text-center");
+                p.classList.add("col-md-12");
                 informationContainer.appendChild(p);
                 break;
             }
             case "Image": {
                 let img = document.createElement("img");
                 img.src = "data:image/png;base64," + data.informationViewModel.information;
+                img.classList.add("col-m-12","w-100","h-100");
                 informationContainer.appendChild(img);
                 break;
             }
@@ -55,6 +59,7 @@ async function ShowStep(data: Step) {
                 video.autoplay = true;
                 video.loop = true;
                 video.controls = false;
+                video.classList.add("h-100","w-100");
                 informationContainer.appendChild(video);
                 break;
             }
@@ -64,19 +69,25 @@ async function ShowStep(data: Step) {
     if (data.questionViewModel != undefined) {
         let p = document.createElement("p");
         p.innerText = data.questionViewModel.question;
+        p.classList.add("text-start");
+        p.classList.add("m-auto");
+        p.classList.add("mb-3");
         questionContainer.appendChild(p);
         switch (data.questionViewModel.questionType) {
             case "SingleChoiceQuestion":
                 for (let i = 0; i < data.questionViewModel.choices.length; i++) {
                     let choice = document.createElement("input");
                     let label = document.createElement("label");
+                    let div = document.createElement("div");
+                    div.classList.add("text-start","m-auto")
                     choice.type = 'radio';
                     choice.name = 'choice';
                     choice.value = data.questionViewModel.choices[i].text;
                     label.appendChild(choice);
                     label.append(data.questionViewModel.choices[i].text);
                     label.style.display = 'block';
-                    questionContainer.appendChild(label);
+                    div.append(label);
+                    questionContainer.appendChild(div);
                     // Add event listener to capture user input
                     choice.addEventListener('change', function () {
                         userAnswers = [choice.value];
@@ -87,13 +98,16 @@ async function ShowStep(data: Step) {
                 for (let i = 0; i < data.questionViewModel.choices.length; i++) {
                     let choice = document.createElement("input");
                     let label = document.createElement("label");
+                    let div = document.createElement("div");
+                    div.classList.add("text-start","m-auto")
                     choice.type = 'checkbox';
                     choice.name = 'choice';
                     choice.value = data.questionViewModel.choices[i].text;
                     label.appendChild(choice);
                     label.append(data.questionViewModel.choices[i].text);
                     label.style.display = 'block';
-                    questionContainer.appendChild(label);
+                    div.appendChild(label);
+                    questionContainer.appendChild(div);
                     // Add event listener to capture user input
                     choice.addEventListener('change', function () {
                         if (choice.checked) {
@@ -111,6 +125,8 @@ async function ShowStep(data: Step) {
                 break;
             case "RangeQuestion":
                 let slider = document.createElement("input");
+                let div = document.createElement("div");
+                div.classList.add("m-auto");
                 slider.type = 'range';
                 slider.min = String(0);
                 slider.max = String(data.questionViewModel.choices.length - 1);
@@ -120,16 +136,21 @@ async function ShowStep(data: Step) {
                 slider.addEventListener('input', function () {
                     // Update the label to reflect the current choice
                     userAnswers = [data.questionViewModel.choices[Number(slider.value)].text];
+                    label.innerText = data.questionViewModel.choices[Number(slider.value)].text;
                 });
 
-                questionContainer.appendChild(slider);
+                div.appendChild(slider);
 
                 let label = document.createElement("label");
                 label.innerText = data.questionViewModel.choices[Number(slider.value)].text;
-                questionContainer.appendChild(label);
+                div.appendChild(label);
+                questionContainer.appendChild(div);
                 break;
             case "OpenQuestion":
                 let textInput = document.createElement("textarea");
+                let opendiv = document.createElement("div");
+                opendiv.classList.add("m-auto");
+                textInput.classList.add("w-100");
                 textInput.name = 'answer';
                 textInput.rows = 8;
                 textInput.cols = 75;
@@ -145,8 +166,8 @@ async function ShowStep(data: Step) {
                     // Capture user input
                     openUserAnswer = textInput.value;
                 });
-
-                questionContainer.appendChild(textInput);
+                opendiv.append(textInput);
+                questionContainer.appendChild(opendiv);
                 break;
             default:
                 console.log("This question type is not currently supported. (QuestionType: " + data.questionViewModel.questionType);
