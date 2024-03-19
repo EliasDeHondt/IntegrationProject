@@ -101,8 +101,8 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         modelBuilder.Entity<OpenQuestion>(entity => entity.Property(e => e.TextField).IsRequired().HasMaxLength(600));
         modelBuilder.Entity<QuestionBase>(entity => entity.Property(e => e.Question).IsRequired().HasMaxLength(600));
         modelBuilder.Entity<QuestionBase>(entity => entity.Property(e => e.Question).IsRequired().HasMaxLength(600));
-        modelBuilder.Entity<Choice>(entity => entity.Property(e => e.Text).IsRequired().HasMaxLength(50));
-        modelBuilder.Entity<ThemeBase>(entity => entity.Property(e => e.Subject).IsRequired().HasMaxLength(50));
+        modelBuilder.Entity<Choice>(entity => entity.Property(e => e.Text).IsRequired().HasMaxLength(600));
+        modelBuilder.Entity<ThemeBase>(entity => entity.Property(e => e.Subject).IsRequired().HasMaxLength(600));
         
         modelBuilder.Entity<Project>()
             .HasOne(project => project.MainTheme);
