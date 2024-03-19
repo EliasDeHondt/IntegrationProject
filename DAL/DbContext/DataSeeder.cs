@@ -410,9 +410,6 @@ public class DataSeeder
         Flow flow = new Flow(FlowType.LINEAR, subTheme1);
         Text textInfo = new Text("Lokale Verkiezingen");
         Image imageInfo = new Image(ImageUrls.Verkiezingen);
-        Image favicon = new Image("../MVC/wwwroot/favicon.ico");
-        // Video videoInfo = new Video("/Assets/Videos/screensaver.mp4");
-        // Image imageInfo = new Image("../MVC/Assets/Images/TestImage.jpg");
         Video videoInfo = new Video("screensaver.mp4");
         
         GenerateSingleQuestions(ctx,flow);
@@ -422,8 +419,6 @@ public class DataSeeder
         
         InformationStep step1 = new InformationStep(19, imageInfo, flow);
         InformationStep step2 = new InformationStep(20, videoInfo, flow);
-
-        ctx.Images.Add(favicon);
         
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
