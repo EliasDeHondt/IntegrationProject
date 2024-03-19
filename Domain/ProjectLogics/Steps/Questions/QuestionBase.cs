@@ -6,6 +6,7 @@
  ***************************************/
 
 using System.ComponentModel.DataAnnotations;
+using Domain.ProjectLogics.Steps.Questions.Answers;
 
 namespace Domain.ProjectLogics.Steps.Questions;
 
@@ -14,15 +15,14 @@ public abstract class QuestionBase
     [Key]
     public long Id { get; set; }
     [Required]
-    public ICollection<Answer> Answers { get; set; }
+    public ICollection<ChoiceAnswer> Answers { get; set; }
     [Required]
-    [MaxLength(150)]
+    [MaxLength(600)]
     public string Question { get; set; }
     
     public abstract object Answer();
-    public abstract IEnumerable<string> GetChoices();
 
-    protected QuestionBase(ICollection<Answer> answers, string question, long id = 0)
+    protected QuestionBase(ICollection<ChoiceAnswer> answers, string question, long id = 0)
     {
         Id = id;
         Answers = answers;
@@ -33,13 +33,13 @@ public abstract class QuestionBase
     {
         Id = id;
         Question = question;
-        Answers = new List<Answer>();
+        Answers = new List<ChoiceAnswer>();
     }
 
     protected QuestionBase()
     {
         Id = default;
         Question = string.Empty;
-        Answers = new List<Answer>();
+        Answers = new List<ChoiceAnswer>();
     }
 }

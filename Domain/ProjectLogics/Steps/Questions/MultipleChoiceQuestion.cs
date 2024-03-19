@@ -6,27 +6,23 @@
  ***************************************/
 
 using System.ComponentModel.DataAnnotations;
+using Domain.ProjectLogics.Steps.Questions.Answers;
 
 namespace Domain.ProjectLogics.Steps.Questions;
 
-public class MultipleChoiceQuestion : QuestionBase
+public class MultipleChoiceQuestion : ChoiceQuestionBase
 {
-    [Required]
-    public ICollection<Choice> Choices { get; set; }
 
-    public MultipleChoiceQuestion(string question, ICollection<Choice> choices, ICollection<Answer> answers, long id = 0) : base(answers, question, id)
+    public MultipleChoiceQuestion(string question, ICollection<Choice> choices, ICollection<ChoiceAnswer> answers, long id = 0) : base(answers, question, choices, id)
     {
-        Choices = choices;
     }
 
-    public MultipleChoiceQuestion(string question, ICollection<Choice> choices, long id = 0) : base(question, id)
+    public MultipleChoiceQuestion(string question, ICollection<Choice> choices, long id = 0) : base(question, choices, id)
     {
-        Choices = choices;
     }
 
     public MultipleChoiceQuestion()
     {
-        Choices = new List<Choice>();
     }
     
     private IEnumerable<string> SelectMultiple()
@@ -35,11 +31,6 @@ public class MultipleChoiceQuestion : QuestionBase
     }
     
     public override object Answer()
-    {
-        throw new NotImplementedException();
-    }
-    
-    public override IEnumerable<string> GetChoices()
     {
         throw new NotImplementedException();
     }

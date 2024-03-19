@@ -5,21 +5,20 @@
  *                                     *
  ***************************************/
 
-using System.ComponentModel.DataAnnotations;
+
+using Domain.ProjectLogics.Steps.Questions.Answers;
 
 namespace Domain.ProjectLogics.Steps.Questions;
 
-public class SingleChoiceQuestion : QuestionBase
+public class SingleChoiceQuestion : ChoiceQuestionBase
 {
-    [Required]
-    public ICollection<Choice> Choices { get; set; }
 
-    public SingleChoiceQuestion(string question, ICollection<Choice> choices, ICollection<Answer> answers, long id = 0) : base(answers, question, id)
+    public SingleChoiceQuestion(string question, ICollection<Choice> choices, ICollection<ChoiceAnswer> answers, long id = 0) : base(answers, question, choices, id)
     {
         Choices = choices;
     }
     
-    public SingleChoiceQuestion(string question, ICollection<Choice> choices, long id = 0) : base(question, id)
+    public SingleChoiceQuestion(string question, ICollection<Choice> choices, long id = 0) : base(question, choices, id)
     {
         Choices = choices;
     }
@@ -39,8 +38,4 @@ public class SingleChoiceQuestion : QuestionBase
         throw new NotImplementedException();
     }
 
-    public override IEnumerable<string> GetChoices()
-    {
-        throw new NotImplementedException();
-    }
 }
