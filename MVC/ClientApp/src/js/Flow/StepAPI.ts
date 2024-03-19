@@ -117,16 +117,18 @@ async function ShowStep(data: Step) {
                 slider.step = String(1);
 
                 userAnswers = [data.questionViewModel.choices[Number(slider.value)].text];
-                slider.addEventListener('input', function () {
-                    // Update the label to reflect the current choice
-                    userAnswers = [data.questionViewModel.choices[Number(slider.value)].text];
-                });
 
                 questionContainer.appendChild(slider);
 
                 let label = document.createElement("label");
                 label.innerText = data.questionViewModel.choices[Number(slider.value)].text;
                 questionContainer.appendChild(label);
+
+                slider.addEventListener('input', function () {
+                    // Update the label to reflect the current choice
+                    userAnswers = [data.questionViewModel.choices[Number(slider.value)].text];
+                    label.innerText = data.questionViewModel.choices[Number(slider.value)].text;
+                });
                 break;
             case "OpenQuestion":
                 let textInput = document.createElement("textarea");
