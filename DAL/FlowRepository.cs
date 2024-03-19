@@ -29,6 +29,7 @@ public class FlowRepository
     {
         return _context.Flows
             .Include(f => f.Theme)
+            .Include(f => f.Steps)
             .FirstOrDefault(f => f.Id == id);
     }
     

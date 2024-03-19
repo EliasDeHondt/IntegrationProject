@@ -442,15 +442,12 @@ public class DataSeeder
         // Seed main theme 2
         MainTheme mainTheme2 = new MainTheme("Lokale Verkiezingen - circulair");
         Project project2 = new Project(mainTheme2);
-        SubTheme subTheme2 = new SubTheme("SubTheme", mainTheme2);
-        Flow flow2 = new Flow(FlowType.CIRCULAR, subTheme2);
+        Flow flow2 = new Flow(FlowType.CIRCULAR, mainTheme2);
         
         GenerateSingleQuestions(ctx,flow2);
        // GenerateRangeQuestions(ctx,flow2);
         
-        flow2.Theme = subTheme2;
-        mainTheme2.Themes.Add(subTheme2);
-        ctx.SubThemes.Add(subTheme2);
+        flow2.Theme = mainTheme2;
         
         ctx.MainThemes.Add(mainTheme2);
         ctx.Flows.Add(flow2);

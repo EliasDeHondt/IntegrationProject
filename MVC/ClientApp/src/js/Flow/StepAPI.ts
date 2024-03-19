@@ -184,13 +184,13 @@ btnNextStep.onclick = async () => {
         for (let i = 0; i < userAnswers.length; i++) {
             console.log(userAnswers[i]);
         }
-        await saveAnswerToDatabase(userAnswers, openUserAnswer, 1, currentStepNumber);
+        await saveAnswerToDatabase(userAnswers, openUserAnswer, flowId, currentStepNumber);
         // Clear the userAnswers array for the next step
         userAnswers = [];
         openUserAnswer = "";
     }
     // Proceed to the next step
-    if (flowtype == "CIRCULAR" && currentStepNumber > steptotal) {
+    if (flowtype == "CIRCULAR" && currentStepNumber >= steptotal) {
         currentStepNumber = 0;
         GetNextStep(++currentStepNumber, flowId);
     } else {
