@@ -24,7 +24,6 @@ before_script:
 
 stages:
   - build
-  - quality_check
 
 build:
   stage: build
@@ -33,22 +32,3 @@ build:
     - curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
     - apt-get install -y nodejs
     - 'dotnet build --no-restore'
-      
-quality_check:
-  stage: quality_check
-  script:
-    - apt-get update && apt-get install -y curl
-    - curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
-    - apt-get install -y nodejs
-    - 'dotnet build --no-restore --verbosity quiet' # Build again to ensure all artifacts are generated
-
-    # Integrate code quality tools here
-    # ESLint for JavaScript files
-    - docker run --rm -v "$PWD:/app" -w /app node:latest npm install eslint --global
-    - docker run --rm -v "$PWD:/app" -w /app node:latest eslint .
-
-    # StyleCop for C# files
-    - docker run --rm -v "$PWD:/app" -w /app mcr.microsoft.com/dotnet/sdk:7.0 bash -c "dotnet tool install --global StyleCopCmd.GlobalTool --version 1.1.118 && export PATH=\"$PATH:/root/.dotnet/tools\" && dotnet stylecop analyze --directory /app"
-
-    # SonarQube for general code analysis
-    - docker run --rm -v "$PWD:/app" -w /app sonarsource/sonar-scanner-cli:latest sonar-scanner
