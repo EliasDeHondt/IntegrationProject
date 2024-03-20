@@ -29,11 +29,17 @@ stages:
 build:
   stage: build
   script:
+    - apt-get update && apt-get install -y curl
+    - curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+    - apt-get install -y nodejs
     - 'dotnet build --no-restore'
-
+      
 quality_check:
   stage: quality_check
   script:
+    - apt-get update && apt-get install -y curl
+    - curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+    - apt-get install -y nodejs
     - 'dotnet build --no-restore --verbosity quiet' # Build again to ensure all artifacts are generated
 
     # Integrate code quality tools here
