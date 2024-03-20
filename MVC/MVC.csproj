@@ -25,9 +25,6 @@
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
             <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         </Content>
-        <Content Include="..\..\..\Downloads\screensaver.mp4">
-          <Link>Assets\Videos\screensaver.mp4</Link>
-        </Content>
         <Content Update="Assets\Rocket league in Wheelchair meme.mp4">
           <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
           <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -55,6 +52,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Assets\Videos\" />
       <Folder Include="wwwroot\Assets\Videos\" />
     </ItemGroup>
 
