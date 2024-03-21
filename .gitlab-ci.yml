@@ -52,22 +52,12 @@ deploy: # Job to deploy the application (temp)
   environment: production
   only:
     - main # Only notify on the main branch
-
-notify_discord_cloud_build_success:
+  
+notify_discord:
   image: byrnedo/alpine-curl # Use a different image for this job
   stage: notify
   script:
-    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \":white_check_mark: Virtual cloud image successful!\"}" https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
-  when: on_success
-  allow_failure: false
-  only:
-    - main # Only notify on the main branch
-
-notify_discord_commit_to_main:
-  image: byrnedo/alpine-curl # Use a different image for this job
-  stage: notify
-  script:
-    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \":arrow_up: New commit to the main branch!\"}" https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
+    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \"New commit to the main branch!\"}" https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
   when: on_success
   allow_failure: false
   only:
