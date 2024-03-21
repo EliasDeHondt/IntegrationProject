@@ -1,10 +1,9 @@
 ############################
-# Author: Elias De Hondt   #
-# See: https://eliasdh.com #
-# Since: 01/03/2024        #
+# @author Elias De Hondt   #
+# @see https://eliasdh.com #
+# @since 01/03/2024        #
 ############################
 # Function: This file is used to define the CI/CD pipeline for the project.
-
 image: mcr.microsoft.com/dotnet/sdk:7.0 # Global image for all jobs
 
 variables:
@@ -37,38 +36,28 @@ build: # Job to build the solution/projects
     - apt-get install -y nodejs
     - 'dotnet build --no-restore'
   only:
-    - main # Only run on the main branch
+    - main # Only notify on the main branch
 
 test: # Job to run the tests
-  stage: test
-  script:
-    - 'dotnet test --no-build'
-  only:
-    - main # Only run on the main branch
+    stage: test
+    script:
+        - 'dotnet test --no-build'
+    only:
+      - main # Only notify on the main branch
 
 deploy: # Job to deploy the application (temp)
   stage: deploy
-  script:
+  script: 
     - 'echo "Deployment script"'
   environment: production
   only:
-    - main # Only run on the main branch
-
-notify_discord_cloud_build_success:
-  image: byrnedo/alpine-curl # Use a different image for this job
-  stage: notify
-  script:
-    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \"## :white_check_mark: Virtual cloud image successful! Time: $(date +"%Y-%m-%d %H:%M:%S")\"}" https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
-  when: on_success
-  allow_failure: false
-  only:
     - main # Only notify on the main branch
-
-notify_discord_commit_to_main:
+  
+notify_discord:
   image: byrnedo/alpine-curl # Use a different image for this job
   stage: notify
   script:
-    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \"## :arrow_up: New commit to the main branch! Time: $(date +"%Y-%m-%d %H:%M:%S")\"}" https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
+    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \"Build successful! Time: $(date +"%Y-%m-%d %H:%M:%S")\"}" https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
   when: on_success
   allow_failure: false
   only:
