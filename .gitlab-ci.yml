@@ -58,7 +58,7 @@ notify_discord_cloud_build_success:
   image: byrnedo/alpine-curl # Use a different image for this job
   stage: notify
   script:
-    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \":white_check_mark: Virtual cloud image successful! Time: $(date +"%Y-%m-%d %H:%M:%S")\"}" https://discord.com/api/webhooks/your_cloud_webhook_url_here'
+    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \"## :white_check_mark: Virtual cloud image successful! Time: $(date +"%Y-%m-%d %H:%M:%S")\"}" https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
   when: on_success
   allow_failure: false
   only:
@@ -68,7 +68,7 @@ notify_discord_commit_to_main:
   image: byrnedo/alpine-curl # Use a different image for this job
   stage: notify
   script:
-    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \":arrow_up: New commit to the main branch! Time: $(date +"%Y-%m-%d %H:%M:%S")\"}" https://discord.com/api/webhooks/your_commit_webhook_url_here'
+    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \"## :arrow_up: New commit to the main branch! Time: $(date +"%Y-%m-%d %H:%M:%S")\"}" https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
   when: on_success
   allow_failure: false
   only:
