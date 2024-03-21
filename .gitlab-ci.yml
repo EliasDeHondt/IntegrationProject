@@ -45,20 +45,6 @@ test: # Job to run the tests
     only:
       - main # Only notify on the main branch
 
-code_quality: # Job to run the code analysis
-  stage: test
-  script:
-    - 'dotnet build /p:CodeAnalysis=True /p:CodeAnalysisRuleSet=custom.ruleset'
-  only:
-    - main # Only notify on the main branch
-
-security_scan: # Job to scan the image for vulnerabilities
-  stage: test
-  script:
-    - 'trivy image myapp:latest'
-  only:
-    - main # Only notify on the main branch
-
 deploy: # Job to deploy the application (temp)
   stage: deploy
   script: echo "Deployment script"
@@ -66,10 +52,10 @@ deploy: # Job to deploy the application (temp)
   only:
     - main # Only notify on the main branch
   
-notify: # Job to notify the team that the build was successful
+notify_discord:
   stage: notify
   script:
-    - 'echo "Build successful!"'
+    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \"Build successful!\"}" https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
   when: on_success
   allow_failure: false
   only:
