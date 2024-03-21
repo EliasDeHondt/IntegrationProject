@@ -5,6 +5,8 @@
 ############################
 # Function: This file is used to define the CI/CD pipeline for the project.
 
+image: mcr.microsoft.com/dotnet/sdk:7.0 # Global image for all jobs
+
 variables:
   OBJECTS_DIRECTORY: 'obj'
   NUGET_PACKAGES_DIRECTORY: '.nuget'
@@ -28,7 +30,6 @@ stages:
   - notify
 
 build: # Job to build the solution/projects
-  image: mcr.microsoft.com/dotnet/sdk:7.0
   stage: build
   script:
     - apt-get update && apt-get install -y curl
@@ -39,7 +40,6 @@ build: # Job to build the solution/projects
     - main # Only notify on the main branch
 
 test: # Job to run the tests
-  image: mcr.microsoft.com/dotnet/sdk:7.0
   stage: test
   script:
     - 'dotnet test --no-build'
@@ -47,7 +47,6 @@ test: # Job to run the tests
     - main # Only notify on the main branch
 
 deploy: # Job to deploy the application
-  image: mcr.microsoft.com/dotnet/sdk:7.0
   stage: deploy
   script:
     - 'echo "Deployment script"'
