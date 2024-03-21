@@ -53,11 +53,20 @@ deploy: # Job to deploy the application
   environment: production
   only:
     - main # Only notify on the main branch
-  
-notify_discord:
+      
+notify_cloud_build_success:
   stage: notify
   script:
-    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \" # :ok_hand: New commit to the main branch :ok_hand: \"}" https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
+    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \":white_check_mark: Virtual cloud image successful!\nTime: $(date +"%Y-%m-%d %H:%M:%S")\"}" https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
+  when: on_success
+  allow_failure: false
+  only:
+    - main # Only notify on the main branch
+
+notify_commit_to_main:
+  stage: notify
+  script:
+    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \":arrow_up: New commit to the main branch!\nTime: $(date +"%Y-%m-%d %H:%M:%S")\"}" https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
   when: on_success
   allow_failure: false
   only:
