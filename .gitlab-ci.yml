@@ -72,9 +72,5 @@ notify: # Job to notify the team that the build was successful
     - 'echo "Build successful!"'
   when: on_success
   allow_failure: false
-  notify:
-    email:
-      recipients:
-        - 'elias.dehondt@outlook.com'
   only:
     - main # Only notify on the main branch
