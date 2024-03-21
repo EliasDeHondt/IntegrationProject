@@ -58,7 +58,7 @@ deploy: # Job to deploy the application
 notify_discord:
   stage: notify
   script:
-    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \"New commit to the main branch!\"}" https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
+    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \" # :ok_hand: New commit to the main branch :ok_hand: \"}" https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
   when: on_success
   allow_failure: false
   only:
