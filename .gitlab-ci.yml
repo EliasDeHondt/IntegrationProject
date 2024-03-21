@@ -4,12 +4,12 @@
 # @since 01/03/2024        #
 ############################
 # Function: This file is used to define the CI/CD pipeline for the project.
-image: mcr.microsoft.com/dotnet/sdk:7.0 # Global image for all jobs
 
 variables:
   OBJECTS_DIRECTORY: 'obj'
   NUGET_PACKAGES_DIRECTORY: '.nuget'
   SOURCE_CODE_PATH: '*/'
+  DISCORD_WEBHOOK: 'https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
 
 cache:
   key: "$CI_COMMIT_REF_SLUG"
@@ -29,6 +29,7 @@ stages:
   - notify
 
 build: # Job to build the solution/projects
+  image: mcr.microsoft.com/dotnet/sdk:7.0
   stage: build
   script:
     - apt-get update && apt-get install -y curl
@@ -39,13 +40,15 @@ build: # Job to build the solution/projects
     - main # Only notify on the main branch
 
 test: # Job to run the tests
-    stage: test
-    script:
-        - 'dotnet test --no-build'
-    only:
-      - main # Only notify on the main branch
+  image: mcr.microsoft.com/dotnet/sdk:7.0
+  stage: test
+  script:
+    - 'dotnet test --no-build'
+  only:
+    - main # Only notify on the main branch
 
-deploy: # Job to deploy the application (temp)
+deploy: # Job to deploy the application
+  image: mcr.microsoft.com/dotnet/sdk:7.0
   stage: deploy
   script:
     - 'echo "Deployment script"'
@@ -56,7 +59,7 @@ deploy: # Job to deploy the application (temp)
 notify_discord:
   stage: notify
   script:
-    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \"New commit to the main branch!\"}" https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
+    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \"# Time: $(date +"%Y-%m-%d %H:%M:%S") -> :ok_hand: New commit to the main branch :ok_hand: \"}" $DISCORD_WEBHOOK'
   when: on_success
   allow_failure: false
   only:
