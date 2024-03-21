@@ -36,35 +36,35 @@ build: # Job to build the solution/projects
     - apt-get install -y nodejs
     - 'dotnet build --no-restore'
   only:
-    - master # Only notify on the master branch
+    - main # Only notify on the main branch
 
 test: # Job to run the tests
     stage: test
     script:
         - 'dotnet test --no-build'
     only:
-      - master # Only notify on the master branch
+      - main # Only notify on the main branch
 
 code_quality: # Job to run the code analysis
   stage: test
   script:
     - 'dotnet build /p:CodeAnalysis=True /p:CodeAnalysisRuleSet=custom.ruleset'
   only:
-    - master # Only notify on the master branch
+    - main # Only notify on the main branch
 
 security_scan: # Job to scan the image for vulnerabilities
   stage: test
   script:
     - 'trivy image myapp:latest'
   only:
-    - master # Only notify on the master branch
+    - main # Only notify on the main branch
 
 deploy: # Job to deploy the application (temp)
   stage: deploy
   script: echo "Deployment script"
   environment: production
   only:
-    - master # Only notify on the master branch
+    - main # Only notify on the main branch
   
 notify: # Job to notify the team that the build was successful
   stage: notify
@@ -72,5 +72,9 @@ notify: # Job to notify the team that the build was successful
     - 'echo "Build successful!"'
   when: on_success
   allow_failure: false
+  notify:
+    email:
+      recipients:
+        - 'elias.dehondt@outlook.com'
   only:
-    - master  # Only notify on the master branch
+    - main # Only notify on the main branch
