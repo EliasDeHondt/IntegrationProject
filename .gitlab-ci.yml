@@ -11,6 +11,7 @@ variables:
   OBJECTS_DIRECTORY: 'obj'
   NUGET_PACKAGES_DIRECTORY: '.nuget'
   SOURCE_CODE_PATH: '*/'
+  DISCORD_WEBHOOK: 'https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
 
 cache:
   key: "$CI_COMMIT_REF_SLUG"
@@ -57,7 +58,7 @@ deploy: # Job to deploy the application
 notify_cloud_build_success:
   stage: notify
   script:
-    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \":white_check_mark: Virtual cloud image successful!\nTime: $(date +"%Y-%m-%d %H:%M:%S")\"}" https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
+    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \":white_check_mark: Virtual cloud image successful!\nTime: $(date +"%Y-%m-%d %H:%M:%S")\"}" $DISCORD_WEBHOOK'
   when: on_success
   allow_failure: false
   only:
@@ -66,7 +67,7 @@ notify_cloud_build_success:
 notify_commit_to_main:
   stage: notify
   script:
-    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \":arrow_up: New commit to the main branch!\nTime: $(date +"%Y-%m-%d %H:%M:%S")\"}" https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
+    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \":arrow_up: New commit to the main branch!\nTime: $(date +"%Y-%m-%d %H:%M:%S")\"}" $DISCORD_WEBHOOK'
   when: on_success
   allow_failure: false
   only:
