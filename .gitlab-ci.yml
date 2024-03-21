@@ -47,14 +47,13 @@ test: # Job to run the tests
 
 deploy: # Job to deploy the application (temp)
   stage: deploy
-  script: 
+  script:
     - 'echo "Deployment script"'
   environment: production
   only:
     - main # Only notify on the main branch
   
 notify_discord:
-  image: byrnedo/alpine-curl # Use a different image for this job
   stage: notify
   script:
     - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \"New commit to the main branch!\"}" https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
