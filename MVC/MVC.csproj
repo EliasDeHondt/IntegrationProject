@@ -52,7 +52,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Assets\Videos\" />
       <Folder Include="wwwroot\Assets\Videos\" />
     </ItemGroup>
 
