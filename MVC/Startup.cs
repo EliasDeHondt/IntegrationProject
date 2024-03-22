@@ -12,6 +12,7 @@ using Data_Access_Layer;
 using Data_Access_Layer.DbContext;
 using Google.Apis.Storage.v1.Data;
 using Google.Cloud.Storage.V1;
+using Microsoft.AspNetCore.Identity;
 
 namespace MVC;
 
@@ -36,6 +37,11 @@ public class Startup
 
         //dependency injection
         services.AddDbContext<CodeForgeDbContext>();
+        services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            .AddEntityFrameworkStores<CodeForgeDbContext>();
+        
+        
+        
         services.AddScoped<FlowRepository, FlowRepository>();
         services.AddScoped<FlowManager, FlowManager>();
         services.AddScoped<ProjectManager, ProjectManager>();
@@ -50,17 +56,7 @@ public class Startup
         services.AddScoped<UnitOfWork, UnitOfWork>();
         services.AddSingleton(options);
         
-        using var serviceScope = services.BuildServiceProvider().CreateScope();
         
-        //init dbcontext
-        var dbContext = serviceScope.ServiceProvider.GetRequiredService<CodeForgeDbContext>();
-        var uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWork>();
-        if (dbContext.CreateDatabase(true))
-        {
-            uow.BeginTransaction();
-            DataSeeder.Seed(dbContext);
-            uow.Commit();
-        }
         
         services.AddControllersWithViews().AddXmlSerializerFormatters().AddJsonOptions(options =>
         {
@@ -77,12 +73,26 @@ public class Startup
             app.UseHsts();
         }
 
+        using var serviceScope = app.ApplicationServices.CreateScope();
+        
+        //init dbcontext
+        var dbContext = serviceScope.ServiceProvider.GetRequiredService<CodeForgeDbContext>();
+        var uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWork>();
+        if (dbContext.CreateDatabase(true))
+        {
+            uow.BeginTransaction();
+            DataSeeder.Seed(dbContext);
+            uow.Commit();
+        }
+        
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
         app.UseAuthorization();
+        app.UseAuthentication();
         app.UseEndpoints(endpoints =>
         {
+            endpoints.MapRazorPages();
             endpoints.MapControllerRoute(name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
         });

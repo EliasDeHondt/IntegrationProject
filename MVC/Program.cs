@@ -4,8 +4,6 @@
  * Visit https://codeforge.eliasdh.com *
  *                                     *
  ***************************************/
-
-using System.Net.Mime;
 using Data_Access_Layer.DbContext;
 using MVC;
 
@@ -21,7 +19,6 @@ var app = builder.Build();
 
 startup.Configure(app, app.Environment);
 
-//app.MapRazorPages();
 app.Run();
 return;
 
