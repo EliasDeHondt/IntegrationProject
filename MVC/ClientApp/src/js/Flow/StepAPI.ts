@@ -1,7 +1,6 @@
 import { Step } from "./Step/StepObjects";
 import { downloadVideoFromBucket } from "../StorageAPI";
 import {Flow} from "./FlowObjects";
-import {op} from "@tensorflow/tfjs";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
