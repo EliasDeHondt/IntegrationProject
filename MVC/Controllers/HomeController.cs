@@ -19,7 +19,12 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult Privacy()
+    public IActionResult PrivacyPolicy()
+    {
+        return View();
+    }
+    
+    public IActionResult LegalGuidelines()
     {
         return View();
     }

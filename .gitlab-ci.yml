@@ -1,0 +1,74 @@
+############################
+# @author Elias De Hondt   #
+# @see https://eliasdh.com #
+# @since 01/03/2024        #
+############################
+# Function: This file is used to define the CI/CD pipeline for the project.
+
+image: mcr.microsoft.com/dotnet/sdk:7.0 # Global image for all jobs
+
+variables:
+  OBJECTS_DIRECTORY: 'obj'
+  NUGET_PACKAGES_DIRECTORY: '.nuget'
+  SOURCE_CODE_PATH: '*/'
+  DISCORD_WEBHOOK: 'https://discord.com/api/webhooks/1220416296982679775/5XA7zWwBq4l5hKEuxPyzQ0qRZiyhdvla0idp7Q7fYmMSOZsV5QpBHqR0stqlGgyDR_5N'
+
+cache:
+  key: "$CI_COMMIT_REF_SLUG"
+  paths:
+    - '$SOURCE_CODE_PATH$OBJECTS_DIRECTORY/project.assets.json'
+    - '$SOURCE_CODE_PATH$OBJECTS_DIRECTORY/*.csproj.nuget.*'
+    - '$NUGET_PACKAGES_DIRECTORY'
+  policy: pull-push
+
+before_script:
+  - 'dotnet restore --packages $NUGET_PACKAGES_DIRECTORY'
+
+stages:
+  - build
+  - test
+  - deploy
+  - notify
+
+build: # Job to build the solution/projects
+  stage: build
+  script:
+    - apt-get update && apt-get install -y curl
+    - curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+    - apt-get install -y nodejs
+    - 'dotnet build --no-restore'
+  only:
+    - main # Only notify on the main branch
+
+test: # Job to run the tests
+  stage: test
+  script:
+    - 'dotnet test --no-build'
+  only:
+    - main # Only notify on the main branch
+
+deploy: # Job to deploy the application
+  stage: deploy
+  script:
+    - 'echo "Deployment script"'
+  environment: production
+  only:
+    - main # Only notify on the main branch
+      
+notify_cloud_build_success:
+  stage: notify
+  script:
+    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \":white_check_mark: Virtual cloud image successful!\nTime: $(date +"%Y-%m-%d %H:%M:%S")\"}" $DISCORD_WEBHOOK'
+  when: on_success
+  allow_failure: false
+  only:
+    - main # Only notify on the main branch
+
+notify_commit_to_main:
+  stage: notify
+  script:
+    - 'curl -X POST -H "Content-Type: application/json" -d "{\"content\": \":arrow_up: New commit to the main branch!\nTime: $(date +"%Y-%m-%d %H:%M:%S")\"}" $DISCORD_WEBHOOK'
+  when: on_success
+  allow_failure: false
+  only:
+    - main # Only notify on the main branch

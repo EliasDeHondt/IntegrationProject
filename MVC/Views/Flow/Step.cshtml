@@ -8,36 +8,45 @@
 
 <!DOCTYPE html>
 
-<html lang="">
+<html class="h-100" lang="">
 <head>
     <title>@ViewData["Title"]</title>
 </head>
-<body>
-<h1><span id="flowtype">@Model.FlowType.ToString()</span> Flow <span id="flowId">@Model.Id</span> - Step <span id="stepNr"></span> / <span id="steptotal">@Model.getStepCount()</span></h1>
+<body class="h-100">
+<div class="row-gap-sm-4 h-75">
+    <h1><span id="flowtype">@Model.FlowType.ToString()</span> Flow <span id="flowId">@Model.Id</span> - Step <span id="stepNr"></span> / <span id="steptotal">@Model.getStepCount()</span></h1>
 
-<p>Theme <span id="theme">@Model.Theme.Id</span> - @Model.Theme.Subject</p>
-<div>
-    <div class="container" id="informationContainer">
-    </div>
-    <div class="container d-block" id="questionContainer">
-        
+    <p>Theme <span id="theme">@Model.Theme.Id</span> - @Model.Theme.Subject</p>
+    <div class="d-flex justify-content-center h-100">
+        <div class="row-cols-md-3 mb-3 text-start" id="informationContainer">
+        </div>
+        <div class="row-cols-md-3 mb-3 d-block justify-content-center" id="questionContainer">
+
+        </div>
     </div>
 </div>
-</body>
-<footer>
-    <button id="btnNextStep">Next step</button>
-    <button id="btnRestartFlow">Restart flow</button>
+<footer class="row-gap-sm-4 h-25 justify-content-center d-flex">
+    <button class="btn-primary mt-auto mb-auto h-25 m-5" id="btnNextStep">Next step</button>
+    <button class="btn-secondary mt-auto mb-auto h-25 m-5" id="btnRestartFlow">Restart flow</button>
     @if (Model.Theme.GetType() == typeof(SubTheme))
     {
-        <a class="nav-item" id="butExitFlow" asp-area="" asp-controller="SubTheme" asp-action="SubTheme" asp-route-id="@Model.Theme.Id">Exit flow</a>
+        <div class="mt-auto mb-auto m-5">
+        <a class="btn-close h-50" id="butExitFlow" asp-area="" asp-controller="SubTheme" asp-action="SubTheme" asp-route-id="@Model.Theme.Id"></a>
+        <span>Exit</span>
+        </div>
     }
     else
     {
-        <a class="nav-item" id="butExitFlow" asp-area="" asp-controller="MainTheme" asp-action="MainTheme" asp-route-id="@Model.Theme.Id">Exit flow</a>
+        <div class="mt-auto mb-auto m-5">
+            <a class="btn-close h-50" id="butExitFlow" asp-area="" asp-controller="MainTheme" asp-action="MainTheme" asp-route-id="@Model.Theme.Id"></a>
+            <span>Exit</span>
+        </div>
     }
-    
+
 </footer>
+</body>
 </html>
 
-    
+
 <script src="/dist/step.entry.js" defer></script>
+<link rel="stylesheet" href="~/dist/site.css"/>
