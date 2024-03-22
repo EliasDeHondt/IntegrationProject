@@ -33,7 +33,7 @@ public class StorageController : Controller
     {
         try
         {
-            string url = _signer.Sign(_options.BucketName, videoName, TimeSpan.FromDays(15), HttpMethod.Get);
+            string url = _signer.Sign(_options.BucketName, videoName, TimeSpan.FromDays(7), HttpMethod.Get);
             
             return Ok(url);
         }
