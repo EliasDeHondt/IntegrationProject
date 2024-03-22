@@ -12,6 +12,7 @@ module.exports = {
         mainThemeDetails: './src/js/Theme/MainThemeDetailsAPI.ts',
         subThemeDetails: './src/js/Theme/SubThemeDetailsAPI.ts',
         webcam: './src/js/Webcam/WebCamDetection.ts',
+        login: './src/js/Login/login-animation.ts',
     },
     output: {
         filename: '[name].entry.js',
