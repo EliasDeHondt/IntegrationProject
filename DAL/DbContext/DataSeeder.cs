@@ -412,7 +412,7 @@ public class DataSeeder
         Image imageInfo = new Image(ImageUrls.Verkiezingen);
         // Video videoInfo = new Video("/Assets/Videos/screensaver.mp4");
         // Image imageInfo = new Image("../MVC/Assets/Images/TestImage.jpg");
-        Video videoInfo = new Video("rocket_league_meme.mp4");
+        Video videoInfo = new Video("screensaver.mp4");
         
         GenerateSingleQuestions(ctx,flow);
         GenerateMultipleCQuestions(ctx,flow);

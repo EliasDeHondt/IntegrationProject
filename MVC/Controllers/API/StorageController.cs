@@ -13,12 +13,14 @@ public class StorageController : Controller
     
     private readonly CloudStorageOptions _options; // Google Cloud Storage Options
     private readonly StorageClient _storage; // Google Cloud Storage Client
+    private readonly UrlSigner _signer;
 
     public StorageController(CloudStorageOptions options)
     {
         _options = options;
         GoogleCredential credential = GoogleCredential.GetApplicationDefaultAsync().Result;
         _storage = StorageClient.Create(credential);
+        _signer = UrlSigner.FromCredential(credential);
     }
     
     [HttpGet("DownloadVideo/{videoName}")]
@@ -27,16 +29,9 @@ public class StorageController : Controller
             
         try
         {
-            using MemoryStream m = new();
-            string filePath = $"./wwwroot/Assets/Videos/{videoName}";
-            _storage.GetBucket(_options.BucketName); 
-            _storage.DownloadObject(_options.BucketName, videoName, m);
-            m.Position = 0;
-
-            using FileStream fs = new(filePath, FileMode.Create); 
-            m.CopyTo(fs);
+            string url = _signer.Sign(_options.BucketName, videoName, TimeSpan.FromDays(15), HttpMethod.Get);
             
-            return Ok(filePath.Replace("./wwwroot", ""));
+            return Ok(url);
         }
         catch (GoogleApiException e)
             when (e.HttpStatusCode == System.Net.HttpStatusCode.NotFound)
