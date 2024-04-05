@@ -410,6 +410,8 @@ public class DataSeeder
         MainTheme mainTheme1 = new MainTheme("Lokale Verkiezingen");
         SubTheme subTheme1 = new SubTheme("Causes", mainTheme1);
         Flow flow = new Flow(FlowType.LINEAR, subTheme1);
+        Participation participation1 = new Participation(flow); //for respondents
+        flow.Participations.Add(participation1);
         Text textInfo = new Text("Lokale Verkiezingen");
         Image imageInfo = new Image(ImageUrls.Verkiezingen);
         Video videoInfo = new Video("screensaver.mp4");

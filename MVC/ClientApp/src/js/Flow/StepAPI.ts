@@ -17,7 +17,12 @@ let flowId = Number((document.getElementById("flowId") as HTMLSpanElement).inner
 let themeId = Number((document.getElementById("theme") as HTMLSpanElement).innerText);
 let steptotal = Number((document.getElementById("steptotal") as HTMLSpanElement).innerText);
 let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerText;
+let inputEmail = (document.getElementById("inputEmail") as HTMLInputElement).value;
 
+
+function SetRespondentEmail(){
+    flowId
+}
 function GetNextStep(stepNumber: number, flowId: number) {
     fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
         method: "GET",
