@@ -16,6 +16,7 @@ public class Respondent : IdentityUser
     public List<Idea> Ideas { get; set; }
     public List<Reaction> Reactions { get; set; }
     public List<Like> Likes { get; set; }
+    public string Email { get; set; }
     
     void CreatePost()
     {
