@@ -1,0 +1,18 @@
+@use "variables" as *;
+
+/*
+ * imports from mixins will be prefixed with 'mx'
+ * prefixing is not needed if you import mixins as '*'
+ */
+@use "mixins" as mx;
+
+
+body {
+  background-color: $background;
+  padding: 10px;
+
+  h1 {
+    color: $highlight;
+    @include mx.transform(rotate(-10deg));
+  }
+}
