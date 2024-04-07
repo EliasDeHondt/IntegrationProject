@@ -17,14 +17,8 @@ public class FlowsController : Controller
     [HttpPost("SetRespondentEmail/{flowId:int}/{inputEmail}")]
     public IActionResult SetRespondentEmail(int flowId, string inputEmail)
     {
-        if (inputEmail == null)
-        {
-            return BadRequest();
-        }
-        
         _manager.SetParticipationByFlow(flowId, inputEmail);
         
         return Ok();
-        
     }
 }
