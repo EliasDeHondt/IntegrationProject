@@ -22,6 +22,7 @@ public class Participation
     {
         Id = id;
         Flow = flow;
+        Respondents = new List<Respondent>();
     }
 
     public Participation()

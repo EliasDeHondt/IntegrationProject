@@ -17,8 +17,6 @@ let flowId = Number((document.getElementById("flowId") as HTMLSpanElement).inner
 let themeId = Number((document.getElementById("theme") as HTMLSpanElement).innerText);
 let steptotal = Number((document.getElementById("steptotal") as HTMLSpanElement).innerText);
 let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerText;
-let inputEmail = (document.getElementById("inputEmail") as HTMLInputElement).value;
-
 
 async function SetRespondentEmail(flowId: number,inputEmail: string){
     try {
@@ -41,8 +39,22 @@ async function SetRespondentEmail(flowId: number,inputEmail: string){
             console.error("Error:", error);
         }
 }
-if(inputEmail != null)
-    SetRespondentEmail(flowId,inputEmail)
+// if(inputEmail != null)
+//     SetRespondentEmail(flowId,inputEmail,currentStepNumber)
+document.addEventListener("DOMContentLoaded", function () {
+    const emailInput = document.getElementById("inputEmail");
+
+    // @ts-ignore
+    emailInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            // @ts-ignore
+            const inputEmail = emailInput.value.trim();
+            if (inputEmail !== "") {
+                SetRespondentEmail(flowId, inputEmail);
+            }
+        }
+    });
+});
 function GetNextStep(stepNumber: number, flowId: number) {
     fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
         method: "GET",
