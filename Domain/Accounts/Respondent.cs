@@ -10,13 +10,17 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Accounts;
 
-public class Respondent : IdentityUser
+public class Respondent 
 {
     public Respondent(string email) 
     {
         Email = email;
+        Ideas = new List<Idea>();
+        Reactions = new List<Reaction>();
+        Likes = new List<Like>();
     }
 
+    public long RespondentId { get; set; }
     public List<Idea> Ideas { get; set; }
     public List<Reaction> Reactions { get; set; }
     public List<Like> Likes { get; set; }
