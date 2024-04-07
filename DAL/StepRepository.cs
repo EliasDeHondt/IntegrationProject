@@ -1,4 +1,5 @@
 ﻿using Data_Access_Layer.DbContext;
+using Domain.Accounts;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Questions;
@@ -78,9 +79,14 @@ public class StepRepository
             .Include(flow => flow.Steps)
             .First(flow => flow.Id == flowId);
     }
-    public void ReadParticipationByFlow(long flowId)
+    public void AddParticipationByFlow(long flowId,string email)
     {
         var participations = _ctx.Flows.Find(flowId).Participations;
-        participations.First().Respondents.Add(); //respondent
+        var name = email.Substring(0, email.IndexOf('@')); //aa.ww@email.com --> aa.ww
+        Respondent respondent = new Respondent(email);
+
+        Participation participation = new Participation(_ctx.Flows.Find(flowId));
+        participation.Respondents.Add(respondent); //respondent
+        participations.Add(participation);
     }
 }
