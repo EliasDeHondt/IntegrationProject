@@ -20,8 +20,17 @@ let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerTex
 let inputEmail = (document.getElementById("inputEmail") as HTMLInputElement).value;
 
 
-function SetRespondentEmail(){
-    flowId
+function SetRespondentEmail(flowId: number,inputEmail: string){
+    fetch("/api/Steps/SetRespondentEmail/" + flowId + "/" + inputEmail, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => ShowStep(data))
+        .catch(error => console.error("Error:", error))
 }
 function GetNextStep(stepNumber: number, flowId: number) {
     fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
@@ -35,7 +44,8 @@ function GetNextStep(stepNumber: number, flowId: number) {
         .then(data => ShowStep(data))
         .catch(error => console.error("Error:", error))
 }
-
+if(inputEmail != null)
+    SetRespondentEmail(flowId,inputEmail)
 async function ShowStep(data: Step) {
     (document.getElementById("stepNr") as HTMLSpanElement).innerText = currentStepNumber.toString();
     informationContainer.innerHTML = "";
