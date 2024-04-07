@@ -79,14 +79,4 @@ public class StepRepository
             .Include(flow => flow.Steps)
             .First(flow => flow.Id == flowId);
     }
-    public void AddParticipationByFlow(long flowId,string email)
-    {
-        var participations = _ctx.Flows.Find(flowId).Participations;
-        var name = email.Substring(0, email.IndexOf('@')); //aa.ww@email.com --> aa.ww
-        Respondent respondent = new Respondent(email);
-
-        Participation participation = new Participation(_ctx.Flows.Find(flowId));
-        participation.Respondents.Add(respondent); //respondent
-        participations.Add(participation);
-    }
 }

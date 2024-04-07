@@ -55,13 +55,7 @@ public class StepsController : Controller
         }
     }
     
-    [HttpGet("SetRespondentEmail/{flowId:int}/{inputEmail:string}")]
-    public IActionResult SetRespondent(long flowId,string email)
-    {
-        _manager.SetParticipationByFlow(flowId,email);
-
-        return Ok();
-    }
+    
     
     
 }

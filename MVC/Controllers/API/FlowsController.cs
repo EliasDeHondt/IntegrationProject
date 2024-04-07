@@ -1,4 +1,4 @@
-﻿using Business_Layer;
+using Business_Layer;
 using Domain.ProjectLogics;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +6,7 @@ namespace MVC.Controllers.API;
 
 [ApiController]
 [Route("api/[controller]")]
-public class FlowsController : ControllerBase
+public class FlowsController : Controller
 {
     private readonly FlowManager _manager;
 
@@ -14,6 +14,13 @@ public class FlowsController : ControllerBase
     {
         _manager = manager;
     }
+    
+    [HttpGet("SetRespondentEmail/{flowId:int}/{inputEmail:string}")]
+    public IActionResult SetRespondent(long flowId,string email)
+    {
+        _manager.SetParticipationByFlow(flowId,email);
+
+        return Ok();
 
     [HttpPut("{id}/Paused")]
     public IActionResult PutFlowStateToPaused(long id)

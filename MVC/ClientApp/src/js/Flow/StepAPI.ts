@@ -20,18 +20,29 @@ let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerTex
 let inputEmail = (document.getElementById("inputEmail") as HTMLInputElement).value;
 
 
-function SetRespondentEmail(flowId: number,inputEmail: string){
-    fetch("/api/Steps/SetRespondentEmail/" + flowId + "/" + inputEmail, {
-        method: "GET",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
+async function SetRespondentEmail(flowId: number,inputEmail: string){
+    try {
+        const response = await fetch("/api/Flows/SetRespondentEmail/" + flowId + "/" + inputEmail, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                flowId: flowId,
+                email: inputEmail
+            })
+        });
+        if (response.ok) {
+            console.log("Email saved successfully.");
+        } else {
+            console.error("Failed to save Email.");
         }
-    })
-        .then(response => response.json())
-        .then(data => ShowStep(data))
-        .catch(error => console.error("Error:", error))
+        } catch (error) {
+            console.error("Error:", error);
+        }
 }
+if(inputEmail != null)
+    SetRespondentEmail(flowId,inputEmail)
 function GetNextStep(stepNumber: number, flowId: number) {
     fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
         method: "GET",
@@ -44,8 +55,6 @@ function GetNextStep(stepNumber: number, flowId: number) {
         .then(data => ShowStep(data))
         .catch(error => console.error("Error:", error))
 }
-if(inputEmail != null)
-    SetRespondentEmail(flowId,inputEmail)
 async function ShowStep(data: Step) {
     (document.getElementById("stepNr") as HTMLSpanElement).innerText = currentStepNumber.toString();
     informationContainer.innerHTML = "";
