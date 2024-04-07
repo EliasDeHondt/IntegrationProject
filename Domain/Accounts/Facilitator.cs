@@ -10,8 +10,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Accounts;
 
-public class Facilitator : IdentityUser
+public class Facilitator: User
 {
-    public long SharedPlatformId { get; set; }
-    public IEnumerable<Project> Projects { get; set; }
+ public override string Name { get; set; }
+ public override string Email { get; set; }
+ public override string Password { get; set; }
 }

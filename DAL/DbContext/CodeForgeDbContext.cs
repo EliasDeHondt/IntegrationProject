@@ -39,6 +39,11 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Answer> Answers { get; set; }
     public DbSet<Choice> Choices { get; set; }
     public DbSet<Selection> Selections { get; set; }
+    
+    public DbSet<Respondent> Respondents { get; set; }
+    public DbSet<Facilitator> Facilitators { get; set; }
+    public DbSet<SpAdmin> SpAdmins { get; set; }
+    public DbSet<SystemAdmin> SystemAdmins { get; set; }
     public DbSet<SharedPlatform> SharedPlatforms { get; set; }
 
     public CodeForgeDbContext(DbContextOptions<CodeForgeDbContext> options) : base(options) {}
@@ -160,6 +165,8 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         modelBuilder.Entity<Participation>().HasKey(participation => participation.Id);
         modelBuilder.Entity<Answer>().HasKey(answer => answer.Id);
         modelBuilder.Entity<Selection>().HasKey("FK_Selection_AnswerId", "FK_Selection_ChoiceId");
+
+        modelBuilder.Entity<Respondent>().HasKey(respondent =>  respondent.RespondentId);
     }
 
     public bool CreateDatabase(bool dropDatabase)

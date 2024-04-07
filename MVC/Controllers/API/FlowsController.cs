@@ -15,12 +15,18 @@ public class FlowsController : Controller
         _manager = manager;
     }
     
-    [HttpGet("SetRespondentEmail/{flowId:int}/{inputEmail:string}")]
-    public IActionResult SetRespondent(long flowId,string email)
+    [HttpPost("SetRespondentEmail/{flowId:int}/{inputEmail}")]
+    public IActionResult SetRespondentEmail(int flowId, string inputEmail)
     {
-        _manager.SetParticipationByFlow(flowId,email);
-
+        if (inputEmail == null)
+        {
+            return BadRequest();
+        }
+        
+        _manager.SetParticipationByFlow(flowId, inputEmail);
+        
         return Ok();
+        
 
     [HttpPut("{id}/Paused")]
     public IActionResult PutFlowStateToPaused(long id)
