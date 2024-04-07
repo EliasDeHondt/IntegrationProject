@@ -28,9 +28,5 @@ public class StepManager
     {
         return _repo.ReadFlowByNumber(flowId);
     }
-
-    public void SetParticipationByFlow(long flowId,string email)
-    {
-        _repo.AddParticipationByFlow(flowId,email);
-    }
+    
 }
