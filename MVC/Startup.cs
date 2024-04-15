@@ -10,6 +10,7 @@ using System.Text.Json.Serialization;
 using Business_Layer;
 using Data_Access_Layer;
 using Data_Access_Layer.DbContext;
+using Domain.Accounts;
 using Google.Apis.Storage.v1.Data;
 using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Identity;
@@ -42,17 +43,26 @@ public class Startup
         
         
         
-        services.AddScoped<FlowRepository, FlowRepository>();
-        services.AddScoped<FlowManager, FlowManager>();
-        services.AddScoped<ProjectManager, ProjectManager>();
-        services.AddScoped<StepRepository, StepRepository>();
-        services.AddScoped<StepManager, StepManager>();
-        services.AddScoped<QuestionManager, QuestionManager>();
-        services.AddScoped<AnswerManager, AnswerManager>();
-        services.AddScoped<AnswerRepository, AnswerRepository>();
-        services.AddScoped<QuestionRepository, QuestionRepository>();
-        services.AddScoped<ThemeRepository, ThemeRepository>();
-        services.AddScoped<ThemeManager, ThemeManager>();
+        services.AddScoped<FlowRepository>();
+        services.AddScoped<FlowManager>();
+        
+        services.AddScoped<ProjectManager>();
+        
+        services.AddScoped<StepRepository>();
+        services.AddScoped<StepManager>();
+        
+        services.AddScoped<QuestionManager>();
+        services.AddScoped<QuestionRepository>();
+        
+        services.AddScoped<AnswerManager>();
+        services.AddScoped<AnswerRepository>();
+        
+        services.AddScoped<ThemeRepository>();
+        services.AddScoped<ThemeManager>();
+
+        services.AddScoped<SharedPlatformRepository>();
+        services.AddScoped<SharedPlatformManager>();
+        
         services.AddScoped<UnitOfWork, UnitOfWork>();
         services.AddSingleton(options);
         
@@ -77,10 +87,12 @@ public class Startup
         
         //init dbcontext
         var dbContext = serviceScope.ServiceProvider.GetRequiredService<CodeForgeDbContext>();
+        var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
         var uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWork>();
         if (dbContext.CreateDatabase(true))
         {
             uow.BeginTransaction();
+            SeedUsers(userManager).Wait();
             DataSeeder.Seed(dbContext);
             uow.Commit();
         }
@@ -97,4 +109,20 @@ public class Startup
                 pattern: "{controller=Home}/{action=Index}/{id?}");
         });
     }
+
+    public async Task SeedUsers(UserManager<IdentityUser> userManager)
+    {
+
+        var sharedPlatformAdminHenk = new SpAdmin
+        {
+            Id = "HenkId",
+            Email = "Henk@CodeForge.com",
+            UserName = "Henk",
+            EmailConfirmed = true
+        };
+
+        await userManager.CreateAsync(sharedPlatformAdminHenk, "Henk!123");
+
+    }
+
 }

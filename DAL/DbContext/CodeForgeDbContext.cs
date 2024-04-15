@@ -6,7 +6,9 @@
  ***************************************/
 
 using System.Diagnostics;
+using Domain.Accounts;
 using Domain.FacilitatorFunctionality;
+using Domain.Platform;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
@@ -37,6 +39,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Answer> Answers { get; set; }
     public DbSet<Choice> Choices { get; set; }
     public DbSet<Selection> Selections { get; set; }
+    public DbSet<SharedPlatform> SharedPlatforms { get; set; }
 
     public CodeForgeDbContext(DbContextOptions<CodeForgeDbContext> options) : base(options) {}
 
@@ -92,6 +95,10 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
 
         modelBuilder.Entity<ChoiceAnswer>().HasBaseType<Answer>();
         modelBuilder.Entity<OpenAnswer>().HasBaseType<Answer>();
+
+        modelBuilder.Entity<Facilitator>().HasBaseType<IdentityUser>();
+        modelBuilder.Entity<SpAdmin>().HasBaseType<IdentityUser>();
+        modelBuilder.Entity<SystemAdmin>().HasBaseType<IdentityUser>();
         
         // Reflects domain configuration.
         modelBuilder.Entity<Note>(entity => entity.Property(e => e.Textfield).IsRequired().HasMaxLength(15000));
@@ -139,7 +146,10 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
             .HasMany(c => c.Selections)
             .WithOne(s => s.Choice)
             .HasForeignKey("FK_Selection_ChoiceId");
-        
+
+        modelBuilder.Entity<SharedPlatform>()
+            .HasMany<Project>()
+            .WithOne(project => project.SharedPlatform);
         
         modelBuilder.Entity<Project>().HasKey(project => project.Id);
         modelBuilder.Entity<ThemeBase>().HasKey(theme => theme.Id);
