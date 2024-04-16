@@ -39,17 +39,30 @@ async function SetRespondentEmail(flowId: number,inputEmail: string){
 //     SetRespondentEmail(flowId,inputEmail,currentStepNumber)
 document.addEventListener("DOMContentLoaded", function () {
     const emailInput = document.getElementById("inputEmail");
-
+    //(document.getElementById("inputEmail") as HTMLInputElement).value = "New Text Content";
     // @ts-ignore
     emailInput.addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
             // @ts-ignore
-            const inputEmail = emailInput.value.trim();
-            if (inputEmail !== "") {
-                SetRespondentEmail(flowId, inputEmail);
+            var inputElement = document.getElementById("inputEmail") as HTMLInputElement;
+            console.log("E");
+            if (inputElement !== null) {
+                inputElement.value = "New Text Content";
+                console.log("E");
+            } else {
+                console.log("A");
+
             }
+            // const inputEmail = emailInput.value.trim();
+            // if (inputEmail !== "") {
+            //     SetRespondentEmail(flowId, inputEmail);
+            //     console.log("gjkjytyjhtrttyyttytytyt");
+            //    
+            //   // document.getElementById("inputEmail").value = "New Text Content";
+            // }
         }
     });
+
 });
 function GetNextStep(stepNumber: number, flowId: number) {
     fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
