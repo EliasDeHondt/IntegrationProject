@@ -5,8 +5,6 @@
  *                                     *
  ***************************************/
 
-using Domain.Accounts;
-using Domain.Platform;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
@@ -427,11 +425,9 @@ public class DataSeeder
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
         
-        SharedPlatform sp = new SharedPlatform("CodeForge");
-        
         // mainTheme1.Flows.Add(flow);
         subTheme1.Flows.Add(flow);
-        Project project1 = new Project(mainTheme1, sp);
+        Project project1 = new Project(mainTheme1);
         ctx.MainThemes.Add(mainTheme1);
         ctx.Flows.Add(flow);
         ctx.Projects.Add(project1);
@@ -445,18 +441,14 @@ public class DataSeeder
         
         // Seed main theme 2
         MainTheme mainTheme2 = new MainTheme("Lokale Verkiezingen - circulair");
-        Project project2 = new Project(mainTheme2, sp);
+        Project project2 = new Project(mainTheme2);
         Flow flow2 = new Flow(FlowType.CIRCULAR, mainTheme2);
         
         GenerateSingleQuestions(ctx,flow2);
        // GenerateRangeQuestions(ctx,flow2);
-
-       ((SpAdmin)ctx.Users.Single(user => user.Email == "Henk@CodeForge.com")).SharedPlatform = sp;
-       sp.Projects.Add(project1);
-       sp.Projects.Add(project2);
-       
+        
         flow2.Theme = mainTheme2;
-        ctx.SharedPlatforms.Add(sp);
+        
         ctx.MainThemes.Add(mainTheme2);
         ctx.Flows.Add(flow2);
         ctx.Projects.Add(project2);
