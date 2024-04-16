@@ -40,9 +40,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Selection> Selections { get; set; }
     
     public DbSet<Respondent> Respondents { get; set; }
-    public DbSet<Facilitator> Facilitators { get; set; }
-    public DbSet<SpAdmin> SpAdmins { get; set; }
-    public DbSet<SystemAdmin> SystemAdmins { get; set; }
+
 
     public CodeForgeDbContext(DbContextOptions<CodeForgeDbContext> options) : base(options) {}
 
@@ -139,8 +137,6 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
             .HasMany(participation => participation.Respondents) 
             .WithOne() 
             .HasForeignKey("ParticipationId"); 
-        modelBuilder.Entity<Respondent>()
-            .ToTable("Respondents");
 
 
         modelBuilder.Entity<ChoiceAnswer>()

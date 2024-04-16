@@ -38,13 +38,12 @@ public class FlowRepository
     {
         var participations = _context.Participations;//ReadFlowById(flowId).Participations;
        // var name = email.Substring(0, email.IndexOf('@')); //aa.ww@email.com --> aa.ww
-        Respondent respondent = new Respondent(email);
+        //Respondent respondent = ;
 
         Participation participation = new Participation(ReadFlowById(flowId));
-        participation.Respondents.Add(respondent); //respondent
+        participation.Respondents.Add(new Respondent(email,participation)); //respondent
         participations.Add(participation);
-
-        var a = _context.Participations.Include(p => p.Respondents);
-
+        _context.SaveChanges();
+//        var a = _context.Participations.Include(p => p.Respondents);
     }
 }
