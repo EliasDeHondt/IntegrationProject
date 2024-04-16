@@ -121,3 +121,7 @@ button.accept-policy {
 .iconSize {
   font-size: 6rem;
 }
+
+.bgAccent {
+  background: map-get($themes, light, accent);
+}
