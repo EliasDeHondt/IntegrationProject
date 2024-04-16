@@ -6,6 +6,7 @@ const questionContainer = document.getElementById("questionContainer") as HTMLDi
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
 const btnNextStep = document.getElementById("btnNextStep") as HTMLButtonElement;
 const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonElement;
+const btnEmail = document.getElementById("btnEmail") as HTMLButtonElement;
 let currentStepNumber: number = 0;
 let userAnswers: string[] = []; // Array to store user answers
 let openUserAnswer: string = "";
@@ -14,19 +15,20 @@ let themeId = Number((document.getElementById("theme") as HTMLSpanElement).inner
 let steptotal = Number((document.getElementById("steptotal") as HTMLSpanElement).innerText);
 let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerText;
 
+//email checken
 function CheckEmail(inputEmail: string,inputElement:HTMLInputElement): boolean{
     const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const errorMessage = document.getElementById("emailErrorMessage");
+    const errorMessage = document.getElementById("errorMsg");
     if (emailRegex.test(inputEmail)) {
         if (errorMessage) {
-            errorMessage.remove();
+            errorMessage.innerText = "dss"
         }
         return true;
     } else {
         if (!errorMessage) {
             let p = document.getElementById("errorMsg") as HTMLElement;
             p.innerText = "Not an Email.";
-            p.id = "emailErrorMessage";
+            p.id = "errorMsg";
             p.style.color = "red";
             // @ts-ignore
             inputElement.parentNode.appendChild(p);
@@ -34,6 +36,8 @@ function CheckEmail(inputEmail: string,inputElement:HTMLInputElement): boolean{
         return false;
     }
 }
+
+//email doorsturen
 async function SetRespondentEmail(flowId: number,inputEmail: string){
     try {
         const response = await fetch("/api/Flows/SetRespondentEmail/" + flowId + "/" + inputEmail, {
@@ -55,34 +59,32 @@ async function SetRespondentEmail(flowId: number,inputEmail: string){
             console.error("Error:", error);
         }
 }
-// if(inputEmail != null)
-//     SetRespondentEmail(flowId,inputEmail,currentStepNumber)
+
+//button submit email 
 document.addEventListener("DOMContentLoaded", function () {
     const emailInput = document.getElementById("inputEmail");
 
-    // @ts-ignore
-    emailInput.addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-            // @ts-ignore
-            const inputEmail = emailInput.value.trim();
-            var inputElement = document.getElementById("inputEmail") as HTMLInputElement;
-            if(CheckEmail(inputEmail,inputElement)){
-                console.log("Correct Email.")
-                if (inputEmail !== "") {
-                    SetRespondentEmail(flowId, inputEmail);
-                    
-                    if (inputElement !== null) {
-                        inputElement.value = "";
-                        console.log("Reset value.");
-                    } else {
-                        console.log("No value to reset.");
-                    }
+    btnEmail.onclick = function () {
+        // @ts-ignore
+        const inputEmail = emailInput.value.trim();
+        const inputElement = emailInput as HTMLInputElement;
+
+        if (CheckEmail(inputEmail, inputElement)) {
+            console.log("Correct Email.");
+            if (inputEmail !== "") {
+                SetRespondentEmail(flowId, inputEmail);
+
+                if (inputElement !== null) {
+                    inputElement.value = "";
+                    console.log("Reset value.");
+                } else {
+                    console.log("No value to reset.");
                 }
             }
         }
-    });
-
+    };
 });
+
 function GetNextStep(stepNumber: number, flowId: number) {
     fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
         method: "GET",
