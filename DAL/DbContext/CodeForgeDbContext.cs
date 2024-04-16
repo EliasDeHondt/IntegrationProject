@@ -132,10 +132,17 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
             .HasMany(theme => theme.Flows)
             .WithOne(flow => (SubTheme)flow.Theme);
         
+        // modelBuilder.Entity<Participation>()
+        //     .HasOne(participation => participation.Flow)
+        //     .WithMany(flow => flow.Participations)
+        //     .HasForeignKey("FK_Flow_Id");
         modelBuilder.Entity<Participation>()
-            .HasOne(participation => participation.Flow)
-            .WithMany(flow => flow.Participations)
-            .HasForeignKey("FK_Flow_Id");
+            .HasMany(participation => participation.Respondents) 
+            .WithOne() 
+            .HasForeignKey("ParticipationId"); 
+        modelBuilder.Entity<Respondent>()
+            .ToTable("Respondents");
+
 
         modelBuilder.Entity<ChoiceAnswer>()
             .HasMany(a => a.Answers)

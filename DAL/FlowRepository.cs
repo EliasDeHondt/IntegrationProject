@@ -36,13 +36,16 @@ public class FlowRepository
     
     public void AddParticipationByFlow(long flowId,string email)
     {
-        var participations = ReadFlowById(flowId).Participations;
+        var participations = _context.Participations;//ReadFlowById(flowId).Participations;
        // var name = email.Substring(0, email.IndexOf('@')); //aa.ww@email.com --> aa.ww
         Respondent respondent = new Respondent(email);
 
         Participation participation = new Participation(ReadFlowById(flowId));
         participation.Respondents.Add(respondent); //respondent
         participations.Add(participation);
+
+        var a = _context.Participations.Include(p => p.Respondents);
+
     }
 
     public void UpdateFlowState(Flow flow)
