@@ -28,6 +28,15 @@ async function SetRespondentEmail(flowId: number,inputEmail: string){
         });
         if (response.ok) {
             console.log("Email saved successfully.");
+            //(document.getElementById("inputEmail") as HTMLInputElement).innerText
+            var inputElement = document.getElementById("inputEmail") as HTMLInputElement;
+            if (inputElement !== null) {
+                inputElement.value = "New Text Content";
+                console.log("Eashjkjtreqryjkjtytertyjkhyrer");
+            } else {
+                console.log("Element with ID 'inputEmail' not found!");
+
+            }
         } else {
             console.error("Failed to save Email.");
         }
@@ -39,7 +48,7 @@ async function SetRespondentEmail(flowId: number,inputEmail: string){
 //     SetRespondentEmail(flowId,inputEmail,currentStepNumber)
 document.addEventListener("DOMContentLoaded", function () {
     const emailInput = document.getElementById("inputEmail");
-
+    //(document.getElementById("inputEmail") as HTMLInputElement).value = "New Text Content";
     // @ts-ignore
     emailInput.addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
@@ -47,9 +56,13 @@ document.addEventListener("DOMContentLoaded", function () {
             const inputEmail = emailInput.value.trim();
             if (inputEmail !== "") {
                 SetRespondentEmail(flowId, inputEmail);
+                console.log("gjkjytyjhtrttyyttytytyt");
+                
+              // document.getElementById("inputEmail").value = "New Text Content";
             }
         }
     });
+
 });
 function GetNextStep(stepNumber: number, flowId: number) {
     fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
