@@ -13,5 +13,5 @@ public class Like
 {
     public long LikeId { get; set; }
     public Idea Idea { get; set; }
-    public User User { get; set; }
+    public Respondent User { get; set; }
 }
