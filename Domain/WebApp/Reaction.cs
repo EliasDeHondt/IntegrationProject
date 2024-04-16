@@ -14,5 +14,5 @@ public class Reaction
     public long ReactionId { get; set; }
     public String Text { get; set; }
     public Idea Idea { get; set; }
-    public Respondent User { get; set; }
+    public User User { get; set; }
 }

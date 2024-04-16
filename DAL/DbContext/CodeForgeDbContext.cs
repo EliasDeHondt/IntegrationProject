@@ -8,7 +8,6 @@
 using System.Diagnostics;
 using Domain.Accounts;
 using Domain.FacilitatorFunctionality;
-using Domain.Platform;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
@@ -100,10 +99,6 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
 
         modelBuilder.Entity<ChoiceAnswer>().HasBaseType<Answer>();
         modelBuilder.Entity<OpenAnswer>().HasBaseType<Answer>();
-
-        modelBuilder.Entity<Facilitator>().HasBaseType<IdentityUser>();
-        modelBuilder.Entity<SpAdmin>().HasBaseType<IdentityUser>();
-        modelBuilder.Entity<SystemAdmin>().HasBaseType<IdentityUser>();
         
         // Reflects domain configuration.
         modelBuilder.Entity<Note>(entity => entity.Property(e => e.Textfield).IsRequired().HasMaxLength(15000));

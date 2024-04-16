@@ -5,7 +5,6 @@
  *                                     *
  ***************************************/
 
-using Domain.Platform;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Accounts;

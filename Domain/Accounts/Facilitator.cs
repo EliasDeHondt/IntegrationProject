@@ -5,7 +5,6 @@
  *                                     *
  ***************************************/
 
-using Domain.ProjectLogics;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Accounts;
