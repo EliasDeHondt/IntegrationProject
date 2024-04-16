@@ -18,17 +18,17 @@ let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerTex
 //email checken
 function CheckEmail(inputEmail: string,inputElement:HTMLInputElement): boolean{
     const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const errorMessage = document.getElementById("errorMsg");
+    const errorMessage = document.getElementById("error");
     if (emailRegex.test(inputEmail)) {
         if (errorMessage) {
-            errorMessage.innerText = "dss"
+            errorMessage.innerHTML = "&nbsp;"
         }
         return true;
     } else {
         if (!errorMessage) {
             let p = document.getElementById("errorMsg") as HTMLElement;
             p.innerText = "Not an Email.";
-            p.id = "errorMsg";
+            p.id = "error";
             p.style.color = "red";
             // @ts-ignore
             inputElement.parentNode.appendChild(p);
