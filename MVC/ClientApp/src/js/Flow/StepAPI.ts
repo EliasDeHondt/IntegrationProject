@@ -1,15 +1,12 @@
-import {Step} from "./Step/StepObjects";
-import {downloadVideoFromBucket} from "../StorageAPI";
+import { Step } from "./Step/StepObjects";
+import { downloadVideoFromBucket } from "../StorageAPI";
 import {Flow} from "./FlowObjects";
-import {Modal} from "bootstrap";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
 const btnNextStep = document.getElementById("btnNextStep") as HTMLButtonElement;
 const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonElement;
-const btnPauseFlow = document.getElementById("btnPauseFlow") as HTMLButtonElement;
-const btnUnPauseFlow = document.getElementById("btnUnPauseFlow") as HTMLButtonElement;
-const modal = new Modal(document.getElementById("pausedFlowModal") as HTMLDivElement);
+const btnEmail = document.getElementById("btnEmail") as HTMLButtonElement;
 let currentStepNumber: number = 0;
 let userAnswers: string[] = []; // Array to store user answers
 let openUserAnswer: string = "";
@@ -18,6 +15,29 @@ let themeId = Number((document.getElementById("theme") as HTMLSpanElement).inner
 let steptotal = Number((document.getElementById("steptotal") as HTMLSpanElement).innerText);
 let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerText;
 
+//email checken
+function CheckEmail(inputEmail: string,inputElement:HTMLInputElement): boolean{
+    const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const errorMessage = document.getElementById("errorMsg");
+    if (emailRegex.test(inputEmail)) {
+        if (errorMessage) {
+            errorMessage.innerText = "dss"
+        }
+        return true;
+    } else {
+        if (!errorMessage) {
+            let p = document.getElementById("errorMsg") as HTMLElement;
+            p.innerText = "Not an Email.";
+            p.id = "errorMsg";
+            p.style.color = "red";
+            // @ts-ignore
+            inputElement.parentNode.appendChild(p);
+        }
+        return false;
+    }
+}
+
+//email doorsturen
 async function SetRespondentEmail(flowId: number,inputEmail: string){
     try {
         const response = await fetch("/api/Flows/SetRespondentEmail/" + flowId + "/" + inputEmail, {
@@ -32,15 +52,6 @@ async function SetRespondentEmail(flowId: number,inputEmail: string){
         });
         if (response.ok) {
             console.log("Email saved successfully.");
-            //(document.getElementById("inputEmail") as HTMLInputElement).innerText
-            var inputElement = document.getElementById("inputEmail") as HTMLInputElement;
-            if (inputElement !== null) {
-                inputElement.value = "New Text Content";
-                console.log("Eashjkjtreqryjkjtytertyjkhyrer");
-            } else {
-                console.log("Element with ID 'inputEmail' not found!");
-
-            }
         } else {
             console.error("Failed to save Email.");
         }
@@ -48,41 +59,32 @@ async function SetRespondentEmail(flowId: number,inputEmail: string){
             console.error("Error:", error);
         }
 }
-// if(inputEmail != null)
-//     SetRespondentEmail(flowId,inputEmail,currentStepNumber)
+
+//button submit email 
 document.addEventListener("DOMContentLoaded", function () {
     const emailInput = document.getElementById("inputEmail");
-    //(document.getElementById("inputEmail") as HTMLInputElement).value = "New Text Content";
-    // @ts-ignore
-    emailInput.addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-            // @ts-ignore
-            const inputEmail = emailInput.value.trim();
+
+    btnEmail.onclick = function () {
+        // @ts-ignore
+        const inputEmail = emailInput.value.trim();
+        const inputElement = emailInput as HTMLInputElement;
+
+        if (CheckEmail(inputEmail, inputElement)) {
+            console.log("Correct Email.");
             if (inputEmail !== "") {
                 SetRespondentEmail(flowId, inputEmail);
-                console.log("gjkjytyjhtrttyyttytytyt");
-                
-              // document.getElementById("inputEmail").value = "New Text Content";
-            var inputElement = document.getElementById("inputEmail") as HTMLInputElement;
-            console.log("E");
-            if (inputElement !== null) {
-                inputElement.value = "New Text Content";
-                console.log("E");
-            } else {
-                console.log("A");
 
+                if (inputElement !== null) {
+                    inputElement.value = "";
+                    console.log("Reset value.");
+                } else {
+                    console.log("No value to reset.");
+                }
             }
-            // const inputEmail = emailInput.value.trim();
-            // if (inputEmail !== "") {
-            //     SetRespondentEmail(flowId, inputEmail);
-            //     console.log("gjkjytyjhtrttyyttytytyt");
-            //    
-            //   // document.getElementById("inputEmail").value = "New Text Content";
-            // }
         }
-    });
-
+    };
 });
+
 function GetNextStep(stepNumber: number, flowId: number) {
     fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
         method: "GET",
@@ -112,7 +114,7 @@ async function ShowStep(data: Step) {
             case "Image": {
                 let img = document.createElement("img");
                 img.src = "data:image/png;base64," + data.informationViewModel.information;
-                img.classList.add("col-m-12", "w-100", "h-100");
+                img.classList.add("col-m-12","w-100","h-100");
                 informationContainer.appendChild(img);
                 break;
             }
@@ -126,7 +128,7 @@ async function ShowStep(data: Step) {
                 video.autoplay = true;
                 video.loop = true;
                 video.controls = false;
-                video.classList.add("h-100", "w-100");
+                video.classList.add("h-100","w-100");
                 informationContainer.appendChild(video);
                 break;
             }
@@ -146,7 +148,7 @@ async function ShowStep(data: Step) {
                     let choice = document.createElement("input");
                     let label = document.createElement("label");
                     let div = document.createElement("div");
-                    div.classList.add("text-start", "m-auto")
+                    div.classList.add("text-start","m-auto")
                     choice.type = 'radio';
                     choice.name = 'choice';
                     choice.value = data.questionViewModel.choices[i].text;
@@ -166,7 +168,7 @@ async function ShowStep(data: Step) {
                     let choice = document.createElement("input");
                     let label = document.createElement("label");
                     let div = document.createElement("div");
-                    div.classList.add("text-start", "m-auto")
+                    div.classList.add("text-start","m-auto")
                     choice.type = 'checkbox';
                     choice.name = 'choice';
                     choice.value = data.questionViewModel.choices[i].text;
@@ -286,37 +288,10 @@ btnNextStep.onclick = async () => {
     } else {
         GetNextStep(++currentStepNumber, flowId);
     }
-
+    
 }
 
 btnRestartFlow.onclick = () => {
     currentStepNumber = 0;
     GetNextStep(++currentStepNumber, flowId);
 };
-
-btnPauseFlow.onclick = () => {
-    fetch("/api/Flows/" + flowId + "/Paused", {
-        method: "PUT"
-    })
-        .then(response => {
-            if (response.ok) {
-                console.log("Flow paused!")
-                modal.show()
-            }
-        })
-        .catch(error => console.error("Error:", error))
-}
-
-if (btnUnPauseFlow)
-    btnUnPauseFlow.onclick = () => {
-        fetch("/api/Flows/" + flowId + "/Active", {
-            method: "PUT"
-        })
-            .then(response => {
-                if (response.ok) {
-                    console.log("Flow active!")
-                    modal.hide()
-                }
-            })
-            .catch(error => console.error("Error:", error))
-    }
