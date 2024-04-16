@@ -158,6 +158,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         modelBuilder.Entity<Selection>().HasKey("FK_Selection_AnswerId", "FK_Selection_ChoiceId");
 
         modelBuilder.Entity<Respondent>().HasKey(respondent =>  respondent.RespondentId);
+        //modelBuilder.Entity<Facilitator>().HasBaseType<User>();
     }
 
     public bool CreateDatabase(bool dropDatabase)

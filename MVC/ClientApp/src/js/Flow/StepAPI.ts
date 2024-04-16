@@ -18,15 +18,13 @@ function CheckEmail(inputEmail: string,inputElement:HTMLInputElement): boolean{
     const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const errorMessage = document.getElementById("emailErrorMessage");
     if (emailRegex.test(inputEmail)) {
-        // Remove error message if it exists
         if (errorMessage) {
             errorMessage.remove();
         }
         return true;
     } else {
-        // Append error message only if it doesn't already exist and parent has no children
         if (!errorMessage) {
-            let p = document.createElement("p");
+            let p = document.getElementById("errorMsg") as HTMLElement;
             p.innerText = "Not an Email.";
             p.id = "emailErrorMessage";
             p.style.color = "red";
