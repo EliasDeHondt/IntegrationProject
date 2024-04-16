@@ -1,12 +1,12 @@
 const path = require('path');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
     entry: {
         site: './src/js/site.ts',
-        validation: './src/js/validation.ts',
-        index: './src/js/index.ts',
+        index: './src/ts/index.ts',
+        validation: './src/ts/validation.ts',
         step: './src/js/Flow/StepAPI.ts',
         theme: './src/js/Theme/ThemeAPI.ts',
         mainThemeDetails: './src/js/Theme/MainThemeDetailsAPI.ts',
@@ -48,11 +48,7 @@ module.exports = {
             },
             {
                 test: /\.s?css$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    "css-loader",
-                    "sass-loader"
-                ]
+                use: [{loader: MiniCssExtractPlugin.loader}, 'css-loader', 'sass-loader']
             },
             {
                 test: /\.(png|svg|jpg|jpeg|gif|webp)$/i,
@@ -71,6 +67,6 @@ module.exports = {
     plugins: [
         new MiniCssExtractPlugin({
             filename: "[name].css"
-        }),
+        })
     ]
-};
+}

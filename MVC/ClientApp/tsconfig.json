@@ -1,8 +1,8 @@
 ﻿{
   "extends": "@tsconfig/recommended/tsconfig.json",
   "compilerOptions": {
-    "target": "es2022",
-    "module": "es2022",
+    "target": "es6",
+    "module": "es6",
     "allowJs": true,
     "strict": true,
     "moduleResolution": "node",
