@@ -39,8 +39,13 @@ public class Startup
         //dependency injection
         services.AddDbContext<CodeForgeDbContext>();
         services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<CodeForgeDbContext>();
-        
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("admin", policy => policy.RequireRole(UserRoles.PlatformAdmin, UserRoles.SystemAdmin));
+        });
         
         
         services.AddScoped<FlowRepository>();
@@ -62,6 +67,9 @@ public class Startup
 
         services.AddScoped<SharedPlatformRepository>();
         services.AddScoped<SharedPlatformManager>();
+
+        services.AddScoped<CustomUserManager>();
+        services.AddScoped<UserRepository>();
         
         services.AddScoped<UnitOfWork, UnitOfWork>();
         services.AddSingleton(options);
@@ -88,11 +96,12 @@ public class Startup
         //init dbcontext
         var dbContext = serviceScope.ServiceProvider.GetRequiredService<CodeForgeDbContext>();
         var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+        var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWork>();
         if (dbContext.CreateDatabase(true))
         {
             uow.BeginTransaction();
-            SeedUsers(userManager).Wait();
+            SeedUsers(userManager, roleManager).Wait();
             DataSeeder.Seed(dbContext);
             uow.Commit();
         }
@@ -100,8 +109,8 @@ public class Startup
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
-        app.UseAuthorization();
         app.UseAuthentication();
+        app.UseAuthorization();
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapRazorPages();
@@ -110,7 +119,7 @@ public class Startup
         });
     }
 
-    public async Task SeedUsers(UserManager<IdentityUser> userManager)
+    public async Task SeedUsers(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
     {
 
         var sharedPlatformAdminHenk = new SpAdmin
@@ -121,7 +130,12 @@ public class Startup
             EmailConfirmed = true
         };
 
+        await roleManager.CreateAsync(new IdentityRole(UserRoles.PlatformAdmin));
+        await roleManager.CreateAsync(new IdentityRole(UserRoles.SystemAdmin));
+        
         await userManager.CreateAsync(sharedPlatformAdminHenk, "Henk!123");
+        
+        await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.PlatformAdmin);
 
     }
 

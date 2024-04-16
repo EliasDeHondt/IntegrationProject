@@ -1,5 +1,9 @@
-﻿using Business_Layer;
+﻿using System.Security.Claims;
+using Business_Layer;
+using Domain.Accounts;
 using Domain.Platform;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MVC.Controllers;
@@ -8,16 +12,19 @@ public class SharedPlatformController : Controller
 {
 
     private readonly SharedPlatformManager _sharedPlatformManager;
+    private readonly CustomUserManager _customUserManager;
     
-    public SharedPlatformController(SharedPlatformManager sharedPlatformManager)
+    public SharedPlatformController(SharedPlatformManager sharedPlatformManager, CustomUserManager customUserManager)
     {
         _sharedPlatformManager = sharedPlatformManager;
+        _customUserManager = customUserManager;
     }
     
-    
-    public IActionResult Index()
+    [Authorize(policy: "admin")]
+    public IActionResult Dashboard()
     {
-        var sharedPlatform = _sharedPlatformManager.GetSharedPlatformWithProjects(1);
+        SpAdmin admin = _customUserManager.GetPlatformAdminWithSharedPlatform(User.FindFirstValue(ClaimTypes.Email));
+        var sharedPlatform = _sharedPlatformManager.GetSharedPlatformWithProjects(admin.SharedPlatform.Id);
         return View(sharedPlatform);
     }
 }
