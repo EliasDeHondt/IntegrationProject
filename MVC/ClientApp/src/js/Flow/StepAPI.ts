@@ -14,6 +14,28 @@ let themeId = Number((document.getElementById("theme") as HTMLSpanElement).inner
 let steptotal = Number((document.getElementById("steptotal") as HTMLSpanElement).innerText);
 let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerText;
 
+function CheckEmail(inputEmail: string,inputElement:HTMLInputElement): boolean{
+    const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const errorMessage = document.getElementById("emailErrorMessage");
+    if (emailRegex.test(inputEmail)) {
+        // Remove error message if it exists
+        if (errorMessage) {
+            errorMessage.remove();
+        }
+        return true;
+    } else {
+        // Append error message only if it doesn't already exist and parent has no children
+        if (!errorMessage) {
+            let p = document.createElement("p");
+            p.innerText = "Not an Email.";
+            p.id = "emailErrorMessage";
+            p.style.color = "red";
+            // @ts-ignore
+            inputElement.parentNode.appendChild(p);
+        }
+        return false;
+    }
+}
 async function SetRespondentEmail(flowId: number,inputEmail: string){
     try {
         const response = await fetch("/api/Flows/SetRespondentEmail/" + flowId + "/" + inputEmail, {
@@ -39,27 +61,26 @@ async function SetRespondentEmail(flowId: number,inputEmail: string){
 //     SetRespondentEmail(flowId,inputEmail,currentStepNumber)
 document.addEventListener("DOMContentLoaded", function () {
     const emailInput = document.getElementById("inputEmail");
-    //(document.getElementById("inputEmail") as HTMLInputElement).value = "New Text Content";
+
     // @ts-ignore
     emailInput.addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
             // @ts-ignore
+            const inputEmail = emailInput.value.trim();
             var inputElement = document.getElementById("inputEmail") as HTMLInputElement;
-            console.log("E");
-            if (inputElement !== null) {
-                inputElement.value = "New Text Content";
-                console.log("E");
-            } else {
-                console.log("A");
-
+            if(CheckEmail(inputEmail,inputElement)){
+                console.log("Correct Email.")
+                if (inputEmail !== "") {
+                    SetRespondentEmail(flowId, inputEmail);
+                    
+                    if (inputElement !== null) {
+                        inputElement.value = "";
+                        console.log("Reset value.");
+                    } else {
+                        console.log("No value to reset.");
+                    }
+                }
             }
-            // const inputEmail = emailInput.value.trim();
-            // if (inputEmail !== "") {
-            //     SetRespondentEmail(flowId, inputEmail);
-            //     console.log("gjkjytyjhtrttyyttytytyt");
-            //    
-            //   // document.getElementById("inputEmail").value = "New Text Content";
-            // }
         }
     });
 
