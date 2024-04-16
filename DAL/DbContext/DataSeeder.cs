@@ -5,6 +5,7 @@
  *                                     *
  ***************************************/
 
+using Domain.Accounts;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
@@ -409,7 +410,9 @@ public class DataSeeder
         SubTheme subTheme1 = new SubTheme("Causes", mainTheme1);
         Flow flow = new Flow(FlowType.LINEAR, subTheme1);
         Participation participation1 = new Participation(flow); //for respondents
+        participation1.Respondents.Add(new Respondent("test@mail.com",participation1));
         flow.Participations.Add(participation1);
+        
         Text textInfo = new Text("Lokale Verkiezingen");
         Image imageInfo = new Image(ImageUrls.Verkiezingen);
         Video videoInfo = new Video("screensaver.mp4");
