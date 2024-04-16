@@ -6,14 +6,13 @@
 
 <!DOCTYPE html>
 
-<html>
+<html class="h-100 w-100">
 <head>
     <title>title</title>
-    <script src="~/dist/site.entry.js" defer></script>
     <link rel="stylesheet" href="~/dist/site.css"/>
 </head>
-<body>
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
+<body class="row h-100 w-100">
+<div class="d-flex col-2 flex-shrink-0 p-3 bg-light h-100">
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
             <a href="#" class="nav-link active" aria-current="page">
@@ -22,5 +21,32 @@
         </li>
     </ul>
 </div>
+<div class="col-10">
+    <div class="row row-cols-3 border rounded-4 bgSecondary ps-4 pe-4 m-4 h-25">
+        <div class="col mt-3 mb-3">
+            <div class="card h-100">
+                <div class="card-body align-items-center d-flex justify-content-center">
+                    <i class="bi bi-person-plus-fill iconSize"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col mt-3 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <i class="bi bi-person-plus-fill"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col mt-3 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <i class="bi bi-person-plus-fill"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
+
+<script src="~/dist/site.entry.js" defer></script>
