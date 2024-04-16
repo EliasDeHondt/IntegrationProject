@@ -125,3 +125,15 @@ button.accept-policy {
 .bgAccent {
   background: map-get($themes, light, accent);
 }
+
+.bgPrimary {
+  background: map-get($themes, light, primary);
+}
+
+.bgColor {
+  background: map-get($themes, light, background);
+}
+
+.bgModal {
+  background: hsl(48, 61%, 47%);
+}
