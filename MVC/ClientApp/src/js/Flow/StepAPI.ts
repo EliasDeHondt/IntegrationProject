@@ -32,6 +32,15 @@ async function SetRespondentEmail(flowId: number,inputEmail: string){
         });
         if (response.ok) {
             console.log("Email saved successfully.");
+            //(document.getElementById("inputEmail") as HTMLInputElement).innerText
+            var inputElement = document.getElementById("inputEmail") as HTMLInputElement;
+            if (inputElement !== null) {
+                inputElement.value = "New Text Content";
+                console.log("Eashjkjtreqryjkjtytertyjkhyrer");
+            } else {
+                console.log("Element with ID 'inputEmail' not found!");
+
+            }
         } else {
             console.error("Failed to save Email.");
         }
@@ -48,6 +57,12 @@ document.addEventListener("DOMContentLoaded", function () {
     emailInput.addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
             // @ts-ignore
+            const inputEmail = emailInput.value.trim();
+            if (inputEmail !== "") {
+                SetRespondentEmail(flowId, inputEmail);
+                console.log("gjkjytyjhtrttyyttytytyt");
+                
+              // document.getElementById("inputEmail").value = "New Text Content";
             var inputElement = document.getElementById("inputEmail") as HTMLInputElement;
             console.log("E");
             if (inputElement !== null) {
