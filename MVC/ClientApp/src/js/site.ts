@@ -4,6 +4,6 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
 // Custom CSS imports
-import '../scss/site.scss';
+import '../css/site.scss';
 
 console.log('The \'site\' bundle has been loaded!');
