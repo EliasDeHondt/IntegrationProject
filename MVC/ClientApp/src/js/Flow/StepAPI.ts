@@ -19,19 +19,21 @@ let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerTex
 function CheckEmail(inputEmail: string,inputElement:HTMLInputElement): boolean{
     const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const errorMessage = document.getElementById("error");
-    if (emailRegex.test(inputEmail)) {
-        if (errorMessage) {
+    if (emailRegex.test(inputEmail)) { // het is een email
+        if (errorMessage && errorMessage.innerHTML === "Not an Email.") {
             errorMessage.innerHTML = "&nbsp;"
         }
+        console.log("mailss")
         return true;
     } else {
         if (!errorMessage) {
             let p = document.getElementById("errorMsg") as HTMLElement;
-            p.innerText = "Not an Email.";
+            p.innerHTML = "Not an Email.";
             p.id = "error";
             p.style.color = "red";
             // @ts-ignore
             inputElement.parentNode.appendChild(p);
+            console.log("append chikd")
         }
         return false;
     }
