@@ -5,6 +5,7 @@
  *                                     *
  ***************************************/
 
+using System.ComponentModel.DataAnnotations;
 using Domain.Platform;
 using Microsoft.AspNetCore.Identity;
 
@@ -12,5 +13,6 @@ namespace Domain.Accounts;
 
 public class SpAdmin: IdentityUser
 {
+    [Required]
     public SharedPlatform SharedPlatform { get; set; }
 }
