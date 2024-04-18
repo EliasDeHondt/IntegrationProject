@@ -18,23 +18,26 @@ let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerTex
 //email checken
 function CheckEmail(inputEmail: string,inputElement:HTMLInputElement): boolean{
     const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const errorMessage = document.getElementById("error");
+    let p = document.getElementById("errorMsg") as HTMLElement; 
     if (emailRegex.test(inputEmail)) { // het is een email
-        if (errorMessage && errorMessage.innerHTML === "Not an Email.") {
-            errorMessage.innerHTML = "&nbsp;"
-        }
+       // if (errorMessage && errorMessage.innerHTML === "Not an Email.") {
+            //errorMessage.innerHTML = "&nbsp;"
+            p.innerHTML = "Email submitted!";
+            p.style.color = "blue";
+            console.log("nbsp");
+       // }
         console.log("mailss")
         return true;
     } else {
-        if (!errorMessage) {
-            let p = document.getElementById("errorMsg") as HTMLElement;
+        
+            //let p = document.getElementById("errorMsg") as HTMLElement;
             p.innerHTML = "Not an Email.";
-            p.id = "error";
             p.style.color = "red";
-            // @ts-ignore
-            inputElement.parentNode.appendChild(p);
+        // if (!errorMessage) {
+        //     // @ts-ignore
+        //     inputElement.parentNode.appendChild(p);
             console.log("append chikd")
-        }
+        // }
         return false;
     }
 }
@@ -67,6 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const emailInput = document.getElementById("inputEmail");
 
     btnEmail.onclick = function () {
+        console.log("click");
         // @ts-ignore
         const inputEmail = emailInput.value.trim();
         const inputElement = emailInput as HTMLInputElement;
