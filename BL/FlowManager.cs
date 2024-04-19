@@ -49,4 +49,9 @@ public class FlowManager
     {
         throw new NotImplementedException();
     }
+
+    public void ChangeFlowState(Flow flow)
+    {
+        _repository.UpdateFlowState(flow);
+    }
 }

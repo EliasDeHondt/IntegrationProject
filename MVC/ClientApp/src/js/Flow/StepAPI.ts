@@ -1,11 +1,15 @@
-import { Step } from "./Step/StepObjects";
-import { downloadVideoFromBucket } from "../StorageAPI";
+import {Step} from "./Step/StepObjects";
+import {downloadVideoFromBucket} from "../StorageAPI";
 import {Flow} from "./FlowObjects";
+import {Modal} from "bootstrap";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
 const btnNextStep = document.getElementById("btnNextStep") as HTMLButtonElement;
 const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonElement;
+const btnPauseFlow = document.getElementById("btnPauseFlow") as HTMLButtonElement;
+const btnUnPauseFlow = document.getElementById("btnUnPauseFlow") as HTMLButtonElement;
+const modal = new Modal(document.getElementById("pausedFlowModal") as HTMLDivElement);
 let currentStepNumber: number = 0;
 let userAnswers: string[] = []; // Array to store user answers
 let openUserAnswer: string = "";
@@ -44,7 +48,7 @@ async function ShowStep(data: Step) {
             case "Image": {
                 let img = document.createElement("img");
                 img.src = "data:image/png;base64," + data.informationViewModel.information;
-                img.classList.add("col-m-12","w-100","h-100");
+                img.classList.add("col-m-12", "w-100", "h-100");
                 informationContainer.appendChild(img);
                 break;
             }
@@ -58,7 +62,7 @@ async function ShowStep(data: Step) {
                 video.autoplay = true;
                 video.loop = true;
                 video.controls = false;
-                video.classList.add("h-100","w-100");
+                video.classList.add("h-100", "w-100");
                 informationContainer.appendChild(video);
                 break;
             }
@@ -78,7 +82,7 @@ async function ShowStep(data: Step) {
                     let choice = document.createElement("input");
                     let label = document.createElement("label");
                     let div = document.createElement("div");
-                    div.classList.add("text-start","m-auto")
+                    div.classList.add("text-start", "m-auto")
                     choice.type = 'radio';
                     choice.name = 'choice';
                     choice.value = data.questionViewModel.choices[i].text;
@@ -98,7 +102,7 @@ async function ShowStep(data: Step) {
                     let choice = document.createElement("input");
                     let label = document.createElement("label");
                     let div = document.createElement("div");
-                    div.classList.add("text-start","m-auto")
+                    div.classList.add("text-start", "m-auto")
                     choice.type = 'checkbox';
                     choice.name = 'choice';
                     choice.value = data.questionViewModel.choices[i].text;
@@ -218,10 +222,37 @@ btnNextStep.onclick = async () => {
     } else {
         GetNextStep(++currentStepNumber, flowId);
     }
-    
+
 }
 
 btnRestartFlow.onclick = () => {
     currentStepNumber = 0;
     GetNextStep(++currentStepNumber, flowId);
 };
+
+btnPauseFlow.onclick = () => {
+    fetch("/api/Flows/" + flowId + "/Paused", {
+        method: "PUT"
+    })
+        .then(response => {
+            if (response.ok) {
+                console.log("Flow paused!")
+                modal.show()
+            }
+        })
+        .catch(error => console.error("Error:", error))
+}
+
+if (btnUnPauseFlow)
+    btnUnPauseFlow.onclick = () => {
+        fetch("/api/Flows/" + flowId + "/Active", {
+            method: "PUT"
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log("Flow active!")
+                    modal.hide()
+                }
+            })
+            .catch(error => console.error("Error:", error))
+    }

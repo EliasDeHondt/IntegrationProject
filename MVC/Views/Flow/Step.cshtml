@@ -13,6 +13,18 @@
     <title>@ViewData["Title"]</title>
 </head>
 <body class="h-100">
+<div class="modal" id="pausedFlowModal" data-bs-backdrop="static" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                Flow paused by facilitator!
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary mt-auto mb-auto h-25 m-5" id="btnUnPauseFlow">Back To Flow</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row-gap-sm-4 h-75">
     <h1><span id="flowtype">@Model.FlowType.ToString()</span> Flow <span id="flowId">@Model.Id</span> - Step <span id="stepNr"></span> / <span id="steptotal">@Model.getStepCount()</span></h1>
 
@@ -28,11 +40,12 @@
 <footer class="row-gap-sm-4 h-25 justify-content-center d-flex">
     <button class="btn-primary mt-auto mb-auto h-25 m-5" id="btnNextStep">Next step</button>
     <button class="btn-secondary mt-auto mb-auto h-25 m-5" id="btnRestartFlow">Restart flow</button>
+    <button class="btn-secondary mt-auto mb-auto h-25 m-5" id="btnPauseFlow">Pause flow</button>
     @if (Model.Theme.GetType() == typeof(SubTheme))
     {
         <div class="mt-auto mb-auto m-5">
-        <a class="btn-close h-50" id="butExitFlow" asp-area="" asp-controller="SubTheme" asp-action="SubTheme" asp-route-id="@Model.Theme.Id"></a>
-        <span>Exit</span>
+            <a class="btn-close h-50" id="butExitFlow" asp-area="" asp-controller="SubTheme" asp-action="SubTheme" asp-route-id="@Model.Theme.Id"></a>
+            <span>Exit</span>
         </div>
     }
     else

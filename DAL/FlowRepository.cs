@@ -32,5 +32,10 @@ public class FlowRepository
             .Include(f => f.Steps)
             .FirstOrDefault(f => f.Id == id);
     }
-    
+
+    public void UpdateFlowState(Flow flow)
+    {
+        _context.Flows.Update(flow);
+        _context.SaveChanges();
+    }
 }
