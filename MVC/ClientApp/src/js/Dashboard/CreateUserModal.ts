@@ -1,11 +1,13 @@
-﻿import {Modal} from "bootstrap";
-import { Project } from "../ProjectObjects";
+﻿import {Modal, Toast} from "bootstrap";
+import {Project} from "../ProjectObjects";
 
 const CreateUserModal = new Modal(document.getElementById('CreateUserModal')!, {
     keyboard: false,
     focus: true,
     backdrop: "static"
 });
+
+const userCreatedToast = new Toast(document.getElementById("userToast")!);
 
 const butCreateUser = document.getElementById("butCreateUser") as HTMLButtonElement;
 const butCloseCreateUserModal = document.getElementById("butCloseCreateUserModal") as HTMLButtonElement;
@@ -39,12 +41,12 @@ butCancelCreateUserModal.onclick = () => {
     clearModal()
 }
 
-butConfirmCreateUser.onclick = (ev) => {
+butConfirmCreateUser.onclick = async (ev) => {
     ev.preventDefault()
     // API call to create user
-    if(validateForm()){
-        if(radioFacilitator.checked) createFacilitator()
-        else if(radioAdmin.checked) createAdmin()
+    if (await validateForm()) {
+        if (radioFacilitator.checked) createFacilitator()
+        else if (radioAdmin.checked) createAdmin()
     }
 }
 
@@ -58,10 +60,10 @@ radioFacilitator.onchange = () => {
     facilitatorContainer.classList.remove("visually-hidden");
     // Generate options for each Project
     getProjects();
-    
+
 }
 
-function clearModal(){
+function clearModal() {
     inputName.value = "";
     inputEmail.value = "";
     inputPassword.value = "";
@@ -69,7 +71,7 @@ function clearModal(){
     CreateUserModal.hide();
 }
 
-function createFacilitator(){
+function createFacilitator() {
     let projectIds: number[] = [];
     for (let i = 0; i < selectProject.options.length; i++) {
         if (selectProject.options[i].selected) {
@@ -90,8 +92,14 @@ function createFacilitator(){
         })
     })
         .then(() => clearModal())
+        .then(() => {
+            userCreatedToast.show()
+            let closeUserToast = document.getElementById("closeUserToast") as HTMLButtonElement
+            closeUserToast.onclick = () => userCreatedToast.hide()
+        })
 }
-function createAdmin(){
+
+function createAdmin() {
     fetch("/api/Users/CreateAdmin", {
         method: "POST",
         headers: {
@@ -105,6 +113,11 @@ function createAdmin(){
         })
     })
         .then(() => clearModal())
+        .then(() => {
+            userCreatedToast.show()
+            let closeUserToast = document.getElementById("closeUserToast") as HTMLButtonElement
+            closeUserToast.onclick = () => userCreatedToast.hide()
+        })
 }
 
 function getProjects() {
@@ -128,10 +141,10 @@ function fillDropdown(data: Project[]) {
     }
 }
 
-function validateForm(){
+async function validateForm() {
     let valid: boolean = true;
-    
-    
+
+
     if (inputName.value.trim() === '') {
         nameWarning.textContent = 'Please enter a name';
         valid = false;
@@ -140,35 +153,58 @@ function validateForm(){
     }
 
     let emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
+
     if (inputEmail.value.trim() === '') {
         emailWarning.textContent = 'Please enter an email';
         valid = false;
-    } else if(!emailRegex.test(inputEmail.value)) {
+    } else if (!emailRegex.test(inputEmail.value)) {
         emailWarning.textContent = 'Please enter a valid email';
+        valid = false;
+    } else if (await isEmailInUse(inputEmail.value)) {
+        emailWarning.textContent = 'This email is already in use';
         valid = false;
     } else {
         emailWarning.textContent = '';
     }
-    
+
     let passwordRegex: RegExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{10,}$/
-    
+
     if (inputPassword.value.trim() === '') {
         passwordWarning.textContent = 'Please enter a password';
         valid = false;
-    } else if(!passwordRegex.test(inputPassword.value)) {
+    } else if (!passwordRegex.test(inputPassword.value)) {
         passwordWarning.textContent = 'The password needs to be 10 characters long and contain at least one uppercase letter, one lowercase letter, one number and one special character';
         valid = false;
-    }
-    else {
+    } else {
         passwordWarning.textContent = '';
     }
-    
+
     return valid;
 }
 
-function resetWarnings(){
+function resetWarnings() {
     nameWarning.textContent = '';
     emailWarning.textContent = '';
     passwordWarning.textContent = '';
+}
+
+async function isEmailInUse(email: string): Promise<boolean> {
+    let result = true;
+    await fetch("/api/Users/IsEmailInUse", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            email: email
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            result = data;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        })
+    return result;
 }

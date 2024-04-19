@@ -89,4 +89,12 @@ public class UsersController : Controller
 
         return Created("CreateAdmin", result);
     }
+
+    [HttpPost("IsEmailInUse")]
+    public bool IsEmailInUse(EmailDto email)
+    {
+        return _userManager.FindByEmailAsync(email.email).Result != null;
+    }
+    
+    
 }
