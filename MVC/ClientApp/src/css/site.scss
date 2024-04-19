@@ -113,3 +113,7 @@ button.accept-policy {
   margin: 10px;
   cursor: pointer;
 }
+
+.modal-content {
+  background-color: map-get($themes, light, background);
+}
