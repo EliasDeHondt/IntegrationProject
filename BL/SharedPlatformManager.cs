@@ -16,5 +16,10 @@ public class SharedPlatformManager
     {
         return _repo.ReadSharedPlatformIncludingProjects(id);
     }
+
+    public SharedPlatform GetSharedPlatform(long id)
+    {
+        return _repo.ReadSharedPlatform(id);
+    }
     
 }

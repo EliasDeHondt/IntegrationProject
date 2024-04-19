@@ -17,4 +17,9 @@ public class CustomUserManager
         return _repo.ReadPlatformAdminIncludingSharedPlatform(email);
     } 
     
+    public long GetSharedPlatformId(string email)
+    {
+        return _repo.ReadSharedPlatformId(email);
+    }
+    
 }

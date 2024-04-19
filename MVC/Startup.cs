@@ -135,6 +135,7 @@ public class Startup
             SharedPlatform = new SharedPlatform()
         };
 
+        await roleManager.CreateAsync(new IdentityRole(UserRoles.Facilitator));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.PlatformAdmin));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.SystemAdmin));
         

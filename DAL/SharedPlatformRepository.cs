@@ -19,5 +19,10 @@ public class SharedPlatformRepository
             .Include(platform => platform.Projects)
             .First(platform => platform.Id == id);
     }
+
+    public SharedPlatform ReadSharedPlatform(long id)
+    {
+        return _ctx.SharedPlatforms.Find(id);
+    }
     
 }

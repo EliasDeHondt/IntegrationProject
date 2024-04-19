@@ -1,5 +1,6 @@
 ﻿using Data_Access_Layer.DbContext;
 using Domain.Accounts;
+using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,9 +22,19 @@ public class ProjectRepository
         return _ctx.Projects.Where(project => ids.Contains(project.Id));
     }
 
-    public void AddFacilitatorToProjects(Facilitator facilitator, params long[] projectIds)
+    public Project ReadProject(long id)
     {
-        _ctx.Projects.Where(project => projectIds.Contains(project.Id)).ToList().ForEach(project => project.Facilitators.Add(facilitator));
+        return _ctx.Projects.Find(id);
+    }
+    
+    public IEnumerable<Project> ReadAllProjectsForSharedPlatformIncludingMainTheme(long platformId)
+    {
+        return _ctx.Projects.Where(project => project.SharedPlatform.Id == platformId).Include(project => project.MainTheme);
+    }
+    
+    public void CreateProjectOrganizer(ProjectOrganizer projectOrganizer)
+    {
+        if(_ctx.ProjectOrganizers.Where(organizer => organizer.Project.Id == projectOrganizer.Project.Id && organizer.Facilitator.Id == projectOrganizer.Facilitator.Id).ToList().Count == 0) _ctx.ProjectOrganizers.Add(projectOrganizer);
     }
 
 }

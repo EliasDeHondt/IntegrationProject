@@ -6,6 +6,7 @@
  ***************************************/
 
 using System.ComponentModel.DataAnnotations;
+using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics;
 using Microsoft.AspNetCore.Identity;
 
@@ -16,5 +17,5 @@ public class Facilitator : IdentityUser
     [Required]
     public long SharedPlatformId { get; set; }
     [Required]
-    public ICollection<Project> Projects { get; set; }
+    public ICollection<ProjectOrganizer> ManagedProjects { get; set; }
 }

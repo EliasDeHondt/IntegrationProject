@@ -7,6 +7,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using Domain.Accounts;
+using Domain.FacilitatorFunctionality;
 using Domain.Platform;
 
 namespace Domain.ProjectLogics;
@@ -20,11 +21,11 @@ public class Project
     [Required]
     public SharedPlatform SharedPlatform { get; set; }
     [Required]
-    public ICollection<Facilitator> Facilitators { get; set; }
+    public ICollection<ProjectOrganizer> Organizers { get; set; }
 
-    public Project(MainTheme mainTheme, SharedPlatform sharedPlatform, ICollection<Facilitator> facilitators, long id = 0): this(mainTheme, sharedPlatform, id)
+    public Project(MainTheme mainTheme, SharedPlatform sharedPlatform, ICollection<ProjectOrganizer> organizers, long id = 0): this(mainTheme, sharedPlatform, id)
     {
-        Facilitators = facilitators;
+        Organizers = organizers;
     }
 
     public Project(MainTheme mainTheme, SharedPlatform sharedPlatform, long id = 0)
@@ -32,7 +33,7 @@ public class Project
         MainTheme = mainTheme;
         Id = id;
         SharedPlatform = sharedPlatform;
-        Facilitators = new List<Facilitator>();
+        Organizers = new List<ProjectOrganizer>();
     }
     
     public Project()
@@ -40,6 +41,6 @@ public class Project
         Id = default;
         MainTheme = new MainTheme();
         SharedPlatform = new SharedPlatform();
-        Facilitators = new List<Facilitator>();
+        Organizers = new List<ProjectOrganizer>();
     }
 }

@@ -7,6 +7,7 @@
 
 using Data_Access_Layer;
 using Domain.Accounts;
+using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics;
 
 namespace Business_Layer;
@@ -27,9 +28,24 @@ public class ProjectManager
         return _repo.ReadProjectsFromIds(ids);
     }
 
-    public void AddFacilitatorToProjects(Facilitator facilitator,params long[] projectId)
+    public Project GetProject(long id)
     {
-        _repo.AddFacilitatorToProjects(facilitator, projectId);
+        return _repo.ReadProject(id);
+    }
+
+    public IEnumerable<Project> GetAllProjectsForSharedPlatformWithMainTheme(long platformId)
+    {
+        return _repo.ReadAllProjectsForSharedPlatformIncludingMainTheme(platformId);
+    }
+    
+    public void AddProjectOrganizer(Facilitator facilitator, Project project)
+    {
+        var projectOrganizer = new ProjectOrganizer
+        {
+            Facilitator = facilitator,
+            Project = project
+        };
+        _repo.CreateProjectOrganizer(projectOrganizer);
     }
 
 }

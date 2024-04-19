@@ -2,7 +2,7 @@
 
 namespace MVC.Models.userModels;
 
-public class FacilitatorViewModel
+public class AdminViewModel
 {
     [Required]
     [MinLength(1)]
@@ -14,7 +14,5 @@ public class FacilitatorViewModel
     [MinLength(10)]
     public string Password { get; set; }
     [Required]
-    public IEnumerable<long> ProjectIds { get; set; }
-    [Required]
-    public long platformId { get; set;  }
+    public long platformId { get; set; }
 }

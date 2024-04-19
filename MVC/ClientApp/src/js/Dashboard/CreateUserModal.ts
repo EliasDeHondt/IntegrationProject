@@ -1,5 +1,5 @@
-﻿import {Dropdown, Modal} from "bootstrap";
-import {Select} from "@tensorflow/tfjs";
+﻿import {Modal} from "bootstrap";
+import { Project } from "../ProjectObjects";
 
 const CreateUserModal = new Modal(document.getElementById('CreateUserModal')!, {
     keyboard: false,
@@ -21,30 +21,55 @@ const inputEmail = document.getElementById("inputEmail") as HTMLInputElement;
 const inputPassword = document.getElementById("inputPassword") as HTMLInputElement;
 const selectProject = document.getElementById("selectProject") as HTMLSelectElement;
 
+let id = document.getElementById("platformId")!.textContent
+
 butCreateUser.onclick = () => {
     CreateUserModal.show();
 }
 
 butCloseCreateUserModal.onclick = () => {
-    CreateUserModal.hide();
+    clearModal()
 }
 
 butCancelCreateUserModal.onclick = () => {
+    clearModal()
+}
+
+butConfirmCreateUser.onclick = (ev) => {
+    ev.preventDefault()
+    // API call to create user
+    if(radioFacilitator.checked) createFacilitator()
+    if(radioAdmin.checked) createAdmin()
+}
+
+radioAdmin.onchange = () => {
+    facilitatorContainer.classList.add("visually-hidden");
+    selectProject.options.length = 0;
+}
+
+radioFacilitator.onchange = () => {
+
+    facilitatorContainer.classList.remove("visually-hidden");
+    // Generate options for each Project
+    getProjects();
+    
+}
+
+function clearModal(){
     inputName.value = "";
     inputEmail.value = "";
     inputPassword.value = "";
     CreateUserModal.hide();
 }
 
-butConfirmCreateUser.onclick = (ev) => {
-    ev.preventDefault()
-    // API call to create user
+function createFacilitator(){
     let projectIds: number[] = [];
-    for (const option in selectProject.selectedOptions) {
-        projectIds.push(Number(selectProject.selectedOptions[option].value));
+    for (let i = 0; i < selectProject.options.length; i++) {
+        if (selectProject.options[i].selected) {
+            projectIds.push(Number(selectProject.options[i].value));
+        }
     }
-    
-    fetch("api/Users/CreateFacilitator", {
+    fetch("/api/Users/CreateFacilitator", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -53,20 +78,45 @@ butConfirmCreateUser.onclick = (ev) => {
             name: inputName.value,
             email: inputEmail.value,
             password: inputPassword.value,
-            projectids: projectIds
+            projectIds: projectIds,
+            platformId: id
         })
     })
-        .then(() => CreateUserModal.hide())
+        .then(() => clearModal())
+}
+function createAdmin(){
+    fetch("/api/Users/CreateAdmin", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: inputName.value,
+            email: inputEmail.value,
+            password: inputPassword.value,
+            platformId: id
+        })
+    })
+        .then(() => clearModal())
 }
 
-radioAdmin.onclick = () => {
-    facilitatorContainer.classList.add("visually-hidden");
+function getProjects() {
+    fetch(`/api/Projects/GetProjectsForSharedPlatform/${id}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => fillDropdown(data))
 }
 
-radioFacilitator.onclick = () => {
-
-    facilitatorContainer.classList.remove("visually-hidden");
-    
-    // Generate options for each Project
+function fillDropdown(data: Project[]) {
+    for (let i = 0; i < data.length; i++) {
+        let option = document.createElement("option");
+        option.value = data[i].id.toString();
+        option.text = data[i].mainTheme.subject;
+        selectProject.appendChild(option);
+    }
 }
-
