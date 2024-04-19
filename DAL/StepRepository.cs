@@ -1,4 +1,6 @@
 ﻿using Data_Access_Layer.DbContext;
+using Domain.Accounts;
+using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Questions;
 using Microsoft.EntityFrameworkCore;
@@ -70,5 +72,11 @@ public class StepRepository
                     .First(step => step.Id == c.Id);
             default: return null;
         }
+    }
+    public Flow ReadFlowByNumber(long flowId)
+    {
+        return _ctx.Flows
+            .Include(flow => flow.Steps)
+            .First(flow => flow.Id == flowId);
     }
 }

@@ -9,9 +9,14 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Accounts;
 
-public class Facilitator: User
+public abstract class User : IdentityUser
 {
- public override string Name { get; set; }
- public override string Email { get; set; }
- public override string Password { get; set; }
+    // public abstract long UserId { get; set; }
+    public abstract string Name { get; set; }
+    public abstract string Email { get; set; }
+    public abstract string Password { get; set; }
+
+    public void Login()
+    {
+    }
 }

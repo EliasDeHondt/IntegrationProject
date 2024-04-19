@@ -6,6 +6,7 @@
  ***************************************/
 
 using Data_Access_Layer.DbContext;
+using Domain.Accounts;
 using Domain.ProjectLogics;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,4 +34,16 @@ public class FlowRepository
             .FirstOrDefault(f => f.Id == id);
     }
     
+    public void AddParticipationByFlow(long flowId,string email)
+    {
+        var participations = _context.Participations;//ReadFlowById(flowId).Participations;
+       // var name = email.Substring(0, email.IndexOf('@')); //aa.ww@email.com --> aa.ww
+        //Respondent respondent = ;
+
+        Participation participation = new Participation(ReadFlowById(flowId));
+        participation.Respondents.Add(new Respondent(email,participation)); //respondent
+        participations.Add(participation);
+        _context.SaveChanges();
+//        var a = _context.Participations.Include(p => p.Respondents);
+    }
 }
