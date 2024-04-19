@@ -11,6 +11,7 @@ using Business_Layer;
 using Data_Access_Layer;
 using Data_Access_Layer.DbContext;
 using Domain.Accounts;
+using Domain.Platform;
 using Google.Apis.Storage.v1.Data;
 using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Identity;
@@ -127,7 +128,8 @@ public class Startup
             Id = "HenkId",
             Email = "Henk@CodeForge.com",
             UserName = "Henk",
-            EmailConfirmed = true
+            EmailConfirmed = true,
+            SharedPlatform = new SharedPlatform()
         };
 
         await roleManager.CreateAsync(new IdentityRole(UserRoles.PlatformAdmin));
