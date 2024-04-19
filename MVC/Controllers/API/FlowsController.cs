@@ -14,14 +14,14 @@ public class FlowsController : Controller
     {
         _manager = manager;
     }
-    
+
     [HttpPost("SetRespondentEmail/{flowId:int}/{inputEmail}")]
     public IActionResult SetRespondentEmail(int flowId, string inputEmail)
     {
         _manager.SetParticipationByFlow(flowId, inputEmail);
-        
+
         return Ok();
-        
+    }
 
     [HttpPut("{id}/Paused")]
     public IActionResult PutFlowStateToPaused(long id)

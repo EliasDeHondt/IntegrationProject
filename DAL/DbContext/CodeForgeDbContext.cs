@@ -8,6 +8,7 @@
 using System.Diagnostics;
 using Domain.Accounts;
 using Domain.FacilitatorFunctionality;
+using Domain.Platform;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
@@ -40,7 +41,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Selection> Selections { get; set; }
     
     public DbSet<Respondent> Respondents { get; set; }
-
+    public DbSet<SharedPlatform> SharedPlatforms { get; set; }
 
     public CodeForgeDbContext(DbContextOptions<CodeForgeDbContext> options) : base(options) {}
 
@@ -149,6 +150,9 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
             .WithOne(s => s.Choice)
             .HasForeignKey("FK_Selection_ChoiceId");
         
+        modelBuilder.Entity<SharedPlatform>()
+            .HasMany<Project>()
+            .WithOne(project => project.SharedPlatform);
         
         modelBuilder.Entity<Project>().HasKey(project => project.Id);
         modelBuilder.Entity<ThemeBase>().HasKey(theme => theme.Id);
@@ -159,9 +163,6 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         modelBuilder.Entity<Participation>().HasKey(participation => participation.Id);
         modelBuilder.Entity<Answer>().HasKey(answer => answer.Id);
         modelBuilder.Entity<Selection>().HasKey("FK_Selection_AnswerId", "FK_Selection_ChoiceId");
-
-        modelBuilder.Entity<Respondent>().HasKey(respondent =>  respondent.RespondentId);
-        //modelBuilder.Entity<Facilitator>().HasBaseType<User>();
     }
 
     public bool CreateDatabase(bool dropDatabase)

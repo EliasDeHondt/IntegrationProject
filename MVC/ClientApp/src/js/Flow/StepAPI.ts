@@ -1,12 +1,16 @@
 import { Step } from "./Step/StepObjects";
 import { downloadVideoFromBucket } from "../StorageAPI";
 import {Flow} from "./FlowObjects";
+import {Modal} from "bootstrap";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
 const btnNextStep = document.getElementById("btnNextStep") as HTMLButtonElement;
 const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonElement;
+const btnPauseFlow = document.getElementById("btnPauseFlow") as HTMLButtonElement;
+const btnUnPauseFlow = document.getElementById("btnUnPauseFlow") as HTMLButtonElement;
 const btnEmail = document.getElementById("btnEmail") as HTMLButtonElement;
+const modal = new Modal(document.getElementById("pausedFlowModal") as HTMLDivElement);
 let currentStepNumber: number = 0;
 let userAnswers: string[] = []; // Array to store user answers
 let openUserAnswer: string = "";
@@ -294,10 +298,37 @@ btnNextStep.onclick = async () => {
     } else {
         GetNextStep(++currentStepNumber, flowId);
     }
-    
+
 }
 
 btnRestartFlow.onclick = () => {
     currentStepNumber = 0;
     GetNextStep(++currentStepNumber, flowId);
 };
+
+btnPauseFlow.onclick = () => {
+    fetch("/api/Flows/" + flowId + "/Paused", {
+        method: "PUT"
+    })
+        .then(response => {
+            if (response.ok) {
+                console.log("Flow paused!")
+                modal.show()
+            }
+        })
+        .catch(error => console.error("Error:", error))
+}
+
+if (btnUnPauseFlow)
+    btnUnPauseFlow.onclick = () => {
+        fetch("/api/Flows/" + flowId + "/Active", {
+            method: "PUT"
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log("Flow active!")
+                    modal.hide()
+                }
+            })
+            .catch(error => console.error("Error:", error))
+    }
