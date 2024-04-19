@@ -436,6 +436,7 @@ public class DataSeeder
         MainTheme mainTheme1 = new MainTheme("Lokale Verkiezingen");
         SubTheme subTheme1 = new SubTheme("Causes", mainTheme1);
         Flow flow = new Flow(FlowType.LINEAR, subTheme1);
+        Flow flow1 = new Flow(FlowType.CIRCULAR, subTheme1);
         Participation participation1 = new Participation(flow); //for respondents
         participation1.Respondents.Add(new Respondent("test@mail.com",participation1));
         flow.Participations.Add(participation1);
@@ -448,26 +449,37 @@ public class DataSeeder
         GenerateMultipleCQuestions(ctx, flow);
         GenerateRangeQuestions(ctx, flow);
         GenerateOpenQuestions(ctx, flow);
+        GenerateSingleQuestions(ctx, flow1);
+        GenerateMultipleCQuestions(ctx, flow1);
+        GenerateRangeQuestions(ctx, flow1);
+        GenerateOpenQuestions(ctx, flow1);
 
         InformationStep step1 = new InformationStep(19, imageInfo, flow);
         InformationStep step2 = new InformationStep(20, videoInfo, flow);
+        InformationStep step3 = new InformationStep(19, imageInfo, flow1);
+        InformationStep step4 = new InformationStep(20, videoInfo, flow1);
 
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
+        flow.Steps.Add(step3);
+        flow.Steps.Add(step4);
 
         SharedPlatform sp = new SharedPlatform("CodeForge");
 
         // mainTheme1.Flows.Add(flow);
         subTheme1.Flows.Add(flow);
+        subTheme1.Flows.Add(flow1);
         Project project1 = new Project(mainTheme1, sp);
         ctx.MainThemes.Add(mainTheme1);
         ctx.Flows.Add(flow);
+        ctx.Flows.Add(flow1);
         ctx.Projects.Add(project1);
         ctx.Texts.Add(textInfo);
         ctx.Images.Add(imageInfo);
 
         // Seed subtheme and extra main theme
         flow.Theme = subTheme1;
+        flow1.Theme = subTheme1;
         mainTheme1.Themes.Add(subTheme1);
         ctx.SubThemes.Add(subTheme1);
 

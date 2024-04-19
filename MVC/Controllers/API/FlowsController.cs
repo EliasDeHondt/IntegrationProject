@@ -50,4 +50,18 @@ public class FlowsController : Controller
         
         return NoContent();
     }
+
+    [HttpPut("{id}/Inactive")]
+    public IActionResult PutFlowStateToInactive(long id)
+    {
+        Flow flow = _manager.GetFlowByIdWithTheme(id);
+
+        if (flow == null)
+            return NotFound();
+
+        flow.State = FlowState.Inactive;
+        _manager.ChangeFlowState(flow);
+        
+        return NoContent();
+    }
 }
