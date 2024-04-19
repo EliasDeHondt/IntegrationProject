@@ -149,7 +149,8 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
 
         modelBuilder.Entity<SharedPlatform>()
             .HasMany<Project>()
-            .WithOne(project => project.SharedPlatform);
+            .WithOne(project => project.SharedPlatform)
+            .HasForeignKey("FK_SharedPlatform_Id");
         
         modelBuilder.Entity<Project>().HasKey(project => project.Id);
         modelBuilder.Entity<ThemeBase>().HasKey(theme => theme.Id);

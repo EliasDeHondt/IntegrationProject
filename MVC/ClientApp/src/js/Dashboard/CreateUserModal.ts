@@ -1,4 +1,5 @@
 ﻿import {Dropdown, Modal} from "bootstrap";
+import {Select} from "@tensorflow/tfjs";
 
 const CreateUserModal = new Modal(document.getElementById('CreateUserModal')!, {
     keyboard: false,
@@ -15,6 +16,11 @@ const radioAdmin = document.getElementById("radioAdmin") as HTMLInputElement;
 const radioFacilitator = document.getElementById("radioFacilitator") as HTMLInputElement;
 const facilitatorContainer = document.getElementById("facilitatorContainer") as HTMLDivElement;
 
+const inputName = document.getElementById("inputName") as HTMLInputElement;
+const inputEmail = document.getElementById("inputEmail") as HTMLInputElement;
+const inputPassword = document.getElementById("inputPassword") as HTMLInputElement;
+const selectProject = document.getElementById("selectProject") as HTMLSelectElement;
+
 butCreateUser.onclick = () => {
     CreateUserModal.show();
 }
@@ -24,52 +30,43 @@ butCloseCreateUserModal.onclick = () => {
 }
 
 butCancelCreateUserModal.onclick = () => {
-    // Empty fields
-    
+    inputName.value = "";
+    inputEmail.value = "";
+    inputPassword.value = "";
     CreateUserModal.hide();
 }
 
-butConfirmCreateUser.onclick = () => {
+butConfirmCreateUser.onclick = (ev) => {
+    ev.preventDefault()
     // API call to create user
+    let projectIds: number[] = [];
+    for (const option in selectProject.selectedOptions) {
+        projectIds.push(Number(selectProject.selectedOptions[option].value));
+    }
     
-    CreateUserModal.hide();
+    fetch("api/Users/CreateFacilitator", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: inputName.value,
+            email: inputEmail.value,
+            password: inputPassword.value,
+            projectids: projectIds
+        })
+    })
+        .then(() => CreateUserModal.hide())
 }
 
 radioAdmin.onclick = () => {
-    facilitatorContainer.innerHTML = "";
+    facilitatorContainer.classList.add("visually-hidden");
 }
 
 radioFacilitator.onclick = () => {
+
+    facilitatorContainer.classList.remove("visually-hidden");
     
-    let butDdl = document.createElement("button");
-    butDdl.className = "btn btn-success dropdown-toggle";
-    butDdl.type = "button";
-    butDdl.setAttribute("data-bs-toggle", "dropdown");
-    
-    let ulProjects = document.createElement("ul");
-    ulProjects.classList.add("dropdown-menu");
-    
-    // Generate HTML For each project.
-    
-    // Demo html:
-    let project = document.createElement("li");
-    let label = document.createElement("label");
-    let input = document.createElement("input");
-    input.type = "checkbox";
-    label.appendChild(input);
-    label.append("test");
-    project.appendChild(label);
-    ulProjects.appendChild(project);
-    
-    facilitatorContainer.appendChild(butDdl);
-    facilitatorContainer.appendChild(ulProjects);
-    let dropdownEl= new Dropdown(butDdl);
-    dropdownEl.show()
+    // Generate options for each Project
 }
 
-function handleAllowFocusClick(event: MouseEvent) {
-    event.stopPropagation();
-}
-
-let t = document.getElementsByClassName("allow-focus") as HTMLCollectionOf<HTMLElement>
-Array.from(t).forEach(e => e.addEventListener('click', handleAllowFocusClick));

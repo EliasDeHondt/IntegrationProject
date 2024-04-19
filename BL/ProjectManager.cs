@@ -5,33 +5,31 @@
  *                                     *
  ***************************************/
 
+using Data_Access_Layer;
+using Domain.Accounts;
 using Domain.ProjectLogics;
 
 namespace Business_Layer;
 
-public class ProjectManager{
-    public Project Add(Project item)
+public class ProjectManager
+{
+
+    public readonly ProjectRepository _repo;
+    
+
+    public ProjectManager(ProjectRepository repo)
     {
-        throw new NotImplementedException();
+        _repo = repo;
     }
 
-    public Project Update(Project item)
+    public IEnumerable<Project> GetAllProjectsFromIds(IEnumerable<long> ids)
     {
-        throw new NotImplementedException();
+        return _repo.ReadProjectsFromIds(ids);
     }
 
-    public Project Remove(Project item)
+    public void AddFacilitatorToProjects(Facilitator facilitator,params long[] projectId)
     {
-        throw new NotImplementedException();
+        _repo.AddFacilitatorToProjects(facilitator, projectId);
     }
 
-    public Project Get(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public List<Project> GetAll()
-    {
-        throw new NotImplementedException();
-    }
 }
