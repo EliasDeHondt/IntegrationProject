@@ -49,4 +49,13 @@ public class FlowManager
     {
         throw new NotImplementedException();
     }
+    public void SetParticipationByFlow(long flowId,string email)
+    {
+        _repository.AddParticipationByFlow(flowId,email);
+    }
+
+    public void ChangeFlowState(Flow flow)
+    {
+        _repository.UpdateFlowState(flow);
+    }
 }

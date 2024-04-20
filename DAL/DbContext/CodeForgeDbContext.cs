@@ -39,6 +39,8 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Answer> Answers { get; set; }
     public DbSet<Choice> Choices { get; set; }
     public DbSet<Selection> Selections { get; set; }
+    
+    public DbSet<Respondent> Respondents { get; set; }
     public DbSet<SharedPlatform> SharedPlatforms { get; set; }
     public DbSet<ProjectOrganizer> ProjectOrganizers { get; set; }
 
@@ -96,10 +98,6 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
 
         modelBuilder.Entity<ChoiceAnswer>().HasBaseType<Answer>();
         modelBuilder.Entity<OpenAnswer>().HasBaseType<Answer>();
-
-        modelBuilder.Entity<Facilitator>().HasBaseType<IdentityUser>();
-        modelBuilder.Entity<SpAdmin>().HasBaseType<IdentityUser>();
-        modelBuilder.Entity<SystemAdmin>().HasBaseType<IdentityUser>();
         
         // Reflects domain configuration.
         modelBuilder.Entity<Note>(entity => entity.Property(e => e.Textfield).IsRequired().HasMaxLength(15000));
@@ -133,10 +131,15 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
             .HasMany(theme => theme.Flows)
             .WithOne(flow => (SubTheme)flow.Theme);
         
+        // modelBuilder.Entity<Participation>()
+        //     .HasOne(participation => participation.Flow)
+        //     .WithMany(flow => flow.Participations)
+        //     .HasForeignKey("FK_Flow_Id");
         modelBuilder.Entity<Participation>()
-            .HasOne(participation => participation.Flow)
-            .WithMany(flow => flow.Participations)
-            .HasForeignKey("FK_Flow_Id");
+            .HasMany(participation => participation.Respondents) 
+            .WithOne() 
+            .HasForeignKey("ParticipationId"); 
+
 
         modelBuilder.Entity<ChoiceAnswer>()
             .HasMany(a => a.Answers)
@@ -147,7 +150,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
             .HasMany(c => c.Selections)
             .WithOne(s => s.Choice)
             .HasForeignKey("FK_Selection_ChoiceId");
-
+        
         modelBuilder.Entity<SharedPlatform>()
             .HasMany<Project>()
             .WithOne(project => project.SharedPlatform)

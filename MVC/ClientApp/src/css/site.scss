@@ -146,3 +146,8 @@ button.accept-policy {
   color: map-get($themes, light, accent);
   font-size: 0.8em;
 }
+
+
+.modal-content {
+  background-color: map-get($themes, light, background);
+}

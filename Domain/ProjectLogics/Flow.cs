@@ -27,6 +27,8 @@ public class Flow
     
     private bool FlowStopped { get; set; }
 
+    public FlowState State { get; set; }
+
     public Flow(FlowType flowTye, ICollection<StepBase> steps, ICollection<Participation> participations, ThemeBase theme, long id = 0)
     {
         Id = id;
@@ -35,6 +37,14 @@ public class Flow
         Participations = participations;
         Theme = theme;
     }
+    // public Flow(FlowType flowTye, ICollection<StepBase> steps, ICollection<Participation> participations, ThemeBase theme, long id = 0)
+    // {
+    //     Id = id;
+    //     FlowType = flowTye;
+    //     Steps = steps;
+    //     Participations = participations;
+    //     Theme = theme;
+    // }
     
     public Flow(FlowType flowType, ThemeBase theme, long id = 0)
     {
