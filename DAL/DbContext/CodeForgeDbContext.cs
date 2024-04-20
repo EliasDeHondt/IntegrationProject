@@ -98,6 +98,10 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
 
         modelBuilder.Entity<ChoiceAnswer>().HasBaseType<Answer>();
         modelBuilder.Entity<OpenAnswer>().HasBaseType<Answer>();
+
+        modelBuilder.Entity<SpAdmin>().HasBaseType<IdentityUser>();
+        modelBuilder.Entity<SystemAdmin>().HasBaseType<IdentityUser>();
+        modelBuilder.Entity<Facilitator>().HasBaseType<IdentityUser>(); 
         
         // Reflects domain configuration.
         modelBuilder.Entity<Note>(entity => entity.Property(e => e.Textfield).IsRequired().HasMaxLength(15000));
