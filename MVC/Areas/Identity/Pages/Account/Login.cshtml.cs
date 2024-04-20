@@ -124,7 +124,7 @@ namespace MVC.Areas.Identity.Pages.Account
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User logged in.");
-                        if (User.IsInRole(UserRoles.PlatformAdmin))
+                        if (_userManager.IsInRoleAsync(user, UserRoles.PlatformAdmin).Result)
                         {
                             return RedirectToAction("Dashboard", "SharedPlatform");
                         }
