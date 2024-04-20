@@ -5,14 +5,17 @@
  *                                     *
  ***************************************/
 
-using Domain.Platform;
+using System.ComponentModel.DataAnnotations;
+using Domain.FacilitatorFunctionality;
+using Domain.ProjectLogics;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Accounts;
 
 public class Facilitator : IdentityUser
 {
-    public string Name { get; set; }
-    public string Password { get; set; }
-    public SharedPlatform SharedPlatform { get; set; }
+    [Required]
+    public long SharedPlatformId { get; set; }
+    [Required]
+    public ICollection<ProjectOrganizer> ManagedProjects { get; set; }
 }

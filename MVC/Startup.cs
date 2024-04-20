@@ -71,6 +71,9 @@ public class Startup
 
         services.AddScoped<CustomUserManager>();
         services.AddScoped<UserRepository>();
+
+        services.AddScoped<ProjectManager>();
+        services.AddScoped<ProjectRepository>();
         
         services.AddScoped<UnitOfWork, UnitOfWork>();
         services.AddSingleton(options);
@@ -132,6 +135,7 @@ public class Startup
             SharedPlatform = new SharedPlatform()
         };
 
+        await roleManager.CreateAsync(new IdentityRole(UserRoles.Facilitator));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.PlatformAdmin));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.SystemAdmin));
         

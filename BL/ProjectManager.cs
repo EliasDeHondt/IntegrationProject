@@ -5,33 +5,47 @@
  *                                     *
  ***************************************/
 
+using Data_Access_Layer;
+using Domain.Accounts;
+using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics;
 
 namespace Business_Layer;
 
-public class ProjectManager{
-    public Project Add(Project item)
+public class ProjectManager
+{
+
+    public readonly ProjectRepository _repo;
+    
+
+    public ProjectManager(ProjectRepository repo)
     {
-        throw new NotImplementedException();
+        _repo = repo;
     }
 
-    public Project Update(Project item)
+    public IEnumerable<Project> GetAllProjectsFromIds(IEnumerable<long> ids)
     {
-        throw new NotImplementedException();
+        return _repo.ReadProjectsFromIds(ids);
     }
 
-    public Project Remove(Project item)
+    public Project GetProject(long id)
     {
-        throw new NotImplementedException();
+        return _repo.ReadProject(id);
     }
 
-    public Project Get(int id)
+    public IEnumerable<Project> GetAllProjectsForSharedPlatformWithMainTheme(long platformId)
     {
-        throw new NotImplementedException();
+        return _repo.ReadAllProjectsForSharedPlatformIncludingMainTheme(platformId);
+    }
+    
+    public void AddProjectOrganizer(Facilitator facilitator, Project project)
+    {
+        var projectOrganizer = new ProjectOrganizer
+        {
+            Facilitator = facilitator,
+            Project = project
+        };
+        _repo.CreateProjectOrganizer(projectOrganizer);
     }
 
-    public List<Project> GetAll()
-    {
-        throw new NotImplementedException();
-    }
 }

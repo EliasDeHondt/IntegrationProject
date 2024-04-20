@@ -42,6 +42,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     
     public DbSet<Respondent> Respondents { get; set; }
     public DbSet<SharedPlatform> SharedPlatforms { get; set; }
+    public DbSet<ProjectOrganizer> ProjectOrganizers { get; set; }
 
     public CodeForgeDbContext(DbContextOptions<CodeForgeDbContext> options) : base(options) {}
 
@@ -97,6 +98,10 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
 
         modelBuilder.Entity<ChoiceAnswer>().HasBaseType<Answer>();
         modelBuilder.Entity<OpenAnswer>().HasBaseType<Answer>();
+
+        modelBuilder.Entity<SpAdmin>().HasBaseType<IdentityUser>();
+        modelBuilder.Entity<SystemAdmin>().HasBaseType<IdentityUser>();
+        modelBuilder.Entity<Facilitator>().HasBaseType<IdentityUser>(); 
         
         // Reflects domain configuration.
         modelBuilder.Entity<Note>(entity => entity.Property(e => e.Textfield).IsRequired().HasMaxLength(15000));
@@ -152,7 +157,18 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         
         modelBuilder.Entity<SharedPlatform>()
             .HasMany<Project>()
-            .WithOne(project => project.SharedPlatform);
+            .WithOne(project => project.SharedPlatform)
+            .HasForeignKey("FK_SharedPlatform_Id");
+        
+        modelBuilder.Entity<ProjectOrganizer>()
+            .HasOne(organizer => organizer.Project)
+            .WithMany(project => project.Organizers)
+            .HasForeignKey("FK_ProjectOrganizer_ProjectId");
+        
+        modelBuilder.Entity<ProjectOrganizer>()
+            .HasOne(organizer => organizer.Facilitator)
+            .WithMany(facilitator => facilitator.ManagedProjects)
+            .HasForeignKey("FK_ProjectOrganizer_FacilitatorId");
         
         modelBuilder.Entity<Project>().HasKey(project => project.Id);
         modelBuilder.Entity<ThemeBase>().HasKey(theme => theme.Id);
@@ -163,6 +179,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         modelBuilder.Entity<Participation>().HasKey(participation => participation.Id);
         modelBuilder.Entity<Answer>().HasKey(answer => answer.Id);
         modelBuilder.Entity<Selection>().HasKey("FK_Selection_AnswerId", "FK_Selection_ChoiceId");
+        modelBuilder.Entity<ProjectOrganizer>().HasKey("FK_ProjectOrganizer_ProjectId", "FK_ProjectOrganizer_FacilitatorId");
     }
 
     public bool CreateDatabase(bool dropDatabase)

@@ -114,6 +114,40 @@ button.accept-policy {
   cursor: pointer;
 }
 
+.bgSecondary{
+  background: map-get($themes, light, secondary);
+}
+
+.bgAccent {
+  background: map-get($themes, light, accent);
+}
+
+.bgPrimary {
+  background: map-get($themes, light, primary);
+}
+
+.bgColor {
+  background: map-get($themes, light, background);
+}
+
+.bgModal {
+  background: hsl(48, 61%, 47%);
+}
+
+.border-accent {
+  border-color: map-get($themes, light, accent);
+}
+
+.bi-person-plus-fill {
+  font-size: 10vh;
+}
+
+.warning {
+  color: map-get($themes, light, accent);
+  font-size: 0.8em;
+}
+
+
 .modal-content {
   background-color: map-get($themes, light, background);
 }
