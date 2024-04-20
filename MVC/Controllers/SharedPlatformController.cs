@@ -1,9 +1,7 @@
 ﻿using System.Security.Claims;
 using Business_Layer;
 using Domain.Accounts;
-using Domain.Platform;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MVC.Controllers;
