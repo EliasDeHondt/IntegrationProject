@@ -29,21 +29,24 @@ const nameWarning = document.getElementById('nameWarning') as HTMLElement;
 const emailWarning = document.getElementById('emailWarning') as HTMLElement;
 const passwordWarning = document.getElementById('passwordWarning') as HTMLElement;
 
+const userRoulette = document.getElementById("UserRoulette") as HTMLDivElement;
+
 let id: string = document.getElementById("platformId")!.textContent!
-dashboard.getUsersForPlatform(id).then(users => {
-    users.forEach(user => {
-        let card = dashboard.generateCard(user);
-        document.getElementById("UserRoulette")!.innerHTML += card
+
+function generateUserCards() {
+    dashboard.getUsersForPlatform(id).then(users => {
+        users.forEach(user => {
+            let card = dashboard.generateCard(user);
+            userRoulette.appendChild(card);
+        })
     })
-})
+}
+
+generateUserCards();
 
 butCreateUser.onclick = () => {
     CreateUserModal.show();
 }
-
-butCreateUser.addEventListener("click", () => {
-    console.log("test")
-})
 
 butCloseCreateUserModal.onclick = () => {
     clearModal()
@@ -56,7 +59,7 @@ butCancelCreateUserModal.onclick = () => {
 butConfirmCreateUser.onclick = async (ev) => {
     ev.preventDefault()
     if (await validateForm()) {
-        if (radioFacilitator.checked){
+        if (radioFacilitator.checked) {
             let projectIds = getSelectedProjects();
             modal.createFacilitator(inputName.value, inputEmail.value, inputPassword.value, projectIds, id)
                 .then(() => clearModal())
@@ -65,8 +68,8 @@ butConfirmCreateUser.onclick = async (ev) => {
                     let closeUserToast = document.getElementById("closeUserToast") as HTMLButtonElement
                     closeUserToast.onclick = () => userCreatedToast.hide()
                 })
-        } 
-        else if (radioAdmin.checked){
+                .finally(() => resetCards())
+        } else if (radioAdmin.checked) {
             modal.createAdmin(inputName.value, inputEmail.value, inputPassword.value, id)
                 .then(() => clearModal())
                 .then(() => {
@@ -74,8 +77,18 @@ butConfirmCreateUser.onclick = async (ev) => {
                     let closeUserToast = document.getElementById("closeUserToast") as HTMLButtonElement
                     closeUserToast.onclick = () => userCreatedToast.hide()
                 })
+                .finally(() => resetCards())
         }
     }
+}
+
+function resetCards(){
+    console.log(userRoulette.children)
+    let length = userRoulette.children.length 
+    for (let i = length - 1; i > 0; i--){
+        userRoulette.children[i].remove();
+    }
+    generateUserCards()
 }
 
 radioAdmin.onchange = () => {
@@ -97,6 +110,8 @@ function clearModal() {
     inputName.value = "";
     inputEmail.value = "";
     inputPassword.value = "";
+    radioAdmin.checked = true;
+    radioFacilitator.checked = false;
     resetWarnings();
     CreateUserModal.hide();
 }
@@ -157,7 +172,7 @@ function fillDropdown(data: Project[]) {
     }
 }
 
-function getSelectedProjects(): number[]{
+function getSelectedProjects(): number[] {
     let projectIds: number[] = [];
     for (let i = 0; i < selectProject.options.length; i++) {
         if (selectProject.options[i].selected) {

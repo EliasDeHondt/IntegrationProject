@@ -9,15 +9,23 @@ export async function getUsersForPlatform(platformId: string): Promise<User[]>{
         })
 }
 
-export function generateCard(user: User): string {
-    return `
-        <div class="col mt-3 mb-3">
-            <div class="card border-black border-2 bgAccent h-100">
-                <div class="card-body">
-                    <p class="text-white">Name: ${user.userName}</p>
-                    <p class="text-white">Email: ${user.email}</p>
-                </div>
-            </div>
-        </div>
-    `;
+export function generateCard(user: User): HTMLDivElement {
+    
+    let colDiv = document.createElement("div");
+    colDiv.className = "col mt-3 mb-3";
+    let cardDiv = document.createElement("div");
+    cardDiv.className = "card border-black border-2 bgAccent h-100";
+    let cardBodyDiv = document.createElement("div");
+    cardBodyDiv.className = "card-body";
+    let pName = document.createElement("p");
+    pName.className = "text-white";
+    pName.textContent = "Name: " + user.userName;
+    let pEmail = document.createElement("p");
+    pEmail.className = "text-white";
+    pEmail.textContent = "Email: " + user.email;
+    
+    cardBodyDiv.append(pName, pEmail);
+    cardDiv.append(cardBodyDiv);
+    colDiv.append(cardDiv);
+    return colDiv;
 }
