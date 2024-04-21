@@ -1,5 +1,6 @@
 ﻿using Data_Access_Layer;
 using Domain.Platform;
+using Microsoft.AspNetCore.Identity;
 
 namespace Business_Layer;
 
@@ -20,6 +21,11 @@ public class SharedPlatformManager
     public SharedPlatform GetSharedPlatform(long id)
     {
         return _repo.ReadSharedPlatform(id);
+    }
+    
+    public IEnumerable<IdentityUser> GetUsersForPlatform(long id)
+    {
+        return _repo.ReadUsersForPlatform(id);
     }
     
 }

@@ -95,6 +95,13 @@ public class UsersController : Controller
     {
         return _userManager.FindByEmailAsync(email.email).Result != null;
     }
-    
+
+    [HttpGet("GetUsersForPlatform/{platformId}")]
+    public IActionResult GetUsersForPlatform(long platformId)
+    {
+        if (User.Identity is { IsAuthenticated: false }) return Unauthorized();
+        var users = _platformManager.GetUsersForPlatform(platformId);
+        return Ok(users);
+    }
     
 }
