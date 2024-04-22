@@ -68,6 +68,7 @@ public class UsersController : Controller
     {
         
         if (User.Identity is { IsAuthenticated: false }) return Unauthorized();
+        if (!User.IsInRole(UserRoles.UserPermission)) return Forbid();
         
         if (!ModelState.IsValid)
         {
@@ -79,12 +80,16 @@ public class UsersController : Controller
             UserName = model.Name,
             Email = model.Email,
             EmailConfirmed = true,
-            SharedPlatform = _platformManager.GetSharedPlatform(model.platformId)
+            SharedPlatform = _platformManager.GetSharedPlatform(model.PlatformId)
         };
-
+        
         _uow.BeginTransaction();
         var result = await _userManager.CreateAsync(admin, model.Password);
         await _userManager.AddToRoleAsync(admin, UserRoles.PlatformAdmin);
+        foreach (var permission in model.Permissions)
+        {
+            await _userManager.AddToRoleAsync(admin, permission);
+        }
         _uow.Commit();
 
         return Created("CreateAdmin", result);
@@ -96,6 +101,12 @@ public class UsersController : Controller
         return _userManager.FindByEmailAsync(email.email).Result != null;
     }
 
+    [HttpGet("IsUserInRole/{role}")]
+    public bool IsUserInRole(string role)
+    {
+        return User.IsInRole(role);
+    }
+    
     [HttpGet("GetUsersForPlatform/{platformId}")]
     public IActionResult GetUsersForPlatform(long platformId)
     {

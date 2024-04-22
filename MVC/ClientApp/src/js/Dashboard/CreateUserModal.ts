@@ -2,6 +2,8 @@
 import * as API from "./API/CreateUserModalAPI";
 import {Project} from "./Types/ProjectObjects";
 import {resetCards} from "./API/DashboardAPI";
+import {UserRoles} from "./Types/UserTypes";
+import {isEmailInUse} from "../API/UserAPI";
 
 const CreateUserModal = new Modal(document.getElementById('CreateUserModal')!, {
     keyboard: false,
@@ -19,6 +21,11 @@ const butConfirmCreateUser = document.getElementById("butConfirmCreateUser") as 
 const radioAdmin = document.getElementById("radioAdmin") as HTMLInputElement;
 const radioFacilitator = document.getElementById("radioFacilitator") as HTMLInputElement;
 const facilitatorContainer = document.getElementById("facilitatorContainer") as HTMLDivElement;
+const adminContainer = document.getElementById("adminContainer") as HTMLDivElement;
+const checkUserPermission = document.getElementById("checkUserPermission") as HTMLInputElement;
+const checkProjectPermission = document.getElementById("checkProjectPermission") as HTMLInputElement;
+const checkStatisticPermission = document.getElementById("checkStatisticPermission") as HTMLInputElement;
+
 
 const inputName = document.getElementById("inputName") as HTMLInputElement;
 const inputEmail = document.getElementById("inputEmail") as HTMLInputElement;
@@ -57,29 +64,43 @@ butConfirmCreateUser.onclick = async (ev) => {
                     let closeUserToast = document.getElementById("closeUserToast") as HTMLButtonElement
                     closeUserToast.onclick = () => userCreatedToast.hide()
                 })
-                .finally(() => resetCards(id, userRoulette))
+                .finally(() => resetCards(id, userRoulette, true))
         } else if (radioAdmin.checked) {
-            API.createAdmin(inputName.value, inputEmail.value, inputPassword.value, id)
+            let permissions: string[] = [];
+            if (checkUserPermission.checked) {
+                permissions.push(UserRoles.UserPermission);
+            }
+            if (checkProjectPermission.checked) {
+                permissions.push(UserRoles.ProjectPermission);
+            }
+            if (checkStatisticPermission.checked) {
+                permissions.push(UserRoles.StatisticPermission);
+            }
+            API.createAdmin(inputName.value, inputEmail.value, inputPassword.value, id, permissions)
                 .then(() => clearModal())
                 .then(() => {
                     userCreatedToast.show()
                     let closeUserToast = document.getElementById("closeUserToast") as HTMLButtonElement
                     closeUserToast.onclick = () => userCreatedToast.hide()
                 })
-                .finally(() => resetCards(id, userRoulette))
+                .finally(() => resetCards(id, userRoulette, true))
         }
     }
 }
 
 radioAdmin.onchange = () => {
     facilitatorContainer.classList.add("visually-hidden");
+    adminContainer.classList.remove("visually-hidden");
     selectProject.options.length = 0;
 }
 
 radioFacilitator.onchange = () => {
 
     facilitatorContainer.classList.remove("visually-hidden");
-    // Generate options for each Project
+    adminContainer.classList.add("visually-hidden");
+    checkUserPermission.checked = false;
+    checkProjectPermission.checked = false;
+    checkStatisticPermission.checked = false;
     API.getProjects(id).then(projects => {
         fillDropdown(projects)
     });
@@ -92,6 +113,9 @@ function clearModal() {
     inputPassword.value = "";
     radioAdmin.checked = true;
     radioFacilitator.checked = false;
+    checkUserPermission.checked = false;
+    checkProjectPermission.checked = false;
+    checkStatisticPermission.checked = false;
     resetWarnings();
     CreateUserModal.hide();
 }
@@ -121,7 +145,7 @@ async function validateForm() {
     } else if (!emailRegex.test(inputEmail.value)) {
         emailWarning.textContent = 'Please enter a valid email';
         valid = false;
-    } else if (await API.isEmailInUse(inputEmail.value)) {
+    } else if (await isEmailInUse(inputEmail.value)) {
         emailWarning.textContent = 'This email is already in use';
         valid = false;
     } else {

@@ -14,7 +14,7 @@
     })
 }
 
-export async function createAdmin(name: string, email:string, password: string, platform: string) {
+export async function createAdmin(name: string, email:string, password: string, platform: string, permissions: string[]) {
     await fetch("/api/Users/CreateAdmin", {
         method: "POST",
         headers: {
@@ -24,7 +24,8 @@ export async function createAdmin(name: string, email:string, password: string, 
             name: name,
             email: email,
             password: password,
-            platformId: platform
+            platformId: platform,
+            permissions: permissions
         })
     })
 }
@@ -41,23 +42,3 @@ export async function getProjects(id: string) {
         .then(data => {return data})
 }
 
-export async function isEmailInUse(email: string): Promise<boolean> {
-    let result = true;
-    await fetch("/api/Users/IsEmailInUse", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            email: email
-        })
-    })
-        .then(response => response.json())
-        .then(data => {
-            result = data;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        })
-    return result;
-}

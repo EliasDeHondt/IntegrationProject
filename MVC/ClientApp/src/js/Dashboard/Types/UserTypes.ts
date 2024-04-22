@@ -8,3 +8,9 @@ export interface User {
 export interface Facilitator extends User {
     projects: Project[]
 }
+
+export enum UserRoles {
+    UserPermission = "UserPermission",
+    ProjectPermission = "ProjectPermission",
+    StatisticPermission = "StatisticPermission",
+}
