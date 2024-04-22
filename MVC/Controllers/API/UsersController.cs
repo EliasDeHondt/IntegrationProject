@@ -101,7 +101,18 @@ public class UsersController : Controller
     {
         if (User.Identity is { IsAuthenticated: false }) return Unauthorized();
         var users = _platformManager.GetUsersForPlatform(platformId);
-        return Ok(users);
+
+        ICollection<UserViewModel> userList = new List<UserViewModel>();
+        foreach (var user in users)
+        {
+            userList.Add(new UserViewModel
+            {
+                UserName = user.UserName,
+                Email = user.Email
+            });
+        }
+        
+        return Ok(userList);
     }
     
 }
