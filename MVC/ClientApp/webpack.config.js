@@ -15,6 +15,8 @@ module.exports = {
         login: './src/js/Login/login-animation.ts',
         dashboard: './src/js/Dashboard/CreateUserModal.ts',
         project: './src/js/Project/ProjectAPI.ts',
+        dashboard: './src/js/Dashboard/Dashboard.ts',
+        flowcreator: './src/js/CreateFlow/FlowCreator.ts'
     },
     output: {
         filename: '[name].entry.js',

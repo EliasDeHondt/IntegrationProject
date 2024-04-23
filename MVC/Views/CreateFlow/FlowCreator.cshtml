@@ -1,0 +1,29 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Flow Creator";
+}
+
+<!DOCTYPE html>
+
+<html lang="">
+<head>
+    <title>Flow Creator</title>
+    <link rel="stylesheet" href="~/dist/site.css"/>
+</head>
+<body>
+
+<div class="flow-container">
+    <div class="" id="flow-cards"></div> <!-- This gets filled automatically in FlowCreator.ts -->
+</div>
+
+<div class="btn-container" id="container-flow-btn">
+    <button class="btn-primary" id="btnCreateFlow">Create Flow</button>
+</div>
+
+</body>
+</html>
+
+@section Scripts
+{
+    <script src="/dist/flowcreator.entry.js"></script>
+}

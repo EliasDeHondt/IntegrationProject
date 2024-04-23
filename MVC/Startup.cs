@@ -46,7 +46,7 @@ public class Startup
         services.AddAuthorization(options =>
         {
             options.AddPolicy("admin", policy => policy.RequireRole(UserRoles.PlatformAdmin, UserRoles.SystemAdmin));
-        });
+            });
         
         
         services.AddScoped<FlowRepository>();
@@ -138,11 +138,17 @@ public class Startup
         await roleManager.CreateAsync(new IdentityRole(UserRoles.Facilitator));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.PlatformAdmin));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.SystemAdmin));
+
+        await roleManager.CreateAsync(new IdentityRole(UserRoles.UserPermission));
+        await roleManager.CreateAsync(new IdentityRole(UserRoles.ProjectPermission));
+        await roleManager.CreateAsync(new IdentityRole(UserRoles.StatisticPermission));
         
         await userManager.CreateAsync(sharedPlatformAdminHenk, "Henk!123");
         
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.PlatformAdmin);
-
+        await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.UserPermission);
+        await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.ProjectPermission);
+        await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.StatisticPermission);
     }
 
 }
