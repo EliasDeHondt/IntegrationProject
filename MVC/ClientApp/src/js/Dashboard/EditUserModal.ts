@@ -19,7 +19,7 @@ const butConfirmEditUser = document.getElementById("butConfirmEditUser") as HTML
 const butCancelEditUserModal = document.getElementById("butCancelEditUserModal") as HTMLButtonElement
 const butCloseEditUserModal = document.getElementById("butCloseEditUserModal") as HTMLButtonElement
 
-const userRoulette = document.getElementById("UserRoulette") as HTMLDivElement;
+const userRoulette = document.getElementById("carouselContainer") as HTMLDivElement;
 
 let id: string = document.getElementById("platformId")!.textContent!
 

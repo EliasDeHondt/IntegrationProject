@@ -36,7 +36,7 @@ const nameWarning = document.getElementById('nameWarning') as HTMLElement;
 const emailWarning = document.getElementById('emailWarning') as HTMLElement;
 const passwordWarning = document.getElementById('passwordWarning') as HTMLElement;
 
-const userRoulette = document.getElementById("UserRoulette") as HTMLDivElement;
+const userRoulette = document.getElementById("carouselContainer") as HTMLDivElement;
 
 let id: string = document.getElementById("platformId")!.textContent!
 

@@ -13,7 +13,7 @@ export async function getUsersForPlatform(platformId: string): Promise<User[]>{
 export function generateCard(user: User, userPermissions: boolean, email:string): HTMLDivElement {
     
     let colDiv = document.createElement("div");
-    colDiv.className = "col mt-3 mb-3";
+    colDiv.className = "col mt-3 mb-3 embla__slide";
     let cardDiv = document.createElement("div");
     cardDiv.className = "card border-black border-2 bgAccent h-100";
     
