@@ -20,12 +20,34 @@ public class FlowManager
         _repository = repository;
     }
 
-    public Flow Add(Flow item)
+    //This function makes a GLOBAL Flow, not project specific!
+    public Flow Add(string type)
     {
-        throw new NotImplementedException();
+
+        FlowType flowType;
+        
+        switch (type)
+        {
+            case "Linear": flowType = FlowType.LINEAR;
+                break;
+            
+            case "Circular": flowType = FlowType.CIRCULAR;
+                break;
+            
+            default: flowType = FlowType.UNKNOWN;
+                break;
+        }
+
+        Flow newFlow = new Flow();
+        
+        newFlow.FlowType = flowType;
+        
+        _repository.AddFlow(newFlow);
+
+        return newFlow;
     }
 
-    public Flow Update(Flow item)
+    public Flow Update(int flowId)
     {
         throw new NotImplementedException();
     }
@@ -45,8 +67,8 @@ public class FlowManager
         return _repository.ReadFlowByIdIncludingTheme(id);
     }
     
-    public List<Flow> GetAll()
+    public List<Flow> GetAllFlows()
     {
-        throw new NotImplementedException();
+        return _repository.ReadAllFlows().ToList();
     }
 }

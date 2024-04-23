@@ -113,3 +113,66 @@ button.accept-policy {
   margin: 10px;
   cursor: pointer;
 }
+
+.card-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  position: relative;
+}
+
+#cards {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 350px;
+  overflow-x: scroll;
+  scrollbar-width: none; // Hide scrollbar for firefox
+}
+
+/* Hide scrollbar for webkit browsers */
+#cardsr::-webkit-scrollbar {
+  width: 0;
+}
+
+.card {
+  width: 200px;
+  height: 300px;
+  background-color: map-get($themes, light, primary);
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  margin: .5em;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.card:hover {
+  width: 220px;
+  height: 330px;
+}
+
+.card-header {
+  text-align: center;
+  font-weight: bolder;
+  font-size: 50px;
+  padding-top: 2em;
+}
+
+.card-footer {
+  text-align: center;
+  font-weight: bold;
+  background-color: map-get($themes, light, accent);
+}
+
+.btn-container {
+  padding-bottom: 1em;
+  padding-top: 1em;
+}
+
+#container-flow-btn {
+  display: flex;
+  justify-content: center;
+}
