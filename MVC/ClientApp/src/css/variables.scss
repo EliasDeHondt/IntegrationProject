@@ -1,0 +1,24 @@
+﻿$themes: (
+        light: (
+                text: hsl(0, 0%, 0%),
+                background: hsl(48, 61%, 89%),
+                primary: hsl(201, 57%, 54%),
+                secondary: hsl(16, 82%, 51%),
+                accent: hsl(31, 100%, 48%),
+        ),
+        dark: (
+                text: hsl(0, 0%, 100%),
+                background: hsl(48, 61%, 11%),
+                primary: hsl(201, 57%, 46%),
+                secondary: hsl(16, 82%, 49%),
+                accent: hsl(31, 100%, 52%),
+        ),
+);
+
+$fontSize: 1.25rem;
+$font: 'Trirong', serif;
+
+@font-face {
+  font-family: 'Trirong';
+  src: url('https://fonts.googleapis.com/css?family=Trirong:700|Trirong:400');
+}

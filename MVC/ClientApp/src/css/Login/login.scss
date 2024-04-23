@@ -1,42 +1,14 @@
-@font-face {
-  font-family: 'Trirong';
-  src: url('https://fonts.googleapis.com/css?family=Trirong:700|Trirong:400');
-}
+@import "../variables";
 
-$themes: (
-        light: (
-                text: hsl(0, 0%, 0%),
-                background: hsl(48, 61%, 89%),
-                primary: hsl(201, 57%, 54%),
-                secondary: hsl(16, 82%, 51%),
-                accent: hsl(31, 100%, 48%),
-        ),
-        dark: (
-                text: hsl(0, 0%, 100%),
-                background: hsl(48, 61%, 11%),
-                primary: hsl(201, 57%, 46%),
-                secondary: hsl(16, 82%, 49%),
-                accent: hsl(31, 100%, 52%),
-        ),
-);
-
-$fontSize: 1.25rem;
-$font: 'Trirong', serif;
-
-body {
-  background-color: #ffffff;
+.loginBody {
+  background-color: #f4ecd5;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
   margin: 0;
-  font-family: Arial, sans-serif;
-}
-
-/* Background Animation */
-body {
-  margin: 0;
+  font-family: 'Trirong', Arial, sans-serif;
   overflow: hidden;
 }
 
@@ -48,18 +20,16 @@ svg {
   height: 100%;
   z-index: -1;
 }
-/* Background Animation */
 
-/* Login CSS */
 .app-name {
-  color: map-get($themes, light, primary);
-  font-size: 30px;
+  color: #f37c00;
+  font-size: 35px;
   margin-top: 20px;
   text-align: center;
 }
 
 .login-form {
-  background-color: map-get($themes, light, primary);
+  background-color: #f37c00;
   border: 1px solid #e5e5e5;
   width: 320px;
   margin-top: 20px;
@@ -77,14 +47,15 @@ svg {
   border: 1px solid #cccccc;
   border-radius: 4px;
   transition: border-color 0.3s;
+  font-family: 'Trirong', Arial, sans-serif;
 }
 
 .login-form input:focus {
   outline: none;
-  border-color: #3498db;
+  border-color: #e9531d;
 }
 
-.login-form button {
+.login-form .button {
   background-color: #ffffff;
   color: #000000;
   width: 100%;
@@ -94,19 +65,33 @@ svg {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-family: 'Trirong', Arial, sans-serif;
 }
 
-.login-form button:hover {
+.login-form .button:hover {
   background-color: #e5e5e5;
   color: #000000;
 }
 
 .logo img {
-  max-width: 80%;
+  max-width: 60%;
   height: auto;
   display: block;
   margin: 20px auto;
   border-radius: 8px;
   padding-bottom: 20px;
 }
-/* Login CSS */
+
+.form-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.form-footer a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 20px;
+}
