@@ -126,4 +126,82 @@ public class UsersController : Controller
         return Ok(userList);
     }
     
+    [HttpGet("GetUser/{email}")]
+    public IActionResult GetUser(string email)
+    {
+        if (User.Identity is { IsAuthenticated: false }) return Unauthorized();
+        var user = _userManager.FindByEmailAsync(email).Result!;
+        return Ok(new UserViewModel
+        {
+            UserName = user.UserName,
+            Email = user.Email,
+            Permissions = _userManager.GetRolesAsync(user).Result
+        });
+    }
+    
+    [HttpPut("UpdateUser/{email}")]
+    public IActionResult UpdateUser(string email, UserViewModel model)
+    {
+        if (User.Identity is { IsAuthenticated: false }) return Unauthorized();
+        var user = _userManager.FindByEmailAsync(email).Result!;
+        user.Email = model.Email;
+        user.UserName = model.UserName;
+        _userManager.UpdateAsync(user);
+        _userManager.RemoveFromRolesAsync(user, _userManager.GetRolesAsync(user).Result);
+        _userManager.AddToRolesAsync(user, model.Permissions);
+        return NoContent();
+    }
+    
+    [HttpPut("UpdateFacilitator/{email}")]
+    public IActionResult UpdateFacilitator(string email, UpdateFacilitatorDto model)
+    {
+        if (User.Identity is { IsAuthenticated: false }) return Unauthorized();
+        var user = _userManager.FindByEmailAsync(email).Result as Facilitator;
+        user!.Email = model.Email;
+        user.UserName = model.UserName;
+        _userManager.UpdateAsync(user);
+
+        _uow.BeginTransaction();
+        
+        foreach (var projectId in model.RemovedProjects)
+        {
+            var project = _projectManager.GetProject(projectId);
+            _projectManager.DeleteProjectOrganizer(user, project);
+        }
+        
+        foreach (var projectId in model.AddedProjects)
+        {
+            var project = _projectManager.GetProject(projectId);
+            _projectManager.AddProjectOrganizer(user, project);
+        }
+        
+        _uow.Commit();
+        
+        return NoContent();
+    }
+    
+    
+    [HttpGet("GetLoggedInEmail")]
+    public IActionResult GetLoggedInEmail()
+    {
+        if (User.Identity is { IsAuthenticated: false }) return Unauthorized();
+        return Ok(User.FindFirstValue(ClaimTypes.Email));
+    }
+
+    [HttpGet("GetPossibleProjectsForFacilitator/{email}")]
+    public IActionResult GetPossibleProjectsForFacilitator(string email)
+    {
+        var projects = _projectManager.GetPossibleProjectsForFacilitator(email);
+        return Ok(projects);
+    }
+
+    [HttpGet("GetAssignedProjectsForFacilitator/{email}")]
+    public IActionResult GetAssignedProjectsForFacilitator(string email)
+    {
+        var projects = _projectManager.GetAssignedProjectsForFacilitator(email);
+        return Ok(projects);
+    }
+    
+    
+    
 }

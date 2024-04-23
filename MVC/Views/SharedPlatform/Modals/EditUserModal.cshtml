@@ -22,6 +22,42 @@
                     </div>
                 </div>
             </div>
+            <div id="editAdminContainer" class="ms-5">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="" id="checkEditUserPermission"/>
+                        User permissions
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="" id="checkEditProjectPermission"/>
+                        Project permissions
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="" id="checkEditStatisticPermission"/>
+                        Statistics permissions
+                    </label>
+                </div>
+            </div>
+            <div id="editFacilitatorContainer" class="ms-5">
+                <label class="d-flex flex-column">
+                    Select the projects
+                    <select multiple id="selectEditProject">
+
+                    </select>
+                </label>
+            </div>
+            <div id="removeProjectContainer" class="ms-5">
+                <label class="d-flex flex-column">
+                    Select projects to remove
+                    <select multiple id="selectRemoveProject">
+                        
+                    </select>
+                </label>
+            </div>
             <div class="modal-footer border-0 bgColor">
                 <button type="button" class="btn bgSecondary text-white" id="butCancelEditUserModal">Cancel</button>
                 <button type="button" class="btn bgPrimary text-white" id="butConfirmEditUser">Edit user</button>

@@ -10,7 +10,7 @@ export async function getUsersForPlatform(platformId: string): Promise<User[]>{
         })
 }
 
-export function generateCard(user: User, userPermissions: boolean): HTMLDivElement {
+export function generateCard(user: User, userPermissions: boolean, email:string): HTMLDivElement {
     
     let colDiv = document.createElement("div");
     colDiv.className = "col mt-3 mb-3";
@@ -21,7 +21,7 @@ export function generateCard(user: User, userPermissions: boolean): HTMLDivEleme
     let editButton;
     let deleteButton;
     
-    if(userPermissions) {
+    if(userPermissions && user.email != email) {
         utilsDiv = document.createElement("div");
         utilsDiv.className = "position-absolute top-0 end-0 me-2 h-50";
 
@@ -57,7 +57,7 @@ export function generateCard(user: User, userPermissions: boolean): HTMLDivEleme
     pEmail.textContent = "Email: " + user.email;
     
     cardBodyDiv.append(pName, pEmail);
-    if(userPermissions) {
+    if(userPermissions && user.email != email) {
         utilsDiv!.append(editButton!, deleteButton!)
         cardDiv.append(utilsDiv!)
     }
@@ -75,11 +75,24 @@ export function resetCards(id: string, userRoulette: HTMLDivElement, userPermiss
 }
 
 export function generateUserCards(id: string, userRoulette: HTMLDivElement, userPermissions: boolean) {
+    let cardCreateUser = document.getElementById("cardCreateUser") as HTMLDivElement;
+    if(userPermissions) cardCreateUser.style.display = "block";
+    else cardCreateUser.style.display = "none";
     getUsersForPlatform(id).then(users => {
-        users.forEach(user => {
-            let card = generateCard(user, userPermissions);
-            userRoulette.appendChild(card);
+        getLoggedInEmail().then(email => {
+            users.forEach(user => {
+                let card = generateCard(user, userPermissions, email);
+                userRoulette.appendChild(card);
+            })
         })
+            .then(() => editModal.initializeEditButtons())
     })
-        .then(() => editModal.initializeEditButtons())
+        
+}
+
+async function getLoggedInEmail(): Promise<string> {
+    return await fetch("/api/Users/GetLoggedInEmail")
+        .then(response => {
+            return response.text()
+        })
 }
