@@ -37,4 +37,28 @@ public class ProjectRepository
         if(_ctx.ProjectOrganizers.Where(organizer => organizer.Project.Id == projectOrganizer.Project.Id && organizer.Facilitator.Id == projectOrganizer.Facilitator.Id).ToList().Count == 0) _ctx.ProjectOrganizers.Add(projectOrganizer);
     }
 
+    public IEnumerable<Project> ReadPossibleProjectsForFacilitator(string email)
+    {
+        var projects = _ctx.Projects.Include(p => p.MainTheme).ToList();
+        var assignedProjects = ReadAssignedProjectsForFacilitator(email);
+        
+        return projects.Except(assignedProjects);
+        
+    }
+
+    public IEnumerable<Project> ReadAssignedProjectsForFacilitator(string email)
+    {
+        return _ctx.ProjectOrganizers
+            .Where(organizer => organizer.Facilitator.Email == email)
+            .Include(organizer => organizer.Project)
+            .ThenInclude(project => project.MainTheme)
+            .Select(organizer => organizer.Project)
+            .ToList();
+    }
+
+    public void RemoveProjectOrganizer(Facilitator user, Project project)
+    {
+        var projectOrganizer = _ctx.ProjectOrganizers.FirstOrDefault(po => po.Facilitator == user && po.Project == project);
+        _ctx.ProjectOrganizers.Remove(projectOrganizer!);
+    }
 }

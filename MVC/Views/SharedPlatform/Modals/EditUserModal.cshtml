@@ -1,0 +1,69 @@
+﻿<div class="modal" id="EditUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content border-3 border-accent">
+            <div class="modal-header bgColor border-0">
+                <button type="button" class="btn-close invisible"></button>
+                <h3 id="editHeader" class="modal-title text-black text-end">Editing </h3>
+                <button type="button" class="btn-close" id="butCloseEditUserModal"></button>
+            </div>
+            <div class="modal-body bgColor">
+                <div class="col ms-3">
+                    <div class="form-group mb-3">
+                        <label>
+                            Name
+                            <input id="inpEditName" type="text" class="form-control"/>
+                            <span id="editNameWarning" class="warning"></span>
+                        </label>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>
+                            Email
+                            <input id="inpEditEmail" type="email" class="form-control"/>
+                            <span id="editEmailWarning" class="warning"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div id="editAdminContainer" class="ms-5">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="" id="checkEditUserPermission"/>
+                        User permissions
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="" id="checkEditProjectPermission"/>
+                        Project permissions
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="" id="checkEditStatisticPermission"/>
+                        Statistics permissions
+                    </label>
+                </div>
+            </div>
+            <div id="editFacilitatorContainer" class="ms-5">
+                <label class="d-flex flex-column">
+                    Select the projects
+                    <select multiple id="selectEditProject">
+
+                    </select>
+                </label>
+            </div>
+            <div id="removeProjectContainer" class="ms-5">
+                <label class="d-flex flex-column">
+                    Select projects to remove
+                    <select multiple id="selectRemoveProject">
+                        
+                    </select>
+                </label>
+            </div>
+            <div class="modal-footer border-0 bgColor">
+                <button type="button" class="btn bgSecondary text-white" id="butCancelEditUserModal">Cancel</button>
+                <button type="button" class="btn bgPrimary text-white" id="butConfirmEditUser">Edit user</button>
+            </div>
+        </div>
+    </div>
+</div>

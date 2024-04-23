@@ -1,5 +1,9 @@
 ﻿import {Modal, Toast} from "bootstrap";
-import {Project} from "../ProjectObjects";
+import * as API from "./API/CreateUserModalAPI";
+import {Project} from "./Types/ProjectObjects";
+import {resetCards} from "./API/DashboardAPI";
+import {UserRoles} from "./Types/UserTypes";
+import {isEmailInUse} from "../API/UserAPI";
 
 const CreateUserModal = new Modal(document.getElementById('CreateUserModal')!, {
     keyboard: false,
@@ -17,6 +21,11 @@ const butConfirmCreateUser = document.getElementById("butConfirmCreateUser") as 
 const radioAdmin = document.getElementById("radioAdmin") as HTMLInputElement;
 const radioFacilitator = document.getElementById("radioFacilitator") as HTMLInputElement;
 const facilitatorContainer = document.getElementById("facilitatorContainer") as HTMLDivElement;
+const adminContainer = document.getElementById("adminContainer") as HTMLDivElement;
+const checkUserPermission = document.getElementById("checkUserPermission") as HTMLInputElement;
+const checkProjectPermission = document.getElementById("checkProjectPermission") as HTMLInputElement;
+const checkStatisticPermission = document.getElementById("checkStatisticPermission") as HTMLInputElement;
+
 
 const inputName = document.getElementById("inputName") as HTMLInputElement;
 const inputEmail = document.getElementById("inputEmail") as HTMLInputElement;
@@ -27,7 +36,9 @@ const nameWarning = document.getElementById('nameWarning') as HTMLElement;
 const emailWarning = document.getElementById('emailWarning') as HTMLElement;
 const passwordWarning = document.getElementById('passwordWarning') as HTMLElement;
 
-let id = document.getElementById("platformId")!.textContent
+const userRoulette = document.getElementById("carouselContainer") as HTMLDivElement;
+
+let id: string = document.getElementById("platformId")!.textContent!
 
 butCreateUser.onclick = () => {
     CreateUserModal.show();
@@ -43,23 +54,56 @@ butCancelCreateUserModal.onclick = () => {
 
 butConfirmCreateUser.onclick = async (ev) => {
     ev.preventDefault()
-    // API call to create user
     if (await validateForm()) {
-        if (radioFacilitator.checked) createFacilitator()
-        else if (radioAdmin.checked) createAdmin()
+        if (radioFacilitator.checked) {
+            let projectIds = getSelectedProjects();
+            API.createFacilitator(inputName.value, inputEmail.value, inputPassword.value, projectIds, id)
+                .then(() => clearModal())
+                .then(() => {
+                    userCreatedToast.show()
+                    let closeUserToast = document.getElementById("closeUserToast") as HTMLButtonElement
+                    closeUserToast.onclick = () => userCreatedToast.hide()
+                })
+                .finally(() => resetCards(id, userRoulette, true))
+        } else if (radioAdmin.checked) {
+            let permissions: string[] = [];
+            if (checkUserPermission.checked) {
+                permissions.push(UserRoles.UserPermission);
+            }
+            if (checkProjectPermission.checked) {
+                permissions.push(UserRoles.ProjectPermission);
+            }
+            if (checkStatisticPermission.checked) {
+                permissions.push(UserRoles.StatisticPermission);
+            }
+            API.createAdmin(inputName.value, inputEmail.value, inputPassword.value, id, permissions)
+                .then(() => clearModal())
+                .then(() => {
+                    userCreatedToast.show()
+                    let closeUserToast = document.getElementById("closeUserToast") as HTMLButtonElement
+                    closeUserToast.onclick = () => userCreatedToast.hide()
+                })
+                .finally(() => resetCards(id, userRoulette, true))
+        }
     }
 }
 
 radioAdmin.onchange = () => {
     facilitatorContainer.classList.add("visually-hidden");
+    adminContainer.classList.remove("visually-hidden");
     selectProject.options.length = 0;
 }
 
 radioFacilitator.onchange = () => {
 
     facilitatorContainer.classList.remove("visually-hidden");
-    // Generate options for each Project
-    getProjects();
+    adminContainer.classList.add("visually-hidden");
+    checkUserPermission.checked = false;
+    checkProjectPermission.checked = false;
+    checkStatisticPermission.checked = false;
+    API.getProjects(id).then(projects => {
+        fillDropdown(projects)
+    });
 
 }
 
@@ -67,78 +111,22 @@ function clearModal() {
     inputName.value = "";
     inputEmail.value = "";
     inputPassword.value = "";
+    radioAdmin.checked = true;
+    radioFacilitator.checked = false;
+    checkUserPermission.checked = false;
+    checkProjectPermission.checked = false;
+    checkStatisticPermission.checked = false;
+    facilitatorContainer.classList.add("visually-hidden");
+    adminContainer.classList.remove("visually-hidden");
+    selectProject.length = 0;
     resetWarnings();
     CreateUserModal.hide();
 }
 
-function createFacilitator() {
-    let projectIds: number[] = [];
-    for (let i = 0; i < selectProject.options.length; i++) {
-        if (selectProject.options[i].selected) {
-            projectIds.push(Number(selectProject.options[i].value));
-        }
-    }
-    fetch("/api/Users/CreateFacilitator", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            name: inputName.value,
-            email: inputEmail.value,
-            password: inputPassword.value,
-            projectIds: projectIds,
-            platformId: id
-        })
-    })
-        .then(() => clearModal())
-        .then(() => {
-            userCreatedToast.show()
-            let closeUserToast = document.getElementById("closeUserToast") as HTMLButtonElement
-            closeUserToast.onclick = () => userCreatedToast.hide()
-        })
-}
-
-function createAdmin() {
-    fetch("/api/Users/CreateAdmin", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            name: inputName.value,
-            email: inputEmail.value,
-            password: inputPassword.value,
-            platformId: id
-        })
-    })
-        .then(() => clearModal())
-        .then(() => {
-            userCreatedToast.show()
-            let closeUserToast = document.getElementById("closeUserToast") as HTMLButtonElement
-            closeUserToast.onclick = () => userCreatedToast.hide()
-        })
-}
-
-function getProjects() {
-    fetch(`/api/Projects/GetProjectsForSharedPlatform/${id}`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        }
-    })
-        .then(response => response.json())
-        .then(data => fillDropdown(data))
-}
-
-function fillDropdown(data: Project[]) {
-    for (let i = 0; i < data.length; i++) {
-        let option = document.createElement("option");
-        option.value = data[i].id.toString();
-        option.text = data[i].mainTheme.subject;
-        selectProject.appendChild(option);
-    }
+function resetWarnings() {
+    nameWarning.textContent = '';
+    emailWarning.textContent = '';
+    passwordWarning.textContent = '';
 }
 
 async function validateForm() {
@@ -182,29 +170,21 @@ async function validateForm() {
     return valid;
 }
 
-function resetWarnings() {
-    nameWarning.textContent = '';
-    emailWarning.textContent = '';
-    passwordWarning.textContent = '';
+function getSelectedProjects(): number[] {
+    let projectIds: number[] = [];
+    for (let i = 0; i < selectProject.options.length; i++) {
+        if (selectProject.options[i].selected) {
+            projectIds.push(Number(selectProject.options[i].value));
+        }
+    }
+    return projectIds
 }
 
-async function isEmailInUse(email: string): Promise<boolean> {
-    let result = true;
-    await fetch("/api/Users/IsEmailInUse", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            email: email
-        })
-    })
-        .then(response => response.json())
-        .then(data => {
-            result = data;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        })
-    return result;
+function fillDropdown(data: Project[]) {
+    for (let i = 0; i < data.length; i++) {
+        let option = document.createElement("option");
+        option.value = data[i].id.toString();
+        option.text = data[i].mainTheme.subject;
+        selectProject.appendChild(option);
+    }
 }

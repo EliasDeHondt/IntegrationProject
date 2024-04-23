@@ -142,6 +142,10 @@ button.accept-policy {
   font-size: 10vh;
 }
 
+.modal-icon{
+  font-size: 3.5vh;
+}
+
 .warning {
   color: map-get($themes, light, accent);
   font-size: 0.8em;
@@ -152,65 +156,89 @@ button.accept-policy {
   background-color: map-get($themes, light, background);
 }
 
-.card-container {
-  overflow-x: auto;
-  white-space: nowrap;
-  position: relative;
+.embla {
+  width: 100% ;
+  --slide-height: 19rem;
+  --slide-spacing: 1rem;
+  --slide-size: 100%;
+  --slide-spacing-sm: 1.6rem;
+  --slide-size-sm: 50%;
+  --slide-spacing-lg: 2rem;
+  --slide-size-lg: calc(100% / 3);
 }
-
-#cards {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  height: 350px;
-  overflow-x: scroll;
-  scrollbar-width: none; // Hide scrollbar for firefox
+.embla__viewport {
+  overflow: hidden;
 }
-
-/* Hide scrollbar for webkit browsers */
-#cardsr::-webkit-scrollbar {
-  width: 0;
-}
-
-.card {
-  width: 200px;
-  height: 300px;
-  background-color: map-get($themes, light, primary);
-  border: 1px solid #ccc;
-  border-radius: 10px;
+.embla__container {
+  backface-visibility: hidden;
   display: flex;
-  flex-direction: column;
+  touch-action: pan-y;
+  margin-left: calc(var(--slide-spacing) * -1);
+}
+@media (min-width: 750px) {
+  .embla__container {
+    margin-left: calc(var(--slide-spacing-sm) * -1);
+  }
+}
+@media (min-width: 1200px) {
+  .embla__container {
+    margin-left: calc(var(--slide-spacing-lg) * -1);
+  }
+}
+.embla__slide {
+  min-width: 0;
+  flex: 0 0 var(--slide-size);
+  padding-left: var(--slide-spacing);
+}
+@media (min-width: 750px) {
+  .embla__slide {
+    flex: 0 0 var(--slide-size-sm);
+    padding-left: var(--slide-spacing-sm);
+  }
+}
+@media (min-width: 1200px) {
+  .embla__slide {
+    flex: 0 0 var(--slide-size-lg);
+    padding-left: var(--slide-spacing-lg);
+  }
+}
+
+.embla__controls {
+  display: grid;
+  grid-template-columns: auto 1fr;
   justify-content: space-between;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: relative;
-  margin: .5em;
-  transition: width 0.3s ease, height 0.3s ease;
+  gap: 1.2rem;
 }
-
-.card:hover {
-  width: 220px;
-  height: 330px;
+.embla__buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+  align-items: center;
 }
-
-.card-header {
-  text-align: center;
-  font-weight: bolder;
-  font-size: 50px;
-  padding-top: 2em;
-}
-
-.card-footer {
-  text-align: center;
-  font-weight: bold;
-  background-color: map-get($themes, light, accent);
-}
-
-.btn-container {
-  padding-bottom: 1em;
-  padding-top: 1em;
-}
-
-#container-flow-btn {
+.embla__button {
+  -webkit-tap-highlight-color: rgba(var(--text-high-contrast-rgb-value), 0.5);
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  touch-action: manipulation;
+  text-decoration: none;
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  box-shadow: inset 0 0 0 0.2rem var(--detail-medium-contrast);
+  width: 3.6rem;
+  z-index: 1;
+  border-radius: 50%;
+  color: var(--text-body);
   display: flex;
+  align-items: center;
   justify-content: center;
+}
+.embla__button:disabled {
+  color: var(--detail-high-contrast);
+}
+.embla__button__svg {
+  width: 35%;
+  height: 35%;
 }
