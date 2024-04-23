@@ -36,6 +36,7 @@ public class Flow
         Steps = steps;
         Participations = participations;
         Theme = theme;
+        State = FlowState.Inactive;
     }
     // public Flow(FlowType flowTye, ICollection<StepBase> steps, ICollection<Participation> participations, ThemeBase theme, long id = 0)
     // {
@@ -53,6 +54,7 @@ public class Flow
         Steps = new List<StepBase>();
         Participations = new List<Participation>();
         Theme = theme;
+        State = FlowState.Inactive;
     }
 
     public Flow()
@@ -62,6 +64,7 @@ public class Flow
         Steps = new List<StepBase>();
         Participations = new List<Participation>();
         Theme = new MainTheme();
+        State = FlowState.Inactive;
     }
 
     public void StartFlow()

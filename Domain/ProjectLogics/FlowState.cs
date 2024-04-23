@@ -2,7 +2,7 @@
 
 public enum FlowState
 {
+    Inactive,
     Active,
-    Paused,
-    Inactive
+    Paused
 }
