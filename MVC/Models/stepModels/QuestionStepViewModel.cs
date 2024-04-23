@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MVC.Models;
 
-public class QuestionStepViewModel
+public class QuestionStepViewModel : StepViewModel
 {
     
     [Required]

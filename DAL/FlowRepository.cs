@@ -33,6 +33,17 @@ public class FlowRepository
             .Include(f => f.Steps)
             .FirstOrDefault(f => f.Id == id);
     }
+
+    public void AddFlow(Flow flow)
+    {
+        _context.Flows.Add(flow);
+    }
+
+    //TODO: This function returns *ALL* flows possible, it does NOT return Project-specific Flows!
+    public DbSet<Flow> ReadAllFlows()
+    {
+        return _context.Flows;
+    }
     
     public void AddParticipationByFlow(long flowId,string email)
     {

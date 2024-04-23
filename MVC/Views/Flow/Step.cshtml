@@ -27,7 +27,12 @@
 </div>
 <div class="row-gap-sm-4 h-75">
     <h1><span id="flowtype">@Model.FlowType.ToString()</span> Flow <span id="flowId">@Model.Id</span> - Step <span id="stepNr"></span> / <span id="steptotal">@Model.getStepCount()</span></h1>
-
+    <div class="dropdown">
+        <button class="btn-primary mt-auto mb-auto h-25 m-5 dropdown-toggle" id="flowDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">Activate other flow</button>
+        <ul class="dropdown-menu" id="flowDropdown" aria-labelledby="flowDropdownBtn">
+            
+        </ul>
+    </div>
     <p>Theme <span id="theme">@Model.Theme.Id</span> - @Model.Theme.Subject</p>
     <div class="d-flex justify-content-center h-100">
         <div class="row-cols-md-3 mb-3 text-start" id="informationContainer">
@@ -59,7 +64,7 @@
     <div style="position: fixed; bottom: 0; right: 0; display: flex; flex-direction: row;">
         <div style="display: flex; flex-direction: column; ">
             <p>Want more info?</p>
-            <input type="email"  id="inputEmail" placeholder="Enter your email">
+            <input type="email" id="inputEmail" placeholder="Enter your email">
             <p id="errorMsg">&nbsp;</p>
         </div>
         <div style="display: flex; flex-direction: column;">

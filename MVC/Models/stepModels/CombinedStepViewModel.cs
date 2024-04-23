@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MVC.Models;
 
-public class CombinedStepViewModel
+public class CombinedStepViewModel : StepViewModel
 {
     [Required]
     [Range(0, int.MaxValue)]

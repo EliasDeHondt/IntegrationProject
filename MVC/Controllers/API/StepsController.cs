@@ -5,6 +5,8 @@
  *                                     *
  ***************************************/
 
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Business_Layer;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
@@ -29,30 +31,10 @@ public class StepsController : Controller
     {
         StepBase stepBase = _manager.GetStepForFlowByNumber(flowId, stepNumber);
         
-        switch (stepBase)
-        {
-            case CombinedStep cStep:
-            {
-                CombinedStepViewModel stepViewModel = StepModelFactory.CreateCombinedStepViewModel(cStep);
-                return Ok(stepViewModel);
-            }
-            case InformationStep iStep:
-            {
-                InformationStepViewModel stepViewModel = StepModelFactory.CreateInformationStepViewModel(iStep);
-
-                return Ok(stepViewModel);
-            }
-            case QuestionStep qStep:
-            {
-                QuestionStepViewModel stepViewModel = StepModelFactory.CreateQuestionStepViewModel(qStep);
-
-                return Ok(stepViewModel);
-            }
-            case null:
-                return BadRequest();
-            default:
-                return Ok(stepBase);
-        }
+        var stepViewModel = StepModelFactory.CreateStepViewModel<StepViewModel, StepBase>(stepBase);
+        
+        return Ok(stepViewModel);
+        
     }
     
     
