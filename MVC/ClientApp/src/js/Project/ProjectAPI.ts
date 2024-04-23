@@ -5,11 +5,6 @@ let inputTitle = (document.getElementById("inputTitle") as HTMLInputElement);
 let inputText = (document.getElementById("inputText") as HTMLInputElement);
 const btnPublishProject = document.getElementById("btnPublishProject") as HTMLButtonElement;
 
-//Check empty
-function isInputEmpty(input: HTMLInputElement): boolean {
-    return input.value.trim() === '';
-}
-
 //Titel & Text checken
 function CheckNotEmpty(inputTitel: HTMLInputElement,errorMessage: string,errorMsgHTML: string): boolean{
     let p = document.getElementById(errorMsgHTML) as HTMLElement;
@@ -25,42 +20,41 @@ function CheckNotEmpty(inputTitel: HTMLInputElement,errorMessage: string,errorMs
     }
 }
 
-//Text checken
-function CheckText(inputText: HTMLInputElement): boolean{
-    let p = document.getElementById("errorMsgText") as HTMLElement;
-    console.log(inputText.value.trim())
-    if (inputText.value.trim() === '') {
-        p.innerHTML = "Text can't be empty";
-        p.style.color = "red";
-        return false;
-    } else {
-        p.innerHTML = "Text accepted!";
-        p.style.color = "blue";
-        return true;
+//Project oplsaan (publish)
+function SetProject(mainTheme,sharedPlatform){
+    try {
+        const response = await fetch("/api/Projects/SetProject/" + mainTheme + "/" + sharedPlatform, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                mainTheme: mainTheme,
+                sharedPlatform: sharedPlatform
+            })
+        });
+        if (response.ok) {
+            console.log("Project saved successfully.");
+        } else {
+            console.error("Failed to save Project.");
+        }
+    } catch (error) {
+        console.error("Error:", error);
     }
 }
-//Project oplsaan (publish)
+
+//Button
 document.addEventListener("DOMContentLoaded", function () {
     btnPublishProject.onclick = function () {
         console.log("click");
-        CheckNotEmpty(inputTitle,"Title","errorMsgTitle");
-        CheckNotEmpty(inputTitle,"Text","errorMsgText");
-        //CheckText(inputText);
-        // @ts-ignore
-        // const inputEmail = emailInput.value.trim();
-        // const inputElement = emailInput as HTMLInputElement;
-        //
-        // if (CheckTitel(inputTitle)) {
-        //     if (inputEmail !== "") {
-        //         //SetRespondentEmail(flowId, inputEmail);
-        //
-        //         if (inputElement !== null) {
-        //             inputElement.value = "";
-        //             console.log("Reset value.");
-        //         } else {
-        //             console.log("No value to reset.");
-        //         }
-        //     }
-        // }
+        //CheckNotEmpty(inputTitle,"Title","errorMsgTitle");
+        //CheckNotEmpty(inputText,"Text","errorMsgText");
+
+        if (CheckNotEmpty(inputTitle,"Title","errorMsgTitle")) {
+            SetProject();
+        }
+                
     };
 });
+
+//select subthemas

@@ -22,6 +22,11 @@ public class ProjectsController : Controller
         return _projectManager.GetAllProjectsForSharedPlatformWithMainTheme(id);
     }
 
+    [HttpPost("SetProject/{id}")]
+    public IEnumerable<Project> SetProject(long id)
+    {
+        return _projectManager.SetProject(id);
+    }
 
 
 }
