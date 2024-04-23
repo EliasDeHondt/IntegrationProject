@@ -11,6 +11,8 @@ export interface MainTheme {
 
 export interface SharedPlatform {
     id: number;
+    OrganisationName: string
+    Projects: Project[]
 }
 
 export interface ProjectOrganizer {
