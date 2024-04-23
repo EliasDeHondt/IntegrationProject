@@ -139,13 +139,13 @@ button.accept-policy {
   background-color: map-get($themes, light, background);
 }
 
-.card-container {
+.flow-container {
   overflow-x: auto;
   white-space: nowrap;
   position: relative;
 }
 
-#cards {
+#flow-cards {
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -155,11 +155,11 @@ button.accept-policy {
 }
 
 /* Hide scrollbar for webkit browsers */
-#cardsr::-webkit-scrollbar {
+#flow-cards::-webkit-scrollbar {
   width: 0;
 }
 
-.card {
+.flow-card {
   width: 200px;
   height: 300px;
   background-color: map-get($themes, light, primary);
@@ -174,19 +174,19 @@ button.accept-policy {
   transition: width 0.3s ease, height 0.3s ease;
 }
 
-.card:hover {
+.flow-card:hover {
   width: 220px;
   height: 330px;
 }
 
-.card-header {
+.flow-card-header {
   text-align: center;
   font-weight: bolder;
   font-size: 50px;
   padding-top: 2em;
 }
 
-.card-footer {
+.flow-card-footer {
   text-align: center;
   font-weight: bold;
   background-color: map-get($themes, light, accent);
