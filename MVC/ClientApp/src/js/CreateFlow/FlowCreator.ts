@@ -32,13 +32,13 @@ async function UpdateFlowList(flows: Array<Array<Flow>>) {
         flows[0].forEach(flow => {
             //Card container
             const flowCard = document.createElement('div');
-            flowCard.classList.add("card");
+            flowCard.classList.add("flow-card");
             //Card Header
             const cardHeader = document.createElement('h2');
-            cardHeader.classList.add("card-header");
+            cardHeader.classList.add("flow-card-header");
             cardHeader.innerText = "Flow " + flow.id.toString();
             const cardFooter = document.createElement('h3');
-            cardFooter.classList.add("card-footer");
+            cardFooter.classList.add("flow-card-footer");
             cardFooter.innerText = flow.flowType.toString();
             
             flowCard.appendChild(cardHeader)
