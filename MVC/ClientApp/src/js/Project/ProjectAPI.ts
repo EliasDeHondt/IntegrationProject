@@ -25,7 +25,7 @@ function CheckNotEmpty(inputTitel: HTMLInputElement,errorMessage: string,errorMs
 //Project oplsaan (publish)
 async function SetProject(mainTheme: string, sharedPlatformid: number) {
     try {
-        const response = await fetch("/api/Projects/AddProject/" + mainTheme + "/" + sharedPlatformid, {
+        const response = await fetch("/api/Projects/AddProject/" + mainTheme + "/" + sharedPlatformid.toString(), {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (CheckNotEmpty(inputTitle,"Title","errorMsgTitle")) {
             SetProject(inputTitle.value, 2);
 
-            window.location.href = "/SharedPlatform/Dashboard/";
+            //window.location.href = "/SharedPlatform/Dashboard/";
         }
     };
 });

@@ -53,4 +53,9 @@ public class ProjectManager
     {
         _repo.CreateProject(mainTheme,sharedPlatform,id);
     }
+
+    public IEnumerable<Project> ProjectCount()
+    {
+        return _repo.ProjectCount();
+    }
 }
