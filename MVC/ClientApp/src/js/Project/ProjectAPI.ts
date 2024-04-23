@@ -10,57 +10,57 @@ function isInputEmpty(input: HTMLInputElement): boolean {
     return input.value.trim() === '';
 }
 
-//Titel checken
-function CheckTitel(inputTitel: HTMLInputElement): boolean{
-    let p = document.getElementById("errorMsgTitle") as HTMLElement;
-    if (inputTitel.value.trim() === '') { // het is een email
-        p.innerHTML = "Title accepted!";
+//Titel & Text checken
+function CheckNotEmpty(inputTitel: HTMLInputElement,errorMessage: string,errorMsgHTML: string): boolean{
+    let p = document.getElementById(errorMsgHTML) as HTMLElement;
+    console.log(inputTitel.value.trim())
+    if (inputTitel.value.trim() === '') {
+        p.innerHTML = errorMessage + " can't be empty";
+        p.style.color = "red";
+        return false;
+    } else {
+        p.innerHTML = errorMessage + " accepted!";
         p.style.color = "blue";
         return true;
-    } else {
-        p.innerHTML = "Title can't be empty";
-        p.style.color = "red";
-        console.log("append chikd")
-        return false;
     }
 }
 
 //Text checken
-function CheckText(inputText: string,inputElement:HTMLInputElement): boolean{
-    const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+function CheckText(inputText: HTMLInputElement): boolean{
     let p = document.getElementById("errorMsgText") as HTMLElement;
-    if (emailRegex.test(inputText)) { // het is een email
-        p.innerHTML = "Title accepted!";
+    console.log(inputText.value.trim())
+    if (inputText.value.trim() === '') {
+        p.innerHTML = "Text can't be empty";
+        p.style.color = "red";
+        return false;
+    } else {
+        p.innerHTML = "Text accepted!";
         p.style.color = "blue";
         return true;
-    } else {
-        p.innerHTML = "Title can't be empty";
-        p.style.color = "red";
-        console.log("append chikd")
-        return false;
     }
 }
 //Project oplsaan (publish)
 document.addEventListener("DOMContentLoaded", function () {
-    const emailInput = document.getElementById("inputEmail");
-
     btnPublishProject.onclick = function () {
         console.log("click");
+        CheckNotEmpty(inputTitle,"Title","errorMsgTitle");
+        CheckNotEmpty(inputTitle,"Text","errorMsgText");
+        //CheckText(inputText);
         // @ts-ignore
-        const inputEmail = emailInput.value.trim();
-        const inputElement = emailInput as HTMLInputElement;
-
-        if (CheckTitel(inputTitle)) {
-            if (inputEmail !== "") {
-                //SetRespondentEmail(flowId, inputEmail);
-
-                if (inputElement !== null) {
-                    inputElement.value = "";
-                    console.log("Reset value.");
-                } else {
-                    console.log("No value to reset.");
-                }
-            }
-        }
+        // const inputEmail = emailInput.value.trim();
+        // const inputElement = emailInput as HTMLInputElement;
+        //
+        // if (CheckTitel(inputTitle)) {
+        //     if (inputEmail !== "") {
+        //         //SetRespondentEmail(flowId, inputEmail);
+        //
+        //         if (inputElement !== null) {
+        //             inputElement.value = "";
+        //             console.log("Reset value.");
+        //         } else {
+        //             console.log("No value to reset.");
+        //         }
+        //     }
+        // }
     };
 });

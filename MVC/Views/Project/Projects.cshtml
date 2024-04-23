@@ -28,11 +28,13 @@
         <div class="col-lg-10 col-md-9 col-sm-8 col-6">
             <div class="py-3">
                 <div class="row align-items-center">
-                    <div class="col card border-black border-2 bgAccent">
-                        <input id="inputTitle" class="m-1" placeholder="Titel">
-                        <p id="errorMsgTitle">&nbsp;</p>
+                    <div class="col">
+                        <div class=" card border-black border-2 bgAccent">
+                            <input id="inputTitle" class="m-1" placeholder="Titel Project">
+                        </div>
+                        <p id="errorMsgTitle" style="text-align: left;">&nbsp;</p>
                     </div>
-                    <div class="col-auto card border-black border-2 bgAccent">
+                    <div class="col-auto card border-black border-2 bgAccent align-top">
                         <button id="btnPublishProject" class="border-0 p-0 m-2" style="background: none;">Publish Project</button>
                     </div>
                 </div>
@@ -42,16 +44,19 @@
                 <div class="row row-cols-3 ps-4 pe-4 m-4 ">
                     <div>
                         <!-- Text -->
-                        <div class="col mt-3 mb-3">
-                            <div class="card border-black border-2 bgAccent" style="height: 250px; width: 1000px">
-                                <div class="card-body align-items-center d-flex justify-content-center">
-                                    <textarea id="inputText" class="form-control" style="height: 100%; width: 100%; resize: none;"></textarea>
-                                    <p id="errorMsgText">&nbsp;</p>
-                                    @* <button class="btn btn-primary mx-2">Save</button> *@
+                        <div class="row">
+                            <div class="col mt-3 mb-3">
+                                <div class="card border-black border-2 bgAccent" style="height: 250px; width: 1000px">
+                                    <div class="card-body align-items-center d-flex justify-content-center">
+                                        <textarea id="inputText" class="form-control" style="height: 100%; width: 100%; resize: none;"></textarea>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="col mt-3 mb-3">
+                                    <p id="errorMsgText" style="text-align: left;">&nbsp;</p>
+                            </div>
                         </div>
-
+                        
                         <!-- Flows -->
                         <div class="col mt-3 mb-3">
                             <div class="card-footer d-flex justify-content-center">
@@ -79,5 +84,5 @@
 </html>
 @* <p class="visually-hidden" id="platformId">@Model.Id</p> *@
 
-@* <script src="~/dist/site.entry.js" defer></script> *@
-@* <script src="~/dist/dashboard.entry.js" defer></script> *@
+<script src="~/dist/site.entry.js" defer></script>
+<script src="~/dist/project.entry.js" defer></script>
