@@ -24,7 +24,6 @@
 //     CreateProjectModal.hide();
 // }
 import {Modal} from "bootstrap";
-import {Project} from "../ProjectObjects";
 
 const CreateProjectModal = new Modal(document.getElementById('CreateProjectModal')!, {
     keyboard: false,
