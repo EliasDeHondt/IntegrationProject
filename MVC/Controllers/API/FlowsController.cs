@@ -23,43 +23,16 @@ public class FlowsController : Controller
         return Ok();
     }
 
-    [HttpPut("{id}/Paused")]
-    public IActionResult PutFlowStateToPaused(long id)
+    [HttpPut("{id}/{state}")]
+    public IActionResult PutFlowState(long id, string state)
     {
         Flow flow = _manager.GetFlowByIdWithTheme(id);
 
         if (flow == null)
             return NotFound();
 
-        flow.State = FlowState.Paused;
-        _manager.ChangeFlowState(flow);
-        
-        return NoContent();
-    }
-
-    [HttpPut("{id}/Active")]
-    public IActionResult PutFlowStateToActive(long id)
-    {
-        Flow flow = _manager.GetFlowByIdWithTheme(id);
-
-        if (flow == null)
-            return NotFound();
-
-        flow.State = FlowState.Active;
-        _manager.ChangeFlowState(flow);
-        
-        return NoContent();
-    }
-
-    [HttpPut("{id}/Inactive")]
-    public IActionResult PutFlowStateToInactive(long id)
-    {
-        Flow flow = _manager.GetFlowByIdWithTheme(id);
-
-        if (flow == null)
-            return NotFound();
-
-        flow.State = FlowState.Inactive;
+        if (FlowState.TryParse(state, out FlowState flowState))
+            flow.State = flowState;
         _manager.ChangeFlowState(flow);
         
         return NoContent();

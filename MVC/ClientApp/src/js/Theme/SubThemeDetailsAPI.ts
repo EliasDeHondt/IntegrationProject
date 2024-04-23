@@ -26,7 +26,7 @@ function addFlow(flow: Flow) {
     flowContainer.innerHTML += `<tr>
                                    <td>${flow.id}</td>
                                    <td>${flow.flowType.toString()}</td>
-                                   <td><a href="/Flow/Step/${flow.id}">Start Flow</a></td>
+                                   <td><a href="/Flow/Step/${flow.id}" onclick='UpdateFlowState(${flow.id}, "Active")'>Start Flow</a></td>
                                 </tr>`
 }
 

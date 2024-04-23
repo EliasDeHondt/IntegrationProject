@@ -312,43 +312,17 @@ btnRestartFlow.onclick = () => {
 };
 
 btnPauseFlow.onclick = () => {
-    fetch("/api/Flows/" + flowId + "/Paused", {
-        method: "PUT"
-    })
-        .then(response => {
-            if (response.ok) {
-                console.log("Flow paused!")
-                modal.show()
-            }
-        })
-        .catch(error => console.error("Error:", error))
-}
+    UpdateFlowState(flowId, "Paused");
+    modal.show();
+};
 
 if (btnUnPauseFlow)
     btnUnPauseFlow.onclick = () => {
-        fetch("/api/Flows/" + flowId + "/Active", {
-            method: "PUT"
-        })
-            .then(response => {
-                if (response.ok) {
-                    console.log("Flow active!")
-                    modal.hide()
-                }
-            })
-            .catch(error => console.error("Error:", error))
+        UpdateFlowState(flowId, "Active");
+        modal.hide();
     }
 
-btnExitFlow.onclick = () => {
-    fetch("/api/Flows/" + flowId + "/Inactive", {
-        method: "PUT"
-    })
-        .then(response => {
-            if (response.ok) {
-                console.log("Flow inactive!")
-            }
-        })
-        .catch(error => console.error("Error:", error))
-}
+btnExitFlow.onclick = () => UpdateFlowState(flowId, "Inactive");
 
 btnShowFlows.onclick = () => LoadFlows();
 
@@ -372,7 +346,27 @@ function ShowFlows(flows: Flow[]) {
 
 function AddFlow(flow: Flow) {
     if (flow.id != flowId)
-        ddFlows.innerHTML += `<li><a class="dropdown-item" href="/Flow/Step/${flow.id}">${flow.id}</a></li>`
+        ddFlows.innerHTML += `<li><a class="dropdown-item" href="/Flow/Step/${flow.id}" onclick="SwitchFlowToFlow(${flow.id})">${flow.id}</a></li>`
     else
         ddFlows.innerHTML += `<li><a class="dropdown-item active" aria-current="true">${flow.id}</a></li>`
+}
+
+function SwitchFlowToFlow(flow: Flow) {
+    UpdateFlowState(flowId, 'Inactive');
+    UpdateFlowState(flow.id, 'Active');
+    return true;
+}
+
+export function UpdateFlowState(id: number, state: string) {
+    fetch("/api/Flows/" + id + "/" + state, {
+        method: "PUT"
+    })
+        .then(response => {
+            if (response.ok) {
+                console.log(`Flow ${state}!`)
+                return true;
+            }
+            return false;
+        })
+        .catch(error => console.error("Error:", error))        
 }
