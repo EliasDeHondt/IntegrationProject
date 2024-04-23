@@ -3,7 +3,7 @@ import * as API from "./API/EditUserModalAPI";
 import {FacilitatorUpdate, UserRoles} from "./Types/UserTypes";
 import {User} from "./Types/UserTypes";
 import {resetCards} from "./API/DashboardAPI";
-import {isUserInRole} from "../API/UserAPI";
+import {isEmailInUse, isUserInRole} from "../API/UserAPI";
 import {Project} from "./Types/ProjectObjects";
 
 let editButtons: HTMLCollectionOf<HTMLButtonElement>;
@@ -35,9 +35,46 @@ export function initializeEditButtons() {
     }
 }
 
+function resetWarnings() {
+    let nameWarning = document.getElementById('nameWarning') as HTMLElement;
+    let emailWarning = document.getElementById('emailWarning') as HTMLElement;
+    nameWarning.textContent = '';
+    emailWarning.textContent = '';
+}
+
+async function validateModal(): Promise<boolean>{
+    let valid: boolean = true;
+    let nameWarning = document.getElementById('editNameWarning') as HTMLElement;
+    let emailWarning = document.getElementById('editEmailWarning') as HTMLElement;
+
+    if (nameInput.value.trim() === '') {
+        nameWarning.textContent = 'Please enter a name';
+        valid = false;
+    } else {
+        nameWarning.textContent = '';
+    }
+
+    let emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (emailInput.value.trim() === '') {
+        emailWarning.textContent = 'Please enter an email';
+        valid = false;
+    } else if (!emailRegex.test(emailInput.value)) {
+        emailWarning.textContent = 'Please enter a valid email';
+        valid = false;
+    } else if (await isEmailInUse(emailInput.value) && emailInput.value != email) {
+        emailWarning.textContent = 'This email is already in use';
+        valid = false;
+    } else {
+        emailWarning.textContent = '';
+    }
+    return valid
+}
+
 function addConfirmListeners(role: UserRoles) {
     if(role === UserRoles.PlatformAdmin){
-        butConfirmEditUser.onclick = () => {
+        butConfirmEditUser.onclick = async () => {
+            if (!await validateModal()) return;
             let user: User = {
                 userName: nameInput.value,
                 email: emailInput.value,
@@ -132,6 +169,7 @@ function clearModal(){
     nameInput.value = "";
     emailInput.value = "";
     loadPermissions([]);
+    resetWarnings()
 }
 
 function loadProjects(email: string){

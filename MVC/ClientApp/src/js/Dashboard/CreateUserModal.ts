@@ -118,6 +118,7 @@ function clearModal() {
     checkStatisticPermission.checked = false;
     facilitatorContainer.classList.add("visually-hidden");
     adminContainer.classList.remove("visually-hidden");
+    selectProject.length = 0;
     resetWarnings();
     CreateUserModal.hide();
 }
