@@ -1,7 +1,8 @@
-﻿@model Domain.Platform.SharedPlatform
+@model Domain.ProjectLogics.Project
 
 @{
     Layout = null;
+    ViewData["Title"] = $"Project {Model.Id}";
 }
 
 <!DOCTYPE html>
@@ -24,16 +25,15 @@
         </div>
         <!-- Partials -->
         <div class="col-lg-10 col-md-9 col-sm-8 col-6">
-            <partial name="Partials/UserPartial"/>
-            <partial name="Partials/ProjectPartial"/>
-            <partial name="Toasts/_UserCreatedToast"/>
+            <a href="#" class="nav-link active" aria-current="page">Projects</a>
+
         </div>
     </div>
 </div>
 
 </body>
 </html>
-<p class="visually-hidden" id="platformId">@Model.Id</p>
+@* <p class="visually-hidden" id="platformId">@Model.Id</p> *@
 
-<script src="~/dist/site.entry.js" defer></script>
-<script src="~/dist/dashboard.entry.js" defer></script>
+@* <script src="~/dist/site.entry.js" defer></script> *@
+@* <script src="~/dist/dashboard.entry.js" defer></script> *@
