@@ -22,6 +22,7 @@ let flowId = Number((document.getElementById("flowId") as HTMLSpanElement).inner
 let themeId = Number((document.getElementById("theme") as HTMLSpanElement).innerText);
 let steptotal = Number((document.getElementById("steptotal") as HTMLSpanElement).innerText);
 let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerText;
+let arrFlows : Flow[]
 
 //email checken
 function CheckEmail(inputEmail: string, inputElement: HTMLInputElement): boolean {
@@ -341,20 +342,15 @@ function LoadFlows() {
 
 function ShowFlows(flows: Flow[]) {
     ddFlows.innerHTML = "";
+    arrFlows = flows;
     flows.forEach(flow => AddFlow(flow));
 }
 
 function AddFlow(flow: Flow) {
     if (flow.id != flowId)
-        ddFlows.innerHTML += `<li><a class="dropdown-item" href="/Flow/Step/${flow.id}" onclick="SwitchFlowToFlow(${flow.id})">${flow.id}</a></li>`
+        ddFlows.innerHTML += `<li><a class="dropdown-item" href="/Flow/Step/${flow.id}">${flow.id}</a></li>`
     else
         ddFlows.innerHTML += `<li><a class="dropdown-item active" aria-current="true">${flow.id}</a></li>`
-}
-
-function SwitchFlowToFlow(flow: Flow) {
-    UpdateFlowState(flowId, 'Inactive');
-    UpdateFlowState(flow.id, 'Active');
-    return true;
 }
 
 export function UpdateFlowState(id: number, state: string) {
@@ -363,10 +359,17 @@ export function UpdateFlowState(id: number, state: string) {
     })
         .then(response => {
             if (response.ok) {
-                console.log(`Flow ${state}!`)
+                console.log(`Flow ${flowId} ${state}!`)
                 return true;
             }
             return false;
         })
-        .catch(error => console.error("Error:", error))        
+        .catch(error => console.error("Error:", error))
 }
+
+function UpdateCurrentFlowState() {
+    // TODO: Make previous flow inactive when using facilitator flow menu
+    UpdateFlowState(flowId, 'Active')
+}
+
+window.onload = () => UpdateCurrentFlowState();
