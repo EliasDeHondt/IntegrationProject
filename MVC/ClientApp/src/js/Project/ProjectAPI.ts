@@ -23,16 +23,16 @@ function CheckNotEmpty(inputTitel: HTMLInputElement,errorMessage: string,errorMs
 }
 
 //Project oplsaan (publish)
-async function SetProject(mainTheme: MainTheme, sharedPlatform: SharedPlatform) {
+async function SetProject(mainTheme: string, sharedPlatformid: number) {
     try {
-        const response = await fetch("/api/Projects/SetProject/" + mainTheme + "/" + sharedPlatform, {
+        const response = await fetch("/api/Projects/AddProject/" + mainTheme + "/" + sharedPlatformid, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 mainTheme: mainTheme,
-                sharedPlatform: sharedPlatform
+                sharedPlatform: sharedPlatformid
             })
         });
         if (response.ok) {
@@ -53,20 +53,10 @@ document.addEventListener("DOMContentLoaded", function () {
         //CheckNotEmpty(inputText,"Text","errorMsgText");
 
         if (CheckNotEmpty(inputTitle,"Title","errorMsgTitle")) {
-            const mainTheme: MainTheme = {
-                id: 1,
-                subject: inputTitle.value,
-                flows: [/* todo flow */],
-                themes: [/* todo theme */]
-            };
-            const sharedPlatform: SharedPlatform = {
-                id: 1,
-                OrganisationName: "test",
-                Projects: [/* todo projects */]
-            };
-            SetProject(mainTheme, sharedPlatform);
+            SetProject(inputTitle.value, 2);
+
+            window.location.href = "/SharedPlatform/Dashboard/";
         }
-                
     };
 });
 

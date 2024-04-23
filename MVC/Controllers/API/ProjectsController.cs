@@ -27,16 +27,18 @@ public class ProjectsController : Controller
         return _projectManager.GetAllProjectsForSharedPlatformWithMainTheme(id);
     }
 
-    [HttpPost("SetProject/{id}")]
-    public IActionResult AddProject(long id)
+    [HttpPost("AddProject/{id}/{mainTheme}/{sharedPlatformid}")]
+    public IActionResult AddProject(long id, string theme,long sharedPlatformid)
     {
         _uow.BeginTransaction();
-        
-        SharedPlatform sharedPlatform = _sharedPlatformManager.GetSharedPlatform(1);
-        _projectManager.AddProject(sharedPlatform, id);
+
+        MainTheme mainTheme = new MainTheme(theme);
+        sharedPlatformid = 2;
+        SharedPlatform sharedPlatform = _sharedPlatformManager.GetSharedPlatform(sharedPlatformid);
+        _projectManager.AddProject(mainTheme,sharedPlatform, id);
         
         _uow.Commit();
-        return CreatedAtAction("AddProject", new Project());
+        return CreatedAtAction("AddProject", new Project(mainTheme,sharedPlatform, id));
     }
 
 

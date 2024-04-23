@@ -49,8 +49,8 @@ public class ProjectManager
         _repo.CreateProjectOrganizer(projectOrganizer);
     }
 
-    public void AddProject(SharedPlatform sharedPlatform,long id)
+    public void AddProject(MainTheme mainTheme,SharedPlatform sharedPlatform,long id)
     {
-        _repo.CreateProject(sharedPlatform,id);
+        _repo.CreateProject(mainTheme,sharedPlatform,id);
     }
 }
