@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (CheckNotEmpty(inputTitle,"Title","errorMsgTitle")) {
             SetProject(inputTitle.value, 2);
 
-            //window.location.href = "/SharedPlatform/Dashboard/";
+            window.location.href = "/SharedPlatform/Dashboard/";
         }
     };
 });
