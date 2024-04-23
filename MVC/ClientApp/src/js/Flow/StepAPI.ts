@@ -22,7 +22,7 @@ let flowId = Number((document.getElementById("flowId") as HTMLSpanElement).inner
 let themeId = Number((document.getElementById("theme") as HTMLSpanElement).innerText);
 let steptotal = Number((document.getElementById("steptotal") as HTMLSpanElement).innerText);
 let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerText;
-let arrFlows : Flow[]
+let prevFlowId = sessionStorage.getItem('prevFlowId');
 
 //email checken
 function CheckEmail(inputEmail: string, inputElement: HTMLInputElement): boolean {
@@ -313,21 +313,19 @@ btnRestartFlow.onclick = () => {
 };
 
 btnPauseFlow.onclick = () => {
-    UpdateFlowState(flowId, "Paused");
+    UpdateFlowState(String(flowId), "Paused");
     modal.show();
 };
 
 if (btnUnPauseFlow)
     btnUnPauseFlow.onclick = () => {
-        UpdateFlowState(flowId, "Active");
+        UpdateFlowState(String(flowId), "Active");
         modal.hide();
     }
 
-btnExitFlow.onclick = () => UpdateFlowState(flowId, "Inactive");
+btnExitFlow.onclick = () => UpdateFlowState(String(flowId), "Inactive");
 
-btnShowFlows.onclick = () => LoadFlows();
-
-function LoadFlows() {
+btnShowFlows.onclick = () => {
     fetch(`/api/SubThemes/` + themeId + `/Flows`, {
         method: "GET",
         headers: {
@@ -338,28 +336,25 @@ function LoadFlows() {
         .then(response => response.json())
         .then(data => ShowFlows(data))
         .catch(error => console.error("Error:", error))
-}
+};
 
 function ShowFlows(flows: Flow[]) {
     ddFlows.innerHTML = "";
-    arrFlows = flows;
-    flows.forEach(flow => AddFlow(flow));
+    flows.forEach(flow => {
+        if (flow.id != flowId)
+            ddFlows.innerHTML += `<li><a class="dropdown-item" href="/Flow/Step/${flow.id}">${flow.id}</a></li>`
+        else
+            ddFlows.innerHTML += `<li><a class="dropdown-item active" aria-current="true">${flow.id}</a></li>`
+    });
 }
 
-function AddFlow(flow: Flow) {
-    if (flow.id != flowId)
-        ddFlows.innerHTML += `<li><a class="dropdown-item" href="/Flow/Step/${flow.id}">${flow.id}</a></li>`
-    else
-        ddFlows.innerHTML += `<li><a class="dropdown-item active" aria-current="true">${flow.id}</a></li>`
-}
-
-export function UpdateFlowState(id: number, state: string) {
+export function UpdateFlowState(id: string, state: string) {
     fetch("/api/Flows/" + id + "/" + state, {
         method: "PUT"
     })
         .then(response => {
             if (response.ok) {
-                console.log(`Flow ${flowId} ${state}!`)
+                console.log(`Flow ${prevFlowId} ${state}!`)
                 return true;
             }
             return false;
@@ -367,9 +362,14 @@ export function UpdateFlowState(id: number, state: string) {
         .catch(error => console.error("Error:", error))
 }
 
+
 function UpdateCurrentFlowState() {
-    // TODO: Make previous flow inactive when using facilitator flow menu
-    UpdateFlowState(flowId, 'Active')
+    console.log(prevFlowId);
+    if (prevFlowId != null)
+        UpdateFlowState(prevFlowId, 'Inactive');
+    UpdateFlowState(String(flowId), 'Active');
+    sessionStorage.setItem('prevFlowId', String(flowId));
+    console.log(prevFlowId);
 }
 
 window.onload = () => UpdateCurrentFlowState();
