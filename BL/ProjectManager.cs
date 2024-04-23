@@ -9,6 +9,7 @@ using Data_Access_Layer;
 using Domain.Accounts;
 using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics;
+using Microsoft.AspNetCore.Identity;
 
 namespace Business_Layer;
 
@@ -48,4 +49,18 @@ public class ProjectManager
         _repo.CreateProjectOrganizer(projectOrganizer);
     }
 
+    public IEnumerable<Project> GetPossibleProjectsForFacilitator(string email)
+    {
+        return _repo.ReadPossibleProjectsForFacilitator(email);
+    }
+
+    public IEnumerable<Project> GetAssignedProjectsForFacilitator(string email)
+    {
+        return _repo.ReadAssignedProjectsForFacilitator(email);
+    }
+
+    public void DeleteProjectOrganizer(Facilitator user, Project project)
+    {
+        _repo.RemoveProjectOrganizer(user, project);
+    }
 }

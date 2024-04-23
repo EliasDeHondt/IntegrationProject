@@ -14,5 +14,7 @@ public class AdminViewModel
     [MinLength(10)]
     public string Password { get; set; }
     [Required]
-    public long platformId { get; set; }
+    public long PlatformId { get; set; }
+    [Required]
+    public List<string> Permissions { get; set; }
 }
