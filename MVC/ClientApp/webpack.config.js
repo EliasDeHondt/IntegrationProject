@@ -13,7 +13,7 @@ module.exports = {
         subThemeDetails: './src/js/Theme/SubThemeDetailsAPI.ts',
         webcam: './src/js/Webcam/WebCamDetection.ts',
         login: './src/js/Login/login-animation.ts',
-        dashboard: './src/js/Dashboard/CreateUserModal.ts',
+        dashboard: './src/js/Dashboard/Dashboard.ts',
         flowcreator: './src/js/CreateFlow/FlowCreator.ts'
     },
     output: {
