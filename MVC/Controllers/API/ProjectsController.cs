@@ -1,4 +1,5 @@
 ﻿using Business_Layer;
+using Domain.Platform;
 using Domain.ProjectLogics;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,12 +11,16 @@ public class ProjectsController : Controller
 {
 
     private readonly ProjectManager _projectManager;
+    private readonly SharedPlatformManager _sharedPlatformManager;
+    private readonly UnitOfWork _uow;
 
-    public ProjectsController(ProjectManager projectManager)
+    public ProjectsController(ProjectManager projectManager, SharedPlatformManager sharedPlatformManager, UnitOfWork uow)
     {
         _projectManager = projectManager;
+        _sharedPlatformManager = sharedPlatformManager;
+        _uow = uow;
     }
-    
+
     [HttpGet("GetProjectsForSharedPlatform/{id}")]
     public IEnumerable<Project> GetProjectsForSharedPlatform(long id)
     {
@@ -23,9 +28,15 @@ public class ProjectsController : Controller
     }
 
     [HttpPost("SetProject/{id}")]
-    public IEnumerable<Project> SetProject(long id)
+    public IActionResult AddProject(long id)
     {
-        return _projectManager.SetProject(id);
+        _uow.BeginTransaction();
+        
+        SharedPlatform sharedPlatform = _sharedPlatformManager.GetSharedPlatform(1);
+        _projectManager.AddProject(sharedPlatform, id);
+        
+        _uow.Commit();
+        return CreatedAtAction("AddProject", new Project());
     }
 
 

@@ -1,6 +1,7 @@
 ﻿using Data_Access_Layer.DbContext;
 using Domain.Accounts;
 using Domain.FacilitatorFunctionality;
+using Domain.Platform;
 using Domain.ProjectLogics;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,4 +38,11 @@ public class ProjectRepository
         if(_ctx.ProjectOrganizers.Where(organizer => organizer.Project.Id == projectOrganizer.Project.Id && organizer.Facilitator.Id == projectOrganizer.Facilitator.Id).ToList().Count == 0) _ctx.ProjectOrganizers.Add(projectOrganizer);
     }
 
+    public void CreateProject(SharedPlatform sharedPlatform,long id)
+    {
+        MainTheme mainTheme = new MainTheme();
+        Project p = new Project(mainTheme,sharedPlatform,id);
+        _ctx.Projects.Add(p);
+        _ctx.SaveChanges();
+    }
 }

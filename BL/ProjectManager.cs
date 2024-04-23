@@ -8,6 +8,7 @@
 using Data_Access_Layer;
 using Domain.Accounts;
 using Domain.FacilitatorFunctionality;
+using Domain.Platform;
 using Domain.ProjectLogics;
 
 namespace Business_Layer;
@@ -48,4 +49,8 @@ public class ProjectManager
         _repo.CreateProjectOrganizer(projectOrganizer);
     }
 
+    public void AddProject(SharedPlatform sharedPlatform,long id)
+    {
+        _repo.CreateProject(sharedPlatform,id);
+    }
 }
