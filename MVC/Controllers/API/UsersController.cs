@@ -202,6 +202,13 @@ public class UsersController : Controller
         return Ok(projects);
     }
     
-    
+    [HttpDelete("DeleteUser/{email}")]
+    public IActionResult DeleteUser(string email)
+    {
+        if (User.Identity is { IsAuthenticated: false }) return Unauthorized();
+        var user = _userManager.FindByEmailAsync(email).Result!;
+        _userManager.DeleteAsync(user);
+        return NoContent();
+    }
     
 }

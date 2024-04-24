@@ -1,5 +1,6 @@
 ﻿import {User} from "../Types/UserTypes";
 import * as editModal from "../EditUserModal";
+import * as deleteModal from "../DeleteUserModal";
 
 
 export async function getUsersForPlatform(platformId: string): Promise<User[]>{
@@ -34,7 +35,7 @@ export function generateCard(user: User, userPermissions: boolean, email:string)
         editIcon.style.color = "white";
 
         deleteButton = document.createElement("button");
-        deleteButton.className = "border-0 p-0 h-50 w-100";
+        deleteButton.className = "border-0 p-0 h-50 w-100 deleteUser";
         deleteButton.style.background = "none";
 
         let deleteIcon = document.createElement("i");
@@ -85,7 +86,10 @@ export function generateUserCards(id: string, userRoulette: HTMLDivElement, user
                 userRoulette.appendChild(card);
             })
         })
-            .then(() => editModal.initializeEditButtons())
+            .then(() => {
+                editModal.initializeEditButtons()
+                deleteModal.initializeDeleteButtons()
+            })
     })
         
 }
