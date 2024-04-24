@@ -1,5 +1,6 @@
 ﻿import * as dashboard from "./API/DashboardAPI";
 import "./CreateUserModal";
+import "./DeleteUserModal";
 import {isUserInRole} from "../API/UserAPI";
 import {UserRoles} from "./Types/UserTypes";
 import "/node_modules/embla-carousel";
