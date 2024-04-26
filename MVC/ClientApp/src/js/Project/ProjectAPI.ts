@@ -57,20 +57,24 @@ export async function getProjectWithId(projectId: number): Promise<Project>{
             return data
         })
 }
+function getIdProject():number{
+    let href = window.location.href;
+    let regex = href.match(/\/Project\/Projects\/(\d+)/);
 
+    if (regex) {
+        const projectId = parseInt(regex[1], 10);
+        return projectId;
+    } else {
+        console.error("Project ID not found in URL:", href);
+        return 0;
+    }
+}
 //Button
 document.addEventListener("DOMContentLoaded", async function () {
-    // @ts-ignore
-    let projectId = document.getElementById('btnPublishProject').getAttribute('data-project-id');
-    // @ts-ignore
-    const projectIdNumber = parseInt(projectId, 10); 
-    try {
-        const project = await getProjectWithId(projectIdNumber);
-        fillExisting(project);
-        console.log(project.id + project.title)
-    } catch (error) {
-        console.error('Error fetching project:', error);
-    }
+    //let projectId = document.getElementById('btnPublishProject').getAttribute('data-project-id');
+    const projectIdNumber = getIdProject();
+    const project = await getProjectWithId(projectIdNumber);
+    fillExisting(project);
 
     btnPublishProject.onclick = function () {
         console.log("click");
