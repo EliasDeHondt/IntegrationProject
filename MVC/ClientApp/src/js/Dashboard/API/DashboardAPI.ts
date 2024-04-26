@@ -130,13 +130,15 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     let editProjectLink = document.createElement("a");
     editProjectLink.className = "nav-link text-light";
     editProjectLink.setAttribute("href", "/Project/Projects/1");
-    editProjectLink.textContent = "Edit Project";
-
-    cardBodyDiv.appendChild(editProjectLink);
-    cardBodyDiv.appendChild(btnEnterProject);
+    editProjectLink.textContent = " Edit Project";
 
     let a = document.createElement("a");
-    a.textContent = project.title
+    a.textContent = project.title + ": "
+    
+    cardBodyDiv.appendChild(a)
+    cardBodyDiv.appendChild(editProjectLink);
+    cardBodyDiv.appendChild(btnEnterProject);
+    
     
     cardDiv.appendChild(btnHideProject);
     cardDiv.appendChild(btnDeleteProject);
@@ -168,7 +170,7 @@ export function generateProjectCards(id: string, userRoulette: HTMLDivElement) {
     id = '2'
     getProjectsForPlatform(id).then(projects => {
         projects.forEach(project => {
-            console.log(project.title)
+            console.log("pfsdjjfjsfd l   "+project.id)
             let card = generateProjectCard(project);
             userRoulette.appendChild(card);
         })})

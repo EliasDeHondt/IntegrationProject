@@ -492,6 +492,8 @@ public class DataSeeder
         // GenerateRangeQuestions(ctx,flow2);
 
         ((SpAdmin)ctx.Users.Single(user => user.Email == "Henk@CodeForge.com")).SharedPlatform = sp;
+        project1.Title = "mainTheme1.Subject";
+        project2.Title = "mainTheme2.Subject";
         sp.Projects.Add(project1);
         sp.Projects.Add(project2);
 
