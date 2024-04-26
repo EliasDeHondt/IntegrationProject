@@ -19,7 +19,7 @@ public class ProjectRepository
 
     public IEnumerable<Project> ReadProjectsFromIds(IEnumerable<long> ids)
     {
-        return _ctx.Projects.Where(project => ids.Contains(project.Id));
+        return _ctx.Projects.Where(project => ids.Contains(project.Id)).ToList();
     }
 
     public Project ReadProject(long id)
@@ -29,7 +29,7 @@ public class ProjectRepository
     
     public IEnumerable<Project> ReadAllProjectsForSharedPlatformIncludingMainTheme(long platformId)
     {
-        return _ctx.Projects.Where(project => project.SharedPlatform.Id == platformId).Include(project => project.MainTheme);
+        return _ctx.Projects.Where(project => project.SharedPlatform.Id == platformId).Include(project => project.MainTheme).ToList();
     }
     
     public void CreateProjectOrganizer(ProjectOrganizer projectOrganizer)
@@ -42,7 +42,7 @@ public class ProjectRepository
         var projects = _ctx.Projects.Include(p => p.MainTheme).ToList();
         var assignedProjects = ReadAssignedProjectsForFacilitator(email);
         
-        return projects.Except(assignedProjects);
+        return projects.Except(assignedProjects).ToList();
         
     }
 

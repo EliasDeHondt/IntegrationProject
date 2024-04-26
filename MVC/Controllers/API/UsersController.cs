@@ -3,7 +3,6 @@ using Business_Layer;
 using Domain.Accounts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using MVC.Models.userModels;
 
 namespace MVC.Controllers.API;

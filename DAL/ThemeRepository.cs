@@ -20,24 +20,9 @@ public class ThemeRepository
         _context = context;
     }
 
-    public ThemeBase Read(long id, Type type)
-    {
-        if (type == typeof(MainTheme))
-        {
-            return _context.MainThemes.Find(id);
-        }
-
-        if (type == typeof(SubTheme))
-        {
-            return _context.SubThemes.Find(id);
-        }
-
-        return null;
-    }
-
     public IEnumerable<MainTheme> ReadAllMainThemes()
     {
-        return _context.MainThemes;
+        return _context.MainThemes.ToList();
     }
 
     public MainTheme ReadMainThemeById(long id)
@@ -57,13 +42,15 @@ public class ThemeRepository
     {
         return _context.SubThemes
             .Include(theme => theme.MainTheme)
-            .Where(theme => theme.MainTheme.Id.Equals(id));
+            .Where(theme => theme.MainTheme.Id.Equals(id))
+            .ToList();
     }
 
     public IEnumerable<Flow> ReadFlowsOfSubThemeById(long id)
     {
         return _context.Flows
             .Include(flow => flow.Theme)
-            .Where(flow => flow.Theme.Id.Equals(id));
+            .Where(flow => flow.Theme.Id.Equals(id))
+            .ToList();
     }
 }

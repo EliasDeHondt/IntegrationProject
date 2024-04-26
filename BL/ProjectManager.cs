@@ -9,14 +9,13 @@ using Data_Access_Layer;
 using Domain.Accounts;
 using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics;
-using Microsoft.AspNetCore.Identity;
 
 namespace Business_Layer;
 
 public class ProjectManager
 {
 
-    public readonly ProjectRepository _repo;
+    private readonly ProjectRepository _repo;
     
 
     public ProjectManager(ProjectRepository repo)

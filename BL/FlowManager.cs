@@ -21,42 +21,19 @@ public class FlowManager
     }
 
     //This function makes a GLOBAL Flow, not project specific!
-    public Flow Add(string type)
+    public Flow Add(FlowType type)
     {
 
-        FlowType flowType;
-        
-        switch (type)
+        Flow newFlow = new Flow
         {
-            case "Linear": flowType = FlowType.LINEAR;
-                break;
-            
-            case "Circular": flowType = FlowType.CIRCULAR;
-                break;
-            
-            default: flowType = FlowType.UNKNOWN;
-                break;
-        }
+            FlowType = type
+        };
 
-        Flow newFlow = new Flow();
-        
-        newFlow.FlowType = flowType;
-        
         _repository.AddFlow(newFlow);
 
         return newFlow;
     }
-
-    public Flow Update(int flowId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Flow Remove(Flow item)
-    {
-        throw new NotImplementedException();
-    }
-
+    
     public Flow GetFlowById(long id)
     {
         return _repository.ReadFlowById(id);
@@ -67,9 +44,9 @@ public class FlowManager
         return _repository.ReadFlowByIdIncludingTheme(id);
     }
     
-    public List<Flow> GetAllFlows()
+    public IEnumerable<Flow> GetAllFlows()
     {
-        return _repository.ReadAllFlows().ToList();
+        return _repository.ReadAllFlows();
     }
     public void SetParticipationByFlow(long flowId,string email)
     {

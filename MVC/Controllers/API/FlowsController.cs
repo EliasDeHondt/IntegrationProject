@@ -31,7 +31,7 @@ public class FlowsController : Controller
         if (flow == null)
             return NotFound();
 
-        if (FlowState.TryParse(state, out FlowState flowState))
+        if (Enum.TryParse(state, out FlowState flowState))
             flow.State = flowState;
         _manager.ChangeFlowState(flow);
         

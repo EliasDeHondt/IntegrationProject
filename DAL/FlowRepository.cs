@@ -40,27 +40,21 @@ public class FlowRepository
     }
 
     //TODO: This function returns *ALL* flows possible, it does NOT return Project-specific Flows!
-    public DbSet<Flow> ReadAllFlows()
+    public IEnumerable<Flow> ReadAllFlows()
     {
-        return _context.Flows;
+        return _context.Flows.ToList();
     }
     
     public void AddParticipationByFlow(long flowId,string email)
     {
-        var participations = _context.Participations;//ReadFlowById(flowId).Participations;
-       // var name = email.Substring(0, email.IndexOf('@')); //aa.ww@email.com --> aa.ww
-        //Respondent respondent = ;
-
+        var participations = _context.Participations;
         Participation participation = new Participation(ReadFlowById(flowId));
         participation.Respondents.Add(new Respondent(email,participation)); //respondent
         participations.Add(participation);
-        _context.SaveChanges();
-//        var a = _context.Participations.Include(p => p.Respondents);
     }
 
     public void UpdateFlowState(Flow flow)
     {
         _context.Flows.Update(flow);
-        _context.SaveChanges();
     }
 }

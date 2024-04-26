@@ -28,6 +28,7 @@ public class QuestionRepository
         return _ctx.ChoiceQuestions
             .Include(mcq => mcq.Choices)
             .Single(mcq => mcq.Id == questionId)
-            .Choices;
+            .Choices
+            .ToList();
     }
 }
