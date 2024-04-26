@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <RootNamespace>Business_Layer</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Phygital.DAL\Phygital.DAL.csproj" />
+      <ProjectReference Include="..\Phygital.Domain\Phygital.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

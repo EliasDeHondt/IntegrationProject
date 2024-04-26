@@ -11,9 +11,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\BL\BL.csproj"/>
-        <ProjectReference Include="..\DAL\DAL.csproj"/>
-        <ProjectReference Include="..\Domain\Domain.csproj"/>
+        <ProjectReference Include="..\Phygital.BL\Phygital.BL.csproj" />
+        <ProjectReference Include="..\Phygital.DAL\Phygital.DAL.csproj" />
+        <ProjectReference Include="..\Phygital.Domain\Phygital.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
