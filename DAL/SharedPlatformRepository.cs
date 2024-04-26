@@ -48,6 +48,11 @@ public class SharedPlatformRepository
     
     public IEnumerable<Project> ReadProjectsForPlatform(long platformId)
     {
-        return _ctx.SharedPlatforms.Find(platformId).Projects;
+        var c = _ctx.SharedPlatforms.Include(platform => platform.Projects)
+            .First(platform => platform.Id == platformId)
+            .Projects;;
+        var a = _ctx.SharedPlatforms.Find(platformId).Projects;
+        var b = _ctx.Projects;
+        return c;
     }
 }

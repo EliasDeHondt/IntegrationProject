@@ -473,7 +473,7 @@ public class DataSeeder
         ctx.MainThemes.Add(mainTheme1);
         ctx.Flows.Add(flow);
         ctx.Flows.Add(flow1);
-        ctx.Projects.Add(project1);
+        //ctx.Projects.Add(project1);
         ctx.Texts.Add(textInfo);
         ctx.Images.Add(imageInfo);
 
@@ -490,10 +490,17 @@ public class DataSeeder
 
         GenerateSingleQuestions(ctx, flow2);
         // GenerateRangeQuestions(ctx,flow2);
-
-        ((SpAdmin)ctx.Users.Single(user => user.Email == "Henk@CodeForge.com")).SharedPlatform = sp;
+        
+        //Projects add title
         project1.Title = "mainTheme1.Subject";
         project2.Title = "mainTheme2.Subject";
+        ctx.Projects.Add(project1);
+        ctx.Projects.Add(project2);
+        sp.Projects.Add(project1);
+        
+        
+        ((SpAdmin)ctx.Users.Single(user => user.Email == "Henk@CodeForge.com")).SharedPlatform = sp;
+        
         sp.Projects.Add(project1);
         sp.Projects.Add(project2);
 
@@ -501,7 +508,7 @@ public class DataSeeder
         ctx.SharedPlatforms.Add(sp);
         ctx.MainThemes.Add(mainTheme2);
         ctx.Flows.Add(flow2);
-        ctx.Projects.Add(project2);
+        
 
 
         ctx.SaveChanges();

@@ -78,12 +78,7 @@ public class ProjectsController : Controller
                 Description = project.Description
             });
         }
-        // var a = new ProjectViewModel
-        // {
-        //     Name = "ASfsadfd",
-        //     Description = "ufvgyhjksd"
-        // };
-        // projectList.Add(a);
+
         return Ok(projectList);
     }
 }

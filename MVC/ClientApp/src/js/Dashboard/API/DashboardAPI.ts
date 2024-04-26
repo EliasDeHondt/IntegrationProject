@@ -133,7 +133,7 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     editProjectLink.textContent = " Edit Project";
 
     let a = document.createElement("a");
-    a.textContent = project.title + ": "
+    a.textContent = project.name + ": "
     
     cardBodyDiv.appendChild(a)
     cardBodyDiv.appendChild(editProjectLink);
@@ -170,7 +170,7 @@ export function generateProjectCards(id: string, userRoulette: HTMLDivElement) {
     id = '2'
     getProjectsForPlatform(id).then(projects => {
         projects.forEach(project => {
-            console.log("pfsdjjfjsfd l   "+project.id)
+            console.log(project.name)
             let card = generateProjectCard(project);
             userRoulette.appendChild(card);
         })})
