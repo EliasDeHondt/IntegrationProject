@@ -12,7 +12,7 @@
                         <label>
                             Project name
                             <input type="text" class="form-control" id="inputPName" placeholder="Enter name" required>
-                            <span id="nameWarning" class="warning"></span>
+                            <span id="pnameWarning" class="warning"></span>
                         </label>
                     </div>
                     <div class="form-group mb-3">
@@ -29,5 +29,9 @@
                 <button type="button" class="btn bgPrimary text-white" id="butConfirmCreateProject">Create Project</button>
             </div>
         </div>
+    </div>
+    <!-- Partials -->
+    <div class="py-3">
+        <partial name="Toasts/_ProjectDescriptionToast"/>
     </div>
 </div>

@@ -36,35 +36,25 @@ const CreateProjectModal = new Modal(document.getElementById('CreateProjectModal
 });
 
 const projectCreatedToast = new Toast(document.getElementById("projectToast")!);
+const projectDescCreatedToast = new Toast(document.getElementById("projectDescriptionToast")!);
 
 const btnCreateProject = document.getElementById("btnCreateProject") as HTMLButtonElement;
 const butConfirmCreateProject = document.getElementById("butConfirmCreateProject") as HTMLButtonElement;
 const butCloseCreateProjectModal = document.getElementById("butCloseCreateProjectModal") as HTMLButtonElement;
 const butCancelCreateProjectModal = document.getElementById("butCancelCreateProjectModal") as HTMLButtonElement;
-const inputName = document.getElementById("inputPName") as HTMLInputElement;
+const inputPName = document.getElementById("inputPName") as HTMLInputElement;
 const inputDescription = document.getElementById("inputDescription") as HTMLInputElement;
-const nameWarning = document.getElementById('nameWarning') as HTMLElement;
+const pnameWarning = document.getElementById('pnameWarning') as HTMLElement;
 const descriptionWarning = document.getElementById('descriptionWarning') as HTMLElement;
 const projectRoulette = document.getElementById("carouselContainer") as HTMLDivElement;
 
 let id: string = document.getElementById("platformId")!.textContent!
 
 btnCreateProject.onclick = async () => {
-    //if (await validateForm()) {
-        CreateProjectModal.show();
- //   }
+    CreateProjectModal.show();
 }
 butConfirmCreateProject.onclick = async () => {
-    if (await validateForm()) {
-        createProject(inputName.value, inputDescription.value,2) // todo: sharedplatform get id sprint 3
-            .then(() => clearModal())
-            .then(() => {
-                projectCreatedToast.show()
-                let closeUserToast = document.getElementById("closeProjectToast") as HTMLButtonElement
-                closeUserToast.onclick = () => projectCreatedToast.hide()
-            })
-            .finally(() => resetCards(id, projectRoulette, true))
-    }
+    createProjectShow()
 }
 butCloseCreateProjectModal.onclick = () => {
     clearModal()
@@ -72,31 +62,56 @@ butCloseCreateProjectModal.onclick = () => {
 butCancelCreateProjectModal.onclick = () => {
     clearModal()
 }
-
+async function createProjectShow() {
+    if (await validateForm()) {
+        createProject(inputPName.value, inputDescription.value, 2) // todo: sharedplatform get id sprint 3
+            .then(() => clearModal())
+            .then(() => {
+                projectCreatedToast.show()
+                let closeProjectToast = document.getElementById("closeProjectToast") as HTMLButtonElement
+                closeProjectToast.onclick = () => projectCreatedToast.hide()
+            })
+            .finally(() => resetCards(id, projectRoulette, true))
+    }
+}
 function clearModal() {
-    inputName.value = "";
+    inputPName.value = "";
     inputDescription.value = "";
     resetWarnings();
     CreateProjectModal.hide();
 }
 
 function resetWarnings() {
-    nameWarning.textContent = '';
+    pnameWarning.textContent = '';
     descriptionWarning.textContent = '';
 }
 
 async function validateForm() {
     let valid: boolean = true;
 
-    if (inputName.value.trim() === '') {
-        nameWarning.textContent = 'Please enter a name';
+    console.log(inputPName.textContent)
+    console.log(inputDescription.value)
+    if (inputPName.value.trim() === '') {
+        pnameWarning.textContent = 'Please enter a name';
         valid = false;
     } else {
-        nameWarning.textContent = '';
+        pnameWarning.textContent = '';
     }
     
     if (inputDescription.value.trim() === '') {
-        descriptionWarning.textContent = 'Please enter a description';
+        //toast
+        projectDescCreatedToast.show()
+        let closeProjectDescToast = document.getElementById("closeProjectDescriptionToast") as HTMLButtonElement
+        let addProjectDescriptionToast = document.getElementById("addProjectDescriptionToast") as HTMLButtonElement
+        closeProjectDescToast.onclick = () => projectDescCreatedToast.hide()
+        addProjectDescriptionToast.onclick = () => {
+            projectDescCreatedToast.hide()
+            if (inputPName.value.trim() !== '') {
+                clearModal()
+                createProjectShow()
+                valid = false;
+            }
+        }
         valid = false;
     } else {
         descriptionWarning.textContent = '';
