@@ -10,5 +10,5 @@ public class ProjectViewModel
     [Required]
     public string Description { get; set; }
     [Required]
-    public SharedPlatform SharedPlatform { get; set; }
+    public long SharedPlatformId { get; set; }
 }

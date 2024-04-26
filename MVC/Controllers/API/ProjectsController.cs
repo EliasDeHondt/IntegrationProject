@@ -54,7 +54,7 @@ public class ProjectsController : Controller
         {
             Title = model.Name,
             Description = model.Description,
-            SharedPlatform = _sharedPlatformManager.GetSharedPlatform(sharedPlatformid)
+            SharedPlatform = _sharedPlatformManager.GetSharedPlatform(model.SharedPlatformId) 
         };
         _projectManager.CreateProject(project);
         
