@@ -3,7 +3,6 @@ using Business_Layer;
 using Domain.Accounts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using MVC.Models.userModels;
 
 namespace MVC.Controllers.API;
@@ -202,6 +201,13 @@ public class UsersController : Controller
         return Ok(projects);
     }
     
-    
+    [HttpDelete("DeleteUser/{email}")]
+    public IActionResult DeleteUser(string email)
+    {
+        if (User.Identity is { IsAuthenticated: false }) return Unauthorized();
+        var user = _userManager.FindByEmailAsync(email).Result!;
+        _userManager.DeleteAsync(user);
+        return NoContent();
+    }
     
 }

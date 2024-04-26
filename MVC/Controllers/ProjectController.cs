@@ -1,13 +1,11 @@
-using System.Diagnostics;
 using Business_Layer;
 using Microsoft.AspNetCore.Mvc;
-using MVC.Models;
 
 namespace MVC.Controllers;
 
 public class ProjectController: Controller
 {
-    private ProjectManager _manager;
+    private readonly ProjectManager _manager;
     
     public ProjectController(ProjectManager manager)
     {

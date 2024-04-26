@@ -2,7 +2,6 @@ import {Step} from "./Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
 import {Flow} from "./FlowObjects";
 import {Modal} from "bootstrap";
-import {SubTheme} from "../Theme/ThemeObjects";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
@@ -12,7 +11,10 @@ const btnPauseFlow = document.getElementById("btnPauseFlow") as HTMLButtonElemen
 const btnUnPauseFlow = document.getElementById("btnUnPauseFlow") as HTMLButtonElement;
 const btnEmail = document.getElementById("btnEmail") as HTMLButtonElement;
 const btnExitFlow = document.getElementById("butExitFlow") as HTMLButtonElement;
-const modal = new Modal(document.getElementById("pausedFlowModal") as HTMLDivElement);
+const modal = new Modal(document.getElementById("pausedFlowModal") as HTMLDivElement,{
+    backdrop: 'static',
+    keyboard: false
+});
 const btnShowFlows = document.getElementById("flowDropdownBtn") as HTMLButtonElement;
 const ddFlows = document.getElementById("flowDropdown") as HTMLUListElement;
 let currentStepNumber: number = 0;
@@ -20,32 +22,23 @@ let userAnswers: string[] = []; // Array to store user answers
 let openUserAnswer: string = "";
 let flowId = Number((document.getElementById("flowId") as HTMLSpanElement).innerText);
 let themeId = Number((document.getElementById("theme") as HTMLSpanElement).innerText);
-let steptotal = Number((document.getElementById("steptotal") as HTMLSpanElement).innerText);
+let stepTotal = Number((document.getElementById("stepTotal") as HTMLSpanElement).innerText);
 let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerText;
 let prevFlowId = sessionStorage.getItem('prevFlowId');
 
 //email checken
-function CheckEmail(inputEmail: string, inputElement: HTMLInputElement): boolean {
+function CheckEmail(inputEmail: string): boolean {
     const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     let p = document.getElementById("errorMsg") as HTMLElement;
-    if (emailRegex.test(inputEmail)) { // het is een email
-        // if (errorMessage && errorMessage.innerHTML === "Not an Email.") {
-        //errorMessage.innerHTML = "&nbsp;"
+    if (emailRegex.test(inputEmail)) { 
         p.innerHTML = "Email submitted!";
         p.style.color = "blue";
-        console.log("nbsp");
-        // }
-        console.log("mailss")
         return true;
     } else {
 
         //let p = document.getElementById("errorMsg") as HTMLElement;
         p.innerHTML = "Not an Email.";
         p.style.color = "red";
-        // if (!errorMessage) {
-        //     // @ts-ignore
-        //     inputElement.parentNode.appendChild(p);
-        console.log("append chikd")
         // }
         return false;
     }
@@ -84,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const inputEmail = emailInput.value.trim();
         const inputElement = emailInput as HTMLInputElement;
 
-        if (CheckEmail(inputEmail, inputElement)) {
+        if (CheckEmail(inputEmail)) {
             console.log("Correct Email.");
             if (inputEmail !== "") {
                 SetRespondentEmail(flowId, inputEmail);
@@ -160,16 +153,16 @@ async function ShowStep(data: Step) {
         questionContainer.appendChild(p);
         switch (data.questionViewModel.questionType) {
             case "SingleChoiceQuestion":
-                for (let i = 0; i < data.questionViewModel.choices.length; i++) {
+                for (const element of data.questionViewModel.choices) {
                     let choice = document.createElement("input");
                     let label = document.createElement("label");
                     let div = document.createElement("div");
                     div.classList.add("text-start", "m-auto")
                     choice.type = 'radio';
                     choice.name = 'choice';
-                    choice.value = data.questionViewModel.choices[i].text;
+                    choice.value = element.text;
                     label.appendChild(choice);
-                    label.append(data.questionViewModel.choices[i].text);
+                    label.append(element.text);
                     label.style.display = 'block';
                     div.append(label);
                     questionContainer.appendChild(div);
@@ -180,16 +173,16 @@ async function ShowStep(data: Step) {
                 }
                 break;
             case "MultipleChoiceQuestion":
-                for (let i = 0; i < data.questionViewModel.choices.length; i++) {
+                for (const element of data.questionViewModel.choices) {
                     let choice = document.createElement("input");
                     let label = document.createElement("label");
                     let div = document.createElement("div");
                     div.classList.add("text-start", "m-auto")
                     choice.type = 'checkbox';
                     choice.name = 'choice';
-                    choice.value = data.questionViewModel.choices[i].text;
+                    choice.value = element.text;
                     label.appendChild(choice);
-                    label.append(data.questionViewModel.choices[i].text);
+                    label.append(element.text);
                     label.style.display = 'block';
                     div.appendChild(label);
                     questionContainer.appendChild(div);
@@ -208,7 +201,7 @@ async function ShowStep(data: Step) {
                     });
                 }
                 break;
-            case "RangeQuestion":
+            case "RangeQuestion": {
                 let slider = document.createElement("input");
                 let div = document.createElement("div");
                 div.classList.add("m-auto");
@@ -233,10 +226,11 @@ async function ShowStep(data: Step) {
                     label.innerText = data.questionViewModel.choices[Number(slider.value)].text;
                 });
                 break;
-            case "OpenQuestion":
+            }
+            case "OpenQuestion": {
                 let textInput = document.createElement("textarea");
-                let opendiv = document.createElement("div");
-                opendiv.classList.add("m-auto");
+                let openDiv = document.createElement("div");
+                openDiv.classList.add("m-auto");
                 textInput.classList.add("w-100");
                 textInput.name = 'answer';
                 textInput.rows = 8;
@@ -253,9 +247,10 @@ async function ShowStep(data: Step) {
                     // Capture user input
                     openUserAnswer = textInput.value;
                 });
-                opendiv.append(textInput);
-                questionContainer.appendChild(opendiv);
+                openDiv.append(textInput);
+                questionContainer.appendChild(openDiv);
                 break;
+            }
             default:
                 console.log("This question type is not currently supported. (QuestionType: " + data.questionViewModel.questionType);
                 break;
@@ -287,18 +282,13 @@ async function saveAnswerToDatabase(answers: string[], openAnswer: string, flowI
 
 btnNextStep.onclick = async () => {
     if (userAnswers.length > 0 || openUserAnswer.length > 0) {
-        // Save user answers to the database
-        console.log("Saving data...");
-        for (let i = 0; i < userAnswers.length; i++) {
-            console.log(userAnswers[i]);
-        }
         await saveAnswerToDatabase(userAnswers, openUserAnswer, flowId, currentStepNumber);
         // Clear the userAnswers array for the next step
         userAnswers = [];
         openUserAnswer = "";
     }
     // Proceed to the next step
-    if (flowtype == "CIRCULAR" && currentStepNumber >= steptotal) {
+    if (flowtype == "CIRCULAR" && currentStepNumber >= stepTotal) {
         currentStepNumber = 0;
         GetNextStep(++currentStepNumber, flowId);
     } else {

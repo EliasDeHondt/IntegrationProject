@@ -1,12 +1,6 @@
 import {Flow} from "../Flow/FlowObjects";
 
 const btnCreateFlow = document.getElementById("btnCreateFlow") as HTMLButtonElement;
-const cardsContainer = document.querySelector('.card-container') as HTMLElement;
-const cards = document.querySelector('.cards') as HTMLElement;
-const prevBtn = document.getElementById('prevBtn') as HTMLButtonElement;
-const nextBtn = document.getElementById('nextBtn') as HTMLButtonElement;
-
-const scrollAmount = cardsContainer.offsetWidth;
 
 function GetFlows(projectId: number) {
     console.log("Fetching flows...")
@@ -23,13 +17,13 @@ function GetFlows(projectId: number) {
     
 }
 
-async function UpdateFlowList(flows: Array<Array<Flow>>) {
+async function UpdateFlowList(flows: Flow[]) {
     
-    const flowContainer = document.getElementById("cards") as HTMLElement
+    const flowContainer = document.getElementById("flow-cards") as HTMLElement
     flowContainer.innerHTML = "";
     
-    if (flows[0].length > 0) {
-        flows[0].forEach(flow => {
+    if (flows.length > 0) {
+        flows.forEach(flow => {
             //Card container
             const flowCard = document.createElement('div');
             flowCard.classList.add("flow-card");

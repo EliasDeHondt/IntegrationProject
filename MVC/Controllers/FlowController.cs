@@ -14,7 +14,7 @@ namespace MVC.Controllers;
 public class FlowController : Controller
 {
     
-    private FlowManager _manager;
+    private readonly FlowManager _manager;
     
     public FlowController(FlowManager manager)
     {

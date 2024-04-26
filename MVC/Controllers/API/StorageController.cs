@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MVC.Controllers.API;
 
-
 [ApiController]
 [Route("api/[controller]")]
 public class StorageController : Controller
@@ -24,7 +23,7 @@ public class StorageController : Controller
     public StorageController(CloudStorageOptions options)
     {
         _options = options;
-        GoogleCredential credential = GoogleCredential.GetApplicationDefaultAsync().Result;
+        GoogleCredential credential = GoogleCredential.GetApplicationDefault();
         _signer = UrlSigner.FromCredential(credential);
     }
     

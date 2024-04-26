@@ -35,23 +35,26 @@ public class CreateFlowController : Controller
     [HttpGet("GetFlows")]
     public IActionResult GetFlows()
     {
-        List<Flow> flows = _manager.GetAllFlows();
+        var flows = _manager.GetAllFlows();
 
-        if (flows.Count == 0)
+        if (!flows.Any())
         {
             return NoContent();
         }
 
-        return Ok(new FlowListViewModel(flows));
+        return Ok(flows);
     }
 
     //projectId does nothing for now -> setup for future issues.
     [HttpPost("CreateFlow/{flowType}")]
     public IActionResult CreateFlow(string flowType)
     {
+
+        FlowType type = Enum.Parse<FlowType>(flowType);
+        
         _uow.BeginTransaction();
         
-        Flow flow = _manager.Add(flowType);
+        Flow flow = _manager.Add(type);
         
         _uow.Commit();
         
