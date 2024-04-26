@@ -30,7 +30,6 @@ public class ThemeRepository
     public MainTheme ReadMainThemeById(long id)
     {
         return _context.MainThemes
-            .AsNoTracking()
             .First(theme => theme.Id == id);
     }
 
@@ -59,5 +58,11 @@ public class ThemeRepository
             .Include(flow => flow.Theme)
             .Where(flow => flow.Theme.Id.Equals(id))
             .ToList();
+    }
+
+    public SubTheme CreateSubTheme(SubTheme theme)
+    {
+        _context.SubThemes.Add(theme);
+        return theme;
     }
 }

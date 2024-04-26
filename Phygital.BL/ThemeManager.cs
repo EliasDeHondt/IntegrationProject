@@ -43,4 +43,11 @@ public class ThemeManager
     {
         return _repository.ReadFlowsOfSubThemeById(id);
     }
+
+    public SubTheme AddSubTheme(string subject, long mainThemeId)
+    {
+        var mainTheme = GetMainThemeById(mainThemeId);
+        var theme = new SubTheme(subject, mainTheme);
+        return _repository.CreateSubTheme(theme);
+    }
 }

@@ -8,6 +8,7 @@
 using Business_Layer;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
+using MVC.Models.themeModels;
 
 namespace MVC.Controllers.API;
 
@@ -23,7 +24,7 @@ public class SubThemesController : ControllerBase
     }
 
     [HttpGet("{id}/Flows")]
-    public ActionResult GetFlowsOfSubTheme(long id)
+    public IActionResult GetFlowsOfSubTheme(long id)
     {
         var flows = _manager.GetFlowsOfSubThemeById(id);
 
@@ -38,4 +39,12 @@ public class SubThemesController : ControllerBase
             Participations = flow.Participations
         }));
     }
+
+    [HttpPost("AddSubTheme")]
+    public IActionResult AddSubTheme(SubThemeDto dto)
+    {
+        var theme = _manager.AddSubTheme(dto.Subject, dto.MainThemeId);
+        return CreatedAtAction("AddSubTheme", theme);
+    }
+    
 }
