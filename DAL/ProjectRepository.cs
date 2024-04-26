@@ -69,6 +69,12 @@ public class ProjectRepository
         _ctx.SaveChanges();
     }
 
+    public void CreateProject(Project project)
+    {
+        _ctx.Projects.Add(project);
+        _ctx.SaveChanges();
+    }
+
     public IEnumerable<Project> ProjectCount()
     {
         return _ctx.Projects;

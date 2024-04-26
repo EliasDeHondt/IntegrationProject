@@ -24,6 +24,10 @@
 //     CreateProjectModal.hide();
 // }
 import {Modal} from "bootstrap";
+import {isEmailInUse} from "../API/UserAPI";
+import * as API from "./API/CreateUserModalAPI";
+import {resetCards} from "./API/DashboardAPI";
+import {UserRoles} from "./Types/UserTypes";
 
 const CreateProjectModal = new Modal(document.getElementById('CreateProjectModal')!, {
     keyboard: false,
@@ -32,21 +36,39 @@ const CreateProjectModal = new Modal(document.getElementById('CreateProjectModal
 });
 
 const btnCreateProject = document.getElementById("btnCreateProject") as HTMLButtonElement;
+const butConfirmCreateProject = document.getElementById("butConfirmCreateProject") as HTMLButtonElement;
 const butCloseCreateProjectModal = document.getElementById("butCloseCreateProjectModal") as HTMLButtonElement;
+const butCancelCreateProjectModal = document.getElementById("butCancelCreateProjectModal") as HTMLButtonElement;
 const inputName = document.getElementById("inputPName") as HTMLInputElement;
 const inputDescription = document.getElementById("inputDescription") as HTMLInputElement;
+const nameWarning = document.getElementById('nameWarning') as HTMLElement;
+const descriptionWarning = document.getElementById('descriptionWarning') as HTMLElement;
 
-btnCreateProject.onclick = () => {
-    CreateProjectModal.show();
+btnCreateProject.onclick = async () => {
+    //if (await validateForm()) {
+        CreateProjectModal.show();
+ //   }
 }
-
+butConfirmCreateProject.onclick = async () => {
+    if (await validateForm()) {
+        createProject(inputName.value, inputDescription.value)
+            .then(() => clearModal())
+            .then(() => {
+                projectCreatedToast.show()
+                let closeUserToast = document.getElementById("closeProjectToast") as HTMLButtonElement
+                closeUserToast.onclick = () => projectCreatedToast.hide()
+            })
+            .finally(() => resetCards(id, projectRoulette, true))
+        
+    }
+}
 butCloseCreateProjectModal.onclick = () => {
     clearModal()
 }
 
-// butCancelCreateUserModal.onclick = () => {
-//     clearModal()
-// }
+butCancelCreateProjectModal.onclick = () => {
+    clearModal()
+}
 
 // butConfirmCreateUser.onclick = async (ev) => {
 //     ev.preventDefault()
@@ -73,7 +95,7 @@ butCloseCreateProjectModal.onclick = () => {
 function clearModal() {
     inputName.value = "";
     inputDescription.value = "";
-    //resetWarnings();
+    resetWarnings();
     CreateProjectModal.hide();
 }
 
@@ -99,8 +121,41 @@ function clearModal() {
 // }
 
 
-// function resetWarnings() {
-//     nameWarning.textContent = '';
-//     emailWarning.textContent = '';
-//     passwordWarning.textContent = '';
-// }
+function resetWarnings() {
+    nameWarning.textContent = '';
+    descriptionWarning.textContent = '';
+}
+
+async function validateForm() {
+    let valid: boolean = true;
+
+    if (inputName.value.trim() === '') {
+        nameWarning.textContent = 'Please enter a name';
+        valid = false;
+    } else {
+        nameWarning.textContent = '';
+    }
+    
+    if (inputDescription.value.trim() === '') {
+        descriptionWarning.textContent = 'Please enter a description';
+        valid = false;
+    } else {
+        descriptionWarning.textContent = '';
+    }
+
+    return valid;
+}
+
+export async function createProject(name: string, description:string, platform: string) {
+    await fetch("/api/Projects/AddProject", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: name,
+            description: description,
+            platformId: platform
+        })
+    })
+}

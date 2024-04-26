@@ -50,9 +50,13 @@ public class ProjectManager
         _repo.CreateProjectOrganizer(projectOrganizer);
     }
 
-    public void AddProject(MainTheme mainTheme,SharedPlatform sharedPlatform,long id)
+    public void UpdateProject(MainTheme mainTheme,SharedPlatform sharedPlatform,long id)
     {
         _repo.CreateProject(mainTheme,sharedPlatform,id);
+    }
+    public void CreateProject(Project project)
+    {
+        _repo.CreateProject(project);
     }
 
     public IEnumerable<Project> ProjectCount()

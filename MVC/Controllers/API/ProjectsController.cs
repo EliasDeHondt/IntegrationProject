@@ -2,6 +2,7 @@
 using Domain.Platform;
 using Domain.ProjectLogics;
 using Microsoft.AspNetCore.Mvc;
+using MVC.Models;
 
 namespace MVC.Controllers.API;
 
@@ -36,10 +37,29 @@ public class ProjectsController : Controller
         sharedPlatformid = 2; //todo
         long id = _projectManager.ProjectCount().ToList().Count()+1;
         SharedPlatform sharedPlatform = _sharedPlatformManager.GetSharedPlatform(sharedPlatformid);
-        _projectManager.AddProject(theme,sharedPlatform, id);
+        _projectManager.UpdateProject(theme,sharedPlatform, id);
         
         _uow.Commit();
         return CreatedAtAction("AddProject", new Project(theme,sharedPlatform, id));
     }
     
+    [HttpPost("CreateProject")]
+    public IActionResult CreateProject(ProjectViewModel model)
+    {
+        long sharedPlatformid = 2; //todo
+        
+        _uow.BeginTransaction();
+
+        var project = new Project
+        {
+            Title = model.Name,
+            Description = model.Description,
+            SharedPlatform = _sharedPlatformManager.GetSharedPlatform(sharedPlatformid)
+        };
+        _projectManager.CreateProject(project);
+        
+        _uow.Commit();
+
+        return Created("CreateProject",  project);
+    }
 }
