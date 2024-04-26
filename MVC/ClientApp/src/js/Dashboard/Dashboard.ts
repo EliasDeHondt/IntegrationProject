@@ -9,6 +9,7 @@ import { addPrevNextBtnsClickHandlers } from './EmblaCarouselArrowButtons'
 import '../../css/embla.scss'
 
 const userRoulette = document.getElementById("carouselContainer") as HTMLDivElement;
+const projectRoulette = document.getElementById("carouselPContainer") as HTMLDivElement;
 const OPTIONS: EmblaOptionsType = { align: 'start' }
 const emblaNode = <HTMLElement>document.querySelector('.embla')
 const viewportNode = <HTMLElement>emblaNode.querySelector('.embla__viewport')
@@ -25,7 +26,7 @@ let id: string = document.getElementById("platformId")!.textContent!
 
 isUserInRole(UserRoles.UserPermission).then(result => {
     dashboard.generateUserCards(id, userRoulette, result);
-    dashboard.generateProjectCards();
+    dashboard.generateProjectCards(id,projectRoulette);
 })
 
 emblaApi.on('destroy', removePrevNextBtnsClickHandlers)

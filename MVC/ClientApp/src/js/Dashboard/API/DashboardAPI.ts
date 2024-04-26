@@ -97,41 +97,47 @@ async function getLoggedInEmail(): Promise<string> {
 
 //Projects
 export async function getProjectsForPlatform(platformId: string): Promise<Project[]>{
-    return await fetch("/api/Project/GetProjectsForPlatform/" + platformId)
+    return await fetch("/api/Projects/GetProjectsForPlatform/" + platformId)
         .then(response => response.json())
         .then(data => {
             return data
         })
 }
-export function generateProjectCard(project: Project,): HTMLDivElement {
-    const colDiv = document.createElement("div");
+export function generateProjectCard(project: Project): HTMLDivElement {
+    let colDiv = document.createElement("div");
     colDiv.className = "col mt-3 mb-3";
-
-    const cardDiv = document.createElement("div");
+    let cardDiv = document.createElement("div");
     cardDiv.className = "card border-black border-2 bgAccent h-100";
     cardDiv.style.height = "150px";
 
     // Buttons
-    const btnHideProject = createButton("btnHideProject", "bi-eye");
-    const btnDeleteProject = createButton("btnDeleteProject", "bi-folder-minus");
-    const btnGraphProject = createButton("btnGraphProject", "bi-graph-up");
-    const btnEnterProject = createButton("btnEnterProject", "bi-folder");
+    let btnHideProject = createButton("btnHideProject", "bi-eye");
+    let btnDeleteProject = createButton("btnDeleteProject", "bi-folder-minus");
+    let btnGraphProject = createButton("btnGraphProject", "bi-graph-up");
+    let btnEnterProject = createButton("btnEnterProject", "bi-folder");
 
-    const cardBodyDiv = document.createElement("div");
+    btnHideProject.className = "border-0 p-0 position-absolute top-0 end-1 ms-2\" style=\"background: none;";
+    btnDeleteProject.className = "border-0 p-0 position-absolute top-0 end-0 me-2\" style=\"background: none;";
+    btnGraphProject.className = "border-0 p-0 position-absolute top-0 end-0 mt-5 me-2\" style=\"background: none;";
+    btnEnterProject.className = "border-0 p-0";
+    btnEnterProject.style.background = "none;";
+
+
+    let cardBodyDiv = document.createElement("div");
     cardBodyDiv.className = "card-body align-items-center d-flex justify-content-center";
 
     // Edit Project Link
-    const editProjectLink = document.createElement("a");
+    let editProjectLink = document.createElement("a");
     editProjectLink.className = "nav-link text-light";
-    editProjectLink.setAttribute("asp-area", "");
-    editProjectLink.setAttribute("asp-controller", "Project");
-    editProjectLink.setAttribute("asp-action", "Projects");
-    editProjectLink.setAttribute("asp-route-id", project.id.toString());
+    editProjectLink.setAttribute("href", "/Project/Projects/1");
     editProjectLink.textContent = "Edit Project";
 
     cardBodyDiv.appendChild(editProjectLink);
     cardBodyDiv.appendChild(btnEnterProject);
 
+    let a = document.createElement("a");
+    a.textContent = project.title
+    
     cardDiv.appendChild(btnHideProject);
     cardDiv.appendChild(btnDeleteProject);
     cardDiv.appendChild(btnGraphProject);
@@ -158,9 +164,11 @@ function createButton(id: string, iconClass: string): HTMLButtonElement {
 }
 export function generateProjectCards(id: string, userRoulette: HTMLDivElement) {
     let cardCreateProject = document.getElementById("cardCreateProject") as HTMLDivElement;
-    cardCreateProject.style.display = "none";
+    cardCreateProject.style.display = "block";
+    id = '2'
     getProjectsForPlatform(id).then(projects => {
         projects.forEach(project => {
+            console.log(project.title)
             let card = generateProjectCard(project);
             userRoulette.appendChild(card);
         })})
