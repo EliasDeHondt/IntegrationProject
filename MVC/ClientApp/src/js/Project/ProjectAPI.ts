@@ -9,7 +9,8 @@ let inputText = (document.getElementById("inputText") as HTMLInputElement);
 const btnPublishProject = document.getElementById("btnPublishProject") as HTMLButtonElement;
 
 function fillExisting(project: Project): void{
-    inputTitle.value = project.name //<input id="inputTitle" class="m-1" placeholder="Project Title.">
+    inputTitle.value = project.title //<input id="inputTitle" class="m-1" placeholder="Project Title.">
+    inputText.value = project.description //<input id="inputTitle" class="m-1" placeholder="Project Title.">
 }
 //Titel & Text checken
 function CheckNotEmpty(inputTitel: HTMLInputElement,errorMessage: string,errorMsgHTML: string): boolean{
@@ -60,14 +61,15 @@ export async function getProjectWithId(projectId: number): Promise<Project>{
 //Button
 document.addEventListener("DOMContentLoaded", async function () {
     // @ts-ignore
-    let projectId = document.getElementById('col').getAttribute('data-project-id');
+    let projectId = document.getElementById('btnPublishProject').getAttribute('data-project-id');
     // @ts-ignore
     const projectIdNumber = parseInt(projectId, 10); // Assuming it's an integer
     try {
-        const projectData = await getProjectWithId(projectIdNumber);
-        fillExisting(projectData);
+        const project = await getProjectWithId(projectIdNumber);
+        fillExisting(project);
+        console.log(project.id + project.title)
     } catch (error) {
-        console.error('Error fetching project data:', error);
+        console.error('Error fetching project:', error);
     }
 
     btnPublishProject.onclick = function () {
