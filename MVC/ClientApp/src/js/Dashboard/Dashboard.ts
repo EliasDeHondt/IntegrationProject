@@ -25,6 +25,7 @@ let id: string = document.getElementById("platformId")!.textContent!
 
 isUserInRole(UserRoles.UserPermission).then(result => {
     dashboard.generateUserCards(id, userRoulette, result);
+    dashboard.generateProjectCards();
 })
 
 emblaApi.on('destroy', removePrevNextBtnsClickHandlers)

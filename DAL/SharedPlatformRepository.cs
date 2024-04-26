@@ -1,5 +1,6 @@
 ﻿using Data_Access_Layer.DbContext;
 using Domain.Platform;
+using Domain.ProjectLogics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,5 +44,10 @@ public class SharedPlatformRepository
         users.AddRange(admins);
 
         return users;
+    }
+    
+    public IEnumerable<Project> ReadProjectsForPlatform(long platformId)
+    {
+        return _ctx.SharedPlatforms.Find(platformId).Projects;
     }
 }

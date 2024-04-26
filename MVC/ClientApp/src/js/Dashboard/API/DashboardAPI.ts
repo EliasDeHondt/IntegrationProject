@@ -1,7 +1,8 @@
 ﻿import {User} from "../Types/UserTypes";
 import * as editModal from "../EditUserModal";
+import {Project} from "../Types/ProjectObjects";
 
-
+//Users
 export async function getUsersForPlatform(platformId: string): Promise<User[]>{
     return await fetch("/api/Users/GetUsersForPlatform/" + platformId)
         .then(response => response.json())
@@ -10,7 +11,7 @@ export async function getUsersForPlatform(platformId: string): Promise<User[]>{
         })
 }
 
-export function generateCard(user: User, userPermissions: boolean, email:string): HTMLDivElement {
+export function generateUserCard(user: User, userPermissions: boolean, email:string): HTMLDivElement {
     
     let colDiv = document.createElement("div");
     colDiv.className = "col mt-3 mb-3 embla__slide";
@@ -44,8 +45,6 @@ export function generateCard(user: User, userPermissions: boolean, email:string)
         editButton.append(editIcon);
         deleteButton.append(deleteIcon);
     }
-    
-    
     
     let cardBodyDiv = document.createElement("div");
     cardBodyDiv.className = "card-body";
@@ -81,13 +80,12 @@ export function generateUserCards(id: string, userRoulette: HTMLDivElement, user
     getUsersForPlatform(id).then(users => {
         getLoggedInEmail().then(email => {
             users.forEach(user => {
-                let card = generateCard(user, userPermissions, email);
+                let card = generateUserCard(user, userPermissions, email);
                 userRoulette.appendChild(card);
             })
         })
             .then(() => editModal.initializeEditButtons())
     })
-        
 }
 
 async function getLoggedInEmail(): Promise<string> {
@@ -95,4 +93,76 @@ async function getLoggedInEmail(): Promise<string> {
         .then(response => {
             return response.text()
         })
+}
+
+//Projects
+export async function getProjectsForPlatform(platformId: string): Promise<Project[]>{
+    return await fetch("/api/Project/GetProjectsForPlatform/" + platformId)
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
+}
+export function generateProjectCard(project: Project,): HTMLDivElement {
+    const colDiv = document.createElement("div");
+    colDiv.className = "col mt-3 mb-3";
+
+    const cardDiv = document.createElement("div");
+    cardDiv.className = "card border-black border-2 bgAccent h-100";
+    cardDiv.style.height = "150px";
+
+    // Buttons
+    const btnHideProject = createButton("btnHideProject", "bi-eye");
+    const btnDeleteProject = createButton("btnDeleteProject", "bi-folder-minus");
+    const btnGraphProject = createButton("btnGraphProject", "bi-graph-up");
+    const btnEnterProject = createButton("btnEnterProject", "bi-folder");
+
+    const cardBodyDiv = document.createElement("div");
+    cardBodyDiv.className = "card-body align-items-center d-flex justify-content-center";
+
+    // Edit Project Link
+    const editProjectLink = document.createElement("a");
+    editProjectLink.className = "nav-link text-light";
+    editProjectLink.setAttribute("asp-area", "");
+    editProjectLink.setAttribute("asp-controller", "Project");
+    editProjectLink.setAttribute("asp-action", "Projects");
+    editProjectLink.setAttribute("asp-route-id", project.id.toString());
+    editProjectLink.textContent = "Edit Project";
+
+    cardBodyDiv.appendChild(editProjectLink);
+    cardBodyDiv.appendChild(btnEnterProject);
+
+    cardDiv.appendChild(btnHideProject);
+    cardDiv.appendChild(btnDeleteProject);
+    cardDiv.appendChild(btnGraphProject);
+    cardDiv.appendChild(cardBodyDiv);
+
+    colDiv.appendChild(cardDiv);
+
+    return colDiv;
+}
+
+function createButton(id: string, iconClass: string): HTMLButtonElement {
+    const button = document.createElement("button");
+    button.id = id;
+    button.className = "border-0 p-0 position-absolute top-0 end-0";
+    button.style.background = "none";
+
+    const icon = document.createElement("i");
+    icon.className = `bi ${iconClass}`;
+    icon.style.color = "white";
+
+    button.appendChild(icon);
+
+    return button;
+}
+export function generateProjectCards(id: string, userRoulette: HTMLDivElement) {
+    let cardCreateProject = document.getElementById("cardCreateProject") as HTMLDivElement;
+    cardCreateProject.style.display = "none";
+    getProjectsForPlatform(id).then(projects => {
+        projects.forEach(project => {
+            let card = generateProjectCard(project);
+            userRoulette.appendChild(card);
+        })})
+        .then(() => editModal.initializeEditButtons())
 }

@@ -62,4 +62,23 @@ public class ProjectsController : Controller
 
         return Created("CreateProject",  project);
     }
+    
+    [HttpGet("GetProjectsForPlatform/{platformId}")]
+    public IActionResult GetProjectsForPlatform(long platformId)
+    {
+        if (User.Identity is { IsAuthenticated: false }) return Unauthorized();
+        var projects = _sharedPlatformManager.GetProjectsForPlatform(platformId);
+
+        ICollection<ProjectViewModel> projectList = new List<ProjectViewModel>();
+        foreach (var project in projects)
+        {
+            projectList.Add(new ProjectViewModel
+            {
+                Name = project.Title,
+                Description = project.Description
+            });
+        }
+        
+        return Ok(projectList);
+    }
 }
