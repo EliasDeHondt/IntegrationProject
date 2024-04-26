@@ -37,7 +37,7 @@ public class CreateFlowController : Controller
     {
         var flows = _manager.GetAllFlows();
 
-        if (flows.Any())
+        if (!flows.Any())
         {
             return NoContent();
         }
