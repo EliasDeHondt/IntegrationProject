@@ -2,11 +2,15 @@ import {Project, SharedPlatform} from "./ProjectObjects";
 import {Modal} from "bootstrap";
 import {MainTheme} from "../Theme/ThemeObjects";
 import {Flow} from "../Flow/FlowObjects";
+import {generateProjectCard, getProjectsForPlatform} from "../Dashboard/API/DashboardAPI";
 
 let inputTitle = (document.getElementById("inputTitle") as HTMLInputElement);
 let inputText = (document.getElementById("inputText") as HTMLInputElement);
 const btnPublishProject = document.getElementById("btnPublishProject") as HTMLButtonElement;
 
+function fillExisting(project: Project): void{
+    inputTitle.value = project.name //<input id="inputTitle" class="m-1" placeholder="Project Title.">
+}
 //Titel & Text checken
 function CheckNotEmpty(inputTitel: HTMLInputElement,errorMessage: string,errorMsgHTML: string): boolean{
     let p = document.getElementById(errorMsgHTML) as HTMLElement;
@@ -45,14 +49,31 @@ async function SetProject(mainTheme: string, sharedPlatformid: number) {
     }
 }
 
+export async function getProjectWithId(projectId: number): Promise<Project>{
+    return await fetch("/api/Projects/GetProjectWithId/" + projectId)
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
+}
+
 //Button
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
+    // @ts-ignore
+    let projectId = document.getElementById('col').getAttribute('data-project-id');
+    // @ts-ignore
+    const projectIdNumber = parseInt(projectId, 10); // Assuming it's an integer
+    try {
+        const projectData = await getProjectWithId(projectIdNumber);
+        fillExisting(projectData);
+    } catch (error) {
+        console.error('Error fetching project data:', error);
+    }
+
     btnPublishProject.onclick = function () {
         console.log("click");
-        //CheckNotEmpty(inputTitle,"Title","errorMsgTitle");
-        //CheckNotEmpty(inputText,"Text","errorMsgText");
 
-        if (CheckNotEmpty(inputTitle,"Title","errorMsgTitle")) {
+        if (CheckNotEmpty(inputTitle, "Title", "errorMsgTitle")) {
             SetProject(inputTitle.value, 2);
 
             window.location.href = "/SharedPlatform/Dashboard/";
@@ -60,4 +81,4 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 });
 
-//select subthemas
+//select subthemas todo Matthias

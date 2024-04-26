@@ -492,8 +492,8 @@ public class DataSeeder
         // GenerateRangeQuestions(ctx,flow2);
         
         //Projects add title
-        project1.Title = "mainTheme1.Subject";
-        project2.Title = "mainTheme2.Subject";
+        project1.Title = mainTheme1.Subject;
+        project2.Title = mainTheme2.Subject;
         ctx.Projects.Add(project1);
         ctx.Projects.Add(project2);
         sp.Projects.Add(project1);

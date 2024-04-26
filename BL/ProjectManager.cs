@@ -77,4 +77,9 @@ public class ProjectManager
     {
         _repo.RemoveProjectOrganizer(user, project);
     }
+
+    public Project GetProjectWithId(long id)
+    {
+        return _repo.ReadProjectWithId(id);
+    }
 }

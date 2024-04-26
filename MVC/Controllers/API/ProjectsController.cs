@@ -81,4 +81,17 @@ public class ProjectsController : Controller
 
         return Ok(projectList);
     }
+    
+    [HttpGet("GetProjectWithId/{projectId}")]
+    public IActionResult GetProjectWithId(int projectId)
+    {
+        Project project = _projectManager.GetProjectWithId(projectId);
+
+        if (project == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(project); 
+    }
 }

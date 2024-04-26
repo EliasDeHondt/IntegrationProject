@@ -1,8 +1,9 @@
-export interface Project {
-    id: number;
-    MainTheme: MainTheme;
-    SharedPlatform: SharedPlatform;
-    Organizers: ProjectOrganizer[];
+export type Project = {
+    mainTheme: MainTheme,
+    id: number,
+    name: string,
+    description: string,
+    sharedplatformId: number
 }
 
 export interface MainTheme {

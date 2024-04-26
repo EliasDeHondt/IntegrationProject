@@ -80,4 +80,8 @@ public class ProjectRepository
         return _ctx.Projects;
     }
 
+    public Project ReadProjectWithId(long id)
+    {
+        return _ctx.Projects.Find(id);
+    }
 }
