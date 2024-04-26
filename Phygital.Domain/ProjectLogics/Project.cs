@@ -46,8 +46,13 @@ public class Project
         Title = "";
     }
 
-    public Project(string title, string description, SharedPlatform sharedPlatform)
+    public Project(string title, string description, SharedPlatform sharedPlatform) 
     {
+        Id = default;
+        MainTheme = new MainTheme();
+        SharedPlatform = new SharedPlatform();
+        Organizers = new List<ProjectOrganizer>();
+        
         Title = title;
         Description = description;
         SharedPlatform = sharedPlatform;

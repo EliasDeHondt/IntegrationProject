@@ -1,28 +1,3 @@
-// import {Modal} from "bootstrap";
-//
-// const btnCreateProject = document.getElementById("btnCreateProject") as HTMLButtonElement;
-// const butCloseCreateProjectModal = document.getElementById("butCloseCreateProjectModal") as HTMLButtonElement;
-// const inputName = document.getElementById("inputPName") as HTMLInputElement;
-// const inputDescription = document.getElementById("inputDescription") as HTMLInputElement;
-//
-// const CreateProjectModal = new Modal(document.getElementById('CreateProjectModal')!, {
-//     keyboard: false,
-//     focus: true,
-//     backdrop: "static"
-// });
-//
-// btnCreateProject.onclick = () => {
-//     CreateProjectModal.show();
-// }
-//
-// butCloseCreateProjectModal.onclick = () => {
-//     clearModal()
-// }
-// function clearModal() {
-//     inputName.value = "";
-//     inputDescription.value = "";
-//     CreateProjectModal.hide();
-// }
 import {Modal, Toast} from "bootstrap";
 import {isEmailInUse} from "../API/UserAPI";
 import * as API from "./API/CreateUserModalAPI";
@@ -46,7 +21,7 @@ const inputPName = document.getElementById("inputPName") as HTMLInputElement;
 const inputDescription = document.getElementById("inputDescription") as HTMLInputElement;
 const pnameWarning = document.getElementById('pnameWarning') as HTMLElement;
 const descriptionWarning = document.getElementById('descriptionWarning') as HTMLElement;
-const projectRoulette = document.getElementById("carouselContainer") as HTMLDivElement;
+const projectRoulette = document.getElementById("carouselPContainer") as HTMLDivElement;
 
 let id: string = document.getElementById("platformId")!.textContent!
 

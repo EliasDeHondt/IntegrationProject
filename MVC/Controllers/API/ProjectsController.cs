@@ -88,6 +88,7 @@ public class ProjectsController : Controller
         {
             projectList.Add(new ProjectViewModel
             {
+                Id = project.Id,
                 Name = project.Title,
                 Description = project.Description
             });

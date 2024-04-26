@@ -139,8 +139,10 @@ export function generateProjectCard(project: Project): HTMLDivElement {
 
     // Edit Project Link
     let editProjectLink = document.createElement("a");
+    let projectId = project.id;
+    console.log(project.id, project.name, project.description)
     editProjectLink.className = "nav-link text-light";
-    editProjectLink.setAttribute("href", "/Project/Projects/1");
+    editProjectLink.setAttribute("href", "/Project/Projects/" + projectId);
     editProjectLink.textContent = " Edit Project";
 
     let a = document.createElement("a");
@@ -175,15 +177,13 @@ function createButton(id: string, iconClass: string): HTMLButtonElement {
 
     return button;
 }
-export function generateProjectCards(id: string, userRoulette: HTMLDivElement) {
+export function generateProjectCards(id: string, projectRoulette: HTMLDivElement) {
     let cardCreateProject = document.getElementById("cardCreateProject") as HTMLDivElement;
     cardCreateProject.style.display = "block";
-    id = '2'
+    id = '2';
     getProjectsForPlatform(id).then(projects => {
         projects.forEach(project => {
-            console.log(project.name)
             let card = generateProjectCard(project);
-            userRoulette.appendChild(card);
+            projectRoulette.appendChild(card);
         })})
-        .then(() => editModal.initializeEditButtons())
 }
