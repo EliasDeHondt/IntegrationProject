@@ -40,6 +40,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Google.Apis.Gmail.v1" Version="1.68.0.3399" />
         <PackageReference Include="Google.Cloud.Storage.V1" Version="4.9.0" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.17" />
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.16"/>
