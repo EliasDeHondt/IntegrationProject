@@ -52,11 +52,14 @@ public class SharedPlatformRepository
     
     public IEnumerable<Project> ReadProjectsForPlatform(long platformId)
     {
-        var c = _ctx.SharedPlatforms.Include(platform => platform.Projects)
+        return _ctx.SharedPlatforms.Include(platform => platform.Projects)
             .First(platform => platform.Id == platformId)
-            .Projects;;
-        var a = _ctx.SharedPlatforms.Find(platformId).Projects;
-        var b = _ctx.Projects;
-        return c;
+            .Projects;
+    }
+
+    public void AddProjectToPlatform(Project project, long sharedPlatformId)
+    {
+        _ctx.SharedPlatforms.Where(platform => platform.Id == sharedPlatformId).Single().Projects.Add(project);
+        _ctx.SaveChanges();
     }
 }

@@ -33,5 +33,10 @@ public class SharedPlatformManager
     {
         return _repo.ReadProjectsForPlatform(platformId);
     }
+
+    public void AddProjectToPlatform(Project project, long sharedPlatformId)
+    {
+        _repo.AddProjectToPlatform(project,sharedPlatformId);
+    }
     
 }

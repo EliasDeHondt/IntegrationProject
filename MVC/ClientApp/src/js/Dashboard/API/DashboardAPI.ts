@@ -100,6 +100,13 @@ async function getLoggedInEmail(): Promise<string> {
 }
 
 //Projects
+export function resetProjectCards(id: string, projectRoulette: HTMLDivElement) {
+    let length = projectRoulette.children.length
+    for (let i = length - 1; i > 0; i--){
+        projectRoulette.children[i].remove();
+    }
+    generateProjectCards(id, projectRoulette);
+}
 export async function getProjectsForPlatform(platformId: string): Promise<Project[]>{
     return await fetch("/api/Projects/GetProjectsForPlatform/" + platformId)
         .then(response => response.json())

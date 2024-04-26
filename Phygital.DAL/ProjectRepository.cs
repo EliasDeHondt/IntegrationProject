@@ -74,7 +74,7 @@ public class ProjectRepository
     }
     public void CreateProject(MainTheme mainTheme,SharedPlatform sharedPlatform,long id)
     {
-        Project p = new Project(mainTheme,sharedPlatform,id);
+        Project p = new Project(mainTheme.Subject,mainTheme,sharedPlatform,id);
         _ctx.Projects.Add(p);
         _ctx.SaveChanges();
     }

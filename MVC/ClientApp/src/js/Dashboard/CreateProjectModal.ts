@@ -26,7 +26,7 @@
 import {Modal, Toast} from "bootstrap";
 import {isEmailInUse} from "../API/UserAPI";
 import * as API from "./API/CreateUserModalAPI";
-import {resetCards} from "./API/DashboardAPI";
+import {resetCards, resetProjectCards} from "./API/DashboardAPI";
 import {UserRoles} from "./Types/UserTypes";
 
 const CreateProjectModal = new Modal(document.getElementById('CreateProjectModal')!, {
@@ -71,7 +71,7 @@ async function createProjectShow() {
                 let closeProjectToast = document.getElementById("closeProjectToast") as HTMLButtonElement
                 closeProjectToast.onclick = () => projectCreatedToast.hide()
             })
-            .finally(() => resetCards(id, projectRoulette, true))
+            .finally(() => resetProjectCards(id, projectRoulette))
     }
 }
 function clearModal() {

@@ -468,7 +468,7 @@ public static class DataSeeder
         
         subTheme1.Flows.Add(flow);
         subTheme1.Flows.Add(flow1);
-        Project project1 = new Project(mainTheme1, sp);
+        Project project1 = new Project(mainTheme1.Subject,mainTheme1, sp);
         ctx.MainThemes.Add(mainTheme1);
         ctx.Flows.Add(flow);
         ctx.Flows.Add(flow1);
@@ -483,20 +483,17 @@ public static class DataSeeder
 
         // Seed main theme 2
         MainTheme mainTheme2 = new MainTheme("Lokale Verkiezingen - circulair");
-        Project project2 = new Project(mainTheme2, sp);
+        Project project2 = new Project(mainTheme2.Subject,mainTheme2, sp);
         Flow flow2 = new Flow(FlowType.Circular, mainTheme2);
 
         GenerateSingleQuestions(ctx, flow2); 
-
-        project1.Title = mainTheme1.Subject;
-        project2.Title = mainTheme2.Subject;
+        
         ctx.Projects.Add(project1);
         ctx.Projects.Add(project2);
-        sp.Projects.Add(project1);
         
         ((SpAdmin)ctx.Users.Single(user => user.Email == "Henk@CodeForge.com")).SharedPlatform = sp;
         sp.Projects.Add(project1);
-        sp.Projects.Add(project2);
+        //sp.Projects.Add(project2);
 
         flow2.Theme = mainTheme2;
         ctx.SharedPlatforms.Add(sp);

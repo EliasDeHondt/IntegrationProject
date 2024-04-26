@@ -28,26 +28,9 @@ public class ProjectsController : Controller
         return _projectManager.GetAllProjectsForSharedPlatformWithMainTheme(id);
     }
 
-    [HttpPost("AddProject/{mainTheme}/{sharedPlatformid}")]
-    public IActionResult AddProject(string mainTheme,long sharedPlatformid)
+    [HttpPost("AddProject")]
+    public IActionResult AddProject(ProjectViewModel model)
     {
-        _uow.BeginTransaction();
-
-        MainTheme theme = new MainTheme(mainTheme);
-        sharedPlatformid = 2; //todo
-        long id = _projectManager.ProjectCount().ToList().Count()+1;
-        SharedPlatform sharedPlatform = _sharedPlatformManager.GetSharedPlatform(sharedPlatformid);
-        _projectManager.UpdateProject(theme,sharedPlatform, id);
-        
-        _uow.Commit();
-        return CreatedAtAction("AddProject", new Project(theme,sharedPlatform, id));
-    }
-    
-    [HttpPost("CreateProject")]
-    public IActionResult CreateProject(ProjectViewModel model)
-    {
-        long sharedPlatformid = 2; //todo
-        
         _uow.BeginTransaction();
 
         var project = new Project
@@ -57,6 +40,37 @@ public class ProjectsController : Controller
             SharedPlatform = _sharedPlatformManager.GetSharedPlatform(model.SharedPlatformId) 
         };
         _projectManager.CreateProject(project);
+        _sharedPlatformManager.AddProjectToPlatform(project, model.SharedPlatformId);
+        
+        _uow.Commit();
+
+        return Created("CreateProject",  project);
+        // _uow.BeginTransaction();
+        //
+        // MainTheme theme = new MainTheme(mainTheme);
+        // sharedPlatformid = 2; //todo
+        // long id = _projectManager.ProjectCount().ToList().Count()+1;
+        // SharedPlatform sharedPlatform = _sharedPlatformManager.GetSharedPlatform(sharedPlatformid);
+        // _projectManager.UpdateProject(theme,sharedPlatform, id);
+        //
+        // _uow.Commit();
+        // return CreatedAtAction("AddProject", new Project(theme,sharedPlatform, id));
+        
+    }
+    
+    [HttpPost("CreateProject")]
+    public IActionResult CreateProject(ProjectViewModel model)
+    {
+        _uow.BeginTransaction();
+
+        var project = new Project
+        {
+            Title = model.Name,
+            Description = model.Description,
+            SharedPlatform = _sharedPlatformManager.GetSharedPlatform(model.SharedPlatformId) 
+        };
+        _projectManager.CreateProject(project);
+        _sharedPlatformManager.AddProjectToPlatform(project, model.SharedPlatformId);
         
         _uow.Commit();
 

@@ -9,8 +9,8 @@ let inputText = (document.getElementById("inputText") as HTMLInputElement);
 const btnPublishProject = document.getElementById("btnPublishProject") as HTMLButtonElement;
 
 function fillExisting(project: Project): void{
-    inputTitle.value = project.title //<input id="inputTitle" class="m-1" placeholder="Project Title.">
-    inputText.value = project.description //<input id="inputTitle" class="m-1" placeholder="Project Title.">
+    inputTitle.value = project.title
+    inputText.value = project.description
 }
 //Titel & Text checken
 function CheckNotEmpty(inputTitel: HTMLInputElement,errorMessage: string,errorMsgHTML: string): boolean{
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     // @ts-ignore
     let projectId = document.getElementById('btnPublishProject').getAttribute('data-project-id');
     // @ts-ignore
-    const projectIdNumber = parseInt(projectId, 10); // Assuming it's an integer
+    const projectIdNumber = parseInt(projectId, 10); 
     try {
         const project = await getProjectWithId(projectIdNumber);
         fillExisting(project);

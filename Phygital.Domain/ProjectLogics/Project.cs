@@ -19,14 +19,16 @@ public class Project
     public SharedPlatform SharedPlatform { get; set; }
     public ICollection<ProjectOrganizer> Organizers { get; set; }
 
-    public Project(MainTheme mainTheme, SharedPlatform sharedPlatform, ICollection<ProjectOrganizer> organizers, long id = 0): this(mainTheme, sharedPlatform, id)
+    public Project(MainTheme mainTheme, SharedPlatform sharedPlatform, ICollection<ProjectOrganizer> organizers, long id = 0): this(mainTheme.Subject,mainTheme, sharedPlatform, id)
     {
         Organizers = organizers;
         Description = "";
+        Title = mainTheme.Subject;
     }
 
-    public Project(MainTheme mainTheme, SharedPlatform sharedPlatform, long id = 0)
+    public Project(string title,MainTheme mainTheme, SharedPlatform sharedPlatform, long id = 0)
     {
+        Title = title;
         MainTheme = mainTheme;
         Id = id;
         SharedPlatform = sharedPlatform;
@@ -41,6 +43,7 @@ public class Project
         SharedPlatform = new SharedPlatform();
         Organizers = new List<ProjectOrganizer>();
         Description = "";
+        Title = "";
     }
 
     public Project(string title, string description, SharedPlatform sharedPlatform)
