@@ -116,10 +116,11 @@ export async function getProjectsForPlatform(platformId: string): Promise<Projec
 }
 export function generateProjectCard(project: Project): HTMLDivElement {
     let colDiv = document.createElement("div");
-    colDiv.className = "col mt-3 mb-3";
+    colDiv.className = "col mt-3 mb-3 embla__slide";
     let cardDiv = document.createElement("div");
     cardDiv.className = "card border-black border-2 bgAccent h-100";
-    cardDiv.style.height = "150px";
+    cardDiv.style.height = "250px";
+    cardDiv.style.position = "relative";
 
     // Buttons
     let btnHideProject = createButton("btnHideProject", "bi-eye");
