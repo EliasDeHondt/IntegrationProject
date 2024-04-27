@@ -19,25 +19,32 @@ function GetFlows(projectId: number) {
 
 async function UpdateFlowList(flows: Flow[]) {
     
-    const flowContainer = document.getElementById("flow-cards") as HTMLElement
+    const flowContainer = document.getElementById("flow-cards") as HTMLElement;
     flowContainer.innerHTML = "";
     
     if (flows.length > 0) {
         flows.forEach(flow => {
-            //Card container
+            //Card Container
             const flowCard = document.createElement('div');
             flowCard.classList.add("flow-card");
+            flowCard.dataset.flowId = flow.id.toString();
+            //Card Delete Button
+            const flowCardDeleteBtn = document.createElement('button');
+            flowCardDeleteBtn.innerHTML = '<i class="bi bi-trash3-fill"></i>';
+            flowCardDeleteBtn.classList.add("btn", "btn-secondary", "flow-card-delete-btn");
             //Card Header
             const cardHeader = document.createElement('h2');
             cardHeader.classList.add("flow-card-header");
             cardHeader.innerText = "Flow " + flow.id.toString();
+            //Card Footer
             const cardFooter = document.createElement('h3');
             cardFooter.classList.add("flow-card-footer");
             cardFooter.innerText = flow.flowType.toString();
-            
-            flowCard.appendChild(cardHeader)
-            flowCard.appendChild(cardFooter)
-            
+
+            flowCard.appendChild(flowCardDeleteBtn);
+            flowCard.appendChild(cardHeader);
+            flowCard.appendChild(cardFooter);
+
             flowContainer.appendChild(flowCard);
         });
     } else {
