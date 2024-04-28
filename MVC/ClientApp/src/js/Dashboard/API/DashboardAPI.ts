@@ -1,5 +1,6 @@
 ﻿import {User} from "../Types/UserTypes";
 import * as editModal from "../EditUserModal";
+import {Project} from "../Types/ProjectObjects";
 import * as deleteModal from "../DeleteUserModal";
 
 
@@ -11,7 +12,7 @@ export async function getUsersForPlatform(platformId: string): Promise<User[]>{
         })
 }
 
-export function generateCard(user: User, userPermissions: boolean, email:string): HTMLDivElement {
+export function generateUserCard(user: User, userPermissions: boolean, email:string): HTMLDivElement {
     
     let colDiv = document.createElement("div");
     colDiv.className = "col mt-3 mb-3 embla__slide";
@@ -45,8 +46,6 @@ export function generateCard(user: User, userPermissions: boolean, email:string)
         editButton.append(editIcon);
         deleteButton.append(deleteIcon);
     }
-    
-    
     
     let cardBodyDiv = document.createElement("div");
     cardBodyDiv.className = "card-body";
@@ -82,7 +81,7 @@ export function generateUserCards(id: string, userRoulette: HTMLDivElement, user
     getUsersForPlatform(id).then(users => {
         getLoggedInEmail().then(email => {
             users.forEach(user => {
-                let card = generateCard(user, userPermissions, email);
+                let card = generateUserCard(user, userPermissions, email);
                 userRoulette.appendChild(card);
             })
         })
@@ -91,7 +90,6 @@ export function generateUserCards(id: string, userRoulette: HTMLDivElement, user
                 deleteModal.initializeDeleteButtons()
             })
     })
-        
 }
 
 async function getLoggedInEmail(): Promise<string> {
@@ -99,4 +97,94 @@ async function getLoggedInEmail(): Promise<string> {
         .then(response => {
             return response.text()
         })
+}
+
+//Projects
+export function resetProjectCards(id: string, projectRoulette: HTMLDivElement) {
+    let length = projectRoulette.children.length
+    for (let i = length - 1; i > 0; i--){
+        projectRoulette.children[i].remove();
+    }
+    generateProjectCards(id, projectRoulette);
+}
+export async function getProjectsForPlatform(platformId: string): Promise<Project[]>{
+    return await fetch("/api/Projects/GetProjectsForPlatform/" + platformId)
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
+}
+export function generateProjectCard(project: Project): HTMLDivElement {
+    let colDiv = document.createElement("div");
+    colDiv.className = "col mt-3 mb-3 embla__slide";
+    let cardDiv = document.createElement("div");
+    cardDiv.className = "card border-black border-2 bgAccent h-100";
+    cardDiv.style.height = "250px";
+    cardDiv.style.position = "relative";
+
+    // Buttons
+    let btnHideProject = createButton("btnHideProject", "bi-eye");
+    let btnDeleteProject = createButton("btnDeleteProject", "bi-folder-minus");
+    let btnGraphProject = createButton("btnGraphProject", "bi-graph-up");
+    let btnEnterProject = createButton("btnEnterProject", "bi-folder");
+
+    btnHideProject.className = "border-0 p-0 position-absolute top-0 end-1 ms-2\" style=\"background: none;";
+    btnDeleteProject.className = "border-0 p-0 position-absolute top-0 end-0 me-2\" style=\"background: none;";
+    btnGraphProject.className = "border-0 p-0 position-absolute top-0 end-0 mt-5 me-2\" style=\"background: none;";
+    btnEnterProject.className = "border-0 p-0";
+    btnEnterProject.style.background = "none;";
+
+
+    let cardBodyDiv = document.createElement("div");
+    cardBodyDiv.className = "card-body align-items-center d-flex justify-content-center";
+
+    // Edit Project Link
+    let editProjectLink = document.createElement("a");
+    let projectId = project.id;
+    console.log(project.id, project.name, project.description)
+    editProjectLink.className = "nav-link text-light";
+    editProjectLink.setAttribute("href", "/Project/Projects/" + projectId);
+    editProjectLink.textContent = " Edit Project";
+
+    let a = document.createElement("a");
+    a.textContent = project.name + ": "
+    
+    cardBodyDiv.appendChild(a)
+    cardBodyDiv.appendChild(editProjectLink);
+    cardBodyDiv.appendChild(btnEnterProject);
+    
+    
+    cardDiv.appendChild(btnHideProject);
+    cardDiv.appendChild(btnDeleteProject);
+    cardDiv.appendChild(btnGraphProject);
+    cardDiv.appendChild(cardBodyDiv);
+
+    colDiv.appendChild(cardDiv);
+
+    return colDiv;
+}
+
+function createButton(id: string, iconClass: string): HTMLButtonElement {
+    const button = document.createElement("button");
+    button.id = id;
+    button.className = "border-0 p-0 position-absolute top-0 end-0";
+    button.style.background = "none";
+
+    const icon = document.createElement("i");
+    icon.className = `bi ${iconClass}`;
+    icon.style.color = "white";
+
+    button.appendChild(icon);
+
+    return button;
+}
+export function generateProjectCards(id: string, projectRoulette: HTMLDivElement) {
+    let cardCreateProject = document.getElementById("cardCreateProject") as HTMLDivElement;
+    cardCreateProject.style.display = "block";
+    id = '2';
+    getProjectsForPlatform(id).then(projects => {
+        projects.forEach(project => {
+            let card = generateProjectCard(project);
+            projectRoulette.appendChild(card);
+        })})
 }
