@@ -13,5 +13,4 @@ public class ProjectViewModel
     public string Image { get; set; }
     [Required]
     public long SharedPlatformId { get; set; }
-    
 }

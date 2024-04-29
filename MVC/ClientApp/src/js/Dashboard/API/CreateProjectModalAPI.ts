@@ -3,28 +3,30 @@
     formData.append('name', name);
     formData.append('description', description);
     formData.append('sharedplatformId', platform);
+    
+    if (logo) { // If logo is present, convert it to base64 string and add it to formData
+        const base64String = await readFileAsBase64(logo);
+        if (base64String) {
+            formData.append('logoBase64', base64String);
+        }
 
-    // If logo is present, convert it to base64 string and add it to formData
-    if (logo) {
-        const reader = new FileReader();
-        reader.readAsDataURL(logo);
-        reader.onload = async function () {
-            const base64String = reader.result?.toString().split(',')[1];
-            if (base64String) {
-                formData.append('logoBase64', base64String);
-            }
-
-            // Submit the form with the base64 string of the image
-            await fetch("/api/Projects/AddProject", {
-                method: "POST",
-                body: formData
-            });
-        };
-    } else {
-        // If logo is not present, send formData without logo
-        await fetch("/api/Projects/AddProject", {
-            method: "POST",
-            body: formData
-        });
+        console.log('Base64 image string:', base64String);
+        console.log('Type:', typeof base64String);
     }
+    
+    await fetch("/api/Projects/AddProject", {
+        method: "POST",
+        body: formData
+    });
+}
+
+async function readFileAsBase64(file: File): Promise<string | null> { // Convert file to base64 string
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            const base64String = reader.result?.toString().split(',')[1];
+            resolve(base64String || null);
+        };
+    });
 }

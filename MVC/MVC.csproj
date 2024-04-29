@@ -37,6 +37,35 @@
         <_ContentIncludedByDefault Remove="custom npm packages\opencv-ts\package.json" />
         <_ContentIncludedByDefault Remove="custom npm packages\opencv-ts\tsconfig.json" />
         <_ContentIncludedByDefault Remove="custom npm packages\opencv-ts\tsconfig.test.json" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\39795c0b4513de014cf8.woff" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\b7bcc075b395c14ce8c2.woff2" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\dashboard.css" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\dashboard.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\dashboard.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\flowcreator.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\flowcreator.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\index.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\index.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\login.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\login.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\mainThemeDetails.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\mainThemeDetails.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\project.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\project.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\site.css" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\site.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\site.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\site.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\step.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\step.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\subThemeDetails.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\subThemeDetails.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\theme.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\theme.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\validation.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\validation.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\webcam.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\webcam.entry.js.map" />
     </ItemGroup>
 
     <ItemGroup>
@@ -60,7 +89,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Views\Project\Modals\" />
       <Folder Include="wwwroot\Assets\Videos\" />
     </ItemGroup>
 
