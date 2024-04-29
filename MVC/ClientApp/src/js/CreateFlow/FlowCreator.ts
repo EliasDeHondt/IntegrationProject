@@ -2,7 +2,7 @@ import {Flow} from "../Flow/FlowObjects";
 
 const btnCreateFlow = document.getElementById("btnCreateFlow") as HTMLButtonElement;
 
-function GetFlows(projectId: number) {
+export function GetFlows(projectId: number) {
     console.log("Fetching flows...")
     fetch("CreateFlow/GetFlows", {
         method: "GET",
