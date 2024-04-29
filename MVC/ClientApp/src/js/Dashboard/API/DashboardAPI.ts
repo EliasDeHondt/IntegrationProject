@@ -123,6 +123,7 @@ export async function getProjectsForPlatform(platformId: string): Promise<Projec
             return data
         })
 }
+
 export function generateProjectCard(project: Project): HTMLDivElement {
     let colDiv = document.createElement("div");
     colDiv.className = "col mt-3 mb-3 embla__slide";
@@ -142,7 +143,12 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     btnGraphProject.className = "border-0 p-0 position-absolute top-0 end-0 mt-5 me-2\" style=\"background: none;";
     btnEnterProject.className = "border-0 p-0";
     btnEnterProject.style.background = "none;";
+    btnEnterProject.style.fontSize = "10vh";
 
+    btnHideProject.style.fontSize = "3vh";
+    btnDeleteProject.style.fontSize = "3vh";
+    btnGraphProject.style.fontSize = "3vh";
+    
 
     let cardBodyDiv = document.createElement("div");
     cardBodyDiv.className = "card-body align-items-center d-flex justify-content-center";
@@ -153,14 +159,20 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     console.log(project.id, project.name, project.description)
     editProjectLink.className = "nav-link text-light";
     editProjectLink.setAttribute("href", "/Project/Projects/" + projectId);
-    editProjectLink.textContent = " Edit Project";
+    editProjectLink.textContent = project.name;
 
-    let a = document.createElement("a");
-    a.textContent = project.name + ": "
+    let projDiv = document.createElement("div");
+    projDiv.className = "text-center";
+    btnEnterProject.setAttribute("href", "/Project/Projects/" + projectId);
+    projDiv.append(btnEnterProject, editProjectLink);
     
-    cardBodyDiv.appendChild(a)
-    cardBodyDiv.appendChild(editProjectLink);
-    cardBodyDiv.appendChild(btnEnterProject);
+    
+    // let a = document.createElement("a");
+    // a.textContent = project.name + ": "
+    //cardBodyDiv.appendChild(a)
+    
+    cardBodyDiv.appendChild(projDiv);
+    //cardBodyDiv.appendChild(btnEnterProject);
     
     
     cardDiv.appendChild(btnHideProject);
@@ -170,6 +182,13 @@ export function generateProjectCard(project: Project): HTMLDivElement {
 
     colDiv.appendChild(cardDiv);
 
+    btnHideProject.addEventListener("click", function() {
+        // @ts-ignore
+        btnHideProject.firstChild.classList.toggle("bi-eye-slash");
+        // @ts-ignore
+        btnHideProject.firstChild.classList.toggle("bi-eye");
+    });
+    
     return colDiv;
 }
 

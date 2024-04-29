@@ -12,6 +12,8 @@ const projectCreatedToast = new Toast(document.getElementById("projectToast")!);
 const projectDescCreatedToast = new Toast(document.getElementById("projectDescriptionToast")!);
 
 const btnCreateProject = document.getElementById("btnCreateProject") as HTMLButtonElement;
+const btnHideProject = document.getElementById("btnHideProject") as HTMLButtonElement;
+
 const butConfirmCreateProject = document.getElementById("butConfirmCreateProject") as HTMLButtonElement;
 const butCloseCreateProjectModal = document.getElementById("butCloseCreateProjectModal") as HTMLButtonElement;
 const butCancelCreateProjectModal = document.getElementById("butCancelCreateProjectModal") as HTMLButtonElement;
