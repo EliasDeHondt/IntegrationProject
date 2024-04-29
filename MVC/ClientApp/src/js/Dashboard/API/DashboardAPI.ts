@@ -138,9 +138,9 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     let btnGraphProject = createButton("btnGraphProject", "bi-graph-up");
     let btnEnterProject = createButton("btnEnterProject", "bi-folder");
 
-    btnHideProject.className = "border-0 p-0 position-absolute top-0 end-1 ms-2\" style=\"background: none;";
-    btnDeleteProject.className = "border-0 p-0 position-absolute top-0 end-0 me-2\" style=\"background: none;";
-    btnGraphProject.className = "border-0 p-0 position-absolute top-0 end-0 mt-5 me-2\" style=\"background: none;";
+    btnHideProject.className = "border-0 p-0 position-absolute top-0 end-1 ms-2 mb-2\" style=\"background: none;";
+    btnDeleteProject.className = "border-0 p-0 position-absolute top-0 end-0 me-2 mb-2\" style=\"background: none;";
+    btnGraphProject.className = "border-0 p-0 position-absolute top-0 end-0 mt-5 me-2 mb-2\" style=\"background: none;";
     btnEnterProject.className = "border-0 p-0";
     btnEnterProject.style.background = "none;";
     btnEnterProject.style.fontSize = "10vh";
