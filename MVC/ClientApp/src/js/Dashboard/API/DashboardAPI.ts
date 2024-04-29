@@ -3,7 +3,12 @@ import * as editModal from "../EditUserModal";
 import {Project} from "../Types/ProjectObjects";
 import * as deleteModal from "../DeleteUserModal";
 
+// Nav
+export function showUserName(accountname: HTMLElement){
+    accountname.textContent = user.userName;
+}
 
+// Users
 export async function getUsersForPlatform(platformId: string): Promise<User[]>{
     return await fetch("/api/Users/GetUsersForPlatform/" + platformId)
         .then(response => response.json())

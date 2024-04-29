@@ -15,16 +15,32 @@
 <div class="text-center">
     <div class="row h-100 w-100">
         <!-- Dashboard -->
-        <div class="col-lg-2 col-md-3 col-sm-4 col-6 p-3 bg-light">
+        <div class="container-fluid col-lg-2 col-md-3 col-sm-4 col-6 p-3 bgPrimary">
             <ul class="nav nav-pills flex-column mb-auto">
+                <div class="logo">
+                    <img src="/favicon.ico" alt="Logo">
+                </div>
+                
                 <li class="nav-item">
-                    <a href="#" class="nav-link active" aria-current="page">Dashboard</a>
+                    <a style="background: white" id="accountname"></a>
                 </li>
+                <li class="nav-item">
+                    <a href="/SharedPlatform/Dashboard" class="nav-link active" aria-current="page">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Sign Out</button>
+                    </form>
+                </li>
+                
             </ul>
         </div>
+        
         <!-- Partials -->
         <div class="col-lg-10 col-md-9 col-sm-8 col-6">
             <div class="py-3 h-100">
+                @* <partial name="Partials/NavigationPartial"/> *@
+                
                 <partial name="Partials/ProjectPartial"/>
                 <partial name="Partials/UserPartial"/>
 

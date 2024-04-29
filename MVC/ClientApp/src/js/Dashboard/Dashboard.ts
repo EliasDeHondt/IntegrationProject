@@ -8,7 +8,9 @@ import "/node_modules/embla-carousel";
 import EmblaCarousel, {EmblaOptionsType} from "embla-carousel";
 import {addPrevNextBtnsClickHandlers} from './EmblaCarouselArrowButtons'
 import '../../css/embla.scss'
+import {showUserName} from "./API/DashboardAPI";
 
+const accountname = document.getElementById("accountname") as HTMLElement;
 const userRoulette = document.getElementById("carouselContainer") as HTMLDivElement;
 const projectRoulette = document.getElementById("carouselPContainer") as HTMLDivElement;
 const OPTIONS: EmblaOptionsType = {align: 'start'};
@@ -41,6 +43,7 @@ const removePrevNextBtnsClickHandlersProject = addPrevNextBtnsClickHandlers(
 let id: string = document.getElementById("platformId")!.textContent!
 
 isUserInRole(UserRoles.UserPermission).then(result => {
+    dashboard.showUserName(accountname);
     dashboard.generateUserCards(id, userRoulette, result);
     dashboard.generateProjectCards(id, projectRoulette);
 })
