@@ -163,17 +163,8 @@ export function generateProjectCard(project: Project): HTMLDivElement {
 
     let projDiv = document.createElement("div");
     projDiv.className = "text-center";
-    btnEnterProject.setAttribute("href", "/Project/Projects/" + projectId);
     projDiv.append(btnEnterProject, editProjectLink);
-    
-    
-    // let a = document.createElement("a");
-    // a.textContent = project.name + ": "
-    //cardBodyDiv.appendChild(a)
-    
     cardBodyDiv.appendChild(projDiv);
-    //cardBodyDiv.appendChild(btnEnterProject);
-    
     
     cardDiv.appendChild(btnHideProject);
     cardDiv.appendChild(btnDeleteProject);
@@ -181,13 +172,18 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     cardDiv.appendChild(cardBodyDiv);
 
     colDiv.appendChild(cardDiv);
-
+    
+    //Dynamic clicks
     btnHideProject.addEventListener("click", function() {
         // @ts-ignore
         btnHideProject.firstChild.classList.toggle("bi-eye-slash");
         // @ts-ignore
         btnHideProject.firstChild.classList.toggle("bi-eye");
     });
+    btnEnterProject.addEventListener("click", function() {
+        window.location.href = "/Project/Projects/" + projectId;
+    });
+    
     
     return colDiv;
 }
