@@ -1,4 +1,5 @@
-﻿using Business_Layer;
+﻿using System.Drawing;
+using Business_Layer;
 using Domain.Platform;
 using Domain.ProjectLogics;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +38,7 @@ public class ProjectsController : Controller
         {
             Title = model.Name,
             Description = model.Description,
+            Image = model.Image,
             SharedPlatform = _sharedPlatformManager.GetSharedPlatform(model.SharedPlatformId) 
         };
         _projectManager.CreateProject(project);
