@@ -49,14 +49,23 @@ export function generateUserCard(user: User, userPermissions: boolean, email:str
     
     let cardBodyDiv = document.createElement("div");
     cardBodyDiv.className = "card-body";
+    let iconDiv = document.createElement("div");
+    iconDiv.className = "text-center";
+    let icon = document.createElement("i");
+    icon.className = "bi bi-person-fill";
+    icon.style.color = "white";
+    icon.style.fontSize = "10vh";
     let pName = document.createElement("p");
-    pName.className = "text-white";
-    pName.textContent = "Name: " + user.userName;
+    pName.className = "text-white p-0";
+    pName.style.marginTop = "-4vh"
+    pName.style.marginBottom = "0"
+    pName.textContent = user.userName;
     let pEmail = document.createElement("p");
-    pEmail.className = "text-white";
+    pEmail.className = "text-white visually-hidden";
     pEmail.textContent = "Email: " + user.email;
     
-    cardBodyDiv.append(pName, pEmail);
+    iconDiv.append(icon, pName);
+    cardBodyDiv.append(iconDiv,pEmail);
     if(userPermissions && user.email != email) {
         utilsDiv!.append(editButton!, deleteButton!)
         cardDiv.append(utilsDiv!)
@@ -75,7 +84,7 @@ export function resetCards(id: string, userRoulette: HTMLDivElement, userPermiss
 }
 
 export function generateUserCards(id: string, userRoulette: HTMLDivElement, userPermissions: boolean) {
-    let cardCreateUser = document.getElementById("cardCreateUser") as HTMLDivElement;
+    let cardCreateUser = document.getElementById("createUserSlide") as HTMLDivElement;
     if(userPermissions) cardCreateUser.style.display = "block";
     else cardCreateUser.style.display = "none";
     getUsersForPlatform(id).then(users => {

@@ -1,8 +1,6 @@
 import {Modal, Toast} from "bootstrap";
-import {isEmailInUse} from "../API/UserAPI";
-import * as API from "./API/CreateUserModalAPI";
-import {resetCards, resetProjectCards} from "./API/DashboardAPI";
-import {UserRoles} from "./Types/UserTypes";
+import {resetProjectCards} from "./API/DashboardAPI";
+import {createProject} from "./API/CreateProjectModalAPI";
 
 const CreateProjectModal = new Modal(document.getElementById('CreateProjectModal')!, {
     keyboard: false,
@@ -29,7 +27,7 @@ btnCreateProject.onclick = async () => {
     CreateProjectModal.show();
 }
 butConfirmCreateProject.onclick = async () => {
-    createProjectShow()
+    await createProjectShow()
 }
 butCloseCreateProjectModal.onclick = () => {
     clearModal()
@@ -39,7 +37,7 @@ butCancelCreateProjectModal.onclick = () => {
 }
 async function createProjectShow() {
     if (await validateForm()) {
-        createProject(inputPName.value, inputDescription.value, 2) // todo: sharedplatform get id sprint 3
+        createProject(inputPName.value, inputDescription.value, id)
             .then(() => clearModal())
             .then(() => {
                 projectCreatedToast.show()
@@ -93,18 +91,4 @@ async function validateForm() {
     }
 
     return valid;
-}
-
-export async function createProject(name: string, description:string, platform: number) {
-    await fetch("/api/Projects/AddProject", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            name: name,
-            description: description,
-            sharedplatformId: platform
-        })
-    })
 }
