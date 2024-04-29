@@ -1,26 +1,30 @@
 ﻿export async function createProject(name: string, description: string, platform: string, logo?: File) {
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('description', description);
-    formData.append('sharedplatformId', platform);
-    
-    if (logo) { // If logo is present, convert it to base64 string and add it to formData
-        const base64String = await readFileAsBase64(logo);
-        if (base64String) {
-            formData.append('logoBase64', base64String);
-        }
+    let bodyData: { // Indexsignatuur ala Elias ;)
+        name: string;
+        description: string;
+        sharedplatformId: string;
+        [key: string]: string;
+    } = {
+        name: name,
+        description: description,
+        sharedplatformId: platform
+    };
 
-        console.log('Base64 image string:', base64String);
-        console.log('Type:', typeof base64String);
+    if (logo) {
+        const base64String = await readFileAsBase64(logo);
+        if (base64String) bodyData["Image"] = base64String;
     }
-    
+
     await fetch("/api/Projects/AddProject", {
         method: "POST",
-        body: formData
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(bodyData)
     });
 }
 
-async function readFileAsBase64(file: File): Promise<string | null> { // Convert file to base64 string
+async function readFileAsBase64(file: File): Promise<string | null> {
     return new Promise((resolve) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
