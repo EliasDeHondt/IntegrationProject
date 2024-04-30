@@ -81,4 +81,20 @@ public class ProjectManager
     {
         return _repo.ReadProjectWithId(id);
     }
+
+    public Project GetProjectWithSharedPlatformAndMainTheme(long id)
+    {
+        return _repo.ReadProjectIncludingSharedPlatformAndMainTheme(id);
+    }
+
+    public void ChangeProject(long id, string title, string description)
+    {
+        _repo.UpdateProject(id, title, description);
+    }
+
+    public Project GetProjectThroughMainTheme(long id)
+    {
+        return _repo.ReadProjectThroughMainTheme(id);
+        
+    }
 }

@@ -11,11 +11,10 @@ public class ProjectController: Controller
     {
         _manager = manager;
     }
-    
-    public IActionResult Projects()
+
+    public IActionResult ProjectPage(long id, bool isMainThemeId = false)
     {
-        var project = _manager.GetProject(1);
+        var project = isMainThemeId ? _manager.GetProjectThroughMainTheme(id) : _manager.GetProject(id);
         return View(project);
     }
-    
 }
