@@ -3,7 +3,8 @@
 import EmblaCarousel, {EmblaOptionsType} from "embla-carousel";
 import {addPrevNextBtnsClickHandlers} from "../EmblaCarouselArrowButtons";
 import {createSubTheme} from "./API/CreateSubThemeAPI";
-import {getMainThemeId} from "./API/ProjectAPI";
+import {getIdProject, getMainThemeId} from "./API/ProjectAPI";
+import {getSubThemesForProject, resetCards} from "./API/SubThemeAPI";
 
 const OPTIONS: EmblaOptionsType = {align: 'start'};
 const emblaNodeSubTheme = <HTMLElement>document.getElementById('emblaSubThemes');
@@ -27,6 +28,7 @@ const butCancelCreateSubTheme = document.getElementById('butCancelCreateSubTheme
 const butCloseCreateSubThemeModal = document.getElementById('butCloseCreateSubTheme') as HTMLButtonElement;
 const btnOpenModal = document.getElementById("btnCreateSubTheme") as HTMLButtonElement;
 const inputSTSubject = document.getElementById("inputSTSubject") as HTMLInputElement;
+const subThemeRoulette = document.getElementById("carouselContainer") as HTMLDivElement;
 
 btnOpenModal.onclick = function () {
     subThemeModal.show();
@@ -34,12 +36,20 @@ btnOpenModal.onclick = function () {
     butCreateSubTheme.onclick = function () {
         getMainThemeId().then(id => {
             createSubTheme(inputSTSubject.value, id).then(() =>{
+                inputSTSubject.value = '';
                 subThemeModal.hide()
+                reset()
             });
         })
     }
 
+    function reset() {
+        getSubThemesForProject(getIdProject())
+            .then(subThemes => resetCards(subThemes, subThemeRoulette));
+    }
+    
     butCancelCreateSubTheme.onclick = function () {
+        inputSTSubject.value = '';
         subThemeModal.hide();
     };
     butCloseCreateSubThemeModal.onclick = function () {

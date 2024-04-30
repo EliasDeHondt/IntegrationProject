@@ -1,4 +1,5 @@
 import {loadFlows, showFlows, updateSubTheme} from "./API/SubThemeAPI";
+import {showNotificationToast} from "../../Toast/NotificationToast";
 
 const flowContainer = document.getElementById("flowContainer") as HTMLTableSectionElement;
 let themeId = Number((document.getElementById("subThemeId") as HTMLSpanElement).innerText);
@@ -8,7 +9,7 @@ loadFlows(themeId).then(flows => {
     showFlows(flows, flowContainer);
 })
 
-saveButton.onclick = async () => {
+saveButton.onclick = () => {
     let subject = (document.getElementById("inputTitle") as HTMLInputElement).value;
-    await updateSubTheme(themeId, subject);
+    updateSubTheme(themeId, subject).then(() => showNotificationToast("The sub theme has been successfully updated!"));
 }

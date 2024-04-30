@@ -49,12 +49,20 @@ function generateCard(subTheme: SubTheme): HTMLDivElement{
     return cardContainer;
 }
 
-export function generateCards(subThemes: SubTheme[]) {
+export function generateCards(subThemes: SubTheme[], subThemeRoulette: HTMLDivElement) {
     const cards = subThemes.map(generateCard);
-    const subThemeRoulette = document.getElementById("carouselContainer") as HTMLDivElement;
+    
     cards.forEach(card => {
         subThemeRoulette.appendChild(card);
     })
+}
+
+export function resetCards(subThemes: SubTheme[], subThemeRoulette: HTMLDivElement){
+    let length = subThemeRoulette.children.length
+    for (let i = length - 1; i > 0; i--){
+        subThemeRoulette.children[i].remove();
+    }
+    generateCards(subThemes, subThemeRoulette);
 }
 
 export async function getSubThemesForProject(id: number): Promise<SubTheme[]>{
