@@ -137,16 +137,12 @@ button.accept-policy {
   font-size: 0.8em;
 }
 
-#navbar.collapsed  {
+#navbar {
+  transition: width 0.5s; /* Transition the width property over 0.5 seconds */
+}
+
+#navbar.collapsed {
   width: 200px;
-  transition-delay: 10ms;
-  //overflow: hidden;
-}
-#navbar.collapsed #maincontent {
-  display: none;
-}
-#collapseButton {
-  display: block;
 }
 
 .bhover:hover {
