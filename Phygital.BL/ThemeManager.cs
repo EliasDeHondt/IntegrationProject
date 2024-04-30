@@ -29,9 +29,9 @@ public class ThemeManager
         return _repository.ReadMainThemeById(id);
     }
 
-    public SubTheme GetSubThemeByIdWithMainTheme(long id)
+    public SubTheme GetSubThemeByIdWithMainThemeAndProject(long id)
     {
-        return _repository.ReadSubThemeByIdWithMainTheme(id);
+        return _repository.ReadSubThemeByIdIncludingMainThemeAndProject(id);
     }
 
     public IEnumerable<SubTheme> GetSubThemesOfMainThemeById(long id)
@@ -49,5 +49,16 @@ public class ThemeManager
         var mainTheme = GetMainThemeById(mainThemeId);
         var theme = new SubTheme(subject, mainTheme);
         return _repository.CreateSubTheme(theme);
+    }
+
+    public IEnumerable<SubTheme> GetSubthemesForProject(long id)
+    {
+        return _repository.ReadSubthemesForProject(id);
+    }
+
+
+    public void UpdateSubTheme(long id, string subject)
+    {
+        _repository.UpdateSubTheme(id, subject);
     }
 }

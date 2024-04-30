@@ -9,34 +9,71 @@
 @model SubTheme
 
 @{
-    Layout = "_Layout";
-    ViewData["Title"] = $"Theme {Model.Id}";
+    Layout = null;
+    ViewData["Title"] = Model.Subject;
 }
 
 <!DOCTYPE html>
 
-<html lang="">
+<html lang="" class="h-100 w-100 overflow-hidden">
 <head>
-    <title>@ViewData["Title"]</title>
+    <title>title</title>
+    <link rel="stylesheet" href="~/dist/site.css"/>
 </head>
-<body>
-<h1>Theme <span id="subThemeId">@Model.Id</span> - @Model.Subject</h1>
-<a asp-controller="MainTheme" asp-action="MainTheme" asp-route-id="@Model.MainTheme.Id">Back to Sub-Themes</a>
-<div>
-    <table class="table">
-        <caption>Flows</caption>
-        <thead>
-        <tr>
-            <th>Flow ID</th><th>Flow Type</th><th>Start</th>
-        </tr>
-        </thead>
-        <tbody id="flowContainer"></tbody>
-    </table>
+<body class="row h-100 w-100">
+<div class="text-center">
+    <div class="row">
+        <!-- Dashboard -->
+        <div class="col-lg-2 col-md-3 col-sm-4 col-6 p-3 bg-light">
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" aria-current="page">Dashboard</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Titel -->
+        <div class="col-lg-10 col-md-9 col-sm-8 col-6">
+            <div class="py-3">
+                <div class="row ms-4">
+                    <div class="col-auto card border-black border-2 bgAccent align-top">
+                        <a id="btnGoBackToProject" class="border-0 p-0 m-2 bg-transparent text-black text-decoration-none" asp-controller="Project" asp-action="ProjectPage" asp-route-isMainThemeId="true" asp-route-id="@Model.MainTheme.Id">Go back to project</a>
+                    </div>
+                    <div class="col-auto card border-black border-2 bgAccent align-top ms-5">
+                        <button id="btnSaveSubTheme" class="border-0 p-0 m-2" style="background: none;">Save SubTheme</button>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <div class="col">
+                        <div class=" card border-black border-2 m-4 bgAccent">
+                            <input id="inputTitle" class="m-1" placeholder="Theme Subject." value="@Model.Subject">
+                        </div>
+                        <p id="errorMsgTitle" style="text-align: left;">&nbsp;</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="row row-cols-3 ps-4 pe-4 m-4 ">
+                    <div>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Flow ID</th><th>Flow Type</th><th>Edit</th>
+                            </tr>
+                            </thead>
+                            <tbody id="flowContainer"></tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 </body>
-<footer>
-
-</footer>
 </html>
-
-<script src="/dist/subThemeDetails.entry.js" defer></script>
+<span id="subThemeId" class="visually-hidden">@Model.Id</span>
+<script src="/dist/site.entry.js" defer></script>
+<script src="/dist/subTheme.entry.js" defer></script>

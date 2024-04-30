@@ -35,7 +35,6 @@
                         <p id="errorMsgTitle" style="text-align: left;">&nbsp;</p>
                     </div>
                     <div class="col-auto card border-black border-2 bgAccent align-top">
-                        @* <a class="nav-link text-light" asp-area="" asp-controller="SharedPlatform" asp-action="Dashboard" asp-route-id="1"> Publish Project</a> *@
                         <button id="btnPublishProject" class="border-0 p-0 m-2" style="background: none;" data-project-id="@Model.Id">Save Project</button>
                     </div>
                 </div>
@@ -49,13 +48,10 @@
                             <div class="col mt-3 mb-3">
                                 <div class="card border-black border-2 bgAccent" style="height: 250px; width: 1000px">
                                     <div class="card-body align-items-center d-flex justify-content-center">
-                                        <textarea id="inputText" placeholder="Write a desciption for your project." class="form-control" style="height: 100%; width: 100%; resize: none;"></textarea>
+                                        <textarea id="inputText" placeholder="Write a description for your project." class="form-control" style="height: 100%; width: 100%; resize: none;"></textarea>
                                     </div>
                                 </div>
                             </div>
-                            @* <div class="col mt-3 mb-3"> *@
-                            @*         <p id="errorMsgText" style="text-align: left;">&nbsp;</p> *@
-                            @* </div> *@
                         </div>
                         
                         <!-- Flows -->

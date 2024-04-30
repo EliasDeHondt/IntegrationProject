@@ -1,7 +1,5 @@
 import {Project} from "../Types/ProjectObjects";
 
-
-
 export function fillExisting(project: Project, inputTitle: HTMLInputElement, inputText: HTMLInputElement): void{
     inputTitle.value = project.title
     inputText.value = project.description
@@ -53,7 +51,7 @@ export async function getProjectWithId(projectId: number): Promise<Project>{
 }
 export function getIdProject():number{
     let href = window.location.href;
-    let regex = RegExp(/\/Project\/Projects\/(\d+)/).exec(href);
+    let regex = RegExp(/\/Project\/ProjectPage\/(\d+)/).exec(href);
 
     if (regex) {
         return parseInt(regex[1], 10);
@@ -69,6 +67,8 @@ export async function getMainThemeId(): Promise<number>{
     })
     
 }
+
+
 
 //Button
 

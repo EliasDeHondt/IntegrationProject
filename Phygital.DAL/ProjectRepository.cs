@@ -9,9 +9,8 @@ namespace Data_Access_Layer;
 
 public class ProjectRepository
 {
-
     private readonly CodeForgeDbContext _ctx;
-    
+
 
     public ProjectRepository(CodeForgeDbContext ctx)
     {
@@ -31,7 +30,7 @@ public class ProjectRepository
         return _ctx.Projects
             .First(proj => proj.Id == id);
     }
-    
+
     public IEnumerable<Project> ReadAllProjectsForSharedPlatformIncludingMainTheme(long platformId)
     {
         return _ctx.Projects
@@ -40,10 +39,13 @@ public class ProjectRepository
             .Include(project => project.MainTheme)
             .ToList();
     }
-    
+
     public void CreateProjectOrganizer(ProjectOrganizer projectOrganizer)
     {
-        if(_ctx.ProjectOrganizers.Where(organizer => organizer.Project.Id == projectOrganizer.Project.Id && organizer.Facilitator.Id == projectOrganizer.Facilitator.Id).ToList().Count == 0) _ctx.ProjectOrganizers.Add(projectOrganizer);
+        if (_ctx.ProjectOrganizers.Where(organizer =>
+                organizer.Project.Id == projectOrganizer.Project.Id &&
+                organizer.Facilitator.Id == projectOrganizer.Facilitator.Id).ToList().Count ==
+            0) _ctx.ProjectOrganizers.Add(projectOrganizer);
     }
 
     public IEnumerable<Project> ReadPossibleProjectsForFacilitator(string email)
@@ -52,9 +54,8 @@ public class ProjectRepository
             .Include(p => p.MainTheme)
             .ToList();
         var assignedProjects = ReadAssignedProjectsForFacilitator(email);
-        
+
         return projects.Except(assignedProjects).ToList();
-        
     }
 
     public IEnumerable<Project> ReadAssignedProjectsForFacilitator(string email)
@@ -69,12 +70,14 @@ public class ProjectRepository
 
     public void RemoveProjectOrganizer(Facilitator user, Project project)
     {
-        var projectOrganizer = _ctx.ProjectOrganizers.FirstOrDefault(po => po.Facilitator == user && po.Project == project);
+        var projectOrganizer =
+            _ctx.ProjectOrganizers.FirstOrDefault(po => po.Facilitator == user && po.Project == project);
         _ctx.ProjectOrganizers.Remove(projectOrganizer!);
     }
-    public void CreateProject(MainTheme mainTheme,SharedPlatform sharedPlatform,long id)
+
+    public void CreateProject(MainTheme mainTheme, SharedPlatform sharedPlatform, long id)
     {
-        Project p = new Project(mainTheme.Subject,mainTheme,sharedPlatform,id);
+        Project p = new Project(mainTheme.Subject, mainTheme, sharedPlatform, id);
         _ctx.Projects.Add(p);
         _ctx.SaveChanges();
     }
@@ -109,5 +112,13 @@ public class ProjectRepository
         var project = ReadProjectWithId(id);
         project.Title = title;
         project.Description = description;
+    }
+
+    public Project ReadProjectThroughMainTheme(long id)
+    {
+        return _ctx.Projects
+            .AsNoTracking()
+            .Include(project => project.MainTheme)
+            .First(project => project.MainTheme.Id == id);
     }
 }

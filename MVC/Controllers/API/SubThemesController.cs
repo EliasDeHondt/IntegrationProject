@@ -50,4 +50,21 @@ public class SubThemesController : ControllerBase
         return CreatedAtAction("AddSubTheme", theme);
     }
     
+    [HttpGet("GetSubthemesForProject/{id}")]
+    public IActionResult GetSubthemesForProject(long id)
+    {
+        var subThemes = _manager.GetSubthemesForProject(id);
+        var subThemeDtos = subThemes.Select(subTheme => new SubThemeViewModel { Id = subTheme.Id, Subject = subTheme.Subject, MainThemeId = subTheme.MainTheme.Id }).ToList();
+        return Ok(subThemeDtos);
+    }
+ 
+    [HttpPut("UpdateSubTheme/{id}")]
+    public IActionResult UpdateSubTheme(long id, SubThemeViewModel dto)
+    {
+        _uow.BeginTransaction();
+        _manager.UpdateSubTheme(id, dto.Subject);
+        _uow.Commit();
+        return NoContent();
+    }
+    
 }

@@ -91,5 +91,10 @@ public class ProjectManager
     {
         _repo.UpdateProject(id, title, description);
     }
-    
+
+    public Project GetProjectThroughMainTheme(long id)
+    {
+        return _repo.ReadProjectThroughMainTheme(id);
+        
+    }
 }
