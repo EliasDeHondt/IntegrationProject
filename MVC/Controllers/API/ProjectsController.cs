@@ -1,4 +1,5 @@
-﻿using Business_Layer;
+﻿using System.Drawing;
+using Business_Layer;
 using Domain.Platform;
 using Domain.ProjectLogics;
 using Microsoft.AspNetCore.Mvc;
@@ -33,13 +34,17 @@ public class ProjectsController : Controller
     public IActionResult AddProject(ProjectViewModel model)
     {
         _uow.BeginTransaction();
-
+        
         var project = new Project
         {
             Title = model.Name,
             Description = model.Description,
-            SharedPlatform = _sharedPlatformManager.GetSharedPlatform(model.SharedPlatformId) 
+            SharedPlatform = _sharedPlatformManager.GetSharedPlatform(model.SharedPlatformId)
         };
+        
+        // If the logo is also added (Image is not null)
+        if (model.Image != null) project.Image = model.Image;
+
         _projectManager.CreateProject(project);
         _sharedPlatformManager.AddProjectToPlatform(project, model.SharedPlatformId);
         
