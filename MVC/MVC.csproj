@@ -60,6 +60,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Views\Project\Modals\" />
       <Folder Include="wwwroot\Assets\Videos\" />
     </ItemGroup>
 

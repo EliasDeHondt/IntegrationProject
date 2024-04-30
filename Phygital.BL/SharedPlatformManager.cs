@@ -1,5 +1,6 @@
 ﻿using Data_Access_Layer;
 using Domain.Platform;
+using Domain.ProjectLogics;
 using Microsoft.AspNetCore.Identity;
 
 namespace Business_Layer;
@@ -26,6 +27,16 @@ public class SharedPlatformManager
     public IEnumerable<IdentityUser> GetUsersForPlatform(long id)
     {
         return _repo.ReadUsersForPlatform(id);
+    }
+
+    public IEnumerable<Project> GetProjectsForPlatform(long platformId)
+    {
+        return _repo.ReadProjectsForPlatform(platformId);
+    }
+
+    public void AddProjectToPlatform(Project project, long sharedPlatformId)
+    {
+        _repo.AddProjectToPlatform(project,sharedPlatformId);
     }
     
 }
