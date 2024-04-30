@@ -16,8 +16,8 @@ public class SubThemeViewModel
     public long Id { get; set; }
     [MaxLength(50)]
     public string Subject { get; set; }
+
+    [Required] public IEnumerable<Flow> Flows { get; set; } = new List<Flow>();
     [Required]
-    public IEnumerable<Flow> Flows { get; set; }
-    [Required]
-    public long MainTheme { get; set; }
+    public long MainThemeId { get; set; }
 }
