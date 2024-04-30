@@ -144,6 +144,10 @@ button.accept-policy {
 #navbar.collapsed nav ul, #navbar.collapsed .main-menu-top {
   display: none; /* Hide the navigation items, top and bottom when collapsed */
 }
+#collapseButton:hover {
+  transition: 0.5s !important;
+  border-radius: 10px !important;
+}
 .modal-content {
   background-color: map-get($themes, light, background);
 }
