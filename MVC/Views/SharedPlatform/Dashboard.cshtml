@@ -24,9 +24,13 @@
                 <li class="nav-item" style="background: white; padding-bottom: 10px; padding-top: 10px; padding-right: 0; padding-left: 0;">
                     <a id="accountname"></a>
                 </li>
-                <li class="nav-item" style="padding-bottom: 10px; padding-bottom: 10px; padding-top: 10px;  padding-right: 0; padding-left: 0;">
-                    <a href="/SharedPlatform/Dashboard" class="nav-link active text-dark border-0" aria-current="page">Dashboard</a>
+                <li class="nav-item bgPrimary" style="padding-bottom: 10px; padding-top: 20px;  padding-right: 0; padding-left: 0;">
+                    <a href="/SharedPlatform/Dashboard" class="nav-link active text-dark border-0 bgAccent" aria-current="page" style="padding-top: 20px">Dashboard</a>
                 </li>
+                <li class="nav-item bgPrimary" style="padding-bottom: 10px; padding-top: 10px;  padding-right: 0; padding-left: 0;">
+                    <a href="/SharedPlatform/Statistics" class="nav-link active text-dark border-0 bgAccent" aria-current="page" style="padding-top: 20px">Statistics</a>
+                </li>
+                
                 <li class="nav-item bgAccent" style="padding: 10px 0; margin-top: auto;">
                     <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                         <a href="/Account/Logout" class="d-block text-dark">
@@ -40,7 +44,7 @@
                 </div>
 
                 <div class="nav-item" id="collapseButton" style="padding-top: 20px;  padding-left: 70%;">
-                    <button class="btn btn-link text-dark border-0 w-100 bgPrimary" style="padding: 20px"><i id="icon" class="bi bi-caret-left-fill"></i></button>
+                    <button class="btn btn-link text-dark border-0 w-100 bgAccent" style="padding: 20px"><i id="icon" class="bi bi-caret-left-fill"></i></button>
                 </div>
                 
                 
