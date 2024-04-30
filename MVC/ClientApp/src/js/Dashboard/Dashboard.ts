@@ -78,6 +78,9 @@ document.addEventListener('DOMContentLoaded', function() {
             dashboard.style.display = 'none';
             statistics.style.display = 'none';
             signout.style.display = 'none';
+
+            collapseButton.style.margin = 'auto';
+            collapseButton.style.display = 'block';
         }else{
             languageButton.style.display = 'block';
             accountname.style.display = 'block';

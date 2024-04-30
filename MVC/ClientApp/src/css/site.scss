@@ -138,9 +138,12 @@ button.accept-policy {
 }
 
 #navbar {
-  transition: width 0.5s; /* Transition the width property over 0.5 seconds */
+  transition: width 0.5s;
 }
-
+//#maincontent.collapsed { //todo werkt niet
+//  width: 200px;
+//  transition: width 2s !important; 
+//}
 #navbar.collapsed {
   width: 200px;
 }
