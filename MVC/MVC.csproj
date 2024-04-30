@@ -62,6 +62,7 @@
     <ItemGroup>
       <Folder Include="Pages\" />
       <Folder Include="Views\Project\Modals\" />
+      <Folder Include="Views\Statistics\" />
       <Folder Include="wwwroot\Assets\Videos\" />
     </ItemGroup>
 

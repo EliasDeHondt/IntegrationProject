@@ -21,18 +21,18 @@
                     <img src="/favicon.ico" alt="Logo">
                 </div>
         
-                <li class="nav-item" style="background: white; padding-bottom: 20px; padding-top: 20px; border-radius: 5px;">
+                <li id="tohideAN" class="nav-item" style="background: white; padding-bottom: 20px; padding-top: 20px; border-radius: 5px;">
                     <a id="accountname"></a>
                 </li>
-                <li class="nav-item bgPrimary" style="padding-bottom: 10px; padding-top: 20px;">
+                <li id="tohideD" class="nav-item bgPrimary" style="padding-bottom: 10px; padding-top: 20px;">
                     <a href="/SharedPlatform/Dashboard" class="bhover nav-link active text-dark bgAccent" aria-current="page" style="display: block; padding: 20px 0; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">Dashboard</a>
                 </li>
-                <li class="nav-item bgPrimary" style="padding-bottom: 10px; padding-top: 10px;">
+                <li id="tohideS" class="nav-item bgPrimary" style="padding-bottom: 10px; padding-top: 10px;">
                     <a href="/Statistics/Statistics" class="bhover nav-link active text-dark bgAccent" aria-current="page" style="display: block; padding: 20px 0; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">Statistics</a>
                 </li>
 
                 
-                <li class="nav-item bgAccent bhover" style="padding: 10px 0; margin-top: auto;  border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">
+                <li id="tohideLO" class="nav-item bgAccent bhover" style="padding: 10px 0; margin-top: auto;  border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">
                     <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                         <a href="/Account/Logout" class="d-block text-dark" >
                             <button id="logout" type="submit" class="btn btn-link text-dark w-100 text-decoration-none" style="font-size: 20px;">Sign Out</button>
@@ -49,8 +49,6 @@
                         <button class="bhover text-dark w-100 bgAccent" style="padding: 20px; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;"><i id="icon" class="bi bi-caret-left-fill"></i></button>
                     </div>
                 </div>
-
-                
                 
             </ul>
         </div>

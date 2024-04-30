@@ -139,19 +139,16 @@ button.accept-policy {
 
 #navbar.collapsed  {
   width: 200px;
-  overflow: hidden;
+  transition-delay: 10ms;
+  //overflow: hidden;
 }
-#navbar.collapsed nav ul, #navbar.collapsed .main-menu-top {
-  display: none; /* Hide the navigation items, top and bottom when collapsed */
+#navbar.collapsed #maincontent {
+  display: none;
 }
-#collapseButton:hover {
-  transition: 0.5s !important;
-  border-radius: 10px !important;
+#collapseButton {
+  display: block;
 }
-//.bhover:hover{
-//  transition: 0.5s !important;
-//  background-color: #0dcaf0;
-//}
+
 .bhover:hover {
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3) !important;
 }
