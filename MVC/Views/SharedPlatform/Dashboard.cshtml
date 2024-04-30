@@ -24,29 +24,32 @@
                 <li class="nav-item" style="background: white; padding-bottom: 20px; padding-top: 20px; border-radius: 5px;">
                     <a id="accountname"></a>
                 </li>
-                <li class="nav-item bgPrimary" style="padding-bottom: 10px; padding-top: 20px; border-radius: 5px;">
-                    <a href="/SharedPlatform/Dashboard" class="nav-link active text-dark border-0 bgAccent" aria-current="page" style="display: block; padding: 20px 0;">Dashboard</a>
+                <li class="nav-item bgPrimary" style="padding-bottom: 10px; padding-top: 20px;">
+                    <a href="/SharedPlatform/Dashboard" class="bhover nav-link active text-dark bgAccent" aria-current="page" style="display: block; padding: 20px 0; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">Dashboard</a>
                 </li>
-                <li class="nav-item bgPrimary" style="padding-bottom: 10px; padding-top: 10px; border-radius: 5px;">
-                    <a href="/SharedPlatform/Statistics" class="nav-link active text-dark border-0 bgAccent" aria-current="page" style="display: block; padding: 20px 0;">Statistics</a>
+                <li class="nav-item bgPrimary" style="padding-bottom: 10px; padding-top: 10px;">
+                    <a href="/SharedPlatform/Statistics" class="bhover nav-link active text-dark bgAccent" aria-current="page" style="display: block; padding: 20px 0; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">Statistics</a>
                 </li>
 
                 
-                <li class="nav-item bgAccent" style="padding: 10px 0; margin-top: auto;">
+                <li class="nav-item bgAccent bhover" style="padding: 10px 0; margin-top: auto;  border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">
                     <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                        <a href="/Account/Logout" class="d-block text-dark">
-                            <button id="logout" type="submit" class="btn btn-link text-dark border-0 w-100 text-decoration-none">Sign Out</button>
+                        <a href="/Account/Logout" class="d-block text-dark" >
+                            <button id="logout" type="submit" class="btn btn-link text-dark w-100 text-decoration-none" style="font-size: 20px;">Sign Out</button>
                         </a>
                     </form>
                 </li>
 
-                <div class="nav-item" id="language" style="padding-top: 20px;  padding-right: 70%;">
-                    <button class="btn btn-link text-dark border-0 w-100 bgAccent" style="padding: 20px">NED</button>
+                <div class="d-flex justify-content-between">
+                    <div class="nav-item" id="language" style="padding-top: 20px;">
+                        <button class="bhover text-dark w-100 bgAccent" style="padding: 20px; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">NED</button>
+                    </div>
+                
+                    <div class="nav-item" id="collapseButton" style="padding-top: 20px;">
+                        <button class="bhover text-dark w-100 bgAccent" style="padding: 20px; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;"><i id="icon" class="bi bi-caret-left-fill"></i></button>
+                    </div>
                 </div>
 
-                <div class="nav-item" id="collapseButton" style="padding-top: 20px;  padding-left: 70%;">
-                    <button class="btn btn-link text-dark border-0 w-100 bgAccent" style="padding: 20px"><i id="icon" class="bi bi-caret-left-fill"></i></button>
-                </div>
                 
                 
             </ul>
