@@ -1,0 +1,41 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Flow Editor";
+}
+
+<!DOCTYPE html>
+
+<html lang="">
+<head>
+    <title>Flow Editor</title>
+    <link rel="stylesheet" href="~/dist/site.css"/>
+</head>
+<body>
+
+<div class="container-sm editor-shared-outer-container" id="input-container">
+    <div class="editor-shared-inner-container" id="btn-area-1">
+        <button class="btn-primary" id="saveFlow">Save Flow</button>
+    </div>
+    <div class="editor-shared-inner-container" id="btn-area-2">
+        
+    </div>
+</div>
+
+<div class="container-lg editor-shared-outer-container" id="step-view">
+    <div class="editor-shared-inner-container" id="step-view-container"> <!--Wordt automatisch gevuld in FlowEditor.ts!-->
+        
+    </div>
+</div>
+
+<div class="container-sm editor-shared-outer-container" id="step-container">
+    <div class="editor-shared-inner-container" id="steps-list"> <!--Wordt automatisch gevuld in FlowEditor.ts!-->
+    </div>
+</div>
+
+</body>
+</html>
+
+@section Scripts
+{
+    <script src="/dist/flowEditor.entry.js"></script>
+}

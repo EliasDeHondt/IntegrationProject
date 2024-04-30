@@ -8,6 +8,7 @@
 using Data_Access_Layer.DbContext;
 using Domain.Accounts;
 using Domain.ProjectLogics;
+using Domain.ProjectLogics.Steps;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data_Access_Layer;
@@ -60,5 +61,15 @@ public class FlowRepository
     public void UpdateFlowState(Flow flow)
     {
         _context.Flows.Update(flow);
+    }
+
+    public IEnumerable<StepBase> GetAllSteps(long flowId)
+    {
+        Flow flow = _context.Flows
+            .AsNoTracking()
+            .Include(flow => flow.Steps)
+            .First(flow => flow.Id == flowId);
+
+        return flow.Steps;
     }
 }

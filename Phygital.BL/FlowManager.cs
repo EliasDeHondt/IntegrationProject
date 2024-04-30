@@ -39,6 +39,15 @@ public class FlowManager
         return _repository.ReadFlowById(id);
     }
 
+    /** Returns all steps in the given flow.
+     * 
+     * parameter: flowId -> The ID of the flow from which we are getting the steps.
+     */ 
+    public IEnumerable<StepBase> GetAllStepsInFlow(long flowId)
+    {
+        return _repository.GetAllSteps(flowId);
+    }
+
     public Flow GetFlowByIdWithTheme(long id)
     {
         return _repository.ReadFlowByIdIncludingTheme(id);
