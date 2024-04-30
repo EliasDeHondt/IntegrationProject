@@ -1,9 +1,6 @@
-﻿using System.Drawing;
-using Business_Layer;
-using Domain.Platform;
+﻿using Business_Layer;
 using Domain.ProjectLogics;
 using Microsoft.AspNetCore.Mvc;
-using MVC.Models;
 using MVC.Models.projectModels;
 
 namespace MVC.Controllers.API;
@@ -31,13 +28,13 @@ public class ProjectsController : Controller
     }
 
     [HttpPost("AddProject")]
-    public IActionResult AddProject(ProjectViewModel model)
+    public IActionResult AddProject(ProjectDto model)
     {
         _uow.BeginTransaction();
         
         var project = new Project
         {
-            Title = model.Name,
+            Title = model.Title,
             Description = model.Description,
             SharedPlatform = _sharedPlatformManager.GetSharedPlatform(model.SharedPlatformId)
         };
@@ -68,13 +65,13 @@ public class ProjectsController : Controller
         if (User.Identity is { IsAuthenticated: false }) return Unauthorized();
         var projects = _sharedPlatformManager.GetProjectsForPlatform(platformId);
 
-        ICollection<ProjectViewModel> projectList = new List<ProjectViewModel>();
+        ICollection<ProjectDto> projectList = new List<ProjectDto>();
         foreach (var project in projects)
         {
-            projectList.Add(new ProjectViewModel
+            projectList.Add(new ProjectDto()
             {
                 Id = project.Id,
-                Name = project.Title,
+                Title = project.Title,
                 Description = project.Description
             });
         }
