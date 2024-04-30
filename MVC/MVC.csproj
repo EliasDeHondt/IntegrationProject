@@ -60,6 +60,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Controllers\Google\" />
       <Folder Include="wwwroot\Assets\Videos\" />
     </ItemGroup>
 

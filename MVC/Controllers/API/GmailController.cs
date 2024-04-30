@@ -1,11 +1,15 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿using System.Net.Mail;
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.Gmail.v1;
 using Google.Apis.Gmail.v1.Data;
 using Google.Apis.Services;
 using Microsoft.AspNetCore.Mvc;
+using MVC.Models;
 
 namespace MVC.Controllers.Google;
 
+[ApiController]
+[Route("api/[controller]")]
 public class GmailController : Controller
 {
 
@@ -25,8 +29,21 @@ public class GmailController : Controller
         msg.Id = "me";
         msg.Raw = "test";
 
-        _service.Users.Messages.Send(msg, "test@gmail.com").Execute();
+        
     }
 
+    [Route("SendEmail")]
+    public IActionResult SendEmail(EmailModel emailDto)
+    {
+        var message = new MailMessage()
+        {
+            From = new MailAddress(emailDto.From),
+            Subject = emailDto.Subject,
+            IsBodyHtml = true,
+            Body = emailDto.Body
+        };
+        message.To.Add(new MailAddress(emailDto.To));
+        return Ok();
+    }
 
 }

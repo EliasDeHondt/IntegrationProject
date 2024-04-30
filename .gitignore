@@ -261,4 +261,4 @@ fabric.properties
 *.db-shm
 *.db-wal
 */wwwroot/dist/
-service-account-key.json
+*/service-account-key.json

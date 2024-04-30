@@ -30,6 +30,8 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         string bucketName = Environment.GetEnvironmentVariable("BUCKET_NAME_VIDEO") ?? "codeforge-video-bucket";
+        // REVERT AFTER TESTING
+        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../service-account-key.json");
         
         var options = new CloudStorageOptions
         {
