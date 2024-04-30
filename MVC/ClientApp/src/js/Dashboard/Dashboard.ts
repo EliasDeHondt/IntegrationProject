@@ -43,9 +43,34 @@ const removePrevNextBtnsClickHandlersProject = addPrevNextBtnsClickHandlers(
 let id: string = document.getElementById("platformId")!.textContent!
 
 isUserInRole(UserRoles.UserPermission).then(result => {
-    dashboard.showUserName(accountname);
+    dashboard.showUserName(id,accountname);
     dashboard.generateUserCards(id, userRoulette, result);
     dashboard.generateProjectCards(id, projectRoulette);
 })
 emblaApiProject.on('destroy', removePrevNextBtnsClickHandlersProject)
 emblaApiUser.on('destroy', removePrevNextBtnsClickHandlersUser)
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const navigationBar = document.getElementById('navbar') as HTMLElement;
+    const mainContent = document.getElementById('maincontent') as HTMLElement;
+    const collapseButton = document.getElementById('collapseButton') as HTMLElement;
+    const icon = document.getElementById('icon') as HTMLElement;
+    
+    collapseButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        //navigationBar.classList.toggle('collapsed');
+
+        // Toggle icon
+        icon.classList.toggle('bi-caret-left-fill');
+        icon.classList.toggle('bi-caret-right-fill');
+    });
+    
+    // collapseButton.addEventListener('click', function() {
+    //     if (navigationBar.classList.contains('collapsed')) {
+    //         mainContent.style.paddingRight = '50px'; // Adjust to the width of the collapsed navigation bar
+    //     } else {
+    //         mainContent.style.paddingRight = '800px'; // Adjust to the width of the expanded navigation bar
+    //     }
+    // });
+});

@@ -116,6 +116,9 @@ button.accept-policy {
 .bgModal {
   background: hsl(48, 61%, 47%);
 }
+.bgPrimaryBack {
+  background: hsl(220, 81%, 23%);
+}
 
 .border-accent {
   border-color: map-get($themes, light, accent);
@@ -134,7 +137,13 @@ button.accept-policy {
   font-size: 0.8em;
 }
 
-
+#navbar.collapsed  {
+  width: 200px;
+  overflow: hidden;
+}
+#navbar.collapsed nav ul, #navbar.collapsed .main-menu-top {
+  display: none; /* Hide the navigation items, top and bottom when collapsed */
+}
 .modal-content {
   background-color: map-get($themes, light, background);
 }
