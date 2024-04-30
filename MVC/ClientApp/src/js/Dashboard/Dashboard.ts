@@ -88,6 +88,8 @@ document.addEventListener('DOMContentLoaded', function() {
             statistics.style.display = 'block';
             signout.style.display = 'block';
             mainContent.style.paddingRight = '0'; // terug naar origineel
+
+            collapseButton.style.margin = 'unset';
         }
     });
 });
