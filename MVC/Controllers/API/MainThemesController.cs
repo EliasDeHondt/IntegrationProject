@@ -53,7 +53,7 @@ public class MainThemesController : ControllerBase
             Id = subtheme.Id,
             Subject = subtheme.Subject,
             Flows = subtheme.Flows,
-            MainTheme = subtheme.MainTheme.Id
+            MainThemeId = subtheme.MainTheme.Id
         }));
     }
 }

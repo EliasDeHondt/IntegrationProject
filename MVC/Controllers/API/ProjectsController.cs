@@ -3,6 +3,7 @@ using Domain.Platform;
 using Domain.ProjectLogics;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
+using MVC.Models.projectModels;
 
 namespace MVC.Controllers.API;
 
@@ -45,36 +46,15 @@ public class ProjectsController : Controller
         _uow.Commit();
 
         return Created("CreateProject",  project);
-        // _uow.BeginTransaction();
-        //
-        // MainTheme theme = new MainTheme(mainTheme);
-        // sharedPlatformid = 2; //todo
-        // long id = _projectManager.ProjectCount().ToList().Count()+1;
-        // SharedPlatform sharedPlatform = _sharedPlatformManager.GetSharedPlatform(sharedPlatformid);
-        // _projectManager.UpdateProject(theme,sharedPlatform, id);
-        //
-        // _uow.Commit();
-        // return CreatedAtAction("AddProject", new Project(theme,sharedPlatform, id));
-        
     }
     
-    [HttpPost("CreateProject")]
-    public IActionResult CreateProject(ProjectViewModel model)
+    [HttpPut("UpdateProject/{projectId}")]
+    public IActionResult UpdateProject(long projectId, ProjectDto model)
     {
         _uow.BeginTransaction();
-
-        var project = new Project
-        {
-            Title = model.Name,
-            Description = model.Description,
-            SharedPlatform = _sharedPlatformManager.GetSharedPlatform(model.SharedPlatformId) 
-        };
-        _projectManager.CreateProject(project);
-        _sharedPlatformManager.AddProjectToPlatform(project, model.SharedPlatformId);
-        
+        _projectManager.ChangeProject(projectId, model.Title, model.Description);
         _uow.Commit();
-
-        return Created("CreateProject",  project);
+        return NoContent();
     }
     
     [HttpGet("GetProjectsForPlatform/{platformId}")]
@@ -100,13 +80,22 @@ public class ProjectsController : Controller
     [HttpGet("GetProjectWithId/{projectId}")]
     public IActionResult GetProjectWithId(int projectId)
     {
-        Project project = _projectManager.GetProjectWithId(projectId);
+        Project project = _projectManager.GetProjectWithSharedPlatformAndMainTheme(projectId);
 
         if (project == null)
         {
             return NotFound();
         }
+        
+        ProjectDto projectDto = new ProjectDto
+        {
+            MainThemeId = project.MainTheme.Id,
+            Id = project.Id,
+            Title = project.Title,
+            Description = project.Description,
+            SharedPlatformId = project.SharedPlatform.Id
+        };
 
-        return Ok(project); 
+        return Ok(projectDto); 
     }
 }

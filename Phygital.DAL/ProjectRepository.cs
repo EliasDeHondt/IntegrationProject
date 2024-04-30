@@ -94,4 +94,20 @@ public class ProjectRepository
     {
         return _ctx.Projects.Find(id);
     }
+
+    public Project ReadProjectIncludingSharedPlatformAndMainTheme(long id)
+    {
+        return _ctx.Projects
+            .AsNoTracking()
+            .Include(project => project.SharedPlatform)
+            .Include(project => project.MainTheme)
+            .First(project => project.Id == id);
+    }
+
+    public void UpdateProject(long id, string title, string description)
+    {
+        var project = ReadProjectWithId(id);
+        project.Title = title;
+        project.Description = description;
+    }
 }
