@@ -5,7 +5,7 @@
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            name: name,
+            title: name,
             description: description,
             sharedplatformId: platform
         })
