@@ -27,4 +27,9 @@ public class FlowController : Controller
         return View(flow);
     }
     
+    public IActionResult Facilitator()
+    {
+        return View();
+    }
+    
 }

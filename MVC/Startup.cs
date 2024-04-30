@@ -11,6 +11,7 @@ using Business_Layer;
 using Data_Access_Layer;
 using Data_Access_Layer.DbContext;
 using Domain.Accounts;
+using Domain.FacilitatorFunctionality;
 using Domain.Platform;
 using Google.Apis.Storage.v1.Data;
 using Google.Cloud.Storage.V1;
@@ -82,6 +83,8 @@ public class Startup
             options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
+
+        services.AddSignalR();
     }
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env)
@@ -117,6 +120,7 @@ public class Startup
             endpoints.MapRazorPages();
             endpoints.MapControllerRoute(name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            endpoints.MapHub<FacilitatorHub>("/hub");
         });
     }
 

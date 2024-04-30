@@ -11,7 +11,7 @@ const btnPauseFlow = document.getElementById("btnPauseFlow") as HTMLButtonElemen
 const btnUnPauseFlow = document.getElementById("btnUnPauseFlow") as HTMLButtonElement;
 const btnEmail = document.getElementById("btnEmail") as HTMLButtonElement;
 const btnExitFlow = document.getElementById("butExitFlow") as HTMLButtonElement;
-const modal = new Modal(document.getElementById("pausedFlowModal") as HTMLDivElement,{
+const modal = new Modal(document.getElementById("pausedFlowModal") as HTMLDivElement, {
     backdrop: 'static',
     keyboard: false
 });
@@ -30,7 +30,7 @@ let prevFlowId = sessionStorage.getItem('prevFlowId');
 function CheckEmail(inputEmail: string): boolean {
     const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     let p = document.getElementById("errorMsg") as HTMLElement;
-    if (emailRegex.test(inputEmail)) { 
+    if (emailRegex.test(inputEmail)) {
         p.innerHTML = "Email submitted!";
         p.style.color = "blue";
         return true;
@@ -354,12 +354,10 @@ export function UpdateFlowState(id: string, state: string) {
 
 
 function UpdateCurrentFlowState() {
-    console.log(prevFlowId);
     if (prevFlowId != null)
         UpdateFlowState(prevFlowId, 'Inactive');
     UpdateFlowState(String(flowId), 'Active');
     sessionStorage.setItem('prevFlowId', String(flowId));
-    console.log(prevFlowId);
 }
 
 window.onload = () => UpdateCurrentFlowState();
