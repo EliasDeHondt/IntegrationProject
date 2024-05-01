@@ -137,6 +137,14 @@ document.addEventListener("DOMContentLoaded", async function () {
             window.location.href = "/SharedPlatform/Dashboard/";
         }
     };
+    
+    //todo sprint 3: maak api functie die deze ophaalt:
+    // let id: string = "2" //document.getElementById("platformId")!.textContent!
+    const accountname = document.getElementById("accountname") as HTMLElement;
+    //
+    // showUserName(id,accountname);
+    accountname.textContent = "Welcome " + "Henk" + "!";
+    setupsaNavigation();
 });
 
 //select subthemas todo Matthias
