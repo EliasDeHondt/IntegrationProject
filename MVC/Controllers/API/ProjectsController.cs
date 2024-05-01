@@ -65,13 +65,13 @@ public class ProjectsController : Controller
         if (User.Identity is { IsAuthenticated: false }) return Unauthorized();
         var projects = _sharedPlatformManager.GetProjectsForPlatform(platformId);
 
-        ICollection<ProjectDto> projectList = new List<ProjectDto>();
+        ICollection<ProjectViewModel> projectList = new List<ProjectViewModel>();
         foreach (var project in projects)
         {
-            projectList.Add(new ProjectDto()
+            projectList.Add(new ProjectViewModel
             {
                 Id = project.Id,
-                Title = project.Title,
+                Name = project.Title,
                 Description = project.Description
             });
         }
