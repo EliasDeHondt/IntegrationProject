@@ -8,6 +8,7 @@
 using Data_Access_Layer;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
+using Domain.ProjectLogics.Steps.Information;
 
 namespace Business_Layer;
 
@@ -65,5 +66,25 @@ public class FlowManager
     public void ChangeFlowState(Flow flow)
     {
         _repository.UpdateFlowState(flow);
+    }
+
+    //TODO: this method needs to be updated for all step types & sub types
+    public StepBase AddStep(long flowId, int stepNumber, string stepType)
+    {
+        Flow flow = _repository.ReadFlowById(flowId);
+
+        StepBase step = new InformationStep();
+        
+        switch (stepType)
+        {
+            case "Information":
+                step = new InformationStep(stepNumber, new Text(),flow);
+                break;
+        }
+        
+        _repository.AddStepToFlow(flowId, step);
+
+        return step;
+
     }
 }

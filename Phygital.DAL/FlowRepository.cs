@@ -72,4 +72,9 @@ public class FlowRepository
 
         return flow.Steps;
     }
+
+    public void AddStepToFlow(long flowId, StepBase step)
+    {
+        _context.Flows.Find(flowId)!.Steps.Add(step);
+    }
 }

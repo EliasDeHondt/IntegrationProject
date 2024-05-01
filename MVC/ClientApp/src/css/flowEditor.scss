@@ -40,6 +40,13 @@
   grid-row-gap: 0;
 }
 
+#saveFlow {
+  position: relative;
+  display: inline-flex;
+  left: 5px;
+  height: 100px;
+}
+
 #btn-area-1 { 
   grid-area: 1 / 1 / 3 / 2;
   width: 75%;
@@ -51,9 +58,8 @@
 }
 
 #step-view {
-  position: relative;
-  height: 600px;
-  width: 900px;
+  height: 1080px;
+  width: 1920px;
 }
 
 #step-view-container {
@@ -63,12 +69,17 @@
 }
 
 #step-container {
-  height: 250px;
+  height: 300px;
 }
 
 #steps-list {
   padding: 10px;
   overflow-x: auto;
   display: flex;
+  height: 80%;
+}
+
+#btn-add-step {
+  margin: 10px;
 }
 

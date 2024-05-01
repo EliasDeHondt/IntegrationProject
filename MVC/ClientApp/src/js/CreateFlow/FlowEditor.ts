@@ -2,11 +2,11 @@ import {Step} from "../Flow/Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
 
 const stepsList = document.getElementById('steps-list') as HTMLElement;
+const btnAddStep = document.getElementById('btn-add-step') as HTMLButtonElement;
 
 let currentStepList: Step[];
 
-
-let flowId = "";
+let flowId: number;
 
 async function GetSteps(flowId : number) {
   console.log("Fetching steps...");
@@ -22,6 +22,31 @@ async function GetSteps(flowId : number) {
       .catch(error => console.error("Error:", error))
 }
 
+function GetStepById(stepNumber: number, flowId: number) {
+  fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
+    method: "GET",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    }
+  })
+      .then(response => response.json())
+      .then(data => ShowStepInContainer(data))
+      .catch(error => console.error("Error:", error))
+}
+
+async function AddStep(stepNumber: number, stepType: string) {
+  await fetch("/EditFlows/CreateStep/" + flowId + "/" + stepNumber + "/" + stepType, {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    }
+  })
+      .then(response => response.json())
+      .catch(error => console.error("Error:", error))
+}
+
 function UpdateStepList(steps: Step[]) {
   
   steps.sort((a, b) => a.stepNumber - b.stepNumber);
@@ -29,6 +54,8 @@ function UpdateStepList(steps: Step[]) {
   currentStepList = steps;
   
   const stepsList = document.getElementById("steps-list") as HTMLDivElement;
+  
+  stepsList.innerHTML = "";
   
   if (steps.length > 0) {
     steps.forEach(step => {
@@ -59,11 +86,11 @@ function UpdateStepList(steps: Step[]) {
 document.addEventListener('DOMContentLoaded', () => {
   const parts = document.URL.split('/');
   const lastPart = parts[parts.length - 1];
-  const flowId = parseInt(lastPart, 10);
+  flowId = parseInt(lastPart, 10);
   
   if (isNaN(flowId)) { console.error("The ID provided in the URL is not a number.")}
   
-  GetSteps(flowId).then(response => { initializeCardLinks(); });
+  GetSteps(flowId).then(() => { initializeCardLinks(); });
   
 });
 
@@ -72,19 +99,12 @@ function initializeCardLinks() {
 
   stepCards.forEach(stepCard => {
     stepCard.addEventListener('click', () => {
-      const stepId = stepCard.dataset.stepId;
+      const stepNumber = stepCard.dataset.stepNumber;
 
-      if (stepId) {
-        const foundStep = currentStepList.find(step => step.id.toString() === stepId);
-
-        if (foundStep) {
-          console.log(foundStep);
-          ShowStepInContainer(foundStep);
-        } else {
-          console.log('Step not found');
-        }
+      if (stepNumber) {
+        GetStepById(parseInt(stepNumber), flowId);        
       } else {
-        console.error('Step ID not found in dataset');
+        console.error('Step ID not defined in dataset');
       }
     });
   });
@@ -94,10 +114,6 @@ const partialInformationContainer = document.getElementById("partialInformationC
 const partialQuestionContainer = document.getElementById("partialQuestionContainer") as HTMLDivElement;
 
 async function ShowStepInContainer(data: Step) {
-  console.log("Showing step...");
-  console.log(data);
-  console.log(data.informationViewModel == undefined ? "not info" : "info");
-  console.log(data.questionViewModel == undefined ? "not question" : "question");
   partialInformationContainer.innerHTML = "";
   partialQuestionContainer.innerHTML = "";
   if (data.informationViewModel != undefined) {
@@ -221,3 +237,15 @@ async function ShowStepInContainer(data: Step) {
     }
   }
 }
+
+
+
+btnAddStep.addEventListener('click', () => {
+  
+  let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
+
+  //Right now only makes information steps.
+  AddStep(newStepNumber,"Information")
+      .then(() => GetSteps(flowId))
+      .then(() => initializeCardLinks());
+});
