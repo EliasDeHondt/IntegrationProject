@@ -3,26 +3,7 @@ import * as editModal from "../EditUserModal";
 import {Project} from "../Types/ProjectObjects";
 import * as deleteModal from "../DeleteUserModal";
 
-// Nav
-export function showUserName(id: string,accountname: HTMLElement){
-    getUsersForPlatform(id)
-        .then(users => {
-            getLoggedInEmail()
-                .then(email => {
-                    users.forEach(user => {
-                        if (user.email === email) {
-                            accountname.textContent = "Welcome " + user.userName + "!";
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.error('Error getting logged-in email:', error);
-                });
-        })
-        .catch(error => {
-            console.error('Error getting users for platform:', error);
-        });
-}
+
 
 // Users
 export async function getUsersForPlatform(platformId: string): Promise<User[]>{
@@ -122,7 +103,7 @@ export function generateUserCards(id: string, userRoulette: HTMLDivElement, user
     })
 }
 
-async function getLoggedInEmail(): Promise<string> {
+export async function getLoggedInEmail(): Promise<string> {
     return await fetch("/api/Users/GetLoggedInEmail")
         .then(response => {
             return response.text()
