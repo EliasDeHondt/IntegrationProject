@@ -1,5 +1,12 @@
 ﻿import "./CreateSubThemeModal";
-import {CheckNotEmpty, fillExisting, getIdProject, getProjectWithId, SetProject} from "./API/ProjectAPI";
+import {
+    CheckNotEmpty,
+    fillExisting,
+    getIdProject,
+    getProjectWithId,
+    SetProject,
+    setupsaNavigation
+} from "./API/ProjectAPI";
 import {generateCards, getSubThemesForProject} from "./API/SubThemeAPI";
 
 let inputTitle = (document.getElementById("inputTitle") as HTMLInputElement);
@@ -17,4 +24,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             SetProject(project.id, inputTitle.value, inputText.value);
         }
     };
+
+    //todo sprint 3: maak api functie die deze ophaalt:
+    // let id: string = "2" //document.getElementById("platformId")!.textContent!
+    const accountname = document.getElementById("accountname") as HTMLElement;
+    //
+    // showUserName(id,accountname);
+    accountname.textContent = "Welcome " + "Henk" + "!";
+    setupsaNavigation();
 });
