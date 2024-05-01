@@ -30,12 +30,11 @@ public class ThemeRepository
     public MainTheme ReadMainThemeById(long id)
     {
         return _context.MainThemes
-            .AsNoTracking()
             .First(theme => theme.Id == id);
     }
 
 
-    public SubTheme ReadSubThemeByIdWithMainTheme(long id)
+    public SubTheme ReadSubThemeByIdIncludingMainThemeAndProject(long id)
     {
         return _context.SubThemes
             .AsNoTracking()
@@ -59,5 +58,27 @@ public class ThemeRepository
             .Include(flow => flow.Theme)
             .Where(flow => flow.Theme.Id.Equals(id))
             .ToList();
+    }
+
+    public SubTheme CreateSubTheme(SubTheme theme)
+    {
+        _context.SubThemes.Add(theme);
+        return theme;
+    }
+
+    public IEnumerable<SubTheme> ReadSubthemesForProject(long id)
+    {
+        var mainTheme = _context.MainThemes.Find(id);
+        var subThemes = _context.SubThemes
+            .AsNoTracking()
+            .Include(theme => theme.MainTheme)
+            .Where(theme => theme.MainTheme.Id == mainTheme!.Id)
+            .ToList();
+        return subThemes;
+    }
+
+    public void UpdateSubTheme(long id, string subject)
+    {
+        _context.SubThemes.Find(id)!.Subject = subject;
     }
 }

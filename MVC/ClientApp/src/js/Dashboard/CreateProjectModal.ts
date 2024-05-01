@@ -19,6 +19,7 @@ const butCloseCreateProjectModal = document.getElementById("butCloseCreateProjec
 const butCancelCreateProjectModal = document.getElementById("butCancelCreateProjectModal") as HTMLButtonElement;
 const inputPName = document.getElementById("inputPName") as HTMLInputElement;
 const inputDescription = document.getElementById("inputDescription") as HTMLInputElement;
+const inputLogo = document.getElementById("inputLogo") as HTMLInputElement;
 const pnameWarning = document.getElementById('pnameWarning') as HTMLElement;
 const descriptionWarning = document.getElementById('descriptionWarning') as HTMLElement;
 const projectRoulette = document.getElementById("carouselPContainer") as HTMLDivElement;
@@ -39,7 +40,7 @@ butCancelCreateProjectModal.onclick = () => {
 }
 async function createProjectShow() {
     if (await validateForm()) {
-        createProject(inputPName.value, inputDescription.value, id)
+        createProject(inputPName.value, inputDescription.value, id, inputLogo.files ? inputLogo.files[0] : undefined) // If logo is empty, pass undefined
             .then(() => clearModal())
             .then(() => {
                 projectCreatedToast.show()

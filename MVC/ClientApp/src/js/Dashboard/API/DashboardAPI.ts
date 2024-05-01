@@ -179,7 +179,7 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     let projectId = project.id;
     console.log(project.id, project.name, project.description)
     editProjectLink.className = "nav-link text-light";
-    editProjectLink.setAttribute("href", "/Project/Projects/" + projectId);
+    editProjectLink.setAttribute("href", "/Project/ProjectPage/" + projectId);
     editProjectLink.textContent = project.name;
 
     let projDiv = document.createElement("div");
@@ -202,7 +202,7 @@ export function generateProjectCard(project: Project): HTMLDivElement {
         btnHideProject.firstChild.classList.toggle("bi-eye");
     });
     btnEnterProject.addEventListener("click", function() {
-        window.location.href = "/Project/Projects/" + projectId;
+        window.location.href = "/Project/ProjectPage/" + projectId;
     });
     
     
@@ -226,7 +226,6 @@ function createButton(id: string, iconClass: string): HTMLButtonElement {
 export function generateProjectCards(id: string, projectRoulette: HTMLDivElement) {
     let cardCreateProject = document.getElementById("cardCreateProject") as HTMLDivElement;
     cardCreateProject.style.display = "block";
-    id = '2';
     getProjectsForPlatform(id).then(projects => {
         projects.forEach(project => {
             let card = generateProjectCard(project);

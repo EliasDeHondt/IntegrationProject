@@ -1,4 +1,4 @@
-﻿import {MainTheme} from "./ThemeObjects";
+﻿import {MainTheme} from "./Types/ThemeObjects";
 
 const mainThemeContainer = document.getElementById("mainThemeContainer") as HTMLTableSectionElement;
 
