@@ -8,7 +8,8 @@ import "/node_modules/embla-carousel";
 import EmblaCarousel, {EmblaOptionsType} from "embla-carousel";
 import {addPrevNextBtnsClickHandlers} from '../EmblaCarouselArrowButtons'
 import '../../css/embla.scss'
-import {showUserName} from "./API/DashboardAPI";
+import {setupNavigation} from "../Layout/Navigation";
+import {showUserName} from "../Layout/API/NavigationAPI";
 
 const accountname = document.getElementById("accountname") as HTMLElement;
 const userRoulette = document.getElementById("carouselContainer") as HTMLDivElement;
@@ -43,7 +44,7 @@ const removePrevNextBtnsClickHandlersProject = addPrevNextBtnsClickHandlers(
 let id: string = document.getElementById("platformId")!.textContent!
 
 isUserInRole(UserRoles.UserPermission).then(result => {
-    dashboard.showUserName(id,accountname);
+    //dashboard.showUserName(id,accountname);
     dashboard.generateUserCards(id, userRoulette, result);
     dashboard.generateProjectCards(id, projectRoulette);
 })
@@ -52,6 +53,11 @@ emblaApiUser.on('destroy', removePrevNextBtnsClickHandlersUser)
 
 
 document.addEventListener('DOMContentLoaded', function() {
+    showUserName(id,accountname);
+    setupsNavigation();
+});
+
+function setupsNavigation() {
     const navigationBar = document.getElementById('navbar') as HTMLElement;
     const mainContent = document.getElementById('maincontent') as HTMLElement;
     const collapseButton = document.getElementById('collapseButton') as HTMLElement;
@@ -61,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const statistics = document.getElementById('tohideS') as HTMLElement;
     const signout = document.getElementById('tohideLO') as HTMLElement;
     const icon = document.getElementById('icon') as HTMLElement;
-    
+
     collapseButton.addEventListener('click', function(e) {
         e.preventDefault();
         navigationBar.classList.toggle('collapsed');
@@ -70,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
         icon.classList.toggle('bi-caret-left-fill');
         icon.classList.toggle('bi-caret-right-fill');
     });
-    
+
     collapseButton.addEventListener('click', function() {
         if (navigationBar.classList.contains('collapsed')) {
             languageButton.style.display = 'none';
@@ -81,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             collapseButton.style.margin = 'auto';
             collapseButton.style.display = 'block';
-        }else{
+        } else {
             languageButton.style.display = 'block';
             accountname.style.display = 'block';
             dashboard.style.display = 'block';
@@ -92,4 +98,4 @@ document.addEventListener('DOMContentLoaded', function() {
             collapseButton.style.margin = 'unset';
         }
     });
-});
+}

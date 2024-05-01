@@ -18,6 +18,7 @@
 
     <ItemGroup>
         <AdditionalFiles Include="Views\Flow\Step.cshtml"/>
+        <AdditionalFiles Include="Views\Layout\NavigationLayout.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
