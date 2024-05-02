@@ -1,4 +1,4 @@
-﻿import {Flow} from "../Flow/FlowObjects";
+﻿import {Flow} from "../../Flow/FlowObjects";
 
 export interface MainTheme {
     id: number;
