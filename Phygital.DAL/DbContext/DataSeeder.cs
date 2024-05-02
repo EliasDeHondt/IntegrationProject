@@ -492,6 +492,7 @@ public static class DataSeeder
         ctx.Projects.Add(project2);
         
         ((SpAdmin)ctx.Users.Single(user => user.Email == "Henk@CodeForge.com")).SharedPlatform = sp;
+        ((SpAdmin)ctx.Users.Single(user => user.Email == "CodeForge.noreply@gmail.com")).SharedPlatform = sp;
         sp.Projects.Add(project1);
 
         flow2.Theme = mainTheme2;
