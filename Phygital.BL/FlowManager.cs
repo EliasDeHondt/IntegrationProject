@@ -70,7 +70,6 @@ public class FlowManager
         _repository.UpdateFlowState(flow);
     }
 
-    //TODO: this method needs to be updated for all step types & sub types
     public StepBase AddStep(long flowId, int stepNumber, string stepType)
     {
         Flow flow = _repository.ReadFlowById(flowId);
@@ -79,7 +78,7 @@ public class FlowManager
         StepBase step = null;
         switch (stepType)
         {
-            case "Information": step = new InformationStep(stepNumber, new Text(),flow); break; //_Steprepository.ReadExtendedStep(stepI); break; //new InformationStep(stepNumber, new Text(),flow); break;
+            case "Information": step = new InformationStep(stepNumber, new Text(),flow); break;
             case "Single Choice Question": 
                 SingleChoiceQuestion singleChoiceQuestion = new SingleChoiceQuestion(); 
                 step =  new QuestionStep(stepNumber,singleChoiceQuestion,flow); break;
