@@ -1,5 +1,6 @@
 import {Step} from "../Flow/Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
+import {Modal} from "bootstrap";
 
 const stepsList = document.getElementById('steps-list') as HTMLElement;
 const btnAddStep = document.getElementById('btn-add-step') as HTMLButtonElement;
@@ -240,12 +241,21 @@ async function ShowStepInContainer(data: Step) {
 
 
 
-btnAddStep.addEventListener('click', () => {
-  
-  let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
-
-  //Right now only makes information steps.
-  AddStep(newStepNumber,"Information")
-      .then(() => GetSteps(flowId))
-      .then(() => initializeCardLinks());
+// btnAddStep.addEventListener('click', () => {
+//  
+//   let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
+//
+//   //Right now only makes information steps.
+//   AddStep(newStepNumber,"Information")
+//       .then(() => GetSteps(flowId))
+//       .then(() => initializeCardLinks());
+// });
+const CreateStepModal = new Modal(document.getElementById('CreateStepModal')!, {
+  keyboard: false,
+  focus: true,
+  backdrop: "static"
 });
+
+btnAddStep.onclick = () => {
+  CreateStepModal.show();
+}
