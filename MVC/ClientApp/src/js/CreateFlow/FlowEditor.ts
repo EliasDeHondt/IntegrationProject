@@ -1,5 +1,6 @@
 import {Step} from "../Flow/Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
+import {Modal} from "bootstrap";
 
 const stepsList = document.getElementById('steps-list') as HTMLElement;
 const btnAddStep = document.getElementById('btn-add-step') as HTMLButtonElement;
@@ -20,6 +21,7 @@ async function GetSteps(flowId : number) {
       .then(response => response.json())
       .then(data => UpdateStepList(Object.values(data)))
       .catch(error => console.error("Error:", error))
+  
 }
 
 function GetStepById(stepNumber: number, flowId: number) {
@@ -68,8 +70,8 @@ function UpdateStepList(steps: Step[]) {
       //Card Header
       const cardHeader = document.createElement('h2');
       cardHeader.classList.add("step-card-header");
-      cardHeader.innerText = "Step " + step.stepNumber.toString();
-
+      cardHeader.innerText = "Step " + step.stepNumber.toString() + "\n" + step.stepName;
+      console.log(step)
       stepCard.appendChild(cardHeader);
 
       stepsList.appendChild(stepCard);
@@ -240,12 +242,68 @@ async function ShowStepInContainer(data: Step) {
 
 
 
-btnAddStep.addEventListener('click', () => {
-  
-  let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
+// btnAddStep.addEventListener('click', () => {
+//  
+//   let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
+//
+//   //Right now only makes information steps.
+//   AddStep(newStepNumber,"Information")
+//       .then(() => GetSteps(flowId))
+//       .then(() => initializeCardLinks());
+// });
+const CreateStepModal = new Modal(document.getElementById('CreateStepModal')!, {
+  keyboard: false,
+  focus: true,
+  backdrop: "static"
+});
 
-  //Right now only makes information steps.
-  AddStep(newStepNumber,"Information")
+btnAddStep.onclick = () => {
+  CreateStepModal.show();
+}
+
+
+const butCloseCreateStep = document.getElementById("butCloseCreateStep") as HTMLButtonElement;
+const butCancelCreateStep = document.getElementById("butCancelCreateStep") as HTMLButtonElement;
+const butConfirmCreateStep = document.getElementById("butConfirmCreateStep") as HTMLButtonElement;
+
+const infographic = document.getElementById("infographic") as HTMLInputElement;
+const singleQ = document.getElementById("singleQ") as HTMLInputElement;
+const multipleQ = document.getElementById("multipleQ") as HTMLInputElement;
+const rangeQ = document.getElementById("rangeQ") as HTMLInputElement;
+const openQ = document.getElementById("openQ") as HTMLInputElement;
+
+butCancelCreateStep.onclick = () => {
+  clearModal()
+}
+
+butCloseCreateStep.onclick = () => {
+  clearModal()
+}
+butConfirmCreateStep.onclick = () => {
+  let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
+  if(infographic.checked){
+    AddStep(newStepNumber,"Information")
       .then(() => GetSteps(flowId))
       .then(() => initializeCardLinks());
-});
+  } else if (singleQ.checked) {
+    AddStep(newStepNumber, "Single Choice Question")
+        .then(() => GetSteps(flowId))
+        .then(() => initializeCardLinks());
+  } else if (multipleQ.checked) {
+    AddStep(newStepNumber, "Multiple Choice Question")
+        .then(() => GetSteps(flowId))
+        .then(() => initializeCardLinks());
+  } else if (rangeQ.checked) {
+    AddStep(newStepNumber, "Ranged Question")
+        .then(() => GetSteps(flowId))
+        .then(() => initializeCardLinks());
+  } else if (openQ.checked) {
+    AddStep(newStepNumber, "Open Question")
+        .then(() => GetSteps(flowId))
+        .then(() => initializeCardLinks());
+  }
+  clearModal()
+}
+function clearModal() {
+  CreateStepModal.hide();
+}

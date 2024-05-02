@@ -22,7 +22,7 @@ public class StepRepository
         _ctx = ctx;
     }
 
-    private StepBase ReadExtendedStep(StepBase stepBase)
+    public StepBase ReadExtendedStep(StepBase stepBase)
     { 
         switch (stepBase)
         {

@@ -21,7 +21,6 @@ public class EditFlowsController : Controller
     public IActionResult GetSteps(long flowId)
     {
         var steps = _manager.GetAllStepsInFlow(flowId);
-
         return Ok(steps);
     }
 
