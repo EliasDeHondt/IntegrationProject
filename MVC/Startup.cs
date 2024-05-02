@@ -31,9 +31,22 @@ public class Startup
     {
         string bucketName = Environment.GetEnvironmentVariable("BUCKET_NAME_VIDEO") ?? "codeforge-video-bucket";
         
+        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../service-account-key.json");
+        
+        //REMOVE AFTER TESTING
+        Environment.SetEnvironmentVariable("ASPNETCORE_EMAIL", "codeforge.noreply@gmail.com");
+        Environment.SetEnvironmentVariable("ASPNETCORE_EMAIL_PASSWORD", "evqb lztz oqvu kgwc");
+        
+        
         var options = new CloudStorageOptions
         {
             BucketName = bucketName
+        };
+
+        var emailOptions = new EmailOptions()
+        {
+            Email = Environment.GetEnvironmentVariable("ASPNETCORE_EMAIL"),
+            Password = Environment.GetEnvironmentVariable("ASPNETCORE_EMAIL_PASSWORD")
         };
 
         //dependency injection
@@ -73,9 +86,12 @@ public class Startup
 
         services.AddScoped<ProjectManager>();
         services.AddScoped<ProjectRepository>();
+
+        services.AddScoped<EmailManager>();
         
         services.AddScoped<UnitOfWork, UnitOfWork>();
         services.AddSingleton(options);
+        services.AddSingleton(emailOptions);
         
         services.AddControllersWithViews().AddXmlSerializerFormatters().AddJsonOptions(options =>
         {
@@ -132,6 +148,15 @@ public class Startup
             SharedPlatform = new SharedPlatform()
         };
 
+        var sharedPlatformAdminCodeForge = new SpAdmin()
+        {
+            Id = "CodeForgeId",
+            Email = "CodeForge.noreply@gmail.com",
+            UserName = "CodeForge",
+            EmailConfirmed = true,
+            SharedPlatform = new SharedPlatform()
+        };
+        
         await roleManager.CreateAsync(new IdentityRole(UserRoles.Facilitator));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.PlatformAdmin));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.SystemAdmin));
@@ -141,11 +166,13 @@ public class Startup
         await roleManager.CreateAsync(new IdentityRole(UserRoles.StatisticPermission));
         
         await userManager.CreateAsync(sharedPlatformAdminHenk, "Henk!123");
+        await userManager.CreateAsync(sharedPlatformAdminCodeForge, "Codeforge!123");
         
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.PlatformAdmin);
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.UserPermission);
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.ProjectPermission);
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.StatisticPermission);
-    }
 
+        await userManager.AddToRoleAsync(sharedPlatformAdminCodeForge, UserRoles.PlatformAdmin);
+    }
 }

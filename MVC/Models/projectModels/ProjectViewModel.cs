@@ -1,7 +1,7 @@
 using Domain.Platform;
 using Microsoft.Build.Framework;
 
-namespace MVC.Models;
+namespace MVC.Models.projectModels;
 
 public class ProjectViewModel
 {

@@ -1,5 +1,5 @@
 export type Project = {
-    mainTheme: MainTheme,
+    mainThemeId: number,
     id: number,
     title: string,
     description: string,

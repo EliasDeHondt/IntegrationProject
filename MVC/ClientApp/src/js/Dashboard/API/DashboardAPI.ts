@@ -4,6 +4,8 @@ import {Project} from "../Types/ProjectObjects";
 import * as deleteModal from "../DeleteUserModal";
 
 
+
+// Users
 export async function getUsersForPlatform(platformId: string): Promise<User[]>{
     return await fetch("/api/Users/GetUsersForPlatform/" + platformId)
         .then(response => response.json())
@@ -101,7 +103,7 @@ export function generateUserCards(id: string, userRoulette: HTMLDivElement, user
     })
 }
 
-async function getLoggedInEmail(): Promise<string> {
+export async function getLoggedInEmail(): Promise<string> {
     return await fetch("/api/Users/GetLoggedInEmail")
         .then(response => {
             return response.text()
@@ -123,6 +125,7 @@ export async function getProjectsForPlatform(platformId: string): Promise<Projec
             return data
         })
 }
+
 export function generateProjectCard(project: Project): HTMLDivElement {
     let colDiv = document.createElement("div");
     colDiv.className = "col mt-3 mb-3 embla__slide";
@@ -137,12 +140,17 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     let btnGraphProject = createButton("btnGraphProject", "bi-graph-up");
     let btnEnterProject = createButton("btnEnterProject", "bi-folder");
 
-    btnHideProject.className = "border-0 p-0 position-absolute top-0 end-1 ms-2\" style=\"background: none;";
-    btnDeleteProject.className = "border-0 p-0 position-absolute top-0 end-0 me-2\" style=\"background: none;";
-    btnGraphProject.className = "border-0 p-0 position-absolute top-0 end-0 mt-5 me-2\" style=\"background: none;";
+    btnHideProject.className = "border-0 p-0 position-absolute top-0 end-1 ms-2 mb-2\" style=\"background: none;";
+    btnDeleteProject.className = "border-0 p-0 position-absolute top-0 end-0 me-2 mb-2\" style=\"background: none;";
+    btnGraphProject.className = "border-0 p-0 position-absolute top-0 end-0 mt-5 me-2 mb-2\" style=\"background: none;";
     btnEnterProject.className = "border-0 p-0";
     btnEnterProject.style.background = "none;";
+    btnEnterProject.style.fontSize = "10vh";
 
+    btnHideProject.style.fontSize = "3vh";
+    btnDeleteProject.style.fontSize = "3vh";
+    btnGraphProject.style.fontSize = "3vh";
+    
 
     let cardBodyDiv = document.createElement("div");
     cardBodyDiv.className = "card-body align-items-center d-flex justify-content-center";
@@ -152,16 +160,13 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     let projectId = project.id;
     console.log(project.id, project.name, project.description)
     editProjectLink.className = "nav-link text-light";
-    editProjectLink.setAttribute("href", "/Project/Projects/" + projectId);
-    editProjectLink.textContent = " Edit Project";
+    editProjectLink.setAttribute("href", "/Project/ProjectPage/" + projectId);
+    editProjectLink.textContent = project.name;
 
-    let a = document.createElement("a");
-    a.textContent = project.name + ": "
-    
-    cardBodyDiv.appendChild(a)
-    cardBodyDiv.appendChild(editProjectLink);
-    cardBodyDiv.appendChild(btnEnterProject);
-    
+    let projDiv = document.createElement("div");
+    projDiv.className = "text-center";
+    projDiv.append(btnEnterProject, editProjectLink);
+    cardBodyDiv.appendChild(projDiv);
     
     cardDiv.appendChild(btnHideProject);
     cardDiv.appendChild(btnDeleteProject);
@@ -169,7 +174,19 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     cardDiv.appendChild(cardBodyDiv);
 
     colDiv.appendChild(cardDiv);
-
+    
+    //Dynamic clicks
+    btnHideProject.addEventListener("click", function() {
+        // @ts-ignore
+        btnHideProject.firstChild.classList.toggle("bi-eye-slash");
+        // @ts-ignore
+        btnHideProject.firstChild.classList.toggle("bi-eye");
+    });
+    btnEnterProject.addEventListener("click", function() {
+        window.location.href = "/Project/ProjectPage/" + projectId;
+    });
+    
+    
     return colDiv;
 }
 
@@ -190,7 +207,6 @@ function createButton(id: string, iconClass: string): HTMLButtonElement {
 export function generateProjectCards(id: string, projectRoulette: HTMLDivElement) {
     let cardCreateProject = document.getElementById("cardCreateProject") as HTMLDivElement;
     cardCreateProject.style.display = "block";
-    id = '2';
     getProjectsForPlatform(id).then(projects => {
         projects.forEach(project => {
             let card = generateProjectCard(project);
