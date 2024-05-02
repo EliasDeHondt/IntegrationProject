@@ -461,8 +461,8 @@ public static class DataSeeder
 
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
-        flow.Steps.Add(step3);
-        flow.Steps.Add(step4);
+        flow1.Steps.Add(step3);
+        flow1.Steps.Add(step4);
 
         SharedPlatform sp = new SharedPlatform("CodeForge");
         

@@ -5,6 +5,7 @@
 
 @import "Login/login";
 @import "variables";
+@import "flowEditor";
 
 @media (min-width: 768px) {
   html {
@@ -193,6 +194,7 @@ button.accept-policy {
 .flow-card:hover {
   width: 220px;
   height: 330px;
+  background-color: map-get($themes, light, primary);
 }
 
 .flow-card-header {
