@@ -1,10 +1,11 @@
 import {Flow} from "../Flow/FlowObjects";
+import {initializeDeleteButtons} from "./DeleteFlowModal";
 
 const btnCreateFlow = document.getElementById("btnCreateFlow") as HTMLButtonElement;
 
-export function GetFlows(projectId: number) {
+export async function GetFlows(projectId: number) {
     console.log("Fetching flows...")
-    fetch("CreateFlow/GetFlows", {
+    await fetch("CreateFlow/GetFlows", {
         method: "GET",
         headers: {
             "Accept": "application/json",
@@ -13,6 +14,7 @@ export function GetFlows(projectId: number) {
     })
         .then(response => response.json())
         .then(data => UpdateFlowList(Object.values(data)))
+        .then(() => initializeDeleteButtons())
         .catch(error => console.error("Error:", error))
     
 }

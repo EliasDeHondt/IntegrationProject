@@ -57,4 +57,9 @@ public class FlowManager
     {
         _repository.UpdateFlowState(flow);
     }
+
+    public void DeleteFlowById(long flowId)
+    {
+        _repository.DeleteFlowById(flowId);
+    }
 }

@@ -18,17 +18,17 @@ export function initializeDeleteButtons() {
     deleteButtons.forEach((button) => {
         button.onclick = () => {
             let card = button.parentNode as HTMLDivElement;
-            id = parseInt(card.dataset.id as string);
-            console.log("showing flow...")
+            id = parseInt(card.dataset.flowId as string);
             deleteFlowModal.show();
         }
     })
 }
 
 butConfirmDeleteFlow.onclick = () => {
-    deleteFlow(id).then(() => {
-        GetFlows(0);
-        deleteFlowModal.hide();
+    deleteFlow(id)
+        .then(() => {
+            GetFlows(0);
+            deleteFlowModal.hide();
     });
 }
 

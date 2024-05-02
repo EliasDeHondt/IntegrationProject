@@ -8,6 +8,7 @@
 using Data_Access_Layer.DbContext;
 using Domain.Accounts;
 using Domain.ProjectLogics;
+using Domain.ProjectLogics.Steps;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data_Access_Layer;
@@ -60,5 +61,41 @@ public class FlowRepository
     public void UpdateFlowState(Flow flow)
     {
         _context.Flows.Update(flow);
+    }
+
+    public void DeleteFlowById(long flowId)
+    {
+        Flow flow = _context.Flows
+            .Include(f => f.Steps)
+            .Include(f => f.Participations)
+            .FirstOrDefault(f => f.Id == flowId)!;
+
+        ICollection<StepBase> steps = flow.Steps;
+        
+        foreach (StepBase stepBase in steps)
+        {
+            long id = stepBase.Id;
+            
+            var combinedStepToDelete = _context.CombinedSteps.Find(id);
+            if (combinedStepToDelete != null)
+            {
+                _context.CombinedSteps.Remove(combinedStepToDelete);
+            }
+
+            var questionStepToDelete = _context.QuestionSteps.Find(id);
+            if (questionStepToDelete != null)
+            {
+                _context.QuestionSteps.Remove(questionStepToDelete);
+            }
+            
+            var informationStepToDelete = _context.InformationSteps.Find(id);
+            if (informationStepToDelete != null)
+            {
+                _context.InformationSteps.Remove(informationStepToDelete);
+            }
+        }
+        
+        _context.Participations.RemoveRange(flow.Participations);
+        _context.Flows.Remove(flow);
     }
 }
