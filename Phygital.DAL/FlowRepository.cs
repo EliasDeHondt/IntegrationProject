@@ -69,32 +69,8 @@ public class FlowRepository
             .Include(f => f.Steps)
             .Include(f => f.Participations)
             .FirstOrDefault(f => f.Id == flowId)!;
-
-        ICollection<StepBase> steps = flow.Steps;
         
-        foreach (StepBase stepBase in steps)
-        {
-            long id = stepBase.Id;
-            
-            var combinedStepToDelete = _context.CombinedSteps.Find(id);
-            if (combinedStepToDelete != null)
-            {
-                _context.CombinedSteps.Remove(combinedStepToDelete);
-            }
-
-            var questionStepToDelete = _context.QuestionSteps.Find(id);
-            if (questionStepToDelete != null)
-            {
-                _context.QuestionSteps.Remove(questionStepToDelete);
-            }
-            
-            var informationStepToDelete = _context.InformationSteps.Find(id);
-            if (informationStepToDelete != null)
-            {
-                _context.InformationSteps.Remove(informationStepToDelete);
-            }
-        }
-        
+        _context.Steps.RemoveRange(flow.Steps);
         _context.Participations.RemoveRange(flow.Participations);
         _context.Flows.Remove(flow);
     }
