@@ -21,6 +21,7 @@ async function GetSteps(flowId : number) {
       .then(response => response.json())
       .then(data => UpdateStepList(Object.values(data)))
       .catch(error => console.error("Error:", error))
+  
 }
 
 function GetStepById(stepNumber: number, flowId: number) {
@@ -69,8 +70,8 @@ function UpdateStepList(steps: Step[]) {
       //Card Header
       const cardHeader = document.createElement('h2');
       cardHeader.classList.add("step-card-header");
-      cardHeader.innerText = "Step " + step.stepNumber.toString();
-
+      cardHeader.innerText = "Step " + step.stepNumber.toString() + "\n" + step.stepName;
+      console.log(step)
       stepCard.appendChild(cardHeader);
 
       stepsList.appendChild(stepCard);

@@ -128,6 +128,13 @@ public static class DataSeeder
         QuestionStep step5 = new QuestionStep(5, question5, flow);
         QuestionStep step6 = new QuestionStep(6, question6, flow);
 
+        step1.StepName = "Single Choice Question";
+        step2.StepName = "Single Choice Question";
+        step3.StepName = "Single Choice Question";
+        step4.StepName = "Single Choice Question";
+        step5.StepName = "Single Choice Question";
+        step6.StepName = "Single Choice Question";
+        
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
         flow.Steps.Add(step3);
@@ -268,6 +275,12 @@ public static class DataSeeder
         QuestionStep step4 = new QuestionStep(10, mquestion4, flow);
         QuestionStep step5 = new QuestionStep(11, mquestion5, flow);
 
+        step1.StepName = "Multiple Choice Question";
+        step2.StepName = "Multiple Choice Question";
+        step3.StepName = "Multiple Choice Question";
+        step4.StepName = "Multiple Choice Question";
+        step5.StepName = "Multiple Choice Question";
+        
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
         flow.Steps.Add(step3);
@@ -400,6 +413,12 @@ public static class DataSeeder
         QuestionStep step4 = new QuestionStep(15, rquestion4, flow);
         QuestionStep step5 = new QuestionStep(16, rquestion5, flow);
 
+        step1.StepName = "Ranged Question";
+        step2.StepName = "Ranged Question";
+        step3.StepName = "Ranged Question";
+        step4.StepName = "Ranged Question";
+        step5.StepName = "Ranged Question";
+        
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
         flow.Steps.Add(step3);
@@ -423,6 +442,8 @@ public static class DataSeeder
         //add to step
         QuestionStep step1 = new QuestionStep(17, oquesstion1, flow);
         QuestionStep step2 = new QuestionStep(18, oquesstion1, flow);
+        step1.StepName = "Open Question";
+        step2.StepName = "Open Question";
 
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
@@ -443,7 +464,9 @@ public static class DataSeeder
         
         Text textInfo = new Text("Lokale Verkiezingen");
         Image imageInfo = new Image(ImageUrls.Verkiezingen);
+        imageInfo.StepName = "Information";
         Video videoInfo = new Video("screensaver.mp4");
+        videoInfo.StepName = "Information";
 
         GenerateSingleQuestions(ctx, flow);
         GenerateMultipleCQuestions(ctx, flow);

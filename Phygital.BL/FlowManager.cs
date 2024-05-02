@@ -78,19 +78,21 @@ public class FlowManager
         StepBase step = null;
         switch (stepType)
         {
-            case "Information": step = new InformationStep(stepNumber, new Text(),flow); break;
+            case "Information": step = new InformationStep(stepNumber, new Text(),flow);
+                step.StepName = "Information"; break;
             case "Single Choice Question": 
                 SingleChoiceQuestion singleChoiceQuestion = new SingleChoiceQuestion(); 
-                step =  new QuestionStep(stepNumber,singleChoiceQuestion,flow); break;
+                step =  new QuestionStep(stepNumber,singleChoiceQuestion,flow);
+                step.StepName = "Single Choice Question"; break;
             case "Multiple Choice Question":
                 MultipleChoiceQuestion multipleChoiceQuestion = new MultipleChoiceQuestion(); 
-                step =  new QuestionStep(stepNumber,multipleChoiceQuestion,flow); break;
+                step =  new QuestionStep(stepNumber,multipleChoiceQuestion,flow); step.StepName = "Multiple Choice Question"; break;
             case "Ranged Question":
                 RangeQuestion rangeQuestion = new RangeQuestion(); 
-                step =  new QuestionStep(stepNumber,rangeQuestion,flow); break;
+                step =  new QuestionStep(stepNumber,rangeQuestion,flow); step.StepName = "Ranged Question"; break;
             case "Open Question": 
                 OpenQuestion openQuestion = new OpenQuestion(); 
-                step =  new QuestionStep(stepNumber,openQuestion,flow); break;
+                step =  new QuestionStep(stepNumber,openQuestion,flow); step.StepName = "Open Question"; break;
         }
         
         _repository.AddStepToFlow(flowId, step);
