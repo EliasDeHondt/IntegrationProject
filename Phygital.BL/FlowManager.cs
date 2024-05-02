@@ -9,12 +9,14 @@ using Data_Access_Layer;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
+using Domain.ProjectLogics.Steps.Questions;
 
 namespace Business_Layer;
 
 public class FlowManager
 {
     private readonly FlowRepository _repository;
+    private readonly StepRepository _Steprepository;
 
     public FlowManager(FlowRepository repository)
     {
@@ -73,13 +75,23 @@ public class FlowManager
     {
         Flow flow = _repository.ReadFlowById(flowId);
 
-        StepBase step = new InformationStep();
-        
+        //InformationStep stepI = null;
+        StepBase step = null;
         switch (stepType)
         {
-            case "Information":
-                step = new InformationStep(stepNumber, new Text(),flow);
-                break;
+            case "Information": step = new InformationStep(stepNumber, new Text(),flow); break; //_Steprepository.ReadExtendedStep(stepI); break; //new InformationStep(stepNumber, new Text(),flow); break;
+            case "Single Choice Question": 
+                SingleChoiceQuestion singleChoiceQuestion = new SingleChoiceQuestion(); 
+                step =  new QuestionStep(stepNumber,singleChoiceQuestion,flow); break;
+            case "Multiple Choice Question":
+                MultipleChoiceQuestion multipleChoiceQuestion = new MultipleChoiceQuestion(); 
+                step =  new QuestionStep(stepNumber,multipleChoiceQuestion,flow); break;
+            case "Ranged Question":
+                RangeQuestion rangeQuestion = new RangeQuestion(); 
+                step =  new QuestionStep(stepNumber,rangeQuestion,flow); break;
+            case "Open Question": 
+                OpenQuestion openQuestion = new OpenQuestion(); 
+                step =  new QuestionStep(stepNumber,openQuestion,flow); break;
         }
         
         _repository.AddStepToFlow(flowId, step);

@@ -259,3 +259,50 @@ const CreateStepModal = new Modal(document.getElementById('CreateStepModal')!, {
 btnAddStep.onclick = () => {
   CreateStepModal.show();
 }
+
+
+const butCloseCreateStep = document.getElementById("butCloseCreateStep") as HTMLButtonElement;
+const butCancelCreateStep = document.getElementById("butCancelCreateStep") as HTMLButtonElement;
+const butConfirmCreateStep = document.getElementById("butConfirmCreateStep") as HTMLButtonElement;
+
+const infographic = document.getElementById("infographic") as HTMLInputElement;
+const singleQ = document.getElementById("singleQ") as HTMLInputElement;
+const multipleQ = document.getElementById("multipleQ") as HTMLInputElement;
+const rangeQ = document.getElementById("rangeQ") as HTMLInputElement;
+const openQ = document.getElementById("openQ") as HTMLInputElement;
+
+butCancelCreateStep.onclick = () => {
+  clearModal()
+}
+
+butCloseCreateStep.onclick = () => {
+  clearModal()
+}
+butConfirmCreateStep.onclick = () => {
+  let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
+  if(infographic.checked){
+    AddStep(newStepNumber,"Information")
+      .then(() => GetSteps(flowId))
+      .then(() => initializeCardLinks());
+  } else if (singleQ.checked) {
+    AddStep(newStepNumber, "Single Choice Question")
+        .then(() => GetSteps(flowId))
+        .then(() => initializeCardLinks());
+  } else if (multipleQ.checked) {
+    AddStep(newStepNumber, "Multiple Choice Question")
+        .then(() => GetSteps(flowId))
+        .then(() => initializeCardLinks());
+  } else if (rangeQ.checked) {
+    AddStep(newStepNumber, "Ranged Question")
+        .then(() => GetSteps(flowId))
+        .then(() => initializeCardLinks());
+  } else if (openQ.checked) {
+    AddStep(newStepNumber, "Open Question")
+        .then(() => GetSteps(flowId))
+        .then(() => initializeCardLinks());
+  }
+  clearModal()
+}
+function clearModal() {
+  CreateStepModal.hide();
+}
