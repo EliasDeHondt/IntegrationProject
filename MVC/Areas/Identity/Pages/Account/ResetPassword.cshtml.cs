@@ -50,7 +50,7 @@ namespace MVC.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 10)]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
@@ -101,7 +101,9 @@ namespace MVC.Areas.Identity.Pages.Account
                 // Don't reveal that the user does not exist
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
-
+            Console.WriteLine(Input.Password);
+            Console.WriteLine(Input.Code);
+            Console.WriteLine(user.UserName);
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
             if (result.Succeeded)
             {

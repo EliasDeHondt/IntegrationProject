@@ -490,6 +490,7 @@ public static class DataSeeder
         GenerateSingleQuestions(ctx, flow2); 
 
         ((SpAdmin)ctx.Users.Single(user => user.Email == "Henk@CodeForge.com")).SharedPlatform = sp;
+        ((SpAdmin)ctx.Users.Single(user => user.Email == "CodeForge.noreply@gmail.com")).SharedPlatform = sp;
         sp.Projects.Add(project1);
         sp.Projects.Add(project2);
 

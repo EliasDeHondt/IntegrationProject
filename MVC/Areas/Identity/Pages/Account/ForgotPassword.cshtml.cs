@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Business_Layer;
 using Microsoft.AspNetCore.Authorization;
 using Domain.Accounts;
 using Microsoft.AspNetCore.Identity;
@@ -20,12 +21,12 @@ namespace MVC.Areas.Identity.Pages.Account
     public class ForgotPasswordModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly IEmailSender _emailSender;
+        private readonly EmailManager _emailManager;
 
-        public ForgotPasswordModel(UserManager<IdentityUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<IdentityUser> userManager, EmailManager emailManager)
         {
             _userManager = userManager;
-            _emailSender = emailSender;
+            _emailManager = emailManager;
         }
 
         /// <summary>
@@ -71,10 +72,10 @@ namespace MVC.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
-                await _emailSender.SendEmailAsync(
-                    Input.Email,
+                _emailManager.SendEmail(
                     "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.",
+                    Input.Email);
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

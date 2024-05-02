@@ -1,49 +1,25 @@
-﻿using System.Net.Mail;
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Gmail.v1;
-using Google.Apis.Gmail.v1.Data;
-using Google.Apis.Services;
+﻿using Business_Layer;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 
-namespace MVC.Controllers.Google;
+namespace MVC.Controllers.API;
 
 [ApiController]
 [Route("api/[controller]")]
 public class GmailController : Controller
 {
 
-    private readonly GmailService _service;
-
-    public GmailController()
+    private readonly EmailManager _emailManager;
+    
+    public GmailController(EmailManager emailManager)
     {
-        GoogleCredential credential = GoogleCredential.GetApplicationDefault();
-        _service = new GmailService(new BaseClientService.Initializer
-        {
-            HttpClientInitializer = credential,
-            ApplicationName = "CodeForge"
-        });
-
-        var msg = new Message();
-
-        msg.Id = "me";
-        msg.Raw = "test";
-
-        
+        _emailManager = emailManager;
     }
 
-    [Route("SendEmail")]
+    [HttpPost("SendEmail")]
     public IActionResult SendEmail(EmailModel emailDto)
     {
-        var message = new MailMessage()
-        {
-            From = new MailAddress(emailDto.From),
-            Subject = emailDto.Subject,
-            IsBodyHtml = true,
-            Body = emailDto.Body
-        };
-        message.To.Add(new MailAddress(emailDto.To));
+        _emailManager.SendEmail(emailDto.Subject, emailDto.Body, emailDto.To);
         return Ok();
     }
-
 }
