@@ -26,11 +26,11 @@ public class Choice
         Selections = selections;
     }
 
-    public Choice(string text, long id = 0)
+    public Choice(string text, ChoiceQuestionBase questionBase, long id = 0)
     {
         Id = id;
         Text = text;
-        QuestionBase = new SingleChoiceQuestion();
+        QuestionBase = questionBase;
         Selections = new List<Selection>();
     }
 

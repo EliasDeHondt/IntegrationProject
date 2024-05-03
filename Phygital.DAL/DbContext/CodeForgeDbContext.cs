@@ -44,6 +44,8 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Respondent> Respondents { get; set; } = null!;
     public DbSet<SharedPlatform> SharedPlatforms { get; set; } = null!;
     public DbSet<ProjectOrganizer> ProjectOrganizers { get; set; } = null!;
+    public DbSet<InformationBase> Information { get; set; } = null!;
+    public DbSet<QuestionBase> Questions { get; set; } = null!;
 
     public CodeForgeDbContext(DbContextOptions<CodeForgeDbContext> options) : base(options) {}
 
