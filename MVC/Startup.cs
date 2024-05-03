@@ -118,7 +118,7 @@ public class Startup
         if (dbContext.CreateDatabase(true) && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")!.Equals("Development"))
         {
             seedDatabase(uow, userManager, roleManager, dbContext);
-        } else if (dbContext.CreateDatabase(false) && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")!.Equals("Production"))
+        } else if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")!.Equals("Production") && dbContext.IsEmpty())
         {
             seedDatabase(uow, userManager, roleManager, dbContext);
         }

@@ -124,5 +124,10 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         if (dropDatabase) Database.EnsureDeleted();
         return Database.EnsureCreated();
     }
+
+    public bool IsEmpty()
+    {
+        return !Users.Any() && !SharedPlatforms.Any();
+    }
     
 }
