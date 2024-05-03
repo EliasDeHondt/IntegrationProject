@@ -115,14 +115,13 @@ public class Startup
         var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
         var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var uow = serviceScope.ServiceProvider.GetRequiredService<UnitOfWork>();
-        if (dbContext.CreateDatabase(true))
+        if (dbContext.CreateDatabase(true) && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")!.Equals("Development"))
         {
-            uow.BeginTransaction();
-            SeedUsers(userManager, roleManager).Wait();
-            DataSeeder.Seed(dbContext);
-            uow.Commit();
+            seedDatabase(uow, userManager, roleManager, dbContext);
+        } else if (dbContext.CreateDatabase(false) && Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")!.Equals("Production"))
+        {
+            seedDatabase(uow, userManager, roleManager, dbContext);
         }
-        
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
@@ -175,4 +174,13 @@ public class Startup
 
         await userManager.AddToRoleAsync(sharedPlatformAdminCodeForge, UserRoles.PlatformAdmin);
     }
+
+    void seedDatabase(UnitOfWork uow, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, CodeForgeDbContext dbContext)
+    {
+        uow.BeginTransaction();
+        SeedUsers(userManager, roleManager).Wait();
+        DataSeeder.Seed(dbContext);
+        uow.Commit();
+    }
+    
 }

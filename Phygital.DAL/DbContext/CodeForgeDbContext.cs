@@ -124,4 +124,5 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         if (dropDatabase) Database.EnsureDeleted();
         return Database.EnsureCreated();
     }
+    
 }
