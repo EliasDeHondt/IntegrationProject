@@ -16,7 +16,6 @@ namespace Business_Layer;
 public class FlowManager
 {
     private readonly FlowRepository _repository;
-    private readonly StepRepository _Steprepository;
 
     public FlowManager(FlowRepository repository)
     {

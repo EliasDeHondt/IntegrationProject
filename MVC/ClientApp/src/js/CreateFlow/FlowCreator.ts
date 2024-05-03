@@ -3,7 +3,7 @@ import {initializeDeleteButtons} from "./DeleteFlowModal";
 
 const btnCreateFlow = document.getElementById("btnCreateFlow") as HTMLButtonElement;
 
-async function GetFlows(projectId: number) {
+export async function GetFlows(projectId: number) {
     console.log("Fetching flows...")
     await fetch("CreateFlow/GetFlows", {
         method: "GET",
