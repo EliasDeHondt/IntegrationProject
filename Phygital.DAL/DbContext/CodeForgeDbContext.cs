@@ -127,6 +127,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
 
     public bool IsEmpty()
     {
+        Database.EnsureCreated();
         return !Users.Any() && !SharedPlatforms.Any();
     }
     
