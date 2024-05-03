@@ -55,6 +55,8 @@ public class Startup
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<CodeForgeDbContext>();
 
+        services.AddDataProtection();
+        
         services.AddAuthorization(options =>
         {
             options.AddPolicy("admin",
