@@ -14,6 +14,7 @@ using Domain.Accounts;
 using Domain.Platform;
 using Google.Apis.Storage.v1.Data;
 using Google.Cloud.Storage.V1;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 
 namespace MVC;
@@ -55,7 +56,8 @@ public class Startup
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<CodeForgeDbContext>();
 
-        services.AddDataProtection();
+        services.AddDataProtection()
+            .PersistKeysToDbContext<CodeForgeDbContext>();
         
         services.AddAuthorization(options =>
         {

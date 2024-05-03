@@ -14,6 +14,7 @@ using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
 using Domain.ProjectLogics.Steps.Questions;
 using Domain.ProjectLogics.Steps.Questions.Answers;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Data_Access_Layer.DbContext;
 
-public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
+public class CodeForgeDbContext : IdentityDbContext<IdentityUser>, IDataProtectionKeyContext
 {
     public DbSet<Flow> Flows { get; set; } = null!;
     public DbSet<Project> Projects { get; set; } = null!;
@@ -43,6 +44,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Respondent> Respondents { get; set; } = null!;
     public DbSet<SharedPlatform> SharedPlatforms { get; set; } = null!;
     public DbSet<ProjectOrganizer> ProjectOrganizers { get; set; } = null!;
+    public DbSet<DataProtectionKey> DataProtectionKeys { get; } = null!;
 
     public CodeForgeDbContext(DbContextOptions<CodeForgeDbContext> options) : base(options) {}
 
@@ -130,5 +132,6 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         Database.EnsureCreated();
         return !Users.Any() && !SharedPlatforms.Any();
     }
+
     
 }
