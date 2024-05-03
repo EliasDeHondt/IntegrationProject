@@ -129,6 +129,9 @@ namespace MVC.Areas.Identity.Pages.Account
                             return RedirectToAction("Dashboard", "SharedPlatform");
                         }
 
+                        if (_userManager.IsInRoleAsync(user, UserRoles.Facilitator).Result)
+                            return RedirectToAction("Facilitator", "Flow");
+
                         return LocalRedirect(returnUrl);
                     }
 

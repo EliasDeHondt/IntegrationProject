@@ -3,6 +3,7 @@ using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using MVC.Models;
 
 namespace MVC.Controllers.API;
 
@@ -28,7 +29,7 @@ public class FlowsController : Controller
     }
 
     [HttpPut("{id}/{state}")]
-    public async Task<IActionResult> PutFlowState(long id, string state)
+    public IActionResult PutFlowState(long id, string state)
     {
         Flow flow = _manager.GetFlowByIdWithTheme(id);
 
@@ -38,8 +39,6 @@ public class FlowsController : Controller
         if (Enum.TryParse(state, out FlowState flowState))
             flow.State = flowState;
         _manager.ChangeFlowState(flow);
-
-        await _hub.Clients.All.SendAsync("ReceiveFlowState", id, state);
         
         return NoContent();
     }

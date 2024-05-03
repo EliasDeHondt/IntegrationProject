@@ -1,6 +1,7 @@
 import {Step} from "./Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
 import {Flow} from "./FlowObjects";
+import {connection} from "./Facilitator";
 import {Modal} from "bootstrap";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
@@ -25,6 +26,9 @@ let themeId = Number((document.getElementById("theme") as HTMLSpanElement).inner
 let stepTotal = Number((document.getElementById("stepTotal") as HTMLSpanElement).innerText);
 let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerText;
 let prevFlowId = sessionStorage.getItem('prevFlowId');
+let pCode = document.getElementById("facilitatorCode") as HTMLParagraphElement;
+let facilitatorCode: string = "";
+let currentState: string = "";
 
 //email checken
 function CheckEmail(inputEmail: string): boolean {
@@ -281,6 +285,8 @@ async function saveAnswerToDatabase(answers: string[], openAnswer: string, flowI
 }
 
 btnNextStep.onclick = async () => {
+    SendUpdate();
+
     if (userAnswers.length > 0 || openUserAnswer.length > 0) {
         await saveAnswerToDatabase(userAnswers, openUserAnswer, flowId, currentStepNumber);
         // Clear the userAnswers array for the next step
@@ -302,14 +308,16 @@ btnRestartFlow.onclick = () => {
     GetNextStep(++currentStepNumber, flowId);
 };
 
-btnPauseFlow.onclick = () => {
-    UpdateFlowState(String(flowId), "Paused");
+btnPauseFlow.onclick = async () => {
+    await UpdateFlowState(String(flowId), "Paused");
+    SendUpdate()
     modal.show();
 };
 
 if (btnUnPauseFlow)
-    btnUnPauseFlow.onclick = () => {
-        UpdateFlowState(String(flowId), "Active");
+    btnUnPauseFlow.onclick = async () => {
+        await UpdateFlowState(String(flowId), "Active");
+        SendUpdate()
         modal.hide();
     }
 
@@ -338,7 +346,7 @@ function ShowFlows(flows: Flow[]) {
     });
 }
 
-export function UpdateFlowState(id: string, state: string) {
+export async function UpdateFlowState(id: string, state: string) {
     fetch("/api/Flows/" + id + "/" + state, {
         method: "PUT"
     })
@@ -350,14 +358,28 @@ export function UpdateFlowState(id: string, state: string) {
             return false;
         })
         .catch(error => console.error("Error:", error))
+    currentState = state;
 }
 
-
-function UpdateCurrentFlowState() {
+async function UpdateCurrentFlowState() {
     if (prevFlowId != null)
-        UpdateFlowState(prevFlowId, 'Inactive');
-    UpdateFlowState(String(flowId), 'Active');
+        await UpdateFlowState(prevFlowId, 'Inactive');
+    await UpdateFlowState(String(flowId), 'Active');
     sessionStorage.setItem('prevFlowId', String(flowId));
 }
 
-window.onload = () => UpdateCurrentFlowState();
+window.onload = async () => {
+    GenerateFacilitatorCode()
+    await UpdateCurrentFlowState()
+}
+
+function GenerateFacilitatorCode() {
+    facilitatorCode = Math.floor(100000 + Math.random() * 900000).toString();
+    pCode.innerText = facilitatorCode;
+}
+
+export function SendUpdate() {
+    connection.invoke("SendFlowUpdate", pCode.innerText, flowId.toString(), currentState)
+        .then(() => console.log(pCode.innerText, flowId.toString(), currentState))
+        .catch(error => console.error(error))
+}
