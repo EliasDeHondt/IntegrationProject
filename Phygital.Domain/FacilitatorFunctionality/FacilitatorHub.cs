@@ -9,5 +9,5 @@ public class FacilitatorHub : Hub
         await Groups.AddToGroupAsync(Context.ConnectionId, code);
     
     public async Task SendFlowUpdate(string code, string id, string state) =>
-        await Clients.Group(code).SendAsync("ReceiveFlowUpdate", id, state);
+        await Clients.OthersInGroup(code).SendAsync("ReceiveFlowUpdate", id, state);
 }

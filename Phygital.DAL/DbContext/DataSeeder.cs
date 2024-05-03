@@ -488,7 +488,10 @@ public static class DataSeeder
         Flow flow2 = new Flow(FlowType.Circular, mainTheme2);
 
         GenerateSingleQuestions(ctx, flow2); 
-
+        
+        ctx.Projects.Add(project1);
+        ctx.Projects.Add(project2);
+        
         ((SpAdmin)ctx.Users.Single(user => user.Email == "Henk@CodeForge.com")).SharedPlatform = sp;
         sp.Projects.Add(project1);
         sp.Projects.Add(project2);

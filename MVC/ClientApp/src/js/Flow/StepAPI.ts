@@ -1,15 +1,20 @@
 import {Step} from "./Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
 import {Flow} from "./FlowObjects";
-import {connection} from "./Facilitator";
 import {Modal} from "bootstrap";
+import {HubConnectionState} from "@microsoft/signalr";
+import * as signalR from "@microsoft/signalr";
+import {mod} from "@tensorflow/tfjs";
+
+export const connection = new signalR.HubConnectionBuilder()
+    .withUrl("/hub")
+    .configureLogging(signalR.LogLevel.Information)
+    .build();
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
 const btnNextStep = document.getElementById("btnNextStep") as HTMLButtonElement;
 const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonElement;
-const btnPauseFlow = document.getElementById("btnPauseFlow") as HTMLButtonElement;
-const btnUnPauseFlow = document.getElementById("btnUnPauseFlow") as HTMLButtonElement;
 const btnEmail = document.getElementById("btnEmail") as HTMLButtonElement;
 const btnExitFlow = document.getElementById("butExitFlow") as HTMLButtonElement;
 const modal = new Modal(document.getElementById("pausedFlowModal") as HTMLDivElement, {
@@ -285,7 +290,7 @@ async function saveAnswerToDatabase(answers: string[], openAnswer: string, flowI
 }
 
 btnNextStep.onclick = async () => {
-    SendUpdate();
+    await SendUpdate();
 
     if (userAnswers.length > 0 || openUserAnswer.length > 0) {
         await saveAnswerToDatabase(userAnswers, openUserAnswer, flowId, currentStepNumber);
@@ -307,19 +312,6 @@ btnRestartFlow.onclick = () => {
     currentStepNumber = 0;
     GetNextStep(++currentStepNumber, flowId);
 };
-
-btnPauseFlow.onclick = async () => {
-    await UpdateFlowState(String(flowId), "Paused");
-    SendUpdate()
-    modal.show();
-};
-
-if (btnUnPauseFlow)
-    btnUnPauseFlow.onclick = async () => {
-        await UpdateFlowState(String(flowId), "Active");
-        SendUpdate()
-        modal.hide();
-    }
 
 btnExitFlow.onclick = () => UpdateFlowState(String(flowId), "Inactive");
 
@@ -369,17 +361,35 @@ async function UpdateCurrentFlowState() {
 }
 
 window.onload = async () => {
-    GenerateFacilitatorCode()
+    await connection.start();
+    await GenerateFacilitatorCode()
     await UpdateCurrentFlowState()
+    if (connection.state == HubConnectionState.Connected)
+        connection.invoke("ConnectToUser", facilitatorCode)
+            .then(() => {
+                console.log("Connected to installation #" + facilitatorCode);
+            })
+            .catch((err) => {
+                console.error("Error user connection: " + err + facilitatorCode);
+            });
 }
 
-function GenerateFacilitatorCode() {
+async function GenerateFacilitatorCode() {
     facilitatorCode = Math.floor(100000 + Math.random() * 900000).toString();
     pCode.innerText = facilitatorCode;
 }
 
-export function SendUpdate() {
+export async function SendUpdate() {
     connection.invoke("SendFlowUpdate", pCode.innerText, flowId.toString(), currentState)
         .then(() => console.log(pCode.innerText, flowId.toString(), currentState))
         .catch(error => console.error(error))
 }
+
+connection.on("ReceiveFlowUpdate", async (id, state) => {
+    await UpdateFlowState(id, state);
+    if (currentState.toLowerCase() == "paused") {
+        modal.show()
+    } else {
+        modal.hide()
+    }
+})

@@ -19,9 +19,6 @@
             <div class="modal-body">
                 Flow paused by facilitator!
             </div>
-            <div class="modal-footer">
-                <button class="btn-secondary mt-auto mb-auto h-25 m-5" id="btnUnPauseFlow">Back To Flow</button>
-            </div>
         </div>
     </div>
 </div>
@@ -45,7 +42,6 @@
 <footer class="row-gap-sm-4 h-25 justify-content-center d-flex">
     <button class="btn-primary mt-auto mb-auto h-25 m-5" id="btnNextStep">Next step</button>
     <button class="btn-secondary mt-auto mb-auto h-25 m-5" id="btnRestartFlow">Restart flow</button>
-    <button class="btn-secondary mt-auto mb-auto h-25 m-5" id="btnPauseFlow">Pause flow</button>
     @if (Model.Theme.GetType() == typeof(SubTheme))
     {
         <div class="mt-auto mb-auto m-5">
