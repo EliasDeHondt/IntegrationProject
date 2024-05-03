@@ -6,6 +6,7 @@
 @import "Login/login";
 @import "variables";
 @import "flowcards";
+@import "flowEditor";
 
 @media (min-width: 768px) {
   html {
@@ -117,6 +118,9 @@ button.accept-policy {
 .bgModal {
   background: hsl(48, 61%, 47%);
 }
+.bgPrimaryBack {
+  background: hsl(220, 81%, 23%);
+}
 
 .border-accent {
   border-color: map-get($themes, light, accent);
@@ -135,7 +139,20 @@ button.accept-policy {
   font-size: 0.8em;
 }
 
+#navbar {
+  transition: width 0.5s;
+}
+//#maincontent.collapsed { //todo werkt niet
+//  width: 200px;
+//  transition: width 2s !important; 
+//}
+#navbar.collapsed {
+  width: 200px;
+}
 
+.bhover:hover {
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3) !important;
+}
 .modal-content {
   background-color: map-get($themes, light, background);
 }
@@ -178,6 +195,7 @@ button.accept-policy {
 .flow-card:hover {
   width: 220px;
   height: 330px;
+  background-color: map-get($themes, light, primary);
 }
 
 .flow-card-header {

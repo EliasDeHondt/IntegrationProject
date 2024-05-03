@@ -1,6 +1,9 @@
 export type Project = {
     mainTheme: MainTheme,
-    id: number
+    id: number,
+    name: string,
+    description: string,
+    sharedplatformId: number
 }
 
 export type MainTheme = {

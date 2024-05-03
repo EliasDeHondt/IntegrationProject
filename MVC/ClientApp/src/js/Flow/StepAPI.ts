@@ -288,7 +288,7 @@ btnNextStep.onclick = async () => {
         openUserAnswer = "";
     }
     // Proceed to the next step
-    if (flowtype == "CIRCULAR" && currentStepNumber >= stepTotal) {
+    if (flowtype.toUpperCase() == "CIRCULAR" && currentStepNumber >= stepTotal) {
         currentStepNumber = 0;
         GetNextStep(++currentStepNumber, flowId);
     } else {

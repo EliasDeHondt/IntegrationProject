@@ -10,13 +10,16 @@ module.exports = {
         step: './src/js/Flow/StepAPI.ts',
         theme: './src/js/Theme/ThemeAPI.ts',
         mainThemeDetails: './src/js/Theme/MainThemeDetailsAPI.ts',
-        subThemeDetails: './src/js/Theme/SubThemeDetailsAPI.ts',
+        subTheme: './src/js/Theme/SubTheme/SubTheme.ts',
         webcam: './src/js/Webcam/WebCamDetection.ts',
         login: './src/js/Login/login-animation.ts',
+        project: './src/js/Project/Project.ts',
         dashboard: './src/js/Dashboard/Dashboard.ts',
         flowCreator: './src/js/CreateFlow/FlowCreator.ts',
         deleteFlowModal: './src/js/CreateFlow/DeleteFlowModal.ts',
-        deleteFlowAPI: './src/js/CreateFlow/API/DeleteFlowAPI.ts'
+        deleteFlowAPI: './src/js/CreateFlow/API/DeleteFlowAPI.ts',
+        flowEditor: './src/js/CreateFlow/FlowEditor.ts',
+        navigation: './src/js/Layout/Navigation.ts'
     },
     output: {
         filename: '[name].entry.js',

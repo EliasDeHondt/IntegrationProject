@@ -13,21 +13,28 @@ namespace Domain.ProjectLogics;
 public class Project
 {
     public long Id { get; set; }
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public string? Image { get; set; }
     public MainTheme MainTheme { get; set; }
     public SharedPlatform SharedPlatform { get; set; }
     public ICollection<ProjectOrganizer> Organizers { get; set; }
 
-    public Project(MainTheme mainTheme, SharedPlatform sharedPlatform, ICollection<ProjectOrganizer> organizers, long id = 0): this(mainTheme, sharedPlatform, id)
+    public Project(MainTheme mainTheme, SharedPlatform sharedPlatform, ICollection<ProjectOrganizer> organizers, long id = 0): this(mainTheme.Subject,mainTheme, sharedPlatform, id)
     {
         Organizers = organizers;
+        Description = "";
+        Title = mainTheme.Subject;
     }
 
-    public Project(MainTheme mainTheme, SharedPlatform sharedPlatform, long id = 0)
+    public Project(string title,MainTheme mainTheme, SharedPlatform sharedPlatform, long id = 0)
     {
+        Title = title;
         MainTheme = mainTheme;
         Id = id;
         SharedPlatform = sharedPlatform;
         Organizers = new List<ProjectOrganizer>();
+        Description = "";
     }
     
     public Project()
@@ -36,5 +43,19 @@ public class Project
         MainTheme = new MainTheme();
         SharedPlatform = new SharedPlatform();
         Organizers = new List<ProjectOrganizer>();
+        Description = "";
+        Title = "";
+    }
+
+    public Project(string title, string description, SharedPlatform sharedPlatform) 
+    {
+        Id = default;
+        MainTheme = new MainTheme();
+        SharedPlatform = new SharedPlatform();
+        Organizers = new List<ProjectOrganizer>();
+        
+        Title = title;
+        Description = description;
+        SharedPlatform = sharedPlatform;
     }
 }

@@ -3,7 +3,7 @@ import {initializeDeleteButtons} from "./DeleteFlowModal";
 
 const btnCreateFlow = document.getElementById("btnCreateFlow") as HTMLButtonElement;
 
-export async function GetFlows(projectId: number) {
+async function GetFlows(projectId: number) {
     console.log("Fetching flows...")
     await fetch("CreateFlow/GetFlows", {
         method: "GET",
@@ -19,16 +19,16 @@ export async function GetFlows(projectId: number) {
     
 }
 
-async function UpdateFlowList(flows: Flow[]) {
+function UpdateFlowList(flows: Flow[]) {
     
     const flowContainer = document.getElementById("flow-cards") as HTMLElement;
     flowContainer.innerHTML = "";
     
     if (flows.length > 0) {
         flows.forEach(flow => {
-            //Card Container
-            const flowCard = document.createElement('div');
-            flowCard.classList.add("flow-card");
+            //Card container
+            const flowCard = document.createElement('a');
+            flowCard.classList.add("flow-card", "btn");
             flowCard.dataset.flowId = flow.id.toString();
             //Card Delete Button
             const flowCardDeleteBtn = document.createElement('button');
@@ -56,6 +56,8 @@ async function UpdateFlowList(flows: Flow[]) {
         flowContainer.appendChild(noFlowsMessage);
     }
     
+    initializeCardLinks();
+    
 }
 
 btnCreateFlow.onclick = async() => {
@@ -81,6 +83,28 @@ btnCreateFlow.onclick = async() => {
     GetFlows(0);
 }
 
+function initializeCardLinks() {
+    let flowCards = document.querySelectorAll('.flow-card') as NodeListOf<HTMLAnchorElement>;
+
+    flowCards.forEach(flowCard => {
+        flowCard.addEventListener('click', () => {
+            // Extract flow ID from flowCard dataset
+            const flowId = flowCard.dataset.flowId;
+
+            if (flowId) {
+                const baseUrl = '/EditFlow/FlowEditor/';
+                const url = `${baseUrl}${flowId}`;
+                flowCard.setAttribute('href', url);
+            } else {
+                console.error('Flow ID not found in dataset');
+            }
+        });
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    GetFlows(0);
+    
+    GetFlows(0).then(response => { initializeCardLinks(); }
+        
+    );
 });

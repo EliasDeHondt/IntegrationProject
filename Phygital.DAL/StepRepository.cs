@@ -22,18 +22,16 @@ public class StepRepository
         _ctx = ctx;
     }
 
-    private StepBase ReadExtendedStep(StepBase stepBase)
+    public StepBase ReadExtendedStep(StepBase stepBase)
     { 
         switch (stepBase)
         {
             case InformationStep i: 
                 return _ctx.InformationSteps
-                    .AsNoTracking()
                     .Include(step => step.InformationBase)
                     .First(step => step.Id == i.Id); 
             case QuestionStep q:
                 var questionStep = _ctx.QuestionSteps
-                    .AsNoTracking()
                     .Include(step => step.QuestionBase)
                     .First(step => step.Id == q.Id);
 
@@ -47,7 +45,6 @@ public class StepRepository
                 return questionStep;
             case CombinedStep c:
                 return _ctx.CombinedSteps
-                    .AsNoTracking()
                     .Include(step => step.InformationBase)
                     .Include(step => step.QuestionBase)
                     .First(step => step.Id == c.Id);

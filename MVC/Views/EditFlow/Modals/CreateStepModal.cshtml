@@ -1,0 +1,42 @@
+<div class="modal" id="CreateStepModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content border-3 border-accent">
+            <div class="modal-header bgColor border-0">
+                <button type="button" class="btn-close invisible"></button>
+                <h3 class="modal-title text-black text-end">Choose a step type:</h3>
+                <button type="button" class="btn-close" id="butCloseCreateStep"></button>
+            </div>
+            <div class="modal-body bgColor">
+                <div class="col ms-3" style="padding-left: 100px;">
+                    <form>
+                        <div class="radio-label" style="display: flex; align-items: center;">
+                            <input type="radio" id="infographic" name="options" value="Infographic" style="margin: 0; padding: 0; margin-right: 5px;">
+                            <label for="infographic" style="margin: 0; padding: 0;">Infographic</label>
+                        </div>
+                        <div class="radio-label" style="display: flex; align-items: center;">
+                            <input type="radio" id="singleQ" name="options" value="singleQ" style="margin: 0; padding: 0; margin-right: 5px;">
+                            <label for="singleQ" style="margin: 0; padding: 0;">Single Choice Question</label>
+                        </div>
+                        <div class="radio-label" style="display: flex; align-items: center;">
+                            <input type="radio" id="multipleQ" name="options" value="multipleQ" style="margin: 0; padding: 0; margin-right: 5px;">
+                            <label for="multipleQ" style="margin: 0; padding: 0;">Multiple Choice Question</label>
+                        </div>
+                        <div class="radio-label" style="display: flex; align-items: center;">
+                            <input type="radio" id="rangeQ" name="options" value="rangeQ" style="margin: 0; padding: 0; margin-right: 5px;">
+                            <label for="rangeQ" style="margin: 0; padding: 0;">Ranged Question</label>
+                        </div>
+                        <div class="radio-label" style="display: flex; align-items: center;">
+                            <input type="radio" id="openQ" name="options" value="openQ" style="margin: 0; padding: 0; margin-right: 5px;">
+                            <label for="openQ" style="margin: 0; padding: 0;">Open Question</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="modal-footer border-0 bgColor">
+                <button type="button" class="btn bgSecondary text-white" id="butCancelCreateStep">Cancel</button>
+                <button type="button" class="btn bgPrimary text-white" id="butConfirmCreateStep">Make Step</button>
+            </div>
+        </div>
+    </div>
+</div>

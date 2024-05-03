@@ -15,6 +15,7 @@ public abstract class StepBase
     [Range(0, int.MaxValue)]
     public int StepNumber { get; set; }
     public long Id { get; set; }
+    public String StepName { get; set; }
     public Note Note { get; set; } = new();
     public Flow Flow { get; set; }
     
@@ -23,12 +24,14 @@ public abstract class StepBase
         StepNumber = stepNumber;
         Flow = flow;
         Id = id;
+        StepName = "";
     }
 
     protected StepBase()
     {
         StepNumber = default;
         Flow = new Flow();
-        Id = default;
+        Id = default; 
+        StepName = "";
     }
 }

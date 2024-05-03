@@ -10,6 +10,7 @@ using Domain.Accounts;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Questions;
+using Domain.ProjectLogics.Steps;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data_Access_Layer;
@@ -129,5 +130,20 @@ public class FlowRepository
         if(c.QuestionBase is ChoiceQuestionBase cq) DeleteChoices(cq);
         _context.Information.Remove(c.InformationBase);
         _context.Questions.Remove(c.QuestionBase);
+    }
+
+    public IEnumerable<StepBase> GetAllSteps(long flowId)
+    {
+        Flow flow = _context.Flows
+            .AsNoTracking()
+            .Include(flow => flow.Steps)
+            .First(flow => flow.Id == flowId);
+        
+        return flow.Steps;
+    }
+
+    public void AddStepToFlow(long flowId, StepBase step)
+    {
+        _context.Flows.Find(flowId)!.Steps.Add(step);
     }
 }

@@ -14,6 +14,7 @@ using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
 using Domain.ProjectLogics.Steps.Questions;
 using Domain.ProjectLogics.Steps.Questions.Answers;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -87,6 +88,17 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         builder.Entity<SingleChoiceQuestion>().HasBaseType<ChoiceQuestionBase>();
         builder.Entity<RangeQuestion>().HasBaseType<ChoiceQuestionBase>();
         
+        builder.Entity<Note>(entity => entity.Property(e => e.Textfield).IsRequired().HasMaxLength(15000));
+        builder.Entity<Image>(entity => entity.Property(e => e.Base64).IsRequired().HasMaxLength(900000));
+        builder.Entity<Text>(entity => entity.Property(e => e.InformationText).IsRequired().HasMaxLength(600));
+        builder.Entity<Video>(entity => entity.Property(e => e.FilePath).IsRequired().HasMaxLength(200));
+        builder.Entity<OpenQuestion>(entity => entity.Property(e => e.TextField).IsRequired().HasMaxLength(600));
+        builder.Entity<QuestionBase>(entity => entity.Property(e => e.Question).IsRequired().HasMaxLength(600));
+        builder.Entity<QuestionBase>(entity => entity.Property(e => e.Question).IsRequired().HasMaxLength(600));
+        builder.Entity<Choice>(entity => entity.Property(e => e.Text).IsRequired().HasMaxLength(600));
+        builder.Entity<ThemeBase>(entity => entity.Property(e => e.Subject).IsRequired().HasMaxLength(600));
+
+        
         builder.Entity<ChoiceAnswer>()
             .HasMany(a => a.Answers)
             .WithOne(s => s.ChoiceAnswer)
@@ -116,4 +128,12 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         if (dropDatabase) Database.EnsureDeleted();
         return Database.EnsureCreated();
     }
+
+    public bool IsEmpty()
+    {
+        Database.EnsureCreated();
+        return !Users.Any() && !SharedPlatforms.Any();
+    }
+
+    
 }
