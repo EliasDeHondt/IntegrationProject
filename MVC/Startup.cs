@@ -53,10 +53,10 @@ public class Startup
         //dependency injection
         services.AddDbContext<CodeForgeDbContext>();
         services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            .AddRoles<IdentityRole>();
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<CodeForgeDbContext>();
 
-        services.AddDataProtection()
-            .PersistKeysToDbContext<CodeForgeDbContext>();
+        services.AddDataProtection();
         
         services.AddAuthorization(options =>
         {

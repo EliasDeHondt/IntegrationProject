@@ -22,7 +22,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Data_Access_Layer.DbContext;
 
-public class CodeForgeDbContext : IdentityDbContext<IdentityUser>, IDataProtectionKeyContext
+public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
 {
     public DbSet<Flow> Flows { get; set; } = null!;
     public DbSet<Project> Projects { get; set; } = null!;
@@ -44,7 +44,6 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>, IDataProtecti
     public DbSet<Respondent> Respondents { get; set; } = null!;
     public DbSet<SharedPlatform> SharedPlatforms { get; set; } = null!;
     public DbSet<ProjectOrganizer> ProjectOrganizers { get; set; } = null!;
-    public DbSet<DataProtectionKey> DataProtectionKeys { get; } = null!;
 
     public CodeForgeDbContext(DbContextOptions<CodeForgeDbContext> options) : base(options) {}
 
