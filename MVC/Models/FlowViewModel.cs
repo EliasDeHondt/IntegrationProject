@@ -23,4 +23,5 @@ public class FlowViewModel
     public IEnumerable<StepBase> Steps { get; set; }
     [Required]
     public IEnumerable<Participation> Participations { get; set; }
+    public long ThemeId { get; set; }
 }

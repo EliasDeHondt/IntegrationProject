@@ -1,28 +1,11 @@
 import {Step} from "./Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
-import {Flow} from "./FlowObjects";
-import {Modal} from "bootstrap";
-import {HubConnectionState} from "@microsoft/signalr";
-import * as signalR from "@microsoft/signalr";
-import {mod} from "@tensorflow/tfjs";
-
-export const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/hub")
-    .configureLogging(signalR.LogLevel.Information)
-    .build();
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
 const btnNextStep = document.getElementById("btnNextStep") as HTMLButtonElement;
 const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonElement;
 const btnEmail = document.getElementById("btnEmail") as HTMLButtonElement;
-const btnExitFlow = document.getElementById("butExitFlow") as HTMLButtonElement;
-const modal = new Modal(document.getElementById("pausedFlowModal") as HTMLDivElement, {
-    backdrop: 'static',
-    keyboard: false
-});
-const btnShowFlows = document.getElementById("flowDropdownBtn") as HTMLButtonElement;
-const ddFlows = document.getElementById("flowDropdown") as HTMLUListElement;
 let currentStepNumber: number = 0;
 let userAnswers: string[] = []; // Array to store user answers
 let openUserAnswer: string = "";
@@ -31,8 +14,6 @@ let themeId = Number((document.getElementById("theme") as HTMLSpanElement).inner
 let stepTotal = Number((document.getElementById("stepTotal") as HTMLSpanElement).innerText);
 let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerText;
 let prevFlowId = sessionStorage.getItem('prevFlowId');
-let pCode = document.getElementById("facilitatorCode") as HTMLParagraphElement;
-let facilitatorCode: string = "";
 let currentState: string = "";
 
 //email checken
@@ -290,8 +271,6 @@ async function saveAnswerToDatabase(answers: string[], openAnswer: string, flowI
 }
 
 btnNextStep.onclick = async () => {
-    await SendUpdate();
-
     if (userAnswers.length > 0 || openUserAnswer.length > 0) {
         await saveAnswerToDatabase(userAnswers, openUserAnswer, flowId, currentStepNumber);
         // Clear the userAnswers array for the next step
@@ -312,84 +291,3 @@ btnRestartFlow.onclick = () => {
     currentStepNumber = 0;
     GetNextStep(++currentStepNumber, flowId);
 };
-
-btnExitFlow.onclick = () => UpdateFlowState(String(flowId), "Inactive");
-
-btnShowFlows.onclick = () => {
-    fetch(`/api/SubThemes/` + themeId + `/Flows`, {
-        method: "GET",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
-    })
-        .then(response => response.json())
-        .then(data => ShowFlows(data))
-        .catch(error => console.error("Error:", error))
-};
-
-function ShowFlows(flows: Flow[]) {
-    ddFlows.innerHTML = "";
-    flows.forEach(flow => {
-        if (flow.id != flowId)
-            ddFlows.innerHTML += `<li><a class="dropdown-item" href="/Flow/Step/${flow.id}">${flow.id}</a></li>`
-        else
-            ddFlows.innerHTML += `<li><a class="dropdown-item active" aria-current="true">${flow.id}</a></li>`
-    });
-}
-
-export async function UpdateFlowState(id: string, state: string) {
-    fetch("/api/Flows/" + id + "/" + state, {
-        method: "PUT"
-    })
-        .then(response => {
-            if (response.ok) {
-                console.log(`Flow ${prevFlowId} ${state}!`)
-                return true;
-            }
-            return false;
-        })
-        .catch(error => console.error("Error:", error))
-    currentState = state;
-}
-
-async function UpdateCurrentFlowState() {
-    if (prevFlowId != null)
-        await UpdateFlowState(prevFlowId, 'Inactive');
-    await UpdateFlowState(String(flowId), 'Active');
-    sessionStorage.setItem('prevFlowId', String(flowId));
-}
-
-window.onload = async () => {
-    await connection.start();
-    await GenerateFacilitatorCode()
-    await UpdateCurrentFlowState()
-    if (connection.state == HubConnectionState.Connected)
-        connection.invoke("ConnectToUser", facilitatorCode)
-            .then(() => {
-                console.log("Connected to installation #" + facilitatorCode);
-            })
-            .catch((err) => {
-                console.error("Error user connection: " + err + facilitatorCode);
-            });
-}
-
-async function GenerateFacilitatorCode() {
-    facilitatorCode = Math.floor(100000 + Math.random() * 900000).toString();
-    pCode.innerText = facilitatorCode;
-}
-
-export async function SendUpdate() {
-    connection.invoke("SendFlowUpdate", pCode.innerText, flowId.toString(), currentState)
-        .then(() => console.log(pCode.innerText, flowId.toString(), currentState))
-        .catch(error => console.error(error))
-}
-
-connection.on("ReceiveFlowUpdate", async (id, state) => {
-    await UpdateFlowState(id, state);
-    if (currentState.toLowerCase() == "paused") {
-        modal.show()
-    } else {
-        modal.hide()
-    }
-})

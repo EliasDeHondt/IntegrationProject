@@ -14,8 +14,10 @@ module.exports = {
         webcam: './src/js/Webcam/WebCamDetection.ts',
         login: './src/js/Login/login-animation.ts',
         dashboard: './src/js/Dashboard/Dashboard.ts',
-        flowcreator: './src/js/CreateFlow/FlowCreator.ts',
-        facilitator: './src/js/Flow/Facilitator.ts'
+        flowCreator: './src/js/CreateFlow/FlowCreator.ts',
+        facilitator: './src/js/Flow/Facilitator.ts',
+        kiosk: './src/js/Kiosk/Kiosk.ts',
+        flow: './src/js/Kiosk/Flow.ts',
     },
     output: {
         filename: '[name].entry.js',

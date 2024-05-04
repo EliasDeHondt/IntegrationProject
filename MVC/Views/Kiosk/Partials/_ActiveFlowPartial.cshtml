@@ -1,11 +1,6 @@
 ﻿@using Domain.ProjectLogics
 @model Flow
 
-@{
-    Layout = null;
-    ViewData["Title"] = $"Flow {Model.Id}";
-}
-
 <!DOCTYPE html>
 
 <html class="h-100" lang="">
@@ -36,21 +31,7 @@
 <footer class="row-gap-sm-4 h-25 justify-content-center d-flex">
     <button class="btn-primary mt-auto mb-auto h-25 m-5" id="btnNextStep">Next step</button>
     <button class="btn-secondary mt-auto mb-auto h-25 m-5" id="btnRestartFlow">Restart flow</button>
-    @if (Model.Theme.GetType() == typeof(SubTheme))
-    {
-        <div class="mt-auto mb-auto m-5">
-            <a class="btn-close h-50" id="butExitFlow" asp-area="" asp-controller="Kiosk" asp-action="Index" asp-route-id=""><span></span></a>
-            <span>Exit</span>
-            
-        </div>
-    }
-    else
-    {
-        <div class="mt-auto mb-auto m-5">
-            <a class="btn-close h-50" id="butExitFlow" asp-area="" asp-controller="Kiosk" asp-action="Index" asp-route-id=""><span></span></a>
-            <span>Exit</span>
-        </div>
-    }
+    <button class="btn-secondary mt-auto mb-auto h-25 m-5" id="btnExitFlow">Exit flow</button>
 
     <div style="position: fixed; bottom: 0; right: 0; display: flex; flex-direction: row;">
         <div style="display: flex; flex-direction: column; ">
@@ -69,4 +50,5 @@
 
 
 <script src="/dist/step.entry.js" defer></script>
+<script src="/dist/flow.entry.js" defer></script>
 <link rel="stylesheet" href="~/dist/site.css"/>

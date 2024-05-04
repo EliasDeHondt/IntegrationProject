@@ -48,6 +48,14 @@ public class FlowRepository
             .AsNoTracking()
             .ToList();
     }
+
+    public IEnumerable<Flow> ReadAllFlowsWithTheme()
+    {
+        return _context.Flows
+            .Include(f => f.Theme)
+            .AsNoTracking()
+            .ToList();
+    }
     
     public void AddParticipationByFlow(long flowId,string email)
     {

@@ -42,4 +42,22 @@ public class FlowsController : Controller
         
         return NoContent();
     }
+    
+    [HttpGet]
+    public ActionResult GetFlows()
+    {
+        var flows = _manager.GetAllFlowsWithTheme();
+
+        if (!flows.Any())
+            return NoContent();
+
+        return Ok(flows.Select(flow => new FlowViewModel
+        {
+            Id = flow.Id,
+            FlowType = flow.FlowType,
+            Steps = flow.Steps,
+            Participations = flow.Participations,
+            ThemeId = flow.Theme.Id
+        }));
+    }
 }
