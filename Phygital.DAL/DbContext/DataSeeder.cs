@@ -316,7 +316,7 @@ public static class DataSeeder
         flow.Steps.Add(step3);
         flow.Steps.Add(step4);
 
-        SharedPlatform sp = new SharedPlatform("CodeForge");
+        SharedPlatform sp = new SharedPlatform("CodeForge", ImageUrls.Favicon);
         
         subTheme1.Flows.Add(flow);
         subTheme1.Flows.Add(flow1);
@@ -346,9 +346,11 @@ public static class DataSeeder
         ((SpAdmin)ctx.Users.Single(user => user.Email == "Henk@CodeForge.com")).SharedPlatform = sp;
         ((SpAdmin)ctx.Users.Single(user => user.Email == "CodeForge.noreply@gmail.com")).SharedPlatform = sp;
         sp.Projects.Add(project1);
-
+        ctx.SharedPlatforms.RemoveRange(ctx.SharedPlatforms.Where(p => p.OrganisationName == string.Empty));
+        
         flow2.Theme = mainTheme2;
         ctx.SharedPlatforms.Add(sp);
+        //ctx.SharedPlatforms.AddRange(new SharedPlatform(),new SharedPlatform(),new SharedPlatform(),new SharedPlatform(),new SharedPlatform(),new SharedPlatform(),new SharedPlatform(),new SharedPlatform(),new SharedPlatform(),new SharedPlatform());
         ctx.MainThemes.Add(mainTheme2);
         ctx.Flows.Add(flow2);
         
