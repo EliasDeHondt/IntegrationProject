@@ -18,7 +18,6 @@
 
     <ItemGroup>
         <AdditionalFiles Include="Views\Flow\Step.cshtml"/>
-        <AdditionalFiles Include="Views\Layout\NavigationLayout.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
@@ -33,7 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <_ContentIncludedByDefault Remove="wwwroot\js\site.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\js\site.js" />
         <_ContentIncludedByDefault Remove="custom npm packages\opencv-ts\.eslintrc.json" />
         <_ContentIncludedByDefault Remove="custom npm packages\opencv-ts\package.json" />
         <_ContentIncludedByDefault Remove="custom npm packages\opencv-ts\tsconfig.json" />
@@ -74,7 +73,7 @@
         <PackageReference Include="Google.Cloud.Storage.V1" Version="4.9.0" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="7.0.16" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.17" />
-        <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.16"/>
+        <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.16" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.17" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.17">
           <PrivateAssets>all</PrivateAssets>
@@ -84,13 +83,14 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Remove="$(MpaRoot)**"/>
-        <None Remove="$(MpaRoot)**"/>
-        <None Include="$(MpaRoot)**" Exclude="$(MpaRoot)node_modules\**"/>
+        <Content Remove="$(MpaRoot)**" />
+        <None Remove="$(MpaRoot)**" />
+        <None Include="$(MpaRoot)**" Exclude="$(MpaRoot)node_modules\**" />
 
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="ClientApp\src\js\Layout\API\" />
       <Folder Include="Pages\" />
       <Folder Include="Views\Project\Modals\" />
       <Folder Include="Views\Statistics\" />
