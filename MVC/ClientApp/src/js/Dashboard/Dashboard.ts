@@ -8,10 +8,7 @@ import "/node_modules/embla-carousel";
 import EmblaCarousel, {EmblaOptionsType} from "embla-carousel";
 import {addPrevNextBtnsClickHandlers} from '../EmblaCarouselArrowButtons'
 import '../../css/embla.scss'
-import {setupNavigation} from "../Layout/Navigation";
-import {showUserName} from "../Layout/API/NavigationAPI";
 
-const accountname = document.getElementById("accountname") as HTMLElement;
 const userRoulette = document.getElementById("carouselContainer") as HTMLDivElement;
 const projectRoulette = document.getElementById("carouselPContainer") as HTMLDivElement;
 const OPTIONS: EmblaOptionsType = {align: 'start'};
