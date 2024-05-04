@@ -27,9 +27,12 @@ function UpdateFlowList(flows: Flow[]) {
     if (flows.length > 0) {
         flows.forEach(flow => {
             //Card container
-            const flowCard = document.createElement('a');
-            flowCard.classList.add("flow-card", "btn");
+            const flowCard = document.createElement('div');
+            flowCard.classList.add("flow-card");
             flowCard.dataset.flowId = flow.id.toString();
+            const flowButton = document.createElement('a');
+            flowButton.classList.add("btn","flow-card-btn");
+            flowButton.dataset.flowId = flow.id.toString();
             //Card Delete Button
             const flowCardDeleteBtn = document.createElement('button');
             flowCardDeleteBtn.innerHTML = '<i class="bi bi-trash3-fill"></i>';
@@ -44,8 +47,9 @@ function UpdateFlowList(flows: Flow[]) {
             cardFooter.innerText = flow.flowType.toString();
 
             flowCard.appendChild(flowCardDeleteBtn);
-            flowCard.appendChild(cardHeader);
-            flowCard.appendChild(cardFooter);
+            flowButton.appendChild(cardHeader);
+            flowButton.appendChild(cardFooter);
+            flowCard.appendChild(flowButton);
 
             flowContainer.appendChild(flowCard);
         });
@@ -84,7 +88,7 @@ btnCreateFlow.onclick = async() => {
 }
 
 function initializeCardLinks() {
-    let flowCards = document.querySelectorAll('.flow-card') as NodeListOf<HTMLAnchorElement>;
+    let flowCards = document.querySelectorAll('.flow-card-btn') as NodeListOf<HTMLAnchorElement>;
 
     flowCards.forEach(flowCard => {
         flowCard.addEventListener('click', () => {
