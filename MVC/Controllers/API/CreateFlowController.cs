@@ -55,4 +55,17 @@ public class CreateFlowController : Controller
         
         return Created("CreateFlow", flow);
     }
+
+    [HttpDelete("DeleteFlow/{flowId:long}")]
+    public IActionResult DeleteFlow(long flowId)
+    {
+        
+        _uow.BeginTransaction();
+        
+        _manager.DeleteFlowById(flowId);
+        
+        _uow.Commit();
+        
+        return NoContent();
+    }
 }

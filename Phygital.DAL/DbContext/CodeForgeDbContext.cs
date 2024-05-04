@@ -28,6 +28,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Project> Projects { get; set; } = null!;
     public DbSet<MainTheme> MainThemes { get; set; } = null!;
     public DbSet<SubTheme> SubThemes { get; set; } = null!;
+    public DbSet<StepBase> Steps { get; set; } = null!;
     public DbSet<ChoiceQuestionBase> ChoiceQuestions { get; set; } = null!;
     public DbSet<InformationStep> InformationSteps { get; set; } = null!;
     public DbSet<CombinedStep> CombinedSteps { get; set; } = null!;
@@ -44,6 +45,8 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Respondent> Respondents { get; set; } = null!;
     public DbSet<SharedPlatform> SharedPlatforms { get; set; } = null!;
     public DbSet<ProjectOrganizer> ProjectOrganizers { get; set; } = null!;
+    public DbSet<InformationBase> Information { get; set; } = null!;
+    public DbSet<QuestionBase> Questions { get; set; } = null!;
 
     public CodeForgeDbContext(DbContextOptions<CodeForgeDbContext> options) : base(options) {}
 

@@ -16,6 +16,8 @@ module.exports = {
         project: './src/js/Project/Project.ts',
         dashboard: './src/js/Dashboard/Dashboard.ts',
         flowCreator: './src/js/CreateFlow/FlowCreator.ts',
+        deleteFlowModal: './src/js/CreateFlow/DeleteFlowModal.ts',
+        deleteFlowAPI: './src/js/CreateFlow/API/DeleteFlowAPI.ts',
         flowEditor: './src/js/CreateFlow/FlowEditor.ts',
         navigation: './src/js/Layout/Navigation.ts'
     },
