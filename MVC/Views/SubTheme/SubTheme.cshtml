@@ -9,31 +9,17 @@
 @model SubTheme
 
 @{
-    Layout = null;
+    Layout = "_NavLayout";
     ViewData["Title"] = Model.Subject;
 }
 
 <!DOCTYPE html>
 
 <html lang="" class="h-100 w-100 overflow-hidden">
-<head>
-    <title>title</title>
-    <link rel="stylesheet" href="~/dist/site.css"/>
-</head>
 <body class="row h-100 w-100">
-<div class="text-center">
-    <div class="row">
+<div class="text-center col-lg-10">
         <!-- Dashboard -->
-        <div class="col-lg-2 col-md-3 col-sm-4 col-6 p-3 bg-light">
-            <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <a href="#" class="nav-link active" aria-current="page">Dashboard</a>
-                </li>
-            </ul>
-        </div>
-
         <!-- Titel -->
-        <div class="col-lg-10 col-md-9 col-sm-8 col-6">
             <div class="py-3">
                 <div class="row ms-4">
                     <div class="col-auto card border-black border-2 bgAccent align-top">
@@ -69,8 +55,6 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
 </body>
 </html>
