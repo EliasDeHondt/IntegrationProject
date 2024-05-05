@@ -176,6 +176,15 @@ public class Startup
             SharedPlatform = new SharedPlatform()
         };
 
+        var facilitatorTom = new Facilitator
+        {
+            Id = "TomId",
+            Email = "Tom@CodeForge.com",
+            UserName = "Tom",
+            EmailConfirmed = true,
+            SharedPlatformId = 3
+        };
+        
         await roleManager.CreateAsync(new IdentityRole(UserRoles.Facilitator));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.PlatformAdmin));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.SystemAdmin));
