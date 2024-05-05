@@ -2,25 +2,22 @@
 import "./ChooseFlow";
 import "./FlowTypeModal";
 import {flowTypeModal} from "./FlowTypeModal";
-import {GetFlows} from "../Kiosk/FlowAPI";
-import {GenerateOptions, SubmitFlows} from "./ChooseFlow";
 
 export const connection = new signalR.HubConnectionBuilder()
     .withUrl("/hub")
     .build();
 
 const btnPauseFlow = document.getElementById("btnPauseFlow") as HTMLButtonElement;
-const cardCurrentFlow = document.getElementById("cardCurrentFlow") as HTMLDivElement; // Card moet nog aangemaakt worden in typescript ipv HTML
 const btnCloseInstallation = document.getElementById("cardCurrentFlow") as HTMLButtonElement;
 const connectionCode = document.getElementById("connectionCode") as HTMLSpanElement;
-const btnSubmitFlows = document.getElementById("btnSubmitFlows") as HTMLButtonElement;
 
 let currentFlow = document.getElementById("currentFlow") as HTMLHeadingElement;
 let currentState = document.getElementById("currentState") as HTMLSpanElement;
 export let code = "";
 
 
-document.addEventListener("DOMContentLoaded", async () => {const storedCode = sessionStorage.getItem("connectionCode");
+document.addEventListener("DOMContentLoaded", async () => {
+    const storedCode = sessionStorage.getItem("connectionCode");
     if (storedCode) {
         code = storedCode;
     } else {
@@ -42,6 +39,17 @@ document.addEventListener("DOMContentLoaded", async () => {const storedCode = se
                 flowTypeModal.show();
             };
         })
+
+    if (btnCloseInstallation)
+        btnCloseInstallation.onclick = () => {
+            connection.invoke("LeaveConnection", code).then(() => {
+                code = "";
+                connectionCode.innerText = "";
+                currentFlow.innerText = "0"
+                currentState.innerText = "Inactive"
+                console.log("left connection");
+            }).catch(() => console.log("still connected"))
+        }
 })
 
 connection.on("FlowActivated", (id) => {

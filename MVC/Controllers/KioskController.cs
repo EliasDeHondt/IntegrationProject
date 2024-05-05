@@ -16,11 +16,4 @@ public class KioskController : Controller
     {
         return View();
     }
-    
-    public PartialViewResult Flow(long id)
-    {
-        var flow = _manager.GetFlowByIdWithTheme(id);
-        return PartialView("Partials/_ActiveFlowPartial", flow);
-    }
-    
 }

@@ -10,7 +10,7 @@ function generateCard(flow: Flow): HTMLDivElement {
     const enterButton = document.createElement("button");
     enterButton.id = "btnFlow";
     enterButton.addEventListener("click", () => {
-        window.location.href = `/Kiosk/Flow/${flow.id}`;
+        window.location.href = `/Flow/Step/${flow.id}`;
     });
 
     const title = document.createElement("p")
@@ -24,12 +24,9 @@ function generateCard(flow: Flow): HTMLDivElement {
 }
 
 export function GenerateCards(flows: Flow[], flowContainer: HTMLDivElement) {
-    flowContainer.innerHTML = "";
-    console.log(flows)
     const cards = flows.map(generateCard);
-
     cards.forEach(card => {
-            flowContainer.appendChild(card);
+        flowContainer.appendChild(card);
     })
 }
 

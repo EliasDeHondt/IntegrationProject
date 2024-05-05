@@ -1,6 +1,7 @@
 ﻿import * as signalR from "@microsoft/signalr";
 import {GenerateCards, GetFlowById} from "./FlowAPI";
 import {Flow} from "../Flow/FlowObjects"
+import {div} from "@tensorflow/tfjs";
 
 const connection = new signalR.HubConnectionBuilder()
     .withUrl("/hub")
@@ -9,6 +10,7 @@ const connection = new signalR.HubConnectionBuilder()
 const divFlows = document.getElementById("flowContainer") as HTMLDivElement;
 
 export let code = "";
+let selectedFlowIds : string[] = [];
 let flows : Flow[] = [];
 
 const storedCode = sessionStorage.getItem("connectionCode");
@@ -19,6 +21,8 @@ if (storedCode) {
     sessionStorage.setItem("connectionCode", code);
 }
 
+let storedFlows = sessionStorage.getItem("selectedFlows");
+
 document.addEventListener("DOMContentLoaded", async () => {
     const connectionCode = document.getElementById("connectionCode") as HTMLSpanElement;
     connectionCode.innerText = code;
@@ -27,13 +31,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         connection.invoke("JoinConnection", code).then(() =>
             console.log("connection #" + code))
     });
-    
+
     GenerateCards(flows, divFlows);
 })
 
 connection.on("ReceiveSelectedFlowIds", async (ids) => {
-    for (let i = 0; i < ids.length; i++) {
-       await GetFlowById(ids[i]).then(flow => flows[i] = flow)
+    if (storedFlows) {
+        storedFlows = storedFlows.split(",").join("")
+        for (let i = 0; i < storedFlows.length; i++) {
+            await GetFlowById(storedFlows[i]).then(flow => flows[i] = flow)
+        }
+    } else {
+        for (let i = 0; i < ids.length; i++) {
+            await GetFlowById(ids[i]).then(flow => flows[i] = flow)
+        }
+        sessionStorage.setItem("selectedFlows", ids);
     }
     GenerateCards(flows, divFlows);
 })
