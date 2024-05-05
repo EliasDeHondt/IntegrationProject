@@ -27,7 +27,7 @@ public class FlowRepository
             .AsNoTracking()
             .First(flow => flow.Id == id);
     }
-    
+
     public Flow ReadFlowByIdIncludingTheme(long id)
     {
         return _context.Flows
@@ -56,17 +56,26 @@ public class FlowRepository
             .AsNoTracking()
             .ToList();
     }
-    
-    public void AddParticipationByFlow(long flowId,string email)
+
+    public void AddParticipationByFlow(long flowId, string email)
     {
         var participations = _context.Participations;
         Participation participation = new Participation(ReadFlowById(flowId));
-        participation.Respondents.Add(new Respondent(email,participation)); //respondent
+        participation.Respondents.Add(new Respondent(email, participation)); //respondent
         participations.Add(participation);
     }
 
     public void UpdateFlowState(Flow flow)
     {
         _context.Flows.Update(flow);
+    }
+
+    public IEnumerable<Flow> ReadFlowsByIds(IEnumerable<long> flowIds)
+    {
+        return _context.Flows
+            .Where(flow => flowIds
+                .Contains(flow.Id))
+            .AsNoTracking()
+            .ToList();
     }
 }

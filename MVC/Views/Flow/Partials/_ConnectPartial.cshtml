@@ -1,17 +1,11 @@
-﻿<div>
-    <div>
-        <h1>Installation #<span id=""></span></h1>
-        <button class="btn-secondary mt-auto mb-auto h-25 m-5" id="">Close installation</button>
-    </div>
-    <div class="card">
-        <div class="card-header">Current flow</div>
-        <div class="card-body">
-            <h2 class="card-title">Flow <span id="currentFlow"></span></h2>
-            <p class="card-text">State: <span id="currentState"></span></p>
-        </div>
-        <div class="card-footer">
-            <button class="btn-secondary mt-auto mb-auto h-25 m-5" id="btnPauseFlow">Pause flow</button>
-            <button class="btn-secondary mt-auto mb-auto h-25 m-5" id="">Take notes</button>
+﻿<div class="col">
+    <h2>Connect to Phygital kiosk:</h2>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" id="inputCode">
+        <div class="input-group-append">
+            <input type="submit" class="btn btn-primary" id="btnEnterCode">
         </div>
     </div>
 </div>
+
+<partial name="Modals/FlowTypeModal"/>

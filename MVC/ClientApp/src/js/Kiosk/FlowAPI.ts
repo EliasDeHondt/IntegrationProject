@@ -32,7 +32,20 @@ export function GenerateCards(flows: Flow[], flowContainer: HTMLDivElement) {
 }
 
 export async function GetFlows(): Promise<Flow[]>{
-    return await fetch("/api/Flows", {
+    return await fetch(`/api/Flows`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }
+    }).then(response => response.json())
+        .then(data => {
+            return data;
+        })
+}
+
+export async function GetFlowsByIds(ids: number[]): Promise<Flow[]>{
+    return await fetch(`/api/Flows/${ids}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

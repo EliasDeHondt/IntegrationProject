@@ -1,5 +1,9 @@
 ﻿import * as signalR from "@microsoft/signalr";
-import {HubConnectionState} from "@microsoft/signalr";
+import "./ChooseFlow";
+import "./FlowTypeModal";
+import {flowTypeModal} from "./FlowTypeModal";
+import {GetFlows} from "../Kiosk/FlowAPI";
+import {GenerateOptions} from "./ChooseFlow";
 
 const connection = new signalR.HubConnectionBuilder()
     .withUrl("/hub")
@@ -17,12 +21,13 @@ let code: string = "";
 document.addEventListener("DOMContentLoaded", async () => {
     currentFlow.innerText = "0"
     currentState.innerText = "Inactive"
-    const btnEnterCode = document.getElementById("btnEnterCode") as HTMLInputElement;
+    const btnEnterCode = document.getElementById("btnEnterCode") as HTMLButtonElement;
     await connection.start()
         .then(() => {
-            btnEnterCode.onclick = () => {
+            btnEnterCode.onclick = async () => {
                 code = (document.getElementById("inputCode") as HTMLInputElement).value;
-                connection.invoke("JoinConnection", code).then(() => connectionCode.innerText = code)
+                await connection.invoke("JoinConnection", code).then(() => connectionCode.innerText = code)
+                flowTypeModal.show();
             };
         })
 })

@@ -64,4 +64,9 @@ public class FlowManager
     {
         _repository.UpdateFlowState(flow);
     }
+
+    public IEnumerable<Flow> GetFlowsByIds(IEnumerable<long> flowIds)
+    {
+        return _repository.ReadFlowsByIds(flowIds);
+    }
 }

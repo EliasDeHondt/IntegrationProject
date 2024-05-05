@@ -1,3 +1,4 @@
+using System.Collections;
 using Business_Layer;
 using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics;
@@ -46,7 +47,7 @@ public class FlowsController : Controller
     [HttpGet]
     public ActionResult GetFlows()
     {
-        var flows = _manager.GetAllFlowsWithTheme();
+        var flows = _manager.GetAllFlows();
 
         if (!flows.Any())
             return NoContent();

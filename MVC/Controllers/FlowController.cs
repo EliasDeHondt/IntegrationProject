@@ -6,8 +6,10 @@
  ***************************************/
 
 using Business_Layer;
+using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace MVC.Controllers;
 
@@ -31,5 +33,9 @@ public class FlowController : Controller
     {
         return View();
     }
-    
+
+    public PartialViewResult FlowPicker(string type)
+    {
+        return PartialView("Partials/_FlowPickerPartial", type);
+    }
 }
