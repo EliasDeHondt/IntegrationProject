@@ -1,3 +1,10 @@
+/***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************/
+
 @font-face {
   font-family: 'Trirong';
   src: url('https://fonts.googleapis.com/css?family=Trirong:700|Trirong:400');
@@ -7,6 +14,7 @@
 @import "variables";
 @import "flowcards";
 @import "flowEditor";
+@import "Flow/kiosk";
 @import "SystemPlatform/systemPlatform";
 
 @media (min-width: 768px) {
