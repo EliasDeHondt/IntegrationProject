@@ -41,11 +41,7 @@ public class ProjectManager
     
     public void AddProjectOrganizer(Facilitator facilitator, Project project)
     {
-        var projectOrganizer = new ProjectOrganizer
-        {
-            Facilitator = facilitator,
-            Project = project
-        };
+        var projectOrganizer = new ProjectOrganizer(project, facilitator);
         _repo.CreateProjectOrganizer(projectOrganizer);
     }
 

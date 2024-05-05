@@ -202,6 +202,14 @@ public class Startup
             EmailConfirmed = true
         };
         
+        var facilitatorTom = new Facilitator
+        {
+            Id = "TomId",
+            Email = "Tom@CodeForge.com",
+            UserName = "Tom",
+            EmailConfirmed = true
+        };
+        
         await roleManager.CreateAsync(new IdentityRole(UserRoles.Facilitator));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.PlatformAdmin));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.SystemAdmin));
@@ -213,6 +221,7 @@ public class Startup
         await userManager.CreateAsync(sharedPlatformAdminHenk, "Henk!123");
         await userManager.CreateAsync(sharedPlatformAdminCodeForge, "Codeforge!123");
         await userManager.CreateAsync(systemAdminBob, "Bob!123");
+        await userManager.CreateAsync(facilitatorTom, "Tom!123");
 
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.PlatformAdmin);
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.UserPermission);
@@ -222,6 +231,8 @@ public class Startup
         await userManager.AddToRoleAsync(sharedPlatformAdminCodeForge, UserRoles.PlatformAdmin);
         
         await userManager.AddToRoleAsync(systemAdminBob, UserRoles.SystemAdmin);
+
+        await userManager.AddToRoleAsync(facilitatorTom, UserRoles.Facilitator);
     }
 
     void SeedDatabase(UnitOfWork uow, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager,

@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Domain.ProjectLogics.Project>
+
+@{
+    ViewBag.Title = "Project dashboard";
+    Layout = "_NavLayout";
+}
+
+<html class="h-100 w-100 overflow-hidden">
+<body class="row h-100 w-100">
+<div class="text-center col-lg-10 h-100">
+    <div class="d-flex justify-content-between mt-3 mb-3">
+        <div class="card border-black border-2 bgAccent align-items-lg-start">
+            <a style="color: white;" class="m-1">Projects</a>
+        </div>
+        <div class="card border-black border-2 bgAccent align-items-md-end">
+            <input class="m-1" placeholder="Start typing to search">
+        </div>
+    </div>
+    <ul class="row list-unstyled">
+        @foreach (var project in Model)
+        {
+            <li class="list-item col-6">
+                <div class="card border-black border-2 bgAccent h-100">
+                    <button class="border-0 p-0  h-100" style="background: none">
+                        <div class="card-body align-items-center d-block justify-content-center">
+                            <i class="bi bi-folder" style="color: white; font-size: 10vh"></i>
+                            <p class="text-light">@project.Title</p>
+                        </div>
+                    </button>
+                </div>
+            </li>
+        }
+    </ul>
+</div>
+</body>
+</html>
