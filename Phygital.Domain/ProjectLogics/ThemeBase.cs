@@ -11,7 +11,7 @@ namespace Domain.ProjectLogics;
 public abstract class ThemeBase
 {
     public long Id { get; set; }
-    [MaxLength(50)]
+    [MaxLength(600)]
     public string Subject { get; set; }
     public ICollection<Flow> Flows { get; set; }
 

@@ -1,8 +1,8 @@
 ﻿import {Modal, Toast} from "bootstrap";
 import * as API from "./API/CreateUserModalAPI";
-import {Project} from "./Types/ProjectObjects";
+import {Project} from "../Types/ProjectObjects";
 import {resetCards} from "./API/DashboardAPI";
-import {UserRoles} from "./Types/UserTypes";
+import {UserRoles} from "../Types/UserTypes";
 import {isEmailInUse} from "../API/UserAPI";
 import {sendEmail} from "./API/CreateUserModalAPI";
 

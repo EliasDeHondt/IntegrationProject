@@ -126,7 +126,17 @@ namespace MVC.Areas.Identity.Pages.Account
                         _logger.LogInformation("User logged in.");
                         if (_userManager.IsInRoleAsync(user, UserRoles.PlatformAdmin).Result)
                         {
-                            return RedirectToAction("Dashboard", "SharedPlatform");
+                            return RedirectToAction("RedirectToDashboard", "SharedPlatform");
+                        }
+
+                        if (_userManager.IsInRoleAsync(user, UserRoles.SystemAdmin).Result)
+                        {
+                            return RedirectToAction("Dashboard", "SystemPlatform");
+                        }
+
+                        if (_userManager.IsInRoleAsync(user, UserRoles.Facilitator).Result)
+                        {
+                            return RedirectToAction("Dashboard", "Facilitator");
                         }
 
                         return LocalRedirect(returnUrl);
