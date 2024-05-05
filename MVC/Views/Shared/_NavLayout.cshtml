@@ -24,7 +24,12 @@
                 <a asp-action="Dashboard" asp-controller="SystemPlatform" class="bhover nav-link active  text-dark bgAccent" aria-current="page" style="display: block; padding: 20px 0; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">Dashboard</a>
             </li>
         }
-        else
+        else if (User.IsInRole(UserRoles.Facilitator))
+        {
+            <li id="tohideD" class="nav-item bgPrimary text-center" style="padding-bottom: 10px; padding-top: 20px;">
+                <a asp-action="Dashboard" asp-controller="Facilitator" class="bhover nav-link active  text-dark bgAccent" aria-current="page" style="display: block; padding: 20px 0; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">Dashboard</a>
+            </li>
+        } else
         {
             <li id="tohideD" class="nav-item bgPrimary text-center" style="padding-bottom: 10px; padding-top: 20px;">
                 <a asp-action="Dashboard" asp-controller="SharedPlatform" class="bhover nav-link active  text-dark bgAccent" aria-current="page" style="display: block; padding: 20px 0; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">Dashboard</a>
@@ -62,6 +67,4 @@
 </html>
 @await RenderSectionAsync("Scripts", required: false)
 
-@section Scripts{
-    <script src="~/dist/navigation.entry.js" defer></script>
-}
+<script src="~/dist/navigation.entry.js" defer></script>
