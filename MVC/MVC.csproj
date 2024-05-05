@@ -91,10 +91,8 @@
 
     <ItemGroup>
       <Folder Include="ClientApp\src\js\Layout\API\" />
-      <Folder Include="Pages\" />
       <Folder Include="Views\Project\Modals\" />
       <Folder Include="Views\Statistics\" />
-      <Folder Include="wwwroot\Assets\Videos\" />
     </ItemGroup>
 
     <Target Name="NpmInstall" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(MpaRoot)node_modules') ">
