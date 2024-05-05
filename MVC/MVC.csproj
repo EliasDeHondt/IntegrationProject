@@ -66,6 +66,19 @@
         <_ContentIncludedByDefault Remove="wwwroot\dist\validation.entry.js.map" />
         <_ContentIncludedByDefault Remove="wwwroot\dist\webcam.entry.js" />
         <_ContentIncludedByDefault Remove="wwwroot\dist\webcam.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\dashboard.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\deleteFlowAPI.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\deleteFlowAPI.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\deleteFlowModal.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\deleteFlowModal.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\flowEditor.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\flowEditor.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\navigation.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\navigation.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\subTheme.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\subTheme.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\systemDashboard.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\systemDashboard.entry.js.map" />
     </ItemGroup>
 
     <ItemGroup>

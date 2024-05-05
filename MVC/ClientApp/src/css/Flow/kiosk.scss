@@ -48,6 +48,14 @@
   color: #ffffff;
 }
 
+.kiosk-bottom-center {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ffffff;
+}
+
 .kiosk-bottom-right {
   position: absolute;
   bottom: 0;
@@ -84,6 +92,21 @@
   margin: 24px;
   padding: 24px;
   height: 127px;
+}
+
+.kiosk-container-bottom-center {
+  border: 1px solid #ffffff;
+  border-radius: 24px;
+  background-color: #479ecd;
+  margin: 24px;
+  padding: 24px;
+  height: 127px;
+}
+
+.kiosk-container-bottom-center a {
+  color: #e9521c;
+  text-decoration: none;
+  font-weight: 1000;
 }
 
 .kiosk-container-bottom-right {
