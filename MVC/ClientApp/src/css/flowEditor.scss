@@ -32,6 +32,24 @@
   border: thin solid black;
 }
 
+.choice-textarea {
+  min-height: 50px;
+  height: 60px;
+  max-height: 200px;
+  width: 600px;
+  margin: 5px;
+}
+
+.choice-container {
+  display: flex;
+  align-items: center;
+}
+
+.btn-choice {
+  margin-left: 10px;
+  margin-right: 5px;
+}
+
 #input-container {
   display: grid;
   grid-template-columns: 150px repeat(4, 1fr);

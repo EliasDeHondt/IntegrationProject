@@ -162,17 +162,21 @@ async function ShowStepInContainer(data: Step) {
     switch (data.questionViewModel.questionType) {
       case "SingleChoiceQuestion":
         for (const element of data.questionViewModel.choices) {
-          let choice = document.createElement("input");
-          let label = document.createElement("label");
           let div = document.createElement("div");
-          div.classList.add("text-start", "m-auto")
-          choice.type = 'radio';
-          choice.name = 'choice';
-          choice.value = element.text;
-          label.appendChild(choice);
-          label.append(element.text);
-          label.style.display = 'block';
-          div.append(label);
+          div.classList.add("text-start", "m-auto", "choice-container")
+          const radioButton = document.createElement("input");
+          radioButton.classList.add("btn-choice")
+          radioButton.type = "radio";
+          radioButton.name = "choices";
+          radioButton.value = element.text;
+
+          // Create textarea
+          const textArea = document.createElement("input");
+          textArea.classList.add("choice-textarea")
+          textArea.value = element.text;
+          
+          div.append(radioButton);
+          div.append(textArea);
           partialQuestionContainer.appendChild(div);
         }
         break;
