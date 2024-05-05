@@ -1,5 +1,6 @@
 ﻿import * as signalR from "@microsoft/signalr";
-import {GenerateCards, GetFlows} from "./FlowAPI";
+import {GenerateCards, GetFlowById} from "./FlowAPI";
+import {Flow} from "../Flow/FlowObjects"
 
 const connection = new signalR.HubConnectionBuilder()
     .withUrl("/hub")
@@ -8,6 +9,7 @@ const connection = new signalR.HubConnectionBuilder()
 const divFlows = document.getElementById("flowContainer") as HTMLDivElement;
 
 export let code = "";
+let flows : Flow[] = [];
 
 const storedCode = sessionStorage.getItem("connectionCode");
 if (storedCode) {
@@ -22,8 +24,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     connectionCode.innerText = code;
     
     await connection.start().then(() => {
-        connection.invoke("JoinConnection", code)
+        connection.invoke("JoinConnection", code).then(() =>
+            console.log("connection #" + code))
     });
     
-    GetFlows().then(flows => GenerateCards(flows, divFlows));
+    GenerateCards(flows, divFlows);
+})
+
+connection.on("ReceiveSelectedFlowIds", async (ids) => {
+    for (let i = 0; i < ids.length; i++) {
+       await GetFlowById(ids[i]).then(flow => flows[i] = flow)
+    }
+    GenerateCards(flows, divFlows);
 })

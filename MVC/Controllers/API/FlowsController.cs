@@ -61,4 +61,22 @@ public class FlowsController : Controller
             ThemeId = flow.Theme.Id
         }));
     }
+    
+    [HttpGet("{id}")]
+    public ActionResult GetFlowById(long id)
+    {
+        var flow = _manager.GetFlowByIdWithTheme(id);
+
+        if (flow == null)
+            return NotFound();
+
+        return Ok(new FlowViewModel
+        {
+            Id = flow.Id,
+            FlowType = flow.FlowType,
+            Steps = flow.Steps,
+            Participations = flow.Participations,
+            ThemeId = flow.Theme.Id
+        });
+    }
 }

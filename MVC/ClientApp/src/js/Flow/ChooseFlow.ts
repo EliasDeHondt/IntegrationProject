@@ -1,10 +1,7 @@
 ﻿import {Flow} from "./FlowObjects";
-import {GetFlows} from "../Kiosk/FlowAPI";
 
-const divFlows = document.getElementById("flowContainer") as HTMLDivElement;
-const flowType = document.getElementById("flowType") as HTMLParagraphElement;
-const btnSubmitFlows = document.getElementById("btnSubmitFlows") as HTMLButtonElement;
 let totalFlows: number;
+let flowType: string;
 
 function GenerateOption(flow: Flow): HTMLDivElement {
     const optionsContainer = document.createElement("div");
@@ -16,7 +13,7 @@ function GenerateOption(flow: Flow): HTMLDivElement {
     input.id = `flow${flow.id}`
     input.value = `${flow.id}`
 
-    if (flowType && flowType.innerText == "circular") {
+    if (flowType == "circular") {
         input.type = "radio"
         input.name = `flowRadios`
     }
@@ -31,8 +28,10 @@ function GenerateOption(flow: Flow): HTMLDivElement {
     return optionsContainer;
 }
 
-export function GenerateOptions(flows: Flow[], flowContainer: HTMLDivElement) {
+export function GenerateOptions(flows: Flow[], flowContainer: HTMLDivElement, type: string) {
+    flowContainer.innerHTML = "";
     totalFlows = 0;
+    flowType = type;
     const options = flows.map(GenerateOption);
 
     options.forEach(option => {
@@ -40,33 +39,19 @@ export function GenerateOptions(flows: Flow[], flowContainer: HTMLDivElement) {
             flowContainer.appendChild(option);
         totalFlows++;
     })
-
-    const btnSubmitFlows = document.createElement("input");
-    btnSubmitFlows.type = "submit";
-    flowContainer.appendChild(btnSubmitFlows);
-    
-    btnSubmitFlows.onclick = async (event) => {
-        await SubmitFlows(event);
-    }
 }
 
-GetFlows().then((flows) => {GenerateOptions(flows, divFlows)});
-
-async function SubmitFlows(event: MouseEvent) {
-    event.preventDefault();
+export function SubmitFlows(connection: signalR.HubConnection, code: string) {
     const selectedFlows: number[] = [];
-    if (flowType.innerText == "linear") {
-        const options = document.querySelectorAll<HTMLInputElement>('.form-check-input');
+    if (flowType == "linear") {
+        const options = document.querySelectorAll<HTMLInputElement>('.form-check-input[type="checkbox"]:checked');
         options.forEach((option: HTMLInputElement) => {
-            if (option.checked)
                 selectedFlows.push(parseInt(option.value));
         })
-    } else {
-        const options = document.querySelectorAll<HTMLInputElement>('.form-check-input[type="radio"]:checked');
+    } else if (flowType == "circular") {
+        const options = document.querySelectorAll<HTMLInputElement>('.form-check-input[name="flowRadios"]:checked');
         if (options.length == 1)
             selectedFlows.push(parseInt((options[0] as HTMLInputElement).value))
     }
-    console.log(selectedFlows)
+    connection.invoke("SendSelectedFlowIds", code, selectedFlows).then(() => console.log("send!"));
 }
-
-

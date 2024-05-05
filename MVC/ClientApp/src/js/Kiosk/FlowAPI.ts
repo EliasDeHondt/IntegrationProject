@@ -1,8 +1,8 @@
 ﻿import {Flow} from "../Flow/FlowObjects";
 
-function generateCard(flow: Flow): HTMLDivElement{
+function generateCard(flow: Flow): HTMLDivElement {
     const cardContainer = document.createElement("div");
-    
+
     const card = document.createElement("div");
 
     const cardBody = document.createElement("div");
@@ -24,14 +24,16 @@ function generateCard(flow: Flow): HTMLDivElement{
 }
 
 export function GenerateCards(flows: Flow[], flowContainer: HTMLDivElement) {
+    flowContainer.innerHTML = "";
+    console.log(flows)
     const cards = flows.map(generateCard);
 
     cards.forEach(card => {
-        flowContainer.appendChild(card);
+            flowContainer.appendChild(card);
     })
 }
 
-export async function GetFlows(): Promise<Flow[]>{
+export async function GetFlows(): Promise<Flow[]> {
     return await fetch(`/api/Flows`, {
         method: "GET",
         headers: {
@@ -44,8 +46,8 @@ export async function GetFlows(): Promise<Flow[]>{
         })
 }
 
-export async function GetFlowsByIds(ids: number[]): Promise<Flow[]>{
-    return await fetch(`/api/Flows/${ids}`, {
+export async function GetFlowById(id: string): Promise<Flow> {
+    return await fetch(`/api/Flows/${id}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

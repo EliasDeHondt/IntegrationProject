@@ -22,7 +22,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             connection.invoke("ActivateFlow", code, currFlow.innerText)
                 .then(() => {
                     btnExitFlow.onclick = async () => {
-                        await connection.invoke("SendFlowUpdate", code, "0", "Inactive");
+                        await connection.invoke("SendFlowUpdate", code, "0", "Inactive").then(() =>
+                            console.log("connection #" + code));
                         window.location.href = `/Kiosk`
                     }
                 })
@@ -63,4 +64,3 @@ connection.on("ReceiveFlowUpdate", async (id, state) => {
         modal.hide()
     }
 })
-

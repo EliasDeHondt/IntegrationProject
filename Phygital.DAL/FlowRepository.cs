@@ -69,13 +69,4 @@ public class FlowRepository
     {
         _context.Flows.Update(flow);
     }
-
-    public IEnumerable<Flow> ReadFlowsByIds(IEnumerable<long> flowIds)
-    {
-        return _context.Flows
-            .Where(flow => flowIds
-                .Contains(flow.Id))
-            .AsNoTracking()
-            .ToList();
-    }
 }

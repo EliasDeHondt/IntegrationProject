@@ -3,9 +3,9 @@ import "./ChooseFlow";
 import "./FlowTypeModal";
 import {flowTypeModal} from "./FlowTypeModal";
 import {GetFlows} from "../Kiosk/FlowAPI";
-import {GenerateOptions} from "./ChooseFlow";
+import {GenerateOptions, SubmitFlows} from "./ChooseFlow";
 
-const connection = new signalR.HubConnectionBuilder()
+export const connection = new signalR.HubConnectionBuilder()
     .withUrl("/hub")
     .build();
 
@@ -13,12 +13,21 @@ const btnPauseFlow = document.getElementById("btnPauseFlow") as HTMLButtonElemen
 const cardCurrentFlow = document.getElementById("cardCurrentFlow") as HTMLDivElement; // Card moet nog aangemaakt worden in typescript ipv HTML
 const btnCloseInstallation = document.getElementById("cardCurrentFlow") as HTMLButtonElement;
 const connectionCode = document.getElementById("connectionCode") as HTMLSpanElement;
+const btnSubmitFlows = document.getElementById("btnSubmitFlows") as HTMLButtonElement;
 
 let currentFlow = document.getElementById("currentFlow") as HTMLHeadingElement;
 let currentState = document.getElementById("currentState") as HTMLSpanElement;
-let code: string = "";
+export let code = "";
 
-document.addEventListener("DOMContentLoaded", async () => {
+
+document.addEventListener("DOMContentLoaded", async () => {const storedCode = sessionStorage.getItem("connectionCode");
+    if (storedCode) {
+        code = storedCode;
+    } else {
+        code = Math.floor(100000 + Math.random() * 900000).toString();
+        sessionStorage.setItem("connectionCode", code);
+    }
+
     currentFlow.innerText = "0"
     currentState.innerText = "Inactive"
     const btnEnterCode = document.getElementById("btnEnterCode") as HTMLButtonElement;
@@ -26,7 +35,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         .then(() => {
             btnEnterCode.onclick = async () => {
                 code = (document.getElementById("inputCode") as HTMLInputElement).value;
-                await connection.invoke("JoinConnection", code).then(() => connectionCode.innerText = code)
+                await connection.invoke("JoinConnection", code).then(() => {
+                    connectionCode.innerText = code
+                    console.log("connection #" + code);
+                })
                 flowTypeModal.show();
             };
         })

@@ -33,9 +33,4 @@ public class FlowController : Controller
     {
         return View();
     }
-
-    public PartialViewResult FlowPicker(string type)
-    {
-        return PartialView("Partials/_FlowPickerPartial", type);
-    }
 }
