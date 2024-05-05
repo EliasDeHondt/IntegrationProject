@@ -24,6 +24,7 @@ function generateCard(flow: Flow): HTMLDivElement {
 }
 
 export function GenerateCards(flows: Flow[], flowContainer: HTMLDivElement) {
+    flowContainer.innerHTML = "";
     const cards = flows.map(generateCard);
     cards.forEach(card => {
         flowContainer.appendChild(card);

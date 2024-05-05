@@ -8,7 +8,7 @@ export const connection = new signalR.HubConnectionBuilder()
     .build();
 
 const btnPauseFlow = document.getElementById("btnPauseFlow") as HTMLButtonElement;
-const btnCloseInstallation = document.getElementById("cardCurrentFlow") as HTMLButtonElement;
+const btnCloseInstallation = document.getElementById("btnCloseInstallation") as HTMLButtonElement;
 const connectionCode = document.getElementById("connectionCode") as HTMLSpanElement;
 
 let currentFlow = document.getElementById("currentFlow") as HTMLHeadingElement;
@@ -34,7 +34,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 code = (document.getElementById("inputCode") as HTMLInputElement).value;
                 await connection.invoke("JoinConnection", code).then(() => {
                     connectionCode.innerText = code
-                    console.log("connection #" + code);
                 })
                 flowTypeModal.show();
             };
@@ -47,8 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 connectionCode.innerText = "";
                 currentFlow.innerText = "0"
                 currentState.innerText = "Inactive"
-                console.log("left connection");
-            }).catch(() => console.log("still connected"))
+            })
         }
 })
 
@@ -64,8 +62,6 @@ connection.on("ReceiveFlowUpdate", (id, state) => {
 
 function SendFlowUpdate() {
     connection.invoke("SendFlowUpdate", code, currentFlow.innerText, currentState.innerText)
-        .then(() => console.log(code, currentFlow.innerText, currentState.innerText))
-        .catch(error => console.error(error))
 }
 
 btnPauseFlow.onclick = () => {

@@ -10,8 +10,8 @@ const connection = new signalR.HubConnectionBuilder()
 const divFlows = document.getElementById("flowContainer") as HTMLDivElement;
 
 export let code = "";
-let selectedFlowIds : string[] = [];
-let flows : Flow[] = [];
+let selectedFlowIds: string[] = [];
+let flows: Flow[] = [];
 
 const storedCode = sessionStorage.getItem("connectionCode");
 if (storedCode) {
@@ -21,31 +21,31 @@ if (storedCode) {
     sessionStorage.setItem("connectionCode", code);
 }
 
-let storedFlows = sessionStorage.getItem("selectedFlows");
+let storedFlows = sessionStorage.getItem("flowOptions");
 
 document.addEventListener("DOMContentLoaded", async () => {
     const connectionCode = document.getElementById("connectionCode") as HTMLSpanElement;
     connectionCode.innerText = code;
-    
-    await connection.start().then(() => {
-        connection.invoke("JoinConnection", code).then(() =>
-            console.log("connection #" + code))
-    });
 
-    GenerateCards(flows, divFlows);
+    await connection.start().then(() => {
+        connection.invoke("JoinConnection", code)
+    })
 })
+    
 
 connection.on("ReceiveSelectedFlowIds", async (ids) => {
-    if (storedFlows) {
-        storedFlows = storedFlows.split(",").join("")
-        for (let i = 0; i < storedFlows.length; i++) {
-            await GetFlowById(storedFlows[i]).then(flow => flows[i] = flow)
-        }
-    } else {
-        for (let i = 0; i < ids.length; i++) {
-            await GetFlowById(ids[i]).then(flow => flows[i] = flow)
-        }
-        sessionStorage.setItem("selectedFlows", ids);
+    await GenerateFlowOptions(ids);
+    sessionStorage.setItem("flowOptions", ids);
+})
+
+if (storedFlows) {
+    storedFlows = storedFlows.split(",").join("");
+    GenerateFlowOptions(storedFlows).then(r => console.log(r));
+}
+
+async function GenerateFlowOptions(ids: string) {
+    for (let i = 0; i < ids.length; i++) {
+        await GetFlowById(ids[i]).then(flow => flows[i] = flow)
     }
     GenerateCards(flows, divFlows);
-})
+}
