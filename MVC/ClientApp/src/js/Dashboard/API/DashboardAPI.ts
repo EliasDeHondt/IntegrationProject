@@ -1,6 +1,6 @@
-﻿import {User} from "../Types/UserTypes";
+﻿import {User} from "../../Types/UserTypes";
 import * as editModal from "../EditUserModal";
-import {Project} from "../Types/ProjectObjects";
+import {Project} from "../../Types/ProjectObjects";
 import * as deleteModal from "../DeleteUserModal";
 
 
@@ -158,7 +158,6 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     // Edit Project Link
     let editProjectLink = document.createElement("a");
     let projectId = project.id;
-    console.log(project.id, project.name, project.description)
     editProjectLink.className = "nav-link text-light";
     editProjectLink.setAttribute("href", "/Project/ProjectPage/" + projectId);
     editProjectLink.textContent = project.name;

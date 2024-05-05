@@ -8,7 +8,7 @@ namespace Domain.Platform;
 public class SharedPlatform
 {
     public long Id { get; set; }
-    [MaxLength(150)] public string Logo { get; set; }
+    [MaxLength(65000)] public string Logo { get; set; }
     [MaxLength(150)] public string PrivacyLink { get; set; }
     [MaxLength(150)] public string OrganisationLink { get; set; }
     [MaxLength(150)] public string OrganisationName { get; set; }
@@ -17,7 +17,7 @@ public class SharedPlatform
     public ICollection<SpAdmin> Admins { get; set; }
 
     public SharedPlatform(string logo, string privacyLink, string organisationLink, string organisationName,
-        ICollection<Project> projects, ICollection<Facilitator> faciliators, ICollection<SpAdmin> admins, long id = 0) : this(organisationName, id)
+        ICollection<Project> projects, ICollection<Facilitator> faciliators, ICollection<SpAdmin> admins, long id = 0) : this(organisationName, logo, id)
     {
         Logo = logo;
         PrivacyLink = privacyLink;
@@ -28,20 +28,19 @@ public class SharedPlatform
     }
 
     public SharedPlatform(string logo, string privacyLink, string organisationLink, string organisationName,
-        ICollection<Facilitator> faciliators, ICollection<SpAdmin> admins, long id = 0) : this(organisationName, id)
+        ICollection<Facilitator> faciliators, ICollection<SpAdmin> admins, long id = 0) : this(organisationName, logo, id)
     {
-        Logo = logo;
         PrivacyLink = privacyLink;
         OrganisationLink = organisationLink;
         Faciliators = faciliators;
         Admins = admins;
     }
 
-    public SharedPlatform(string organisationName, long id = 0)
+    public SharedPlatform(string organisationName, string logo, long id = 0)
     {
         OrganisationName = organisationName;
         Id = id;
-        Logo = string.Empty;
+        Logo = logo;
         PrivacyLink = string.Empty;
         OrganisationLink = string.Empty;
         Projects = new List<Project>();

@@ -3,7 +3,7 @@ import "./CreateUserModal";
 import "./CreateProjectModal";
 import "./DeleteUserModal";
 import {isUserInRole} from "../API/UserAPI";
-import {UserRoles} from "./Types/UserTypes";
+import {UserRoles} from "../Types/UserTypes";
 import "/node_modules/embla-carousel";
 import EmblaCarousel, {EmblaOptionsType} from "embla-carousel";
 import {addPrevNextBtnsClickHandlers} from '../EmblaCarouselArrowButtons'
@@ -40,10 +40,15 @@ const removePrevNextBtnsClickHandlersProject = addPrevNextBtnsClickHandlers(
 
 let id: string = document.getElementById("platformId")!.textContent!
 
-isUserInRole(UserRoles.UserPermission).then(result => {
-    //dashboard.showUserName(id,accountname);
-    dashboard.generateUserCards(id, userRoulette, result);
+document.addEventListener("DOMContentLoaded", async function() {
+    let userPermission = await isUserInRole(UserRoles.UserPermission);
+    let projectPermission = await isUserInRole(UserRoles.ProjectPermission);
+    let statisticPermission = await isUserInRole(UserRoles.StatisticPermission);
+    let systemAdmin = await isUserInRole(UserRoles.SystemAdmin);
+
+    dashboard.generateUserCards(id, userRoulette, userPermission || systemAdmin);
     dashboard.generateProjectCards(id, projectRoulette);
+    
 })
 emblaApiProject.on('destroy', removePrevNextBtnsClickHandlersProject)
 emblaApiUser.on('destroy', removePrevNextBtnsClickHandlersUser)
