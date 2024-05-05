@@ -19,7 +19,8 @@ module.exports = {
         deleteFlowModal: './src/js/CreateFlow/DeleteFlowModal.ts',
         deleteFlowAPI: './src/js/CreateFlow/API/DeleteFlowAPI.ts',
         flowEditor: './src/js/CreateFlow/FlowEditor.ts',
-        navigation: './src/js/Layout/Navigation.ts'
+        navigation: './src/js/Layout/Navigation.ts',
+        systemDashboard: "./src/js/SystemDashboard/Dashboard.ts"
     },
     output: {
         filename: '[name].entry.js',
