@@ -1,4 +1,11 @@
-﻿.kiosk-body * {
+﻿/***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************/
+
+.kiosk-body * {
   font-family: 'Roboto', sans-serif;
 }
 
@@ -54,8 +61,8 @@
   border: 1px solid #ffffff;
   border-radius: 24px;
   background-color: #479ecd;
-  width: 500px;
-  height: 100px;
+  width: 550px;
+  height: 150px;
   margin: 24px;
   padding: 24px;
 }
@@ -76,7 +83,7 @@
   background-color: #479ecd;
   margin: 24px;
   padding: 24px;
-  height: 77px;
+  height: 127px;
 }
 
 .kiosk-container-bottom-right {
@@ -85,7 +92,7 @@
   background-color: #479ecd;
   margin: 24px;
   padding: 24px;
-  height: 77px;
+  height: 127px;
 }
 /* Relative Positioning Container */
 
@@ -279,3 +286,4 @@
     height: 16px;
   }
 }
+/* Mobile */
