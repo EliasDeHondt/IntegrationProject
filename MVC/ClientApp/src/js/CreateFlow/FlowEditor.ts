@@ -5,7 +5,15 @@ import {Modal} from "bootstrap";
 const stepsList = document.getElementById('steps-list') as HTMLElement;
 const btnAddStep = document.getElementById('btn-add-step') as HTMLButtonElement;
 
+const btnAddChoice = document.getElementById('btn-add-choice') as HTMLButtonElement;
+const btnAddText = document.getElementById('btn-add-text') as HTMLButtonElement;
+const btnAddImage = document.getElementById('btn-add-image') as HTMLButtonElement;
+const btnAddVideo = document.getElementById('btn-add-video') as HTMLButtonElement;
+const btnSaveFlow = document.getElementById("saveFlow") as HTMLButtonElement;
+
 let currentStepList: Step[];
+
+let currentViewingStep: Step;
 
 let flowId: number;
 
@@ -33,7 +41,11 @@ function GetStepById(stepNumber: number, flowId: number) {
     }
   })
       .then(response => response.json())
-      .then(data => ShowStepInContainer(data))
+      .then(data => {
+        ShowStepInContainer(data);
+        currentViewingStep = data;
+      })
+      .then(() => toggleButtons())
       .catch(error => console.error("Error:", error))
 }
 
@@ -47,6 +59,30 @@ async function AddStep(stepNumber: number, stepType: string) {
   })
       .then(response => response.json())
       .catch(error => console.error("Error:", error))
+}
+
+function toggleButtons() {
+  
+  console.log("disabling all buttons")
+  btnAddText.disabled = true;
+  btnAddImage.disabled = true;
+  btnAddVideo.disabled = true;
+  btnAddChoice.disabled = true;
+
+  if (currentViewingStep == undefined) {
+    return;
+  }
+  
+  if (currentViewingStep.informationViewModel != undefined) {
+    console.log("enabling all info buttons")
+    btnAddText.disabled = false;
+    btnAddImage.disabled = false;
+    btnAddVideo.disabled = false;
+  }
+  if (currentViewingStep.questionViewModel != undefined && currentViewingStep.questionViewModel.questionType != "OpenQuestion") {
+    console.log("enabling all question buttons")
+    btnAddChoice.disabled = false;
+  }
 }
 
 function UpdateStepList(steps: Step[]) {
@@ -71,7 +107,7 @@ function UpdateStepList(steps: Step[]) {
       const cardHeader = document.createElement('h2');
       cardHeader.classList.add("step-card-header");
       cardHeader.innerText = "Step " + step.stepNumber.toString() + "\n" + step.stepName;
-      console.log(step)
+      
       stepCard.appendChild(cardHeader);
 
       stepsList.appendChild(stepCard);
@@ -92,9 +128,99 @@ document.addEventListener('DOMContentLoaded', () => {
   
   if (isNaN(flowId)) { console.error("The ID provided in the URL is not a number.")}
   
-  GetSteps(flowId).then(() => { initializeCardLinks(); });
+  GetSteps(flowId)
+      .then(() => initializeCardLinks())
+      .then(() => toggleButtons());
   
 });
+
+btnAddChoice.addEventListener('click', () => {
+  console.log("Add choice")
+  let div = document.createElement("div");
+  div.classList.add("text-start", "m-auto", "choice-container")
+
+  const radioButton = document.createElement("input");
+  radioButton.classList.add("btn-choice")
+  radioButton.type = "radio";
+  radioButton.name = "choices";
+  radioButton.value = "";
+
+  const textArea = document.createElement("input");
+  textArea.classList.add("choice-textarea")
+
+  div.append(radioButton);
+  div.append(textArea);
+  
+  let choiceContainer = document.getElementById("choices-container") as HTMLDivElement;
+  
+  choiceContainer.appendChild(div);
+});
+
+btnAddText.addEventListener('click', () => {
+  console.log("Add text")
+});
+
+btnAddImage.addEventListener('click', () => {
+  console.log("Add Image")
+  //TODO: add image logica
+});
+
+btnAddVideo.addEventListener('click', () => {
+  console.log("Add Video")
+  //TODO: add video logica
+});
+
+btnSaveFlow.addEventListener('click', () => {
+  console.log("Saving flow...")
+  if (currentViewingStep == undefined) { return; }
+  if (currentViewingStep.informationViewModel != undefined) {
+    const contentElements = partialInformationContainer.children; // Get all child elements of the content div
+
+    // Initialize arrays to store content and information types
+    const content: string[] = [];
+    const informationTypes: string[] = [];
+
+    // Loop through each child element of the content div
+    for (let i = 0; i < contentElements.length; i++) {
+      const element = contentElements[i] as HTMLElement; // Cast to HTMLElement
+
+      // Determine the tag name and cast the element accordingly
+      switch (element.tagName) {
+        case 'P':
+          const paragraphElement = element as HTMLParagraphElement;
+          content.push(paragraphElement.textContent as string); // Add text content or empty string
+          informationTypes.push('Text'); // Set information type to Text
+          break;
+        case 'IMG':
+          const imageElement = element as HTMLImageElement;
+          content.push(imageElement.src); // Add image source or empty string
+          informationTypes.push('Image'); // Set information type to Image
+          break;
+        case 'VIDEO':
+          const videoElement = element as HTMLVideoElement;
+          content.push(videoElement.src); // Add video source or empty string
+          informationTypes.push('Video'); // Set information type to Video
+          break;
+        case 'INPUT':
+          const inputElement = element as HTMLInputElement;
+          content.push(inputElement.value); // Add input value or empty string
+          informationTypes.push('Text'); // Set information type to Text
+          break;
+        default:
+          // Handle other element types if needed
+          break;
+      }
+    }
+
+    // Prepare data to send in the fetch request
+    const data = {
+      content,
+      informationTypes
+    };
+    
+    //TODO: Jana maakt dit verder af -> fetch hier.
+  }
+})
 
 function initializeCardLinks() {
   let stepCards = document.querySelectorAll('.step-card') as NodeListOf<HTMLAnchorElement>;
@@ -153,35 +279,36 @@ async function ShowStepInContainer(data: Step) {
   }
 
   if (data.questionViewModel != undefined) {
-    let p = document.createElement("p");
-    p.innerText = data.questionViewModel.question;
-    p.classList.add("text-start");
-    p.classList.add("m-auto");
-    p.classList.add("mb-3");
+    let p = document.createElement("input");
+    p.value = data.questionViewModel.question;
+    p.classList.add("text-start", "m-auto", "mb-3", "question-header");
     partialQuestionContainer.appendChild(p);
+    
+    let choiceContainer = document.createElement('div');
+    choiceContainer.id = "choices-container";
     switch (data.questionViewModel.questionType) {
       case "SingleChoiceQuestion":
         for (const element of data.questionViewModel.choices) {
+          
           let div = document.createElement("div");
           div.classList.add("text-start", "m-auto", "choice-container")
+          
           const radioButton = document.createElement("input");
           radioButton.classList.add("btn-choice")
           radioButton.type = "radio";
           radioButton.name = "choices";
           radioButton.value = element.text;
 
-          // Create textarea
           const textArea = document.createElement("input");
           textArea.classList.add("choice-textarea")
           textArea.value = element.text;
           
           div.append(radioButton);
           div.append(textArea);
-          partialQuestionContainer.appendChild(div);
+          choiceContainer.appendChild(div);
         }
         break;
       case "MultipleChoiceQuestion":
-        console.log(data);
         for (const element of data.questionViewModel.choices) {
           let choice = document.createElement("input");
           let label = document.createElement("label");
@@ -241,6 +368,7 @@ async function ShowStepInContainer(data: Step) {
         console.log("This question type is not currently supported. (QuestionType: " + data.questionViewModel.questionType);
         break;
     }
+    partialQuestionContainer.appendChild(choiceContainer);
   }
 }
 
