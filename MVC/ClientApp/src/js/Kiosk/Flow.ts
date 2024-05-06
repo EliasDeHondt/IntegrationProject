@@ -22,8 +22,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             connection.invoke("ActivateFlow", code, currFlow.innerText)
                 .then(() => {
                     btnExitFlow.onclick = async () => {
-                        await connection.invoke("SendFlowUpdate", code, "0", "Inactive").then(() =>
-                            console.log("connection #" + code));
                         window.location.href = `/Kiosk`
                     }
                 })
@@ -31,36 +29,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 })
 
-/*
-
-export async function UpdateFlowState(id: string, state: string) {
-    fetch("/api/Flows/" + id + "/" + state, {
-        method: "PUT"
-    })
-        .then(response => {
-            if (response.ok) {
-                console.log(`Flow ${state}!`)
-                return true;
-            }
-            return false;
-        })
-        .catch(error => console.error("Error:", error))
-}
-
-async function UpdateCurrentFlowState() {
-    if (prevFlowId != null)
-        await UpdateFlowState(prevFlowId, 'Inactive');
-    await UpdateFlowState(String(flowId), 'Active');
-    sessionStorage.setItem('prevFlowId', String(flowId));
-}*/
-
-
 connection.on("ReceiveFlowUpdate", async (id, state) => {
-    console.log(id, state)
     currStateOfFlow = state;
     if (currStateOfFlow.toLowerCase() == "paused") {
         modal.show()
     } else {
         modal.hide()
     }
+})
+
+connection.on("FlowActivated", (id) => {
+    window.location.href = `/Flow/Step/${id}`
 })

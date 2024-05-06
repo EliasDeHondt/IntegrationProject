@@ -11,7 +11,7 @@ export const flowTypeModal = new Modal(document.getElementById('flowTypeModal')!
 const btnSubmitFlows = document.getElementById("btnSubmitFlows") as HTMLButtonElement;
 const radioLinear = document.getElementById("radioLinear") as HTMLInputElement;
 const radioCircular = document.getElementById("radioCircular") as HTMLInputElement;
-const divFlows = document.getElementById("flowContainer") as HTMLDivElement;
+const divFlows = document.getElementById("flowOptionsContainer") as HTMLDivElement;
 
 if (btnSubmitFlows)
     btnSubmitFlows.onclick = () => {
@@ -22,7 +22,6 @@ if (btnSubmitFlows)
 
 function FillOptions(type: string) {
     GetFlows().then((flows) => {
-        console.log(flows);
         GenerateOptions(flows, divFlows, type)
     });
 }

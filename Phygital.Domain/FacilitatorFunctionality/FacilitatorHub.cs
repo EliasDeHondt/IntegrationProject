@@ -7,10 +7,13 @@ public class FacilitatorHub : Hub
 {
     public async Task JoinConnection(string code) =>
         await Groups.AddToGroupAsync(Context.ConnectionId, code);
-    
-    public async Task LeaveConnection(string code) =>
-        await Groups.RemoveFromGroupAsync(Context.ConnectionId, code);
 
+    public async Task LeaveConnection(string user, string code)
+    {
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, code);
+        await Clients.Group(code).SendAsync("UserLeftConnection", $"{user} disconnected from connection #{code}!");
+    }
+    
     public async Task SendFlowUpdate(string code, string id, string state) =>
         await Clients.OthersInGroup(code).SendAsync("ReceiveFlowUpdate", id, state);
 

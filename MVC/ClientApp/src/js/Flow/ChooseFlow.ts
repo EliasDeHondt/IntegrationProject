@@ -53,5 +53,5 @@ export function SubmitFlows(connection: signalR.HubConnection, code: string) {
         if (options.length == 1)
             selectedFlows.push(parseInt((options[0] as HTMLInputElement).value))
     }
-    connection.invoke("SendSelectedFlowIds", code, selectedFlows).then(() => console.log("send!"));
+    connection.invoke("SendSelectedFlowIds", code, selectedFlows);
 }
