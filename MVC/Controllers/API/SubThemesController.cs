@@ -6,6 +6,7 @@
  ***************************************/
 
 using Business_Layer;
+using Domain.ProjectLogics;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 
@@ -16,6 +17,7 @@ namespace MVC.Controllers.API;
 public class SubThemesController : ControllerBase
 {
     private readonly ThemeManager _manager;
+    private readonly FlowManager _flowmanager;
     private readonly UnitOfWork _uow;
 
     public SubThemesController(ThemeManager manager, UnitOfWork uow)
@@ -67,4 +69,19 @@ public class SubThemesController : ControllerBase
         return NoContent();
     }
     
+    
+    [HttpPost("CreateSubthemeFlow/{flowType}")]
+    public IActionResult CreateFlow(string flowType)
+    {
+
+        FlowType type = Enum.Parse<FlowType>(flowType);
+        
+        _uow.BeginTransaction();
+        
+        Flow flow = _flowmanager.Add(type);
+        
+        _uow.Commit();
+        
+        return Created("CreateFlow", flow);
+    }
 }

@@ -1,5 +1,6 @@
 ﻿import {Flow} from "../../../Flow/FlowObjects";
 import {initializeDeleteButtons} from "../../../CreateFlow/DeleteFlowModal";
+import {GetFlows} from "../../../CreateFlow/FlowCreator";
 
 export async function loadFlows(id: number): Promise<Flow[]> {
     return await fetch(`/api/SubThemes/${id}/Flows`, {
@@ -81,13 +82,14 @@ function initializeCardLinks() {
         });
     });
 }
-function addFlow(flow: Flow, flowContainer: HTMLTableSectionElement ) {
-    flowContainer.innerHTML += `<tr>
-                                   <td>${flow.id}</td>
-                                   <td>${flow.flowType.toString()}</td>
-                                   <td><a>Edit Flow</a></td>
-                                </tr>`
-}
+// function addFlow(flow: Flow, flowContainer: HTMLTableSectionElement ) {
+//     flowContainer.innerHTML += `<tr>
+//                                    <td>${flow.id}</td>
+//                                    <td>${flow.flowType.toString()}</td>
+//                                    <td><a>Edit Flow</a></td>
+//                                 </tr>`
+// }
+
 
 export async function updateSubTheme(id: number, subject: string) {
     await fetch(`/api/SubThemes/UpdateSubTheme/${id}`, {
