@@ -58,6 +58,9 @@ public static class DataSeeder
                 choice8
             });
 
+        choice7.QuestionBase = question2;
+        choice8.QuestionBase = question2;
+
         Choice choice9 = new Choice("Sportinfrastructuur");
         Choice choice10 = new Choice("Speeltuin voor kinderen");
         Choice choice11 = new Choice("Zitbanken en picknickplaatsen");
@@ -74,6 +77,12 @@ public static class DataSeeder
                 choice12,
                 choice13
             });
+        
+        choice9.QuestionBase = question3;
+        choice10.QuestionBase = question3;
+        choice11.QuestionBase = question3;
+        choice12.QuestionBase = question3;
+        choice13.QuestionBase = question3;
 
         Choice choice14 = new Choice("Akkoord");
         Choice choice15 = new Choice("Niet Akkoord");
@@ -85,6 +94,9 @@ public static class DataSeeder
                 choice14,
                 choice15
             });
+
+        choice14.QuestionBase = question4;
+        choice15.QuestionBase = question4;
 
         Choice choice16 = new Choice("Verplaatsingen met de fiets");
         Choice choice17 = new Choice("Verplaatsingen met de auto/moto");
@@ -103,6 +115,12 @@ public static class DataSeeder
                 choice20
             });
 
+        choice16.QuestionBase = question5;
+        choice17.QuestionBase = question5;
+        choice18.QuestionBase = question5;
+        choice19.QuestionBase = question5;
+        choice20.QuestionBase = question5;
+
         Choice choice21 = new Choice("Goed idee");
         Choice choice22 = new Choice("Slecht idee");
 
@@ -113,6 +131,9 @@ public static class DataSeeder
                 choice21,
                 choice22
             });
+
+        choice21.QuestionBase = question6;
+        choice22.QuestionBase = question6;
 
 
         ctx.Choices.AddRange(choice1, choice2, choice3, choice4, choice5, choice6, choice7, choice8, choice9, choice10,
