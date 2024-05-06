@@ -176,7 +176,6 @@ button.accept-policy {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  height: 350px;
   overflow-x: scroll;
   scrollbar-width: none; // Hide scrollbar for firefox
 }
@@ -188,7 +187,7 @@ button.accept-policy {
 
 .flow-card {
   width: 200px;
-  height: 300px;
+  height: 700px;
   background-color: map-get($themes, light, primary);
   border: 1px solid #ccc;
   border-radius: 10px;

@@ -22,7 +22,7 @@ export async function loadFlows(id: number): Promise<Flow[]> {
 
 export function showFlows(flows: Flow[]) {
     const flowContainer = document.getElementById("flow-cards") as HTMLElement;
-    flowContainer.innerHTML = "";
+    //flowContainer.innerHTML = "";
 
     if (flows.length > 0) {
         flows.forEach(flow => {
@@ -30,6 +30,8 @@ export function showFlows(flows: Flow[]) {
             const flowCard = document.createElement('div');
             flowCard.classList.add("flow-card");
             flowCard.dataset.flowId = flow.id.toString();
+            flowCard.style.width = "250px";
+            flowCard.style.height = "700px !important;";
             const flowButton = document.createElement('a');
             flowButton.classList.add("btn","flow-card-btn");
             flowButton.dataset.flowId = flow.id.toString();
