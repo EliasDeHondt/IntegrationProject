@@ -1,10 +1,10 @@
 ﻿import {Modal} from "bootstrap";
 import * as API from "./API/EditUserModalAPI";
-import {FacilitatorUpdate, UserRoles} from "./Types/UserTypes";
-import {User} from "./Types/UserTypes";
+import {FacilitatorUpdate, UserRoles} from "../Types/UserTypes";
+import {User} from "../Types/UserTypes";
 import {resetCards} from "./API/DashboardAPI";
 import {isEmailInUse, isUserInRole} from "../API/UserAPI";
-import {Project} from "./Types/ProjectObjects";
+import {Project} from "../Types/ProjectObjects";
 
 let editButtons: HTMLCollectionOf<HTMLButtonElement>;
 let email: string;

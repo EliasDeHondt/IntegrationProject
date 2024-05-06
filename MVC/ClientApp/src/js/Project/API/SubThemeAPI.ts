@@ -1,4 +1,4 @@
-﻿import {SubTheme} from "../../Theme/Types/ThemeObjects";
+﻿import {SubTheme} from "../../Types/ProjectObjects";
 
 function generateCard(subTheme: SubTheme): HTMLDivElement{
     const cardContainer = document.createElement("div");

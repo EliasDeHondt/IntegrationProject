@@ -1,12 +1,4 @@
-import * as dashboard from "../Dashboard/API/DashboardAPI";
-import {showUserName} from "./API/NavigationAPI";
-let id: string = document.getElementById("platformId")!.textContent!
-const accountname = document.getElementById("accountname") as HTMLElement;
-
-
-
 document.addEventListener('DOMContentLoaded', function() {
-    showUserName(id,accountname);
     setupNavigation();
 });
 export function setupNavigation() {

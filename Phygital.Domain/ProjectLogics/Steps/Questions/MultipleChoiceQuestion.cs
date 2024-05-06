@@ -17,10 +17,11 @@ public class MultipleChoiceQuestion : ChoiceQuestionBase
     {
     }
 
-    public MultipleChoiceQuestion(string question, ICollection<Choice> choices, long id = 0) : base(question, choices, id)
+    public MultipleChoiceQuestion(string question, long id = 0) : base(question, new List<Choice>(), id)
     {
+        
     }
-
+    
     public MultipleChoiceQuestion()
     {
     }

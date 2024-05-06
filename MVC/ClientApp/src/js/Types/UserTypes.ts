@@ -11,6 +11,7 @@ export interface Facilitator extends User {
 }
 
 export enum UserRoles {
+    SystemAdmin = "SystemAdmin",
     PlatformAdmin = "PlatformAdmin",
     Facilitator = "Facilitator",
     UserPermission = "UserPermission",

@@ -1,9 +1,10 @@
 ﻿import {Modal, Toast} from "bootstrap";
 import * as API from "./API/CreateUserModalAPI";
-import {Project} from "./Types/ProjectObjects";
+import {Project} from "../Types/ProjectObjects";
 import {resetCards} from "./API/DashboardAPI";
-import {UserRoles} from "./Types/UserTypes";
+import {UserRoles} from "../Types/UserTypes";
 import {isEmailInUse} from "../API/UserAPI";
+import {sendEmail} from "./API/CreateUserModalAPI";
 
 const CreateUserModal = new Modal(document.getElementById('CreateUserModal')!, {
     keyboard: false,
@@ -58,13 +59,19 @@ butConfirmCreateUser.onclick = async (ev) => {
         if (radioFacilitator.checked) {
             let projectIds = getSelectedProjects();
             API.createFacilitator(inputName.value, inputEmail.value, inputPassword.value, projectIds, id)
-                .then(() => clearModal())
+                .then(() => {
+                    sendEmail(inputEmail.value, inputPassword.value)
+                    clearModal()
+                })
                 .then(() => {
                     userCreatedToast.show()
                     let closeUserToast = document.getElementById("closeUserToast") as HTMLButtonElement
                     closeUserToast.onclick = () => userCreatedToast.hide()
                 })
-                .finally(() => resetCards(id, userRoulette, true))
+                .finally(() => {
+                    resetCards(id, userRoulette, true)
+
+                })
         } else if (radioAdmin.checked) {
             let permissions: string[] = [];
             if (checkUserPermission.checked) {
@@ -77,13 +84,18 @@ butConfirmCreateUser.onclick = async (ev) => {
                 permissions.push(UserRoles.StatisticPermission);
             }
             API.createAdmin(inputName.value, inputEmail.value, inputPassword.value, id, permissions)
-                .then(() => clearModal())
+                .then(() => {
+                    sendEmail(inputEmail.value, inputPassword.value)
+                    clearModal()
+                })
                 .then(() => {
                     userCreatedToast.show()
                     let closeUserToast = document.getElementById("closeUserToast") as HTMLButtonElement
                     closeUserToast.onclick = () => userCreatedToast.hide()
                 })
-                .finally(() => resetCards(id, userRoulette, true))
+                .finally(() => {
+                    resetCards(id, userRoulette, true)
+                })
         }
     }
 }

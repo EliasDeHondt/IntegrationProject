@@ -1,5 +1,5 @@
-﻿import {Facilitator, FacilitatorUpdate, User} from "../Types/UserTypes";
-import {Project} from "../Types/ProjectObjects";
+﻿import {FacilitatorUpdate, User} from "../../Types/UserTypes";
+import {Project} from "../../Types/ProjectObjects";
 
 export async function getUser(email: string): Promise<User>{
     return await fetch("/api/Users/GetUser/" + email, {

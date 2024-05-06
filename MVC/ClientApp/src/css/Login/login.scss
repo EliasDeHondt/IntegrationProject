@@ -1,3 +1,10 @@
+/***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************/
+
 @import "../variables";
 
 .loginBody {
@@ -56,8 +63,8 @@
 }
 
 .login-form .button {
-  background-color: #ffffff;
-  color: #000000;
+  background-color: map-get($themes, light, primary);
+  color: white;
   width: 100%;
   margin: 10px 0;
   padding: 12px;
@@ -69,8 +76,9 @@
 }
 
 .login-form .button:hover {
-  background-color: #e5e5e5;
-  color: #000000;
+  background-color: map-get($themes, light, primary);
+  filter: brightness(115%);
+  color: white;
 }
 
 .logo img {

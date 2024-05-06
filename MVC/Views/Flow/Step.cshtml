@@ -7,76 +7,58 @@
 }
 
 <!DOCTYPE html>
-
+<!--Author Elias De Hondt-->
 <html class="h-100" lang="">
 <head>
-    <title>@ViewData["Title"]</title>
+    <!--Meta + Title-->
+    <title>Kiosk - @ViewData["Title"]</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!--Meta + Title-->
+    <!--CSS-->
+    <link rel="stylesheet" href="~/dist/site.css"/>
+    <!--CSS-->
 </head>
-<body class="h-100">
-<div class="modal" id="pausedFlowModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body">
-                Flow paused by facilitator!
-            </div>
-            <div class="modal-footer">
-                <button class="btn-secondary mt-auto mb-auto h-25 m-5" id="btnUnPauseFlow">Back To Flow</button>
-            </div>
+<body class="kiosk-background-colors-scheme kiosk-body overflow-hidden">
+<div class="kiosk-top-left">
+    <div class="kiosk-container-top-left">
+        <h1><span id="flowtype">@Model.FlowType.ToString()</span> Flow <span id="flowId">@Model.Id</span> - Step <span id="stepNr"></span> / <span id="stepTotal">@Model.getStepCount()</span></h1>
+        <p>Theme <span id="theme">@Model.Theme.Id</span> - @Model.Theme.Subject</p>
+    </div>
+</div>
+<div class="kiosk-top-right">
+    <img class="kiosk-logo-img" src="/favicon.ico" alt="Logo"/>
+</div>
+<div class="kiosk-center-center">
+    <div class="kiosk-container-center-center">
+        <div id="pausedFlowModal">
+            <div id="informationContainer"></div>
+            <div id="questionContainer"></div>
         </div>
     </div>
 </div>
-<div class="row-gap-sm-4 h-75">
-    <h1><span id="flowtype">@Model.FlowType.ToString()</span> Flow <span id="flowId">@Model.Id</span> - Step <span id="stepNr"></span> / <span id="stepTotal">@Model.getStepCount()</span></h1>
-    <div class="dropdown">
-        <button class="btn-primary mt-auto mb-auto h-25 m-5 dropdown-toggle" id="flowDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">Activate other flow</button>
-        <ul class="dropdown-menu" id="flowDropdown" aria-labelledby="flowDropdownBtn">
-
-        </ul>
-    </div>
-    <p>Theme <span id="theme">@Model.Theme.Id</span> - @Model.Theme.Subject</p>
-    <div class="d-flex justify-content-center h-100">
-        <div class="row-cols-md-3 mb-3 text-start" id="informationContainer">
-        </div>
-        <div class="row-cols-md-3 mb-3 d-block justify-content-center" id="questionContainer">
-
-        </div>
+<div class="kiosk-bottom-left">
+    <div class="kiosk-container-bottom-left">
+        <button class="kiosk-button-step-control" id="btnNextStep">Next step</button>
+        <button class="kiosk-button-step-control" id="btnRestartFlow">Restart flow</button>
     </div>
 </div>
-<footer class="row-gap-sm-4 h-25 justify-content-center d-flex">
-    <button class="btn-primary mt-auto mb-auto h-25 m-5" id="btnNextStep">Next step</button>
-    <button class="btn-secondary mt-auto mb-auto h-25 m-5" id="btnRestartFlow">Restart flow</button>
-    <button class="btn-secondary mt-auto mb-auto h-25 m-5" id="btnPauseFlow">Pause flow</button>
-    @if (Model.Theme.GetType() == typeof(SubTheme))
-    {
-        <div class="mt-auto mb-auto m-5">
-            <a class="btn-close h-50" id="butExitFlow" asp-area="" asp-controller="SubTheme" asp-action="SubTheme" asp-route-id="@Model.Theme.Id"><span></span></a>
-            <span>Exit</span>
-            
-        </div>
-    }
-    else
-    {
-        <div class="mt-auto mb-auto m-5">
-            <a class="btn-close h-50" id="butExitFlow" asp-area="" asp-controller="MainTheme" asp-action="MainTheme" asp-route-id="@Model.Theme.Id"><span></span></a>
-            <span>Exit</span>
-        </div>
-    }
-
-    <div style="position: fixed; bottom: 0; right: 0; display: flex; flex-direction: row;">
-        <div style="display: flex; flex-direction: column; ">
-            <p>Want more info?</p>
-            <input type="email" id="inputEmail" placeholder="Enter your email">
-            <p id="errorMsg">&nbsp;</p>
-        </div>
-        <div style="display: flex; flex-direction: column;">
-            <button class="btn-primary mt-auto" id="btnEmail">Submit Email</button>
-            <p>&nbsp;</p>
-        </div>
+<div class="kiosk-bottom-center">
+    <div class="kiosk-container-bottom-center">
+        &copy; @DateTime.Now.Year - CodeForge - <a asp-area="" asp-controller="Home" asp-action="PrivacyPolicy">Privacy Policy</a> - <a asp-area="" asp-controller="Home" asp-action="LegalGuidelines">Legal Guidelines</a>
     </div>
-</footer>
+</div>
+<div class="kiosk-bottom-right">
+    <div class="kiosk-container-bottom-right">
+        <div class="kiosk-input-container">
+            <input class="kiosk-input-email" id="inputEmail" type="email" placeholder="Enter email for more info...">
+            <button class="kiosk-invite-btn" id="btnEmail">Send</button>
+        </div>
+        <p id="errorMsg">&nbsp;</p>
+    </div>
+</div>
 </body>
 </html>
-
-
+<!--JS-->
 <script src="/dist/step.entry.js" defer></script>
-<link rel="stylesheet" href="~/dist/site.css"/>
+<!--JS-->

@@ -72,9 +72,13 @@ namespace MVC.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
+                string html = System.IO.File.ReadAllText("./EmailHTMLS/CodeForge-ResetPassword.html");
+
+                html = html.Replace("[PasswordLink]", HtmlEncoder.Default.Encode(callbackUrl));// Path to your 
+                
                 _emailManager.SendEmail(
                     "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.",
+                    html,
                     Input.Email);
 
                 return RedirectToPage("./ForgotPasswordConfirmation");

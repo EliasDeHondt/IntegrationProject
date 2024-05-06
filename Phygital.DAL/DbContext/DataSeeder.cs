@@ -6,6 +6,7 @@
  ***************************************/
 
 using Domain.Accounts;
+using Domain.FacilitatorFunctionality;
 using Domain.Platform;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
@@ -18,107 +19,60 @@ public static class DataSeeder
 {
     private static void GenerateSingleQuestions(CodeForgeDbContext ctx, Flow flow)
     {
-        Choice choice = new Choice("Natuur en ecologie");
-        Choice choice1 = new Choice("Vrije tijd, sport, cultuur");
-        Choice choice2 = new Choice("Huisvesting");
-        Choice choice3 = new Choice("Onderwijs en kinderopvang");
-        Choice choice4 = new Choice("Gezondheidszorg en welzijn");
-        Choice choice5 = new Choice("Verkeersveiligheid en mobiliteit");
-        Choice choice6 = new Choice("Ondersteunen van lokale handel");
-
         SingleChoiceQuestion question1 = new SingleChoiceQuestion(
-            "Als jij de begroting van je stad of gemeente zou opmaken, waar zou je dan in de komende jaren vooral op inzetten? Maak 1 keuze.",
-            new List<Choice>
-            {
-                choice,
-                choice1,
-                choice2,
-                choice3,
-                choice4,
-                choice5,
-                choice6
-            });
+            "Als jij de begroting van je stad of gemeente zou opmaken, waar zou je dan in de komende jaren vooral op inzetten? Maak 1 keuze.");
 
-        choice.QuestionBase = question1;
-        choice1.QuestionBase = question1;
-        choice2.QuestionBase = question1;
-        choice3.QuestionBase = question1;
-        choice4.QuestionBase = question1;
-        choice5.QuestionBase = question1;
-        choice6.QuestionBase = question1;
+        Choice choice = new Choice("Natuur en ecologie", question1);
+        Choice choice1 = new Choice("Vrije tijd, sport, cultuur", question1);
+        Choice choice2 = new Choice("Huisvesting", question1);
+        Choice choice3 = new Choice("Onderwijs en kinderopvang", question1);
+        Choice choice4 = new Choice("Gezondheidszorg en welzijn", question1);
+        Choice choice5 = new Choice("Verkeersveiligheid en mobiliteit", question1);
+        Choice choice6 = new Choice("Ondersteunen van lokale handel", question1);
 
-        Choice choice7 = new Choice("Eens");
-        Choice choice8 = new Choice("Oneens");
 
         SingleChoiceQuestion question2 = new SingleChoiceQuestion(
-            "Er moet meer geïnvesteerd worden in overdekte fietsstallingen aan de bushaltes in onze gemeente.\" Wat vind jij van dit voorstel?",
-            new List<Choice>
-            {
-                choice7,
-                choice8
-            });
+            "Er moet meer geïnvesteerd worden in overdekte fietsstallingen aan de bushaltes in onze gemeente.\" Wat vind jij van dit voorstel?");
 
-        Choice choice9 = new Choice("Sportinfrastructuur");
-        Choice choice10 = new Choice("Speeltuin voor kinderen");
-        Choice choice11 = new Choice("Zitbanken en picknickplaatsen");
-        Choice choice12 = new Choice("Ruimte voor kleine evenementen");
-        Choice choice13 = new Choice("Drank- en eetmogelijkheden");
+        Choice choice7 = new Choice("Eens", question2);
+        Choice choice8 = new Choice("Oneens", question2);
 
         SingleChoiceQuestion question3 = new SingleChoiceQuestion(
-            "Waarop wil jij dat de focus wordt gelegd in het nieuwe stadspark? Maak 1 keuze.",
-            new List<Choice>
-            {
-                choice9,
-                choice10,
-                choice11,
-                choice12,
-                choice13
-            });
+            "Waarop wil jij dat de focus wordt gelegd in het nieuwe stadspark? Maak 1 keuze.");
 
-        Choice choice14 = new Choice("Akkoord");
-        Choice choice15 = new Choice("Niet Akkoord");
+        Choice choice9 = new Choice("Sportinfrastructuur", question3);
+        Choice choice10 = new Choice("Speeltuin voor kinderen", question3);
+        Choice choice11 = new Choice("Zitbanken en picknickplaatsen", question3);
+        Choice choice12 = new Choice("Ruimte voor kleine evenementen", question3);
+        Choice choice13 = new Choice("Drank- en eetmogelijkheden", question3);
+
 
         SingleChoiceQuestion question4 = new SingleChoiceQuestion(
-            "Hoe sta jij tegenover deze stelling? “Mijn stad moet meer investeren in fietspaden.",
-            new List<Choice>
-            {
-                choice14,
-                choice15
-            });
+            "Hoe sta jij tegenover deze stelling? “Mijn stad moet meer investeren in fietspaden.");
 
-        Choice choice16 = new Choice("Verplaatsingen met de fiets");
-        Choice choice17 = new Choice("Verplaatsingen met de auto/moto");
-        Choice choice18 = new Choice("Verplaatsingen te voet");
-        Choice choice19 = new Choice("Deelmobiliteit");
-        Choice choice20 = new Choice("Openbaar vervoer");
+        Choice choice14 = new Choice("Akkoord", question4);
+        Choice choice15 = new Choice("Niet Akkoord", question4);
 
         SingleChoiceQuestion question5 = new SingleChoiceQuestion(
-            "Om ons allemaal veilig en vlot te verplaatsen, moet er in jouw stad of gemeente vooral meer aandacht gaan naar:",
-            new List<Choice>
-            {
-                choice16,
-                choice17,
-                choice18,
-                choice19,
-                choice20
-            });
+            "Om ons allemaal veilig en vlot te verplaatsen, moet er in jouw stad of gemeente vooral meer aandacht gaan naar:");
 
-        Choice choice21 = new Choice("Goed idee");
-        Choice choice22 = new Choice("Slecht idee");
+        Choice choice16 = new Choice("Verplaatsingen met de fiets", question5);
+        Choice choice17 = new Choice("Verplaatsingen met de auto/moto", question5);
+        Choice choice18 = new Choice("Verplaatsingen te voet", question5);
+        Choice choice19 = new Choice("Deelmobiliteit", question5);
+        Choice choice20 = new Choice("Openbaar vervoer", question5);
+
 
         SingleChoiceQuestion question6 = new SingleChoiceQuestion(
-            "Wat vind jij van het idee om alle leerlingen van de scholen in onze stad een gratis fiets aan te bieden?",
-            new List<Choice>
-            {
-                choice21,
-                choice22
-            });
+            "Wat vind jij van het idee om alle leerlingen van de scholen in onze stad een gratis fiets aan te bieden?");
 
+        Choice choice21 = new Choice("Goed idee", question6);
+        Choice choice22 = new Choice("Slecht idee", question6);
 
+        ctx.ChoiceQuestions.AddRange(question1, question2, question3, question4, question5, question6);
         ctx.Choices.AddRange(choice1, choice2, choice3, choice4, choice5, choice6, choice7, choice8, choice9, choice10,
             choice11, choice12, choice13, choice14, choice15, choice16, choice17, choice18, choice19, choice20,
             choice21, choice22);
-        ctx.ChoiceQuestions.AddRange(question1, question2, question3, question4, question5, question6);
 
         //add to step
         QuestionStep step1 = new QuestionStep(1, question1, flow);
@@ -134,7 +88,7 @@ public static class DataSeeder
         step4.StepName = "Single Choice Question";
         step5.StepName = "Single Choice Question";
         step6.StepName = "Single Choice Question";
-        
+
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
         flow.Steps.Add(step3);
@@ -147,126 +101,62 @@ public static class DataSeeder
 
     private static void GenerateMultipleCQuestions(CodeForgeDbContext ctx, Flow flow)
     {
-        Choice choice = new Choice("Meer lessen op school rond de partijprogramma’s");
-        Choice choice1 = new Choice("Activiteiten in mijn jeugdclub, sportclub… rond de verkiezingen");
-        Choice choice2 = new Choice("Een bezoek van de partijen aan mijn school, jeugd/sportclub, …");
-        Choice choice3 = new Choice("Een gesprek met mijn ouders rond de gemeentepolitiek");
-        Choice choice4 = new Choice("Een debat georganiseerd door een jeugdhuis met de verschillende partijen");
-
         MultipleChoiceQuestion mquestion1 = new MultipleChoiceQuestion(
-            "Wat zou jou helpen om een keuze te maken tussen de verschillende partijen?",
-            new List<Choice>
-            {
-                choice,
-                choice1,
-                choice2,
-                choice3,
-                choice4
-            });
+            "Wat zou jou helpen om een keuze te maken tussen de verschillende partijen?");
 
-        choice.QuestionBase = mquestion1;
-        choice1.QuestionBase = mquestion1;
-        choice2.QuestionBase = mquestion1;
-        choice3.QuestionBase = mquestion1;
-        choice4.QuestionBase = mquestion1;
-
-        Choice choice5 = new Choice("Tennis");
-        Choice choice6 = new Choice("Hockey");
-        Choice choice7 = new Choice("Padel");
-        Choice choice8 = new Choice("Voetbal");
-        Choice choice9 = new Choice("Fitness");
+        Choice choice = new Choice("Meer lessen op school rond de partijprogramma’s", mquestion1);
+        Choice choice1 = new Choice("Activiteiten in mijn jeugdclub, sportclub… rond de verkiezingen", mquestion1);
+        Choice choice2 = new Choice("Een bezoek van de partijen aan mijn school, jeugd/sportclub, …", mquestion1);
+        Choice choice3 = new Choice("Een gesprek met mijn ouders rond de gemeentepolitiek", mquestion1);
+        Choice choice4 = new Choice("Een debat georganiseerd door een jeugdhuis met de verschillende partijen",
+            mquestion1);
 
         MultipleChoiceQuestion mquestion2 = new MultipleChoiceQuestion(
-            "Welke sportactiviteit(en) zou jij graag in je eigen stad of gemeente kunnen beoefenen?",
-            new List<Choice>
-            {
-                choice5,
-                choice6,
-                choice7,
-                choice8,
-                choice9
-            });
+            "Welke sportactiviteit(en) zou jij graag in je eigen stad of gemeente kunnen beoefenen?");
 
-        choice5.QuestionBase = mquestion2;
-        choice6.QuestionBase = mquestion2;
-        choice7.QuestionBase = mquestion2;
-        choice8.QuestionBase = mquestion2;
-        choice9.QuestionBase = mquestion2;
+        Choice choice5 = new Choice("Tennis", mquestion2);
+        Choice choice6 = new Choice("Hockey", mquestion2);
+        Choice choice7 = new Choice("Padel", mquestion2);
+        Choice choice8 = new Choice("Voetbal", mquestion2);
+        Choice choice9 = new Choice("Fitness", mquestion2);
 
-        Choice choice10 = new Choice("Deelnemen aan gespreksavonden met schepenen en burgemeester");
-        Choice choice11 = new Choice("Bijwonen van een gemeenteraad");
-        Choice choice12 = new Choice("Deelnemen aan een survey uitgestuurd door de stad of gemeente");
-        Choice choice13 =
-            new Choice("Een overleg waarbij ik onderwerpen kan aandragen die voor jongeren belangrijk zijn");
-        Choice choice14 = new Choice("Mee brainstormen over oplossingen voor problemen waar jongeren mee worstelen");
 
         MultipleChoiceQuestion mquestion3 = new MultipleChoiceQuestion(
-            "Aan welke van deze activiteiten zou jij meedoen, om mee te wegen op het beleid van jouw stad of gemeente?",
-            new List<Choice>
-            {
-                choice10,
-                choice11,
-                choice12,
-                choice13,
-                choice14
-            });
+            "Aan welke van deze activiteiten zou jij meedoen, om mee te wegen op het beleid van jouw stad of gemeente?");
 
-        choice10.QuestionBase = mquestion3;
-        choice11.QuestionBase = mquestion3;
-        choice12.QuestionBase = mquestion3;
-        choice13.QuestionBase = mquestion3;
-        choice14.QuestionBase = mquestion3;
+        Choice choice10 = new Choice("Deelnemen aan gespreksavonden met schepenen en burgemeester", mquestion3);
+        Choice choice11 = new Choice("Bijwonen van een gemeenteraad", mquestion3);
+        Choice choice12 = new Choice("Deelnemen aan een survey uitgestuurd door de stad of gemeente", mquestion3);
+        Choice choice13 =
+            new Choice("Een overleg waarbij ik onderwerpen kan aandragen die voor jongeren belangrijk zijn",
+                mquestion3);
+        Choice choice14 = new Choice("Mee brainstormen over oplossingen voor problemen waar jongeren mee worstelen",
+            mquestion3);
 
-        Choice choice15 = new Choice("Ik heb geen interesse");
-        Choice choice16 = new Choice("Ik heb geen tijd om te gaan stemmen");
-        Choice choice17 = new Choice("Ik kan niet naar het stemkantoor gaan");
-        Choice choice18 = new Choice("Ik denk niet dat mijn stem een verschil zal uitmaken");
-        Choice choice19 = new Choice("Ik heb geen idee voor wie ik zou moeten stemmen");
 
         MultipleChoiceQuestion mquestion4 = new MultipleChoiceQuestion(
-            "Jij gaf aan dat je waarschijnlijk niet zal gaan stemmen. Om welke reden(en) zeg je dit?",
-            new List<Choice>
-            {
-                choice15,
-                choice16,
-                choice17,
-                choice18,
-                choice19
-            });
+            "Jij gaf aan dat je waarschijnlijk niet zal gaan stemmen. Om welke reden(en) zeg je dit?");
 
-        choice15.QuestionBase = mquestion4;
-        choice16.QuestionBase = mquestion4;
-        choice17.QuestionBase = mquestion4;
-        choice18.QuestionBase = mquestion4;
-        choice19.QuestionBase = mquestion4;
+        Choice choice15 = new Choice("Ik heb geen interesse", mquestion4);
+        Choice choice16 = new Choice("Ik heb geen tijd om te gaan stemmen", mquestion4);
+        Choice choice17 = new Choice("Ik kan niet naar het stemkantoor gaan", mquestion4);
+        Choice choice18 = new Choice("Ik denk niet dat mijn stem een verschil zal uitmaken", mquestion4);
+        Choice choice19 = new Choice("Ik heb geen idee voor wie ik zou moeten stemmen", mquestion4);
 
-        Choice choice20 = new Choice("Kunnen gaan stemmen op een toffere locatie");
-        Choice choice21 = new Choice("Online, van thuis uit kunnen stemmen");
-        Choice choice22 = new Choice("Betere inhoudelijke voorstellen van de politieke partijen");
-        Choice choice23 = new Choice("Meer aandacht voor jeugd in de programma’s van de partijen");
-        Choice choice24 = new Choice("Beter weten of mijn stem echt impact heeft");
 
         MultipleChoiceQuestion mquestion5 = new MultipleChoiceQuestion(
-            "Wat zou jou (meer) zin geven om te gaan stemmen?",
-            new List<Choice>
-            {
-                choice20,
-                choice21,
-                choice22,
-                choice23,
-                choice24
-            });
+            "Wat zou jou (meer) zin geven om te gaan stemmen?");
 
-        choice20.QuestionBase = mquestion5;
-        choice21.QuestionBase = mquestion5;
-        choice22.QuestionBase = mquestion5;
-        choice23.QuestionBase = mquestion5;
-        choice24.QuestionBase = mquestion5;
+        Choice choice20 = new Choice("Kunnen gaan stemmen op een toffere locatie", mquestion5);
+        Choice choice21 = new Choice("Online, van thuis uit kunnen stemmen", mquestion5);
+        Choice choice22 = new Choice("Betere inhoudelijke voorstellen van de politieke partijen", mquestion5);
+        Choice choice23 = new Choice("Meer aandacht voor jeugd in de programma’s van de partijen", mquestion5);
+        Choice choice24 = new Choice("Beter weten of mijn stem echt impact heeft", mquestion5);
 
+        ctx.ChoiceQuestions.AddRange(mquestion1, mquestion2, mquestion3, mquestion4, mquestion5);
         ctx.Choices.AddRange(choice, choice1, choice2, choice3, choice4, choice5, choice6, choice7, choice8, choice9,
             choice10, choice11, choice12, choice13, choice14, choice15, choice16, choice17, choice18, choice19,
             choice20, choice21, choice22, choice23, choice24);
-        ctx.ChoiceQuestions.AddRange(mquestion1, mquestion2, mquestion3, mquestion4, mquestion5);
 
         //add to step
         QuestionStep step1 = new QuestionStep(7, mquestion1, flow);
@@ -280,7 +170,7 @@ public static class DataSeeder
         step3.StepName = "Multiple Choice Question";
         step4.StepName = "Multiple Choice Question";
         step5.StepName = "Multiple Choice Question";
-        
+
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
         flow.Steps.Add(step3);
@@ -292,119 +182,55 @@ public static class DataSeeder
 
     private static void GenerateRangeQuestions(CodeForgeDbContext ctx, Flow flow)
     {
-        Choice choice = new Choice("Zeker niet");
-        Choice choice1 = new Choice("Eerder niet");
-        Choice choice2 = new Choice("Ik weet het nog niet");
-        Choice choice3 = new Choice("Eerder wel");
-        Choice choice4 = new Choice("Zeker wel");
-
         //make questions
         RangeQuestion rquestion1 = new RangeQuestion(
-            "Ben jij van plan om te gaan stemmen bij de aankomende lokale verkiezingen?",
-            new List<Choice>
-            {
-                choice,
-                choice1,
-                choice2,
-                choice3,
-                choice4
-            });
+            "Ben jij van plan om te gaan stemmen bij de aankomende lokale verkiezingen?");
 
-        choice1.QuestionBase = rquestion1;
-        choice2.QuestionBase = rquestion1;
-        choice3.QuestionBase = rquestion1;
-        choice4.QuestionBase = rquestion1;
-
-        Choice choice5 = new Choice("Ik voel me weinig tot niet betrokken");
-        Choice choice6 = new Choice("Ik voel me weinig betrokken");
-        Choice choice7 = new Choice("Ik voel me betrokken");
-        Choice choice8 = new Choice("Ik voel me zeer betrokken");
+        Choice choice = new Choice("Zeker niet", rquestion1);
+        Choice choice1 = new Choice("Eerder niet", rquestion1);
+        Choice choice2 = new Choice("Ik weet het nog niet", rquestion1);
+        Choice choice3 = new Choice("Eerder wel", rquestion1);
+        Choice choice4 = new Choice("Zeker wel", rquestion1);
 
         RangeQuestion rquestion2 = new RangeQuestion(
-            "Voel jij je betrokken bij het beleid dat wordt uitgestippeld door je gemeente of stad?",
-            new List<Choice>
-            {
-                choice5,
-                choice6,
-                choice7,
-                choice8
-            });
+            "Voel jij je betrokken bij het beleid dat wordt uitgestippeld door je gemeente of stad?");
 
-        choice5.QuestionBase = rquestion2;
-        choice6.QuestionBase = rquestion2;
-        choice7.QuestionBase = rquestion2;
-        choice8.QuestionBase = rquestion2;
-
-        Choice choice9 = new Choice("Zeer ontevreden");
-        Choice choice10 = new Choice("Ontevreden");
-        Choice choice11 = new Choice("Niet tevreden en niet ontevreden");
-        Choice choice12 = new Choice("Tevreden");
-        Choice choice13 = new Choice("Zeer tevreden");
+        Choice choice5 = new Choice("Ik voel me weinig tot niet betrokken", rquestion2);
+        Choice choice6 = new Choice("Ik voel me weinig betrokken", rquestion2);
+        Choice choice7 = new Choice("Ik voel me betrokken", rquestion2);
+        Choice choice8 = new Choice("Ik voel me zeer betrokken", rquestion2);
 
         RangeQuestion rquestion3 = new RangeQuestion(
-            "In hoeverre ben jij tevreden met het vrijetijdsaanbod in jouw stad of gemeente?",
-            new List<Choice>
-            {
-                choice9,
-                choice10,
-                choice11,
-                choice12,
-                choice13
-            });
+            "In hoeverre ben jij tevreden met het vrijetijdsaanbod in jouw stad of gemeente?");
 
-        choice9.QuestionBase = rquestion3;
-        choice10.QuestionBase = rquestion3;
-        choice11.QuestionBase = rquestion3;
-        choice12.QuestionBase = rquestion3;
-        choice13.QuestionBase = rquestion3;
-
-        Choice choice14 = new Choice("Helemaal oneens");
-        Choice choice15 = new Choice("Oneens");
-        Choice choice16 = new Choice("Noch eens, noch oneens");
-        Choice choice17 = new Choice("Eens");
-        Choice choice18 = new Choice("Helemaal eens");
+        Choice choice9 = new Choice("Zeer ontevreden", rquestion3);
+        Choice choice10 = new Choice("Ontevreden", rquestion3);
+        Choice choice11 = new Choice("Niet tevreden en niet ontevreden", rquestion3);
+        Choice choice12 = new Choice("Tevreden", rquestion3);
+        Choice choice13 = new Choice("Zeer tevreden", rquestion3);
 
         RangeQuestion rquestion4 = new RangeQuestion(
-            "In welke mate ben jij het eens met de volgende stelling: “Mijn stad of gemeente doet voldoende om betaalbare huisvesting mogelijk te maken voor iedereen.”",
-            new List<Choice>
-            {
-                choice14,
-                choice15,
-                choice16,
-                choice17,
-                choice18
-            });
+            "In welke mate ben jij het eens met de volgende stelling: “Mijn stad of gemeente doet voldoende om betaalbare huisvesting mogelijk te maken voor iedereen.”");
 
-        choice14.QuestionBase = rquestion4;
-        choice15.QuestionBase = rquestion4;
-        choice16.QuestionBase = rquestion4;
-        choice17.QuestionBase = rquestion4;
-        choice18.QuestionBase = rquestion4;
-
-        Choice choice19 = new Choice("Ik sta hier volledig achter");
-        Choice choice20 = new Choice("Ik sta hier een beetje achter");
-        Choice choice21 = new Choice("Ik sta hier niet achter");
-        Choice choice22 = new Choice("Ik sta hier helemaal niet achter");
+        Choice choice14 = new Choice("Helemaal oneens", rquestion4);
+        Choice choice15 = new Choice("Oneens", rquestion4);
+        Choice choice16 = new Choice("Noch eens, noch oneens", rquestion4);
+        Choice choice17 = new Choice("Eens", rquestion4);
+        Choice choice18 = new Choice("Helemaal eens", rquestion4);
 
         RangeQuestion rquestion5 = new RangeQuestion(
-            "In welke mate kun jij je vinden in het voorstel om de straatlichten in onze gemeente te doven tussen 23u en 5u?",
-            new List<Choice>
-            {
-                choice19,
-                choice20,
-                choice21,
-                choice22
-            });
+            "In welke mate kun jij je vinden in het voorstel om de straatlichten in onze gemeente te doven tussen 23u en 5u?");
 
-        choice19.QuestionBase = rquestion5;
-        choice20.QuestionBase = rquestion5;
-        choice21.QuestionBase = rquestion5;
-        choice22.QuestionBase = rquestion5;
+        Choice choice19 = new Choice("Ik sta hier volledig achter", rquestion5);
+        Choice choice20 = new Choice("Ik sta hier een beetje achter", rquestion5);
+        Choice choice21 = new Choice("Ik sta hier niet achter", rquestion5);
+        Choice choice22 = new Choice("Ik sta hier helemaal niet achter", rquestion5);
 
+        ctx.ChoiceQuestions.AddRange(rquestion1, rquestion2, rquestion3, rquestion4, rquestion5);
         ctx.Choices.AddRange(choice19, choice20, choice21, choice22, choice1, choice2, choice3, choice4, choice5,
             choice6, choice7, choice8, choice9, choice10, choice11, choice12, choice13, choice14, choice15, choice16,
             choice17, choice18, choice);
-        ctx.ChoiceQuestions.AddRange(rquestion1, rquestion2, rquestion3, rquestion4, rquestion5);
+
 
         //add to step
         QuestionStep step1 = new QuestionStep(12, rquestion1, flow);
@@ -418,7 +244,7 @@ public static class DataSeeder
         step3.StepName = "Ranged Question";
         step4.StepName = "Ranged Question";
         step5.StepName = "Ranged Question";
-        
+
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
         flow.Steps.Add(step3);
@@ -441,7 +267,7 @@ public static class DataSeeder
 
         //add to step
         QuestionStep step1 = new QuestionStep(17, oquesstion1, flow);
-        QuestionStep step2 = new QuestionStep(18, oquesstion1, flow);
+        QuestionStep step2 = new QuestionStep(18, oquesstion2, flow);
         step1.StepName = "Open Question";
         step2.StepName = "Open Question";
 
@@ -459,9 +285,9 @@ public static class DataSeeder
         Flow flow = new Flow(FlowType.Linear, subTheme1);
         Flow flow1 = new Flow(FlowType.Circular, subTheme1);
         Participation participation1 = new Participation(flow); //for respondents
-        participation1.Respondents.Add(new Respondent("test@mail.com",participation1));
+        participation1.Respondents.Add(new Respondent("test@mail.com", participation1));
         flow.Participations.Add(participation1);
-        
+
         Text textInfo = new Text("Lokale Verkiezingen");
         Image imageInfo = new Image(ImageUrls.Verkiezingen);
         imageInfo.StepName = "Information";
@@ -484,14 +310,14 @@ public static class DataSeeder
 
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
-        flow1.Steps.Add(step3);
-        flow1.Steps.Add(step4);
+        flow.Steps.Add(step3);
+        flow.Steps.Add(step4);
 
-        SharedPlatform sp = new SharedPlatform("CodeForge");
-        
+        SharedPlatform sp = new SharedPlatform("CodeForge", ImageUrls.Favicon);
+
         subTheme1.Flows.Add(flow);
         subTheme1.Flows.Add(flow1);
-        Project project1 = new Project(mainTheme1.Subject,mainTheme1, sp);
+        Project project1 = new Project(mainTheme1.Subject, mainTheme1, sp);
         ctx.MainThemes.Add(mainTheme1);
         ctx.Flows.Add(flow);
         ctx.Flows.Add(flow1);
@@ -506,25 +332,35 @@ public static class DataSeeder
 
         // Seed main theme 2
         MainTheme mainTheme2 = new MainTheme("Lokale Verkiezingen - circulair");
-        Project project2 = new Project(mainTheme2.Subject,mainTheme2, sp);
+        Project project2 = new Project(mainTheme2.Subject, mainTheme2, sp);
         Flow flow2 = new Flow(FlowType.Circular, mainTheme2);
 
-        GenerateSingleQuestions(ctx, flow2); 
-        
+        GenerateSingleQuestions(ctx, flow2);
+
         ctx.Projects.Add(project1);
         ctx.Projects.Add(project2);
-        
+
         ((SpAdmin)ctx.Users.Single(user => user.Email == "Henk@CodeForge.com")).SharedPlatform = sp;
         ((SpAdmin)ctx.Users.Single(user => user.Email == "CodeForge.noreply@gmail.com")).SharedPlatform = sp;
         sp.Projects.Add(project1);
+        ctx.SharedPlatforms.RemoveRange(ctx.SharedPlatforms.Where(p => p.OrganisationName == string.Empty));
+        ProjectOrganizer projectOrganizer = new ProjectOrganizer(project1,
+            (Facilitator)ctx.Users.Single(user => user.Email == "Tom@CodeForge.com"));
+        ProjectOrganizer projectOrganizer1 = new ProjectOrganizer(project2,
+            (Facilitator)ctx.Users.Single(user => user.Email == "Tom@CodeForge.com"));
 
+        ctx.ProjectOrganizers.Add(projectOrganizer);
+        ctx.ProjectOrganizers.Add(projectOrganizer1);
         flow2.Theme = mainTheme2;
         ctx.SharedPlatforms.Add(sp);
+
+        //ctx.SharedPlatforms.AddRange(new SharedPlatform(),new SharedPlatform(),new SharedPlatform(),new SharedPlatform(),new SharedPlatform(),new SharedPlatform(),new SharedPlatform(),new SharedPlatform(),new SharedPlatform(),new SharedPlatform());
         ctx.MainThemes.Add(mainTheme2);
         ctx.Flows.Add(flow2);
-        
 
 
+        ctx.SaveChanges();
+        ((Facilitator)ctx.Users.Single(user => user.Email == "Tom@CodeForge.com")).SharedPlatformId = 3;
         ctx.SaveChanges();
         ctx.ChangeTracker.Clear();
     }
