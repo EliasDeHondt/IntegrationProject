@@ -131,7 +131,6 @@ async function ShowStepInContainer(data: Step) {
       case "Image": {
         let img = document.createElement("img");
         img.src = "data:image/png;base64," + data.informationViewModel.information;
-        img.classList.add("col-m-12", "w-100", "h-100");
         partialInformationContainer.appendChild(img);
         break;
       }
@@ -145,7 +144,6 @@ async function ShowStepInContainer(data: Step) {
         video.autoplay = true;
         video.loop = true;
         video.controls = false;
-        video.classList.add("h-100", "w-100");
         partialInformationContainer.appendChild(video);
         break;
       }
@@ -215,7 +213,6 @@ async function ShowStepInContainer(data: Step) {
         let textInput = document.createElement("textarea");
         let openDiv = document.createElement("div");
         openDiv.classList.add("m-auto");
-        textInput.classList.add("w-100");
         textInput.name = 'answer';
         textInput.rows = 8;
         textInput.cols = 75;

@@ -116,14 +116,12 @@ async function ShowStep(data: Step) {
                 let p = document.createElement("p");
                 p.innerText = data.informationViewModel.information;
                 p.classList.add("text-center");
-                p.classList.add("col-md-12");
                 informationContainer.appendChild(p);
                 break;
             }
             case "Image": {
                 let img = document.createElement("img");
                 img.src = "data:image/png;base64," + data.informationViewModel.information;
-                img.classList.add("col-m-12", "w-100", "h-100");
                 informationContainer.appendChild(img);
                 break;
             }
@@ -137,7 +135,6 @@ async function ShowStep(data: Step) {
                 video.autoplay = true;
                 video.loop = true;
                 video.controls = false;
-                video.classList.add("h-100", "w-100");
                 informationContainer.appendChild(video);
                 break;
             }
@@ -231,7 +228,6 @@ async function ShowStep(data: Step) {
                 let textInput = document.createElement("textarea");
                 let openDiv = document.createElement("div");
                 openDiv.classList.add("m-auto");
-                textInput.classList.add("w-100");
                 textInput.name = 'answer';
                 textInput.rows = 8;
                 textInput.cols = 75;
