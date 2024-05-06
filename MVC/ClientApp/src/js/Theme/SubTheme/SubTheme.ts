@@ -18,7 +18,7 @@ saveButton.onclick = () => {
 }
 
 btnCreateFlow.onclick = () => {
-console.log("clicjj")
+console.log("click")
     // let flowType = "Linear";
     //
     // try {

@@ -205,7 +205,11 @@ button.accept-policy {
   height: 330px;
   background-color: map-get($themes, light, primary);
 }
-
+.flow-card#btnCreateFlowProject:hover {
+  width: 220px;
+  height: 330px;
+  background-color: map-get($themes, light, primary);
+}
 .flow-card-header {
   text-align: center;
   font-weight: bolder;
