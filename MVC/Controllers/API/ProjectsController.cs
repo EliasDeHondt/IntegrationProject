@@ -100,4 +100,13 @@ public class ProjectsController : Controller
 
         return Ok(projectDto); 
     }
+    
+    [HttpGet("GetFlowsForProject/{projectId}")]
+    public IActionResult GetFlowsForProject(int projectId)
+    {
+        var flows = _projectManager.GetFlowsForProjectById(projectId);
+
+        return Ok(flows);
+
+    }
 }

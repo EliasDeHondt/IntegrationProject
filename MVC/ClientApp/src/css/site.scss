@@ -184,10 +184,11 @@ button.accept-policy {
 #flow-cards::-webkit-scrollbar {
   width: 0;
 }
-
-.flow-card {
+.forSubtheme{
   width: 200px;
   height: 700px;
+}
+.flow-card {
   background-color: map-get($themes, light, primary);
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -198,6 +199,10 @@ button.accept-policy {
   position: relative;
   margin: .5em;
   transition: width 0.3s ease, height 0.3s ease;
+}
+.forProject {
+  width: 200px;
+  height: 300px;
 }
 
 .flow-card:hover {

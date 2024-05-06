@@ -21,7 +21,7 @@ export async function loadFlows(id: number): Promise<Flow[]> {
     
 }
 
-export function showFlows(flows: Flow[]) {
+export function showFlows(flows: Flow[],forWhat: string) {
     const flowContainer = document.getElementById("flow-cards") as HTMLElement;
     //flowContainer.innerHTML = "";
 
@@ -31,8 +31,14 @@ export function showFlows(flows: Flow[]) {
             const flowCard = document.createElement('div');
             flowCard.classList.add("flow-card");
             flowCard.dataset.flowId = flow.id.toString();
-            flowCard.style.width = "250px";
-            flowCard.style.height = "700px !important;";
+            
+            if(forWhat === "forProject"){
+                flowCard.classList.add("forProject");
+            }
+            if(forWhat === "forSubtheme"){
+                flowCard.classList.add("forSubtheme");
+            }
+            
             const flowButton = document.createElement('a');
             flowButton.classList.add("btn","flow-card-btn");
             flowButton.dataset.flowId = flow.id.toString();

@@ -93,4 +93,9 @@ public class ProjectManager
         return _repo.ReadProjectThroughMainTheme(id);
         
     }
+    
+    public IEnumerable<Flow> GetFlowsForProjectById(long projectId)
+    {
+        return _repo.ReadFlowsForProjectById(projectId);
+    }
 }

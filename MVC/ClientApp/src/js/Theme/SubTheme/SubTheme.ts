@@ -9,7 +9,7 @@ const btnCreateFlow = document.getElementById("btnCreateFlow") as HTMLButtonElem
 
 
 loadFlows(themeId).then(flows => {
-    showFlows(flows);
+    showFlows(flows,"forSubtheme");
 })
 
 saveButton.onclick = () => {
@@ -22,7 +22,7 @@ console.log("click")
     // let flowType = "Linear";
     //
     // try {
-    //     const response = fetch("CreateSubthemeFlow/" + flowType, {
+    //     const response = fetch("/api/SubThemes/CreateSubthemeFlow/" + flowType, {
     //         method: "POST",
     //         headers: {
     //             "Content-Type": "application/json"

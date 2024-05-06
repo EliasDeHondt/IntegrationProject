@@ -1,4 +1,5 @@
 import {Project} from "../../Types/ProjectObjects";
+import {Flow} from "../../Flow/FlowObjects";
 
 export function fillExisting(project: Project, inputTitle: HTMLInputElement, inputText: HTMLInputElement): void{
     inputTitle.value = project.title
@@ -68,6 +69,20 @@ export async function getMainThemeId(): Promise<number>{
     
 }
 
-//Nav
+export async function loadFlowsProject(id: number): Promise<Flow[]> {
+    return await fetch(`/api/Projects/GetFlowsForProject/${id}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
+        .catch(error => console.error("Error:", error))
+
+}
 
 //select subthemas

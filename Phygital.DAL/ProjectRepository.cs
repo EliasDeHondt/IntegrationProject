@@ -121,4 +121,9 @@ public class ProjectRepository
             .Include(project => project.MainTheme)
             .First(project => project.MainTheme.Id == id);
     }
+    
+    public IEnumerable<Flow> ReadFlowsForProjectById(long projectId)
+    {
+        return _ctx.Flows.Where(project => project.Id == projectId);
+    }
 }
