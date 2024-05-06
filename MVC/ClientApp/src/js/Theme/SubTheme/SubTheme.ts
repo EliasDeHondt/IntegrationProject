@@ -6,7 +6,7 @@ let themeId = Number((document.getElementById("subThemeId") as HTMLSpanElement).
 const saveButton = document.getElementById("btnSaveSubTheme") as HTMLButtonElement;
 
 loadFlows(themeId).then(flows => {
-    showFlows(flows, flowContainer);
+    showFlows(flows);
 })
 
 saveButton.onclick = () => {
