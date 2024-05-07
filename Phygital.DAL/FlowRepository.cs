@@ -52,8 +52,6 @@ public class FlowRepository
             .ToList();
     }
 
-    public void AddParticipationByFlow(long flowId, string email)
-
     public IEnumerable<Flow> ReadAllFlowsWithTheme()
     {
         return _context.Flows

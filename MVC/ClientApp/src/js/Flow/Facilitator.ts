@@ -87,9 +87,9 @@ function ConnectionClosed() {
     currentState.innerText = "Inactive"
 }
 
-function ActivateFlow(flowId: string) {
+export function ActivateFlow(flowId: string) {
     connection.invoke("ActivateFlow", code, flowId).then(() => console.log(`Activate flow ${flowId}`));
-}
+}   
 
 // Facilitator dashboard
 
