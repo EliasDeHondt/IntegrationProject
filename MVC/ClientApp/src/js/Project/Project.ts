@@ -26,6 +26,10 @@ loadFlowsProject(projectId).then(flows => {
 const btnCreateFlowProject = document.getElementById("btnCreateFlowProject") as HTMLButtonElement;
 const butCancelCreateprojFlow = document.getElementById('butCancelCreateprojFlow') as HTMLButtonElement;
 const butCloseCreateprojFlow = document.getElementById('butCloseCreateprojFlow') as HTMLButtonElement;
+const butConfirmCreateprojFlow = document.getElementById('butConfirmCreateprojFlow') as HTMLButtonElement;
+
+const linear = document.getElementById("linear") as HTMLInputElement;
+const circular = document.getElementById("circular") as HTMLInputElement;
 
 const projFlowModal = new Modal(document.getElementById('createprojFlowModal')!, {
     keyboard: false,
@@ -35,15 +39,23 @@ const projFlowModal = new Modal(document.getElementById('createprojFlowModal')!,
 
 btnCreateFlowProject.onclick = async() => {
     projFlowModal.show();
-    createProjectFlow(projectId);
 }
 butCancelCreateprojFlow.onclick = function () {
-    //inputSTSubject.value = '';
     projFlowModal.hide();
 };
 butCloseCreateprojFlow.onclick = function () {
     projFlowModal.hide();
 };
+butConfirmCreateprojFlow.onclick = async() => {
+    let flowtype = ""
+    if(linear.checked){
+        flowtype = "Linear"
+    }else if(circular.checked){
+        flowtype = "Circular"
+    }
+    createProjectFlow(flowtype,projectId);
+    projFlowModal.hide();
+}
 
 document.addEventListener("DOMContentLoaded", async function () {
     const projectIdNumber = getIdProject();

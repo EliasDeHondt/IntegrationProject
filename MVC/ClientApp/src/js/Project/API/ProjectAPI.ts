@@ -1,5 +1,6 @@
 import {Project} from "../../Types/ProjectObjects";
 import {Flow} from "../../Flow/FlowObjects";
+import {showFlows} from "../../Theme/SubTheme/API/SubThemeAPI";
 
 export function fillExisting(project: Project, inputTitle: HTMLInputElement, inputText: HTMLInputElement): void{
     inputTitle.value = project.title
@@ -85,9 +86,9 @@ export async function loadFlowsProject(id: number): Promise<Flow[]> {
 
 }
 
-export async function createProjectFlow(projectId: number) {
+export async function createProjectFlow(flowtype:string,projectId: number) {
     try {
-        const response = await fetch("/api/Projects/CreateProjectFlow/" + projectId, {
+        const response = await fetch("/api/Projects/CreateProjectFlow/" + flowtype + "/" + projectId, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -101,5 +102,7 @@ export async function createProjectFlow(projectId: number) {
     } catch (error) {
         console.error("Error:", error);
     }
-    loadFlowsProject(projectId)
+    loadFlowsProject(projectId).then(flows => {
+        showFlows(flows,"forProject");
+    })
 }

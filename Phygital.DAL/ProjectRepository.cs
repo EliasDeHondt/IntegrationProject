@@ -126,9 +126,10 @@ public class ProjectRepository
     {
         return _ctx.Flows.Where(project => project.Id == projectId);
     }
-    public Flow CreateFlowForProjectById(long projectId)
+    public Flow CreateFlowForProject(FlowType type, long themeId)
     {
-        var flow = new Flow();
+        var theme = _ctx.MainThemes.Find(themeId);
+        var flow = new Flow(type,theme);
         _ctx.Flows.Add(flow);
 
         return flow;

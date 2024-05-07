@@ -111,15 +111,15 @@ public class ProjectsController : Controller
 
     }
     
-    [HttpPost("CreateProjectFlow/{flowType}")]
-    public IActionResult CreateFlow(string flowType)
+    [HttpPost("CreateProjectFlow/{flowType}/{themeId}")]
+    public IActionResult CreateFlow(string flowType,int themeId)
     {
 
         FlowType type = Enum.Parse<FlowType>(flowType);
         
         _uow.BeginTransaction();
         
-        Flow flow = _projectManager.CreateFlowForProjectById(1);
+        Flow flow = _projectManager.CreateFlowForProject(type, themeId);
         
         _uow.Commit();
         
