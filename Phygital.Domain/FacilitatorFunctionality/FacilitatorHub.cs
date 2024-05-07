@@ -33,4 +33,7 @@ public class FacilitatorHub : Hub
     public async Task SendProjectId(string code, long projectId) =>
         await Clients.OthersInGroup(code).SendAsync("ReceiveProjectId", projectId);
 
+    public async Task OngoingFlow(string code, bool isOngoing) =>
+        await Clients.OthersInGroup(code).SendAsync("ReceiveOngoingFlow", isOngoing);
+    
 }

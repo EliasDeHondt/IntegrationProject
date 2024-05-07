@@ -37,8 +37,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 code = (document.getElementById("inputCode") as HTMLInputElement).value;
                 await connection.invoke("JoinConnection", code).then(() => {
                     connectionCode.innerText = code
+
+                    connection.on("ReceiveOngoingFlow", (ongoing) =>{
+                        if(!ongoing) flowTypeModal.show();
+                    })
                 })
-                flowTypeModal.show();
             };
         })
 
@@ -71,6 +74,8 @@ connection.on("ReceiveProjectId", (id) => {
     GetFlowsForProject(projectId).then(flows => GenerateFlowCards(flows, flowContainer));
     setProjectId(projectId);
 })
+
+
 
 function SendFlowUpdate() {
     connection.invoke("SendFlowUpdate", code, currentFlow.innerText, currentState.innerText)

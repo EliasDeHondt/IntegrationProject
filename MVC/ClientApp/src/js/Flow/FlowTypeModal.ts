@@ -12,6 +12,7 @@ export const flowTypeModal = new Modal(document.getElementById('flowTypeModal')!
 const btnSubmitFlows = document.getElementById("btnSubmitFlows") as HTMLButtonElement;
 const radioLinear = document.getElementById("radioLinear") as HTMLInputElement;
 const radioCircular = document.getElementById("radioCircular") as HTMLInputElement;
+const radioPhysical = document.getElementById("radioPhysical") as HTMLInputElement; 
 const divFlows = document.getElementById("flowOptionsContainer") as HTMLDivElement;
 let projectId: number = 0;
 let flows: Flow[];
@@ -33,6 +34,10 @@ radioLinear.onchange = () => {
 
 radioCircular.onchange = () => {
     FillOptions("circular");
+}
+
+radioPhysical.onchange = () => {
+    FillOptions("physical");
 }
 
 export async function setProjectId(id: number){

@@ -10,11 +10,8 @@ let currentStepNumber: number = 0;
 let userAnswers: string[] = []; // Array to store user answers
 let openUserAnswer: string = "";
 let flowId = Number((document.getElementById("flowId") as HTMLSpanElement).innerText);
-let themeId = Number((document.getElementById("theme") as HTMLSpanElement).innerText);
 let stepTotal = Number((document.getElementById("stepTotal") as HTMLSpanElement).innerText);
 let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerText;
-let prevFlowId = sessionStorage.getItem('prevFlowId');
-let currentState: string = "";
 
 //email checken
 function CheckEmail(inputEmail: string): boolean {
@@ -274,7 +271,7 @@ btnNextStep.onclick = async () => {
         openUserAnswer = "";
     }
     // Proceed to the next step
-    if (flowtype.toUpperCase() == "CIRCULAR" && currentStepNumber >= stepTotal) {
+    if (flowtype.toUpperCase() == "CIRCULAR" || flowtype.toUpperCase() == "PHYSICAL" && currentStepNumber >= stepTotal) {
         currentStepNumber = 0;
         GetNextStep(++currentStepNumber, flowId);
     } else {

@@ -314,6 +314,8 @@ namespace Data_Access_Layer.DbContext
             
             // Create Project Organizers
             ProjectOrganizer projectOrganizer1 = new ProjectOrganizer(project1, (Facilitator)dbContext.Users.Single(user => user.Email == "Tom@CodeForge.com"));
+            ProjectOrganizer projectOrganizer2 = new ProjectOrganizer(project2,
+                (Facilitator)dbContext.Users.Single(user => user.Email == "Tom@CodeForge.com"));
             
             // Add users to shared platform
             ((SpAdmin)dbContext.Users.Single(u => u.Email == "Henk@CodeForge.com")).SharedPlatform = sharedPlatform;
@@ -324,6 +326,7 @@ namespace Data_Access_Layer.DbContext
             
             // Add to database
             dbContext.ProjectOrganizers.Add(projectOrganizer1);
+            dbContext.ProjectOrganizers.Add(projectOrganizer2);
             sharedPlatform.Projects.Add(project1);
             sharedPlatform.Projects.Add(project2);
             
