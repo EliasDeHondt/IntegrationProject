@@ -81,4 +81,14 @@ public class ThemeRepository
     {
         _context.SubThemes.Find(id)!.Subject = subject;
     }
+
+    public void DeleteSubTheme(long id)
+    {
+        SubTheme subTheme = _context.SubThemes.Find(id)!;
+
+        IEnumerable<Flow> flows = subTheme.Flows;
+        
+        _context.Flows.RemoveRange(flows);
+        _context.SubThemes.Remove(subTheme);
+    }
 }
