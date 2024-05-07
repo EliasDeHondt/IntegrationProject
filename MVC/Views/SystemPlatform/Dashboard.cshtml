@@ -2,22 +2,21 @@
     ViewBag.Title = "System dashboard";
     Layout = "_NavLayout";
 }
-
 <html lang="" class="h-100 w-100 overflow-hidden">
 <body class="row h-100 w-100">
 <div class="text-center col-lg-10 h-100">
     <div class="py-3 h-100">
         <div class="container h-100">
             <div class="d-flex justify-content-between">
-                    <div class="card border-black border-2 bgAccent align-items-lg-start">
-                        <a style="color: white;" class="m-1">Platforms</a>
-                    </div>
-                    <div class="card border-black border-2 bgAccent align-items-md-end">
-                        <input class="m-1" placeholder="Start typing to search">
-                    </div>
+                <div class="card border-black border-2 bgAccent align-items-lg-start">
+                    <a style="color: white;" class="m-1">Platforms</a>
                 </div>
-            <ul id="containerSharedPlatform" class="row list-unstyled h-100 overflow-y-scroll mt-3">
-
+                <div class="card border-black border-2 bgAccent align-items-md-end">
+                    <input class="m-1" placeholder="Start typing to search">
+                </div>
+            </div>
+            <ul id="containerSharedPlatform" class="row list-unstyled overflow-y-scroll mt-3">
+                
             </ul>
         </div>
     </div>
@@ -25,7 +24,9 @@
 </body>
 </html>
 
+<partial name="Modals/ModalAddPlatform"></partial>
+
 @section Scripts
 {
-    <script src="/dist/systemDashboard.entry.js"></script>
+    <script src="/dist/systemDashboard.entry.js" defer></script>
 }

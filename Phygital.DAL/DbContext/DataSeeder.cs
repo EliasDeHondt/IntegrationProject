@@ -36,7 +36,6 @@ namespace Data_Access_Layer.DbContext
 
                     // Add to step
                     QuestionStep step1 = new QuestionStep(stepIndexFlow, singleQuestions1, flow);
-                    step1.StepName = "Single Choice Question";
                     flow.Steps.Add(step1);
                     dbContext.QuestionSteps.Add(step1);
                     break;
@@ -55,7 +54,6 @@ namespace Data_Access_Layer.DbContext
 
                     // Add to step
                     QuestionStep step2 = new QuestionStep(stepIndexFlow, singleQuestions2, flow);
-                    step2.StepName = "Single Choice Question";
                     flow.Steps.Add(step2);
                     dbContext.QuestionSteps.Add(step2);
                     break;
@@ -73,7 +71,6 @@ namespace Data_Access_Layer.DbContext
                     
                     // Add to step
                     QuestionStep step3 = new QuestionStep(stepIndexFlow, singleQuestion3, flow);
-                    step3.StepName = "Single Choice Question";
                     flow.Steps.Add(step3);
                     dbContext.QuestionSteps.Add(step3);
                     break;
@@ -91,7 +88,6 @@ namespace Data_Access_Layer.DbContext
 
                     // Add to step
                     QuestionStep step4 = new QuestionStep(stepIndexFlow, singleQuestion4, flow);
-                    step4.StepName = "Single Choice Question";
                     flow.Steps.Add(step4);
                     dbContext.QuestionSteps.Add(step4);
                     break;
@@ -116,7 +112,6 @@ namespace Data_Access_Layer.DbContext
 
                     // Add to step
                     QuestionStep step1 = new QuestionStep(stepIndexFlow, multipleChoiceQuestions1, flow);
-                    step1.StepName = "Multiple Choice Question";
                     flow.Steps.Add(step1);
                     dbContext.QuestionSteps.Add(step1);
                     break;
@@ -134,7 +129,6 @@ namespace Data_Access_Layer.DbContext
                     
                     // Add to step
                     QuestionStep step2 = new QuestionStep(stepIndexFlow, multipleChoiceQuestions2, flow);
-                    step2.StepName = "Multiple Choice Question";
                     flow.Steps.Add(step2);
                     dbContext.QuestionSteps.Add(step2);
                     break;
@@ -159,7 +153,6 @@ namespace Data_Access_Layer.DbContext
 
                     // Add to step
                     QuestionStep step1 = new QuestionStep(stepIndexFlow, rangeQuestions1, flow);
-                    step1.StepName = "Range Question";
                     flow.Steps.Add(step1);
                     dbContext.QuestionSteps.Add(step1);
                     break;
@@ -177,7 +170,6 @@ namespace Data_Access_Layer.DbContext
                     
                     // Add to step
                     QuestionStep step2 = new QuestionStep(stepIndexFlow, rangeQuestions2, flow);
-                    step2.StepName = "Range Question";
                     flow.Steps.Add(step2);
                     dbContext.QuestionSteps.Add(step2);
                     break;
@@ -191,7 +183,6 @@ namespace Data_Access_Layer.DbContext
                 case 1:
                     OpenQuestion openQuestions1 = new OpenQuestion("What do you think is the most important issue in your municipality? Please provide your thoughts.");
                     QuestionStep step1 = new QuestionStep(stepIndexFlow, openQuestions1, flow);
-                    step1.StepName = "Open Question";
                     flow.Steps.Add(step1);
                     dbContext.OpenQuestions.Add(openQuestions1);
                     dbContext.QuestionSteps.Add(step1);
@@ -199,7 +190,6 @@ namespace Data_Access_Layer.DbContext
                 case 2:
                     OpenQuestion openQuestions2 = new OpenQuestion("If you could wish for one thing for the new city park, what would your dream city park definitely include? Please provide your thoughts.");
                     QuestionStep step2 = new QuestionStep(stepIndexFlow, openQuestions2, flow);
-                    step2.StepName = "Open Question";
                     flow.Steps.Add(step2);
                     dbContext.OpenQuestions.Add(openQuestions2);
                     dbContext.QuestionSteps.Add(step2);
@@ -207,7 +197,6 @@ namespace Data_Access_Layer.DbContext
                 case 3:
                     OpenQuestion openQuestions3 = new OpenQuestion("In your opinion, what role should businesses play in promoting sustainable development? Please provide your thoughts.");
                     QuestionStep step3 = new QuestionStep(stepIndexFlow, openQuestions3, flow);
-                    step3.StepName = "Open Question";
                     flow.Steps.Add(step3);
                     dbContext.OpenQuestions.Add(openQuestions3);
                     dbContext.QuestionSteps.Add(step3);
@@ -215,7 +204,6 @@ namespace Data_Access_Layer.DbContext
                 case 4:
                     OpenQuestion openQuestions4 = new OpenQuestion("In your opinion, what role should businesses play in promoting sustainable development? Please provide your thoughts.");
                     QuestionStep step4 = new QuestionStep(stepIndexFlow, openQuestions4, flow);
-                    step4.StepName = "Open Question";
                     flow.Steps.Add(step4);
                     dbContext.OpenQuestions.Add(openQuestions4);
                     dbContext.QuestionSteps.Add(step4);
@@ -223,7 +211,6 @@ namespace Data_Access_Layer.DbContext
                 case 5:
                     OpenQuestion openQuestions5 = new OpenQuestion("How can communities better integrate environmental sustainability into urban planning and development? Share your ideas.");
                     QuestionStep step5 = new QuestionStep(stepIndexFlow, openQuestions5, flow);
-                    step5.StepName = "Open Question";
                     flow.Steps.Add(step5);
                     dbContext.OpenQuestions.Add(openQuestions5);
                     dbContext.QuestionSteps.Add(step5);
@@ -231,7 +218,6 @@ namespace Data_Access_Layer.DbContext
                 case 6:
                     OpenQuestion openQuestions6 = new OpenQuestion("What measures do you believe are necessary to address the challenges of climate change adaptation in vulnerable regions? Provide your insights.");
                     QuestionStep step6 = new QuestionStep(stepIndexFlow, openQuestions6, flow);
-                    step6.StepName = "Open Question";
                     flow.Steps.Add(step6);
                     dbContext.OpenQuestions.Add(openQuestions6);
                     dbContext.QuestionSteps.Add(step6);
@@ -239,7 +225,6 @@ namespace Data_Access_Layer.DbContext
                 case 7:
                     OpenQuestion openQuestions7 = new OpenQuestion("How can technology be harnessed to promote sustainable agriculture and food security? Share your thoughts.");
                     QuestionStep step7 = new QuestionStep(stepIndexFlow, openQuestions7, flow);
-                    step7.StepName = "Open Question";
                     flow.Steps.Add(step7);
                     dbContext.OpenQuestions.Add(openQuestions7);
                     dbContext.QuestionSteps.Add(step7);
@@ -247,7 +232,6 @@ namespace Data_Access_Layer.DbContext
                 case 8:
                     OpenQuestion openQuestions8 = new OpenQuestion("In what ways do you believe sustainable consumption and production patterns can be encouraged among individuals and communities? Offer your perspectives.");
                     QuestionStep step8 = new QuestionStep(stepIndexFlow, openQuestions8, flow);
-                    step8.StepName = "Open Question";
                     flow.Steps.Add(step8);
                     dbContext.OpenQuestions.Add(openQuestions8);
                     dbContext.QuestionSteps.Add(step8);
@@ -255,7 +239,6 @@ namespace Data_Access_Layer.DbContext
                 case 9:
                     OpenQuestion openQuestions9 = new OpenQuestion("What role do you think education should play in fostering a culture of sustainability among future generations? Share your ideas.");
                     QuestionStep step9 = new QuestionStep(stepIndexFlow, openQuestions9, flow);
-                    step9.StepName = "Open Question";
                     flow.Steps.Add(step9);
                     dbContext.OpenQuestions.Add(openQuestions9);
                     dbContext.QuestionSteps.Add(step9);
@@ -300,18 +283,24 @@ namespace Data_Access_Layer.DbContext
             GenerateOpenQuestions(dbContext, flow3, 9, 7);
             
             Image imageInfo = new Image(ImageUrls.Elections);
-            imageInfo.StepName = "Information";
             Video videoInfo = new Video("?"); // TODO: Google Bucket URL
-            videoInfo.StepName = "Information";
             
             flow1.Steps.Add(new InformationStep(5, imageInfo, flow1));
             flow2.Steps.Add(new InformationStep(5, videoInfo, flow2));
 
             // Create Shared Platform & Projects
             SharedPlatform sharedPlatform = new SharedPlatform("CodeForge", ImageUrls.Favicon);
+            SharedPlatform sharedPlatform1 = new SharedPlatform("Karel de Grote", "../Phygital.DAL//Assets/kdg.png");
+            SharedPlatform sharedPlatform2 = new SharedPlatform("Tree company", "../Phygital.DAL/Assets/tree.png");
             Project project1 = new Project(mainTheme1.Subject, mainTheme1, sharedPlatform);
             Project project2 = new Project(mainTheme2.Subject, mainTheme2, sharedPlatform);
+
+            ((SpAdmin)dbContext.Users.Single(u => u.Email == "Henk@CodeForge.com")).SharedPlatform = sharedPlatform;
+            ((SpAdmin)dbContext.Users.Single(u => u.Email == "CodeForge.noreply@gmail.com")).SharedPlatform =
+                sharedPlatform;
             
+            dbContext.SharedPlatforms.RemoveRange(dbContext.SharedPlatforms.Where(p => p.OrganisationName == string.Empty));
+            dbContext.SharedPlatforms.AddRange(sharedPlatform1, sharedPlatform2);
             // Create Project Organizers
             ProjectOrganizer projectOrganizer1 = new ProjectOrganizer(project1, (Facilitator)dbContext.Users.Single(user => user.Email == "Tom@CodeForge.com"));
             

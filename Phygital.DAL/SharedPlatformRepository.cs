@@ -66,4 +66,9 @@ public class SharedPlatformRepository
     {
         return _ctx.SharedPlatforms.AsNoTracking().ToList();
     }
+
+    public SharedPlatform CreateSharedPlatform(SharedPlatform sharedPlatform)
+    {
+        return _ctx.SharedPlatforms.Add(sharedPlatform).Entity;
+    }
 }
