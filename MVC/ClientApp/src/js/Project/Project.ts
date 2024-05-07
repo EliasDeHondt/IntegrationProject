@@ -7,7 +7,7 @@ import {
     SetProject,
 } from "./API/ProjectAPI";
 import {generateCards, getSubThemesForProject, resetCards} from "./API/SubThemeAPI";
-import {loadFlows, showFlows} from "../Theme/SubTheme/API/SubThemeAPI";
+import {loadFlows} from "../Theme/SubTheme/API/SubThemeAPI";
 import {GetFlows} from "../CreateFlow/FlowCreator";
 import {Modal, Toast} from "bootstrap";
 

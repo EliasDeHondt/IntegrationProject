@@ -1,15 +1,16 @@
-import {loadFlows, showFlows, updateSubTheme} from "./API/SubThemeAPI";
+import {loadFlows, updateSubTheme} from "./API/SubThemeAPI";
 import {showNotificationToast} from "../../Toast/NotificationToast";
 import {GetFlows} from "../../CreateFlow/FlowCreator";
+import {showFlows} from "../../Project/API/CreateProjectFlowAPI";
 
-const flowContainer = document.getElementById("flowContainer") as HTMLTableSectionElement;
+const flowContainer = document.getElementById("flow-cards") as HTMLTableSectionElement;
 let themeId = Number((document.getElementById("subThemeId") as HTMLSpanElement).innerText);
 const saveButton = document.getElementById("btnSaveSubTheme") as HTMLButtonElement;
 const btnCreateFlowSub = document.getElementById("btnCreateFlowSub") as HTMLButtonElement;
 
 
 loadFlows(themeId).then(flows => {
-    showFlows(flows,"forSubtheme");
+    showFlows(flows,"forSubtheme",flowContainer);
 })
 
 saveButton.onclick = () => {
