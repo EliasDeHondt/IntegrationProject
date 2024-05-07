@@ -42,3 +42,16 @@ export async function getProjects(id: string) {
         .then(data => {return data})
 }
 
+export async function sendEmail(email: string, password: string) {
+    
+    await fetch("/api/Gmail/SendNewUserEmail", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            to: email,
+            password: password 
+        })
+    })
+}

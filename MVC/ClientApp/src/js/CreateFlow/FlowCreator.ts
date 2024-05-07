@@ -1,10 +1,11 @@
 import {Flow} from "../Flow/FlowObjects";
+import {initializeDeleteButtons} from "./DeleteFlowModal";
 
 const btnCreateFlow = document.getElementById("btnCreateFlow") as HTMLButtonElement;
 
-function GetFlows(projectId: number) {
+export async function GetFlows(projectId: number) {
     console.log("Fetching flows...")
-    fetch("CreateFlow/GetFlows", {
+    await fetch("CreateFlow/GetFlows", {
         method: "GET",
         headers: {
             "Accept": "application/json",
@@ -13,13 +14,14 @@ function GetFlows(projectId: number) {
     })
         .then(response => response.json())
         .then(data => UpdateFlowList(Object.values(data)))
+        .then(() => initializeDeleteButtons())
         .catch(error => console.error("Error:", error))
     
 }
 
-async function UpdateFlowList(flows: Flow[]) {
+function UpdateFlowList(flows: Flow[]) {
     
-    const flowContainer = document.getElementById("flow-cards") as HTMLElement
+    const flowContainer = document.getElementById("flow-cards") as HTMLElement;
     flowContainer.innerHTML = "";
     
     if (flows.length > 0) {
@@ -27,17 +29,28 @@ async function UpdateFlowList(flows: Flow[]) {
             //Card container
             const flowCard = document.createElement('div');
             flowCard.classList.add("flow-card");
+            flowCard.dataset.flowId = flow.id.toString();
+            const flowButton = document.createElement('a');
+            flowButton.classList.add("btn","flow-card-btn");
+            flowButton.dataset.flowId = flow.id.toString();
+            //Card Delete Button
+            const flowCardDeleteBtn = document.createElement('button');
+            flowCardDeleteBtn.innerHTML = '<i class="bi bi-trash3-fill"></i>';
+            flowCardDeleteBtn.classList.add("btn", "btn-secondary", "flow-card-delete-btn");
             //Card Header
             const cardHeader = document.createElement('h2');
             cardHeader.classList.add("flow-card-header");
             cardHeader.innerText = "Flow " + flow.id.toString();
+            //Card Footer
             const cardFooter = document.createElement('h3');
             cardFooter.classList.add("flow-card-footer");
             cardFooter.innerText = flow.flowType.toString();
-            
-            flowCard.appendChild(cardHeader)
-            flowCard.appendChild(cardFooter)
-            
+
+            flowCard.appendChild(flowCardDeleteBtn);
+            flowButton.appendChild(cardHeader);
+            flowButton.appendChild(cardFooter);
+            flowCard.appendChild(flowButton);
+
             flowContainer.appendChild(flowCard);
         });
     } else {
@@ -46,6 +59,8 @@ async function UpdateFlowList(flows: Flow[]) {
         noFlowsMessage.textContent = 'There are currently no Flows in this project!';
         flowContainer.appendChild(noFlowsMessage);
     }
+    
+    initializeCardLinks();
     
 }
 
@@ -72,6 +87,28 @@ btnCreateFlow.onclick = async() => {
     GetFlows(0);
 }
 
+function initializeCardLinks() {
+    let flowCards = document.querySelectorAll('.flow-card-btn') as NodeListOf<HTMLAnchorElement>;
+
+    flowCards.forEach(flowCard => {
+        flowCard.addEventListener('click', () => {
+            // Extract flow ID from flowCard dataset
+            const flowId = flowCard.dataset.flowId;
+
+            if (flowId) {
+                const baseUrl = '/EditFlow/FlowEditor/';
+                const url = `${baseUrl}${flowId}`;
+                flowCard.setAttribute('href', url);
+            } else {
+                console.error('Flow ID not found in dataset');
+            }
+        });
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    GetFlows(0);
+    
+    GetFlows(0).then(response => { initializeCardLinks(); }
+        
+    );
 });

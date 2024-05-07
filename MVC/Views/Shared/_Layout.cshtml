@@ -49,12 +49,6 @@
         @RenderBody()
     </main>
 </div>
-
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; @DateTime.Now.Year - CodeForge - <a asp-area="" asp-controller="Home" asp-action="PrivacyPolicy">Privacy Policy</a> - <a asp-area="" asp-controller="Home" asp-action="LegalGuidelines">Legal Guidelines</a>
-    </div>
-</footer>
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

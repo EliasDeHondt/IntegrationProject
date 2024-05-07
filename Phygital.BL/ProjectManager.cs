@@ -8,6 +8,7 @@
 using Data_Access_Layer;
 using Domain.Accounts;
 using Domain.FacilitatorFunctionality;
+using Domain.Platform;
 using Domain.ProjectLogics;
 
 namespace Business_Layer;
@@ -40,14 +41,23 @@ public class ProjectManager
     
     public void AddProjectOrganizer(Facilitator facilitator, Project project)
     {
-        var projectOrganizer = new ProjectOrganizer
-        {
-            Facilitator = facilitator,
-            Project = project
-        };
+        var projectOrganizer = new ProjectOrganizer(project, facilitator);
         _repo.CreateProjectOrganizer(projectOrganizer);
     }
 
+    public void UpdateProject(MainTheme mainTheme,SharedPlatform sharedPlatform,long id)
+    {
+        _repo.CreateProject(mainTheme,sharedPlatform,id);
+    }
+    public void CreateProject(Project project)
+    {
+        _repo.CreateProject(project);
+    }
+
+    public IEnumerable<Project> ProjectCount()
+    {
+        return _repo.ProjectCount();
+    }
     public IEnumerable<Project> GetPossibleProjectsForFacilitator(string email)
     {
         return _repo.ReadPossibleProjectsForFacilitator(email);
@@ -61,5 +71,26 @@ public class ProjectManager
     public void DeleteProjectOrganizer(Facilitator user, Project project)
     {
         _repo.RemoveProjectOrganizer(user, project);
+    }
+
+    public Project GetProjectWithId(long id)
+    {
+        return _repo.ReadProjectWithId(id);
+    }
+
+    public Project GetProjectWithSharedPlatformAndMainTheme(long id)
+    {
+        return _repo.ReadProjectIncludingSharedPlatformAndMainTheme(id);
+    }
+
+    public void ChangeProject(long id, string title, string description)
+    {
+        _repo.UpdateProject(id, title, description);
+    }
+
+    public Project GetProjectThroughMainTheme(long id)
+    {
+        return _repo.ReadProjectThroughMainTheme(id);
+        
     }
 }

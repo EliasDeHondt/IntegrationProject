@@ -4,7 +4,7 @@
         <TargetFramework>net7.0</TargetFramework>
         <RootNamespace>Business_Layer</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>disable</Nullable>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>

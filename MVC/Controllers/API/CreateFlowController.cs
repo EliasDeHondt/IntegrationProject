@@ -37,11 +37,6 @@ public class CreateFlowController : Controller
     {
         var flows = _manager.GetAllFlows();
 
-        if (!flows.Any())
-        {
-            return NoContent();
-        }
-
         return Ok(flows);
     }
 
@@ -59,5 +54,18 @@ public class CreateFlowController : Controller
         _uow.Commit();
         
         return Created("CreateFlow", flow);
+    }
+
+    [HttpDelete("DeleteFlow/{flowId:long}")]
+    public IActionResult DeleteFlow(long flowId)
+    {
+        
+        _uow.BeginTransaction();
+        
+        _manager.DeleteFlowById(flowId);
+        
+        _uow.Commit();
+        
+        return NoContent();
     }
 }

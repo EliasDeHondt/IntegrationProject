@@ -1,33 +1,23 @@
 ﻿@model Domain.Platform.SharedPlatform
 
 @{
-    Layout = null;
+    Layout = "_NavLayout";
+    ViewData["title"] = "Dashboard";
 }
 
 <!DOCTYPE html>
 
-<html lang="" class="h-100 w-100">
-<head>
-    <title>title</title>
-    <link rel="stylesheet" href="~/dist/site.css"/>
-</head>
+<html lang="" class="h-100 w-100 overflow-hidden">
 <body class="row h-100 w-100">
-<div class="text-center">
-    <div class="row">
-        <!-- Dashboard -->
-        <div class="col-lg-2 col-md-3 col-sm-4 col-6 p-3 bg-light">
-            <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <a href="#" class="nav-link active" aria-current="page">Dashboard</a>
-                </li>
-            </ul>
-        </div>
-        <!-- Partials -->
-        <div class="col-lg-10 col-md-9 col-sm-8 col-6">
-            <partial name="Partials/ProjectPartial"/>
-            <partial name="Partials/UserPartial"/>
-            <partial name="Toasts/_UserCreatedToast"/>  
-        </div>
+<div class="text-center col-lg-10">
+    <div class="py-3 h-100">
+
+
+        <partial name="Partials/ProjectPartial"/>
+        <partial name="Partials/UserPartial"/>
+
+        <partial name="Toasts/_UserCreatedToast"/>
+        <partial name="Toasts/_ProjectCreatedToast"/>
     </div>
 </div>
 

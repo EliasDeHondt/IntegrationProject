@@ -13,6 +13,21 @@ namespace Domain.FacilitatorFunctionality;
 
 public class ProjectOrganizer
 {
+    [Required]
     public Project Project { get; set; }
+    [Required]
     public Facilitator Facilitator { get; set; }
+    
+    public ProjectOrganizer(Project project, Facilitator facilitator)
+    {
+        Project = project;
+        Facilitator = facilitator;
+    }
+
+    public ProjectOrganizer()
+    {
+        Project = new Project();
+        Facilitator = new Facilitator();
+    }
+    
 }

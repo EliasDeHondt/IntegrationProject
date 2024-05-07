@@ -1,0 +1,43 @@
+<div class="modal" id="CreateProjectModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content border-3 border-accent">
+            <div class="modal-header bgColor border-0">
+                <button type="button" class="btn-close invisible"></button>
+                <h3 class="modal-title text-black text-end">Create a Project</h3>
+                <button type="button" class="btn-close" id="butCloseCreateProjectModal"></button>
+            </div>
+            <div class="modal-body bgColor">
+                <div class="col ms-3">
+                    <div class="form-group mb-3">
+                        <label>
+                            Project name
+                            <input type="text" class="form-control" id="inputPName" placeholder="Enter name" required>
+                            <span id="pnameWarning" class="warning"></span>
+                        </label>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>
+                            Project description
+                            <input type="text" class="form-control" id="inputDescription" placeholder="Enter description">
+                            <span id="descriptionWarning" class="warning"></span>
+                        </label>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>
+                            Project logo
+                            <input type="file" class="form-control-file" id="inputLogo" accept="image/*">
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 bgColor">
+                <button type="button" class="btn bgSecondary text-white" id="butCancelCreateProjectModal">Cancel</button>
+                <button type="button" class="btn bgPrimary text-white" id="butConfirmCreateProject">Create Project</button>
+            </div>
+        </div>
+    </div>
+    <!-- Partials -->
+    <div class="py-3">
+        <partial name="Toasts/_ProjectDescriptionToast"/>
+    </div>
+</div>

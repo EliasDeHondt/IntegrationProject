@@ -15,12 +15,10 @@ public class SingleChoiceQuestion : ChoiceQuestionBase
 
     public SingleChoiceQuestion(string question, ICollection<Choice> choices, ICollection<ChoiceAnswer> answers, long id = 0) : base(answers, question, choices, id)
     {
-        Choices = choices;
     }
-    
-    public SingleChoiceQuestion(string question, ICollection<Choice> choices, long id = 0) : base(question, choices, id)
+
+    public SingleChoiceQuestion(string question, long id = 0) : base(question, new List<Choice>(), id)
     {
-        Choices = choices;
     }
     
     public SingleChoiceQuestion()
