@@ -11,11 +11,10 @@ using Domain.Statistics;
 using FileHelpers;
 
 namespace Domain.ProjectLogics.Steps.Questions;
-[FixedLengthRecord]
+[DelimitedRecord(",")]
 public abstract class QuestionBase
 {
     [Key]
-    [FieldFixedLength(length:100)]
     public long Id { get; set; }
     [Required]
     [FieldConverter(typeof(CollectionConverter<ChoiceAnswer>))]

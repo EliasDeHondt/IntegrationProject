@@ -2,6 +2,7 @@ using Data_Access_Layer;
 using Data_Access_Layer.DbContext;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps.Questions;
+using Domain.ProjectLogics.Steps.Questions.Answers;
 
 namespace Domain.Platform;
 using FileHelpers;
@@ -27,7 +28,8 @@ public class Statistic
         // };
 
         //Flow f = new Flow(FlowType.Linear, new MainTheme());
-        QuestionBase[] flows = new QuestionBase[]{new OpenQuestion(),new RangeQuestion()};
+        ICollection<ChoiceAnswer> answers = new List<ChoiceAnswer>(){new ChoiceAnswer(new OpenQuestion()),new ChoiceAnswer(new RangeQuestion())};
+        QuestionBase[] flows = new QuestionBase[]{new OpenQuestion("aaa",answers),new RangeQuestion("bbb")};
         var fileHelperEngine = new FileHelperEngine<QuestionBase>();
         fileHelperEngine.WriteFile("testoutput.csv", flows);
     }
