@@ -1,0 +1,41 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Kiosk";
+}
+
+<!DOCTYPE html>
+
+<html class="h-100" lang="">
+<head>
+    <!--Meta + Title-->
+    <title>Kiosk - @ViewData["Title"]</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!--Meta + Title-->
+    <!--CSS-->
+    <link rel="stylesheet" href="~/dist/site.css"/>
+    <!--CSS-->
+</head>
+<body class="kiosk-background-colors-scheme kiosk-body overflow-hidden">
+<div class="kiosk-top-left">
+    <div class="kiosk-container-top-left">
+        <h1>Code for facilitator: <span id="connectionCode"></span></h1>
+    </div>
+</div>
+<div class="kiosk-top-right">
+    <img class="kiosk-logo-img" src="/favicon.ico" alt="Logo"/>
+</div>
+<div class="kiosk-center-center">
+    <div class="kiosk-container-center-center">
+        <div id="flowContainer"></div>
+    </div>
+</div>
+<div class="kiosk-bottom-center">
+    <div class="kiosk-container-bottom-center">
+        &copy; @DateTime.Now.Year - CodeForge - <a asp-area="" asp-controller="Home" asp-action="PrivacyPolicy">Privacy Policy</a> - <a asp-area="" asp-controller="Home" asp-action="LegalGuidelines">Legal Guidelines</a>
+    </div>
+</div>
+</body>
+</html>
+
+<script src="/dist/kiosk.entry.js" defer></script>

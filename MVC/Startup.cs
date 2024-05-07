@@ -10,6 +10,7 @@ using Business_Layer;
 using Data_Access_Layer;
 using Data_Access_Layer.DbContext;
 using Domain.Accounts;
+using Domain.FacilitatorFunctionality;
 using Domain.Platform;
 using Microsoft.AspNetCore.Identity;
 
@@ -120,6 +121,8 @@ public class Startup
             options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
+
+        services.AddSignalR();
     }
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env)
@@ -171,6 +174,7 @@ public class Startup
             endpoints.MapRazorPages();
             endpoints.MapControllerRoute(name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            endpoints.MapHub<FacilitatorHub>("/hub");
         });
     }
 

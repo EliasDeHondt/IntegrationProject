@@ -15,7 +15,8 @@
     "embla-carousel": "^8.0.2",
     "jquery": "^3.6.0",
     "jquery-validation": "^1.19.3",
-    "jquery-validation-unobtrusive": "^3.2.12"
+    "jquery-validation-unobtrusive": "^3.2.12",
+    "@microsoft/signalr": "^8.0.0"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.5",

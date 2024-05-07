@@ -5,6 +5,7 @@
  *                                     *
  ***************************************/
 
+using System.Collections;
 using Data_Access_Layer;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
@@ -59,6 +60,17 @@ public class FlowManager
     {
         return _repository.ReadAllFlows();
     }
+
+    public IEnumerable<Flow> GetAllFlowsByType(string type)
+    {
+        return _repository.ReadAllFlowsByType(type);
+    }
+
+    public IEnumerable<Flow> GetAllFlowsWithTheme()
+    {
+        return _repository.ReadAllFlowsWithTheme();
+    }
+    
     public void SetParticipationByFlow(long flowId,string email)
     {
         _repository.AddParticipationByFlow(flowId,email);

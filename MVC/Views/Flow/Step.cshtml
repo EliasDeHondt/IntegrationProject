@@ -20,6 +20,15 @@
     <!--CSS-->
 </head>
 <body class="kiosk-background-colors-scheme kiosk-body overflow-hidden">
+<div class="modal" id="pausedFlowModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                Flow paused by facilitator!
+            </div>
+        </div>
+    </div>
+</div>
 <div class="kiosk-top-left">
     <div class="kiosk-container-top-left">
         <h1><span id="flowtype">@Model.FlowType.ToString()</span> Flow <span id="flowId">@Model.Id</span> - Step <span id="stepNr"></span> / <span id="stepTotal">@Model.getStepCount()</span></h1>
@@ -31,7 +40,7 @@
 </div>
 <div class="kiosk-center-center">
     <div class="kiosk-container-center-center">
-        <div id="pausedFlowModal">
+        <div>
             <div id="informationContainer"></div>
             <div id="questionContainer"></div>
         </div>
@@ -61,4 +70,5 @@
 </html>
 <!--JS-->
 <script src="/dist/step.entry.js" defer></script>
+<script src="/dist/flow.entry.js" defer></script>
 <!--JS-->

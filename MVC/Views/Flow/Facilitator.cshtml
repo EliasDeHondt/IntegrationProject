@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>title</title>
+</head>
+<body>
+<div class="text-center">
+    <partial name="Partials/_ConnectPartial"/>
+    <div>
+        <div>
+            <h1>Connection #<span id="connectionCode"></span></h1>
+            <button class="btn btn-secondary" id="btnCloseInstallation">Disconnect</button>
+        </div>
+        <div class="card" id="cardCurrentFlow">
+            <div class="card-header">Current flow</div>
+            <div class="card-body">
+                <h2 class="card-title">Flow <span id="currentFlow"></span></h2>
+                <p class="card-text">State: <span id="currentState"></span></p>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-secondary" id="btnPauseFlow">Pause flow</button>
+                <button class="btn btn-secondary" id="">Take notes</button>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div>
+            <partial name="Partials/_FlowPartial"/>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+<script src="~/dist/facilitator.entry.js" defer></script>
+<link rel="stylesheet" href="~/dist/site.css"/>

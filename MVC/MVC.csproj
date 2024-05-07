@@ -86,6 +86,8 @@
         <PackageReference Include="Google.Cloud.Storage.V1" Version="4.9.0" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="7.0.16" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.17" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.16"/>
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="7.0.16" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.17" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.17">
