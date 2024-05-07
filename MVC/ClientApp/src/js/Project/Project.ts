@@ -11,6 +11,7 @@ import {loadFlowsSub} from "../Theme/SubTheme/API/SubThemeAPI";
 import {GetFlows} from "../CreateFlow/FlowCreator";
 import {Modal, Toast} from "bootstrap";
 import {deleteFlow} from "../CreateFlow/API/DeleteFlowAPI";
+import {showFlows} from "./API/CreateProjectFlowAPI";
 
 let inputTitle = (document.getElementById("inputTitle") as HTMLInputElement);
 let inputText = (document.getElementById("inputText") as HTMLInputElement);
@@ -32,19 +33,20 @@ const butConfirmCreateprojFlow = document.getElementById('butConfirmCreateprojFl
 
 let deleteButtons: NodeListOf<HTMLButtonElement>;
 let id: number;
-
-
 const butConfirmDeleteFlow = document.getElementById("btnConfirmDeleteFlow") as HTMLButtonElement
 const butCancelDeleteFlowModal = document.getElementById("btnCancelDeleteFlowModal") as HTMLButtonElement
 
 const linear = document.getElementById("linear") as HTMLInputElement;
 const circular = document.getElementById("circular") as HTMLInputElement;
-
 const projFlowModal = new Modal(document.getElementById('createprojFlowModal')!, {
     keyboard: false,
     focus: true,
     backdrop: "static"
 });
+
+loadFlowsProject(getIdProject()).then(flows => {
+    showFlows(flows,"forProject",flowContainer);
+})
 
 btnCreateFlowProject.onclick = async() => {
     projFlowModal.show();

@@ -40,7 +40,7 @@ export function showFlows(flows: Flow[],forWhat: string,flowContainer: HTMLDivEl
             flowContainer.appendChild(flowCard);
         });
     }
-    //initializeCardLinks();
+    initializeCardLinks();
     return flowContainer;
 }
 function initializeCardLinks() {
