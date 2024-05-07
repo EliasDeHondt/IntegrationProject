@@ -32,7 +32,12 @@ export function GenerateOptions(flows: Flow[], flowContainer: HTMLDivElement, ty
     flowContainer.innerHTML = "";
     totalFlows = 0;
     flowType = type;
-    const options = flows.map(GenerateOption);
+    let options: HTMLDivElement[] = [];
+    flows.forEach(flows => {
+        if(flows.flowType.toUpperCase() == type.toUpperCase()){
+            options.push(GenerateOption(flows));
+        }
+    })
 
     options.forEach(option => {
         if (flowContainer)
@@ -46,7 +51,7 @@ export function SubmitFlows(connection: signalR.HubConnection, code: string) {
     if (flowType == "linear") {
         const options = document.querySelectorAll<HTMLInputElement>('.form-check-input[type="checkbox"]:checked');
         options.forEach((option: HTMLInputElement) => {
-                selectedFlows.push(parseInt(option.value));
+            selectedFlows.push(parseInt(option.value));
         })
     } else if (flowType == "circular") {
         const options = document.querySelectorAll<HTMLInputElement>('.form-check-input[name="flowRadios"]:checked');

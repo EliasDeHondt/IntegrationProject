@@ -163,4 +163,12 @@ public class FlowRepository
     {
         _context.Flows.Find(flowId)!.Steps.Add(step);
     }
+
+    public IEnumerable<Flow> ReadFlowsByProject(long id)
+    {
+        return _context.Projects
+            .Where(p => p.Id == id)
+            .SelectMany(p => p.MainTheme.Themes.SelectMany(t => t.Flows))
+            .ToList();
+    }
 }

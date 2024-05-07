@@ -1,7 +1,7 @@
 ﻿import * as signalR from "@microsoft/signalr";
 import "./ChooseFlow";
-import {flowTypeModal} from "./FlowTypeModal";
-import {GetFlows} from "../Kiosk/FlowAPI";
+import {flowTypeModal, setProjectId} from "./FlowTypeModal";
+import {GetFlowsForProject} from "../Kiosk/FlowAPI";
 import {Flow} from "./FlowObjects"
 
 export const connection = new signalR.HubConnectionBuilder()
@@ -17,9 +17,10 @@ let currentFlow = document.getElementById("currentFlow") as HTMLHeadingElement;
 let currentState = document.getElementById("currentState") as HTMLSpanElement;
 export let code = "";
 
+let projectId: number = 0;
 
 document.addEventListener("DOMContentLoaded", async () => {
-    GetFlows().then(flows => GenerateFlowCards(flows, flowContainer));
+
     
     const storedCode = sessionStorage.getItem("connectionCode");
     if (storedCode) {
@@ -64,6 +65,12 @@ connection.on("UserLeftConnection", (message) => {
     console.log(message)
     connection.invoke("LeaveConnection", "Facilitator", code).then(() => ConnectionClosed());
 });
+
+connection.on("ReceiveProjectId", (id) => {
+    projectId = id;
+    GetFlowsForProject(projectId).then(flows => GenerateFlowCards(flows, flowContainer));
+    setProjectId(projectId);
+})
 
 function SendFlowUpdate() {
     connection.invoke("SendFlowUpdate", code, currentFlow.innerText, currentState.innerText)

@@ -5,8 +5,12 @@ namespace Domain.FacilitatorFunctionality;
 
 public class FacilitatorHub : Hub
 {
-    public async Task JoinConnection(string code) =>
+    public async Task JoinConnection(string code)
+    {
         await Groups.AddToGroupAsync(Context.ConnectionId, code);
+        await Clients.OthersInGroup(code).SendAsync("UserJoinedConnection");
+    }
+        
 
     public async Task LeaveConnection(string user, string code)
     {
@@ -25,4 +29,8 @@ public class FacilitatorHub : Hub
 
     public async Task SendSelectedFlowIds(string code, long[] ids) =>
         await Clients.OthersInGroup(code).SendAsync("ReceiveSelectedFlowIds", ids);
+
+    public async Task SendProjectId(string code, long projectId) =>
+        await Clients.OthersInGroup(code).SendAsync("ReceiveProjectId", projectId);
+
 }

@@ -329,6 +329,8 @@ namespace Data_Access_Layer.DbContext
             
             // Save changes
             dbContext.SaveChanges();
+            ((Facilitator)dbContext.Users.Single(u => u.Email == "Tom@CodeForge.com")).SharedPlatformId =
+                sharedPlatform.Id;
         }
     }
 }
