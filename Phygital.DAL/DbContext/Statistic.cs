@@ -10,7 +10,7 @@ public class Statistic
 {
     //todo: sprint 3
     //public AnswerRepository AnswerRepository;
-   // private CodeForgeDbContext _ctx;
+    private CodeForgeDbContext _ctx;
 
     // public Flow[] geta()
     // {
@@ -28,8 +28,8 @@ public class Statistic
         // };
 
         //Flow f = new Flow(FlowType.Linear, new MainTheme());
-        ICollection<ChoiceAnswer> answers = new List<ChoiceAnswer>(){new ChoiceAnswer(new OpenQuestion()),new ChoiceAnswer(new RangeQuestion())};
-        QuestionBase[] flows = new QuestionBase[]{new OpenQuestion("aaa",answers),new RangeQuestion("bbb")};
+        //ICollection<ChoiceAnswer> answers = new List<ChoiceAnswer>(){new ChoiceAnswer(new OpenQuestion()),new ChoiceAnswer(new RangeQuestion())};
+        QuestionBase[] flows = _ctx.Questions.ToList().ToArray();//new QuestionBase[]{new OpenQuestion("aaa",answers),new RangeQuestion("bbb")};
         var fileHelperEngine = new FileHelperEngine<QuestionBase>();
         fileHelperEngine.WriteFile("testoutput.csv", flows);
     }
