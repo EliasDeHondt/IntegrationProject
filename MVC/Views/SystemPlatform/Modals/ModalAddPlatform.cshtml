@@ -1,0 +1,33 @@
+﻿<div class="modal" id="ModalCreatePlatform" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content border-3 border-accent">
+            <div class="modal-header bgColor border-0">
+                <button type="button" class="btn-close invisible"></button>
+                <h3 class="modal-title text-black text-end">Create a platform</h3>
+                <button type="button" class="btn-close" id="butCloseCreatePlatformModal"></button>
+            </div>
+            <div class="modal-body bgColor">
+                <div class="col ms-3">
+                    <div class="form-group mb-3">
+                        <label>
+                            Organisation name
+                            <input type="text" class="form-control" id="inputName" placeholder="Enter name" required>
+                            <span id="nameWarning" class="warning"></span>
+                        </label>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>
+                            Organisation logo
+                            <input type="file" class="form-control-file" id="inputLogo" accept="image/*">
+                            <span id="logoWarning" class="warning"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 bgColor">
+                <button type="button" class="btn bgSecondary text-white" id="butCancelCreatePlatformModal">Cancel</button>
+                <button type="button" class="btn bgPrimary text-white" id="butConfirmCreatePlatform">Create Platform</button>
+            </div>
+        </div>
+    </div>
+</div>

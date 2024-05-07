@@ -1,4 +1,4 @@
-﻿/***************************************
+/***************************************
  *                                     *
  * Created by CodeForge                *
  * Visit https://codeforge.eliasdh.com *
@@ -69,7 +69,6 @@ public class SubThemesController : ControllerBase
         return NoContent();
     }
     
-    
     [HttpPost("CreateSubthemeFlow/{flowType}/{themeId}")]
     public IActionResult CreateFlow(string flowType,int themeId)
     {
@@ -84,4 +83,17 @@ public class SubThemesController : ControllerBase
         
         return Created("CreateFlow", flow);
     }
+
+    [HttpDelete("DeleteSubTheme/{id:long}")]
+    public IActionResult DeleteSubTheme(long id)
+    {
+        _uow.BeginTransaction();
+        
+        _manager.DeleteSubTheme(id);
+        
+        _uow.Commit();
+
+        return NoContent();
+    }
+
 }

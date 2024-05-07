@@ -5,6 +5,7 @@
  *                                     *
  ***************************************/
 
+using System.Collections;
 using Data_Access_Layer;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
@@ -25,7 +26,6 @@ public class FlowManager
     //This function makes a GLOBAL Flow, not project specific!
     public Flow Add(FlowType type)
     {
-
         Flow newFlow = new Flow
         {
             FlowType = type
@@ -35,16 +35,16 @@ public class FlowManager
 
         return newFlow;
     }
-    
+
     public Flow GetFlowById(long id)
     {
         return _repository.ReadFlowById(id);
     }
 
     /** Returns all steps in the given flow.
-     * 
+     *
      * parameter: flowId -> The ID of the flow from which we are getting the steps.
-     */ 
+     */
     public IEnumerable<StepBase> GetAllStepsInFlow(long flowId)
     {
         return _repository.GetAllSteps(flowId);
@@ -54,14 +54,25 @@ public class FlowManager
     {
         return _repository.ReadFlowByIdIncludingTheme(id);
     }
-    
+
     public IEnumerable<Flow> GetAllFlows()
     {
         return _repository.ReadAllFlows();
     }
-    public void SetParticipationByFlow(long flowId,string email)
+
+    public IEnumerable<Flow> GetAllFlowsByType(string type)
     {
-        _repository.AddParticipationByFlow(flowId,email);
+        return _repository.ReadAllFlowsByType(type);
+    }
+
+    public IEnumerable<Flow> GetAllFlowsWithTheme()
+    {
+        return _repository.ReadAllFlowsWithTheme();
+    }
+
+    public void SetParticipationByFlow(long flowId, string email)
+    {
+        _repository.AddParticipationByFlow(flowId, email);
     }
 
     public void ChangeFlowState(Flow flow)
@@ -77,27 +88,30 @@ public class FlowManager
         StepBase step = null;
         switch (stepType)
         {
-            case "Information": step = new InformationStep(stepNumber, new Text(),flow);
-                step.StepName = "Information"; break;
-            case "Single Choice Question": 
-                SingleChoiceQuestion singleChoiceQuestion = new SingleChoiceQuestion(); 
-                step =  new QuestionStep(stepNumber,singleChoiceQuestion,flow);
-                step.StepName = "Single Choice Question"; break;
+            case "Information":
+                step = new InformationStep(stepNumber, new Text(), flow);
+                break;
+            case "Single Choice Question":
+                SingleChoiceQuestion singleChoiceQuestion = new SingleChoiceQuestion();
+                step = new QuestionStep(stepNumber, singleChoiceQuestion, flow);
+                break;
             case "Multiple Choice Question":
-                MultipleChoiceQuestion multipleChoiceQuestion = new MultipleChoiceQuestion(); 
-                step =  new QuestionStep(stepNumber,multipleChoiceQuestion,flow); step.StepName = "Multiple Choice Question"; break;
+                MultipleChoiceQuestion multipleChoiceQuestion = new MultipleChoiceQuestion();
+                step = new QuestionStep(stepNumber, multipleChoiceQuestion, flow);
+                break;
             case "Ranged Question":
-                RangeQuestion rangeQuestion = new RangeQuestion(); 
-                step =  new QuestionStep(stepNumber,rangeQuestion,flow); step.StepName = "Ranged Question"; break;
-            case "Open Question": 
-                OpenQuestion openQuestion = new OpenQuestion(); 
-                step =  new QuestionStep(stepNumber,openQuestion,flow); step.StepName = "Open Question"; break;
+                RangeQuestion rangeQuestion = new RangeQuestion();
+                step = new QuestionStep(stepNumber, rangeQuestion, flow);
+                break;
+            case "Open Question":
+                OpenQuestion openQuestion = new OpenQuestion();
+                step = new QuestionStep(stepNumber, openQuestion, flow);
+                break;
         }
-        
+
         _repository.AddStepToFlow(flowId, step);
 
         return step;
-
     }
 
     public void DeleteFlowById(long flowId)

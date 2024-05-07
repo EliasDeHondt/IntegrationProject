@@ -1,1 +1,12 @@
 ﻿@import "../variables";
+
+.sys-card{
+  width: 36rem;
+  height: 9rem;
+  background: map-get($themes, light, accent);
+}
+
+.sys-icon{
+  font-size: 10vh;
+  color: white;
+}

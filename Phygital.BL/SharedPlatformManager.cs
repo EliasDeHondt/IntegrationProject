@@ -43,5 +43,14 @@ public class SharedPlatformManager
     {
         return _repo.ReadAllSharedPlatforms();
     }
-    
+
+    public SharedPlatform AddSharedPlatform(string organisationName, string logo)
+    {
+        var platform = new SharedPlatform
+        {
+            OrganisationName = organisationName,
+            Logo = logo
+        };
+        return _repo.CreateSharedPlatform(platform);
+    }
 }

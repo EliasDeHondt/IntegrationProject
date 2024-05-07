@@ -1,22 +1,11 @@
 import {Step} from "./Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
-import {Flow} from "./FlowObjects";
-import {Modal} from "bootstrap";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
 const btnNextStep = document.getElementById("btnNextStep") as HTMLButtonElement;
 const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonElement;
-const btnPauseFlow = document.getElementById("btnPauseFlow") as HTMLButtonElement;
-const btnUnPauseFlow = document.getElementById("btnUnPauseFlow") as HTMLButtonElement;
 const btnEmail = document.getElementById("btnEmail") as HTMLButtonElement;
-const btnExitFlow = document.getElementById("butExitFlow") as HTMLButtonElement;
-const modal = new Modal(document.getElementById("pausedFlowModal") as HTMLDivElement,{
-    backdrop: 'static',
-    keyboard: false
-});
-const btnShowFlows = document.getElementById("flowDropdownBtn") as HTMLButtonElement;
-const ddFlows = document.getElementById("flowDropdown") as HTMLUListElement;
 let currentStepNumber: number = 0;
 let userAnswers: string[] = []; // Array to store user answers
 let openUserAnswer: string = "";
@@ -25,12 +14,13 @@ let themeId = Number((document.getElementById("theme") as HTMLSpanElement).inner
 let stepTotal = Number((document.getElementById("stepTotal") as HTMLSpanElement).innerText);
 let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerText;
 let prevFlowId = sessionStorage.getItem('prevFlowId');
+let currentState: string = "";
 
 //email checken
 function CheckEmail(inputEmail: string): boolean {
     const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     let p = document.getElementById("errorMsg") as HTMLElement;
-    if (emailRegex.test(inputEmail)) { 
+    if (emailRegex.test(inputEmail)) {
         p.innerHTML = "Email submitted!";
         p.style.color = "blue";
         return true;
@@ -116,14 +106,12 @@ async function ShowStep(data: Step) {
                 let p = document.createElement("p");
                 p.innerText = data.informationViewModel.information;
                 p.classList.add("text-center");
-                p.classList.add("col-md-12");
                 informationContainer.appendChild(p);
                 break;
             }
             case "Image": {
                 let img = document.createElement("img");
                 img.src = "data:image/png;base64," + data.informationViewModel.information;
-                img.classList.add("col-m-12", "w-100", "h-100");
                 informationContainer.appendChild(img);
                 break;
             }
@@ -137,7 +125,6 @@ async function ShowStep(data: Step) {
                 video.autoplay = true;
                 video.loop = true;
                 video.controls = false;
-                video.classList.add("h-100", "w-100");
                 informationContainer.appendChild(video);
                 break;
             }
@@ -231,7 +218,6 @@ async function ShowStep(data: Step) {
                 let textInput = document.createElement("textarea");
                 let openDiv = document.createElement("div");
                 openDiv.classList.add("m-auto");
-                textInput.classList.add("w-100");
                 textInput.name = 'answer';
                 textInput.rows = 8;
                 textInput.cols = 75;
@@ -301,65 +287,3 @@ btnRestartFlow.onclick = () => {
     currentStepNumber = 0;
     GetNextStep(++currentStepNumber, flowId);
 };
-
-btnPauseFlow.onclick = () => {
-    UpdateFlowState(String(flowId), "Paused");
-    modal.show();
-};
-
-if (btnUnPauseFlow)
-    btnUnPauseFlow.onclick = () => {
-        UpdateFlowState(String(flowId), "Active");
-        modal.hide();
-    }
-
-btnExitFlow.onclick = () => UpdateFlowState(String(flowId), "Inactive");
-
-btnShowFlows.onclick = () => {
-    fetch(`/api/SubThemes/` + themeId + `/Flows`, {
-        method: "GET",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
-    })
-        .then(response => response.json())
-        .then(data => ShowFlows(data))
-        .catch(error => console.error("Error:", error))
-};
-
-function ShowFlows(flows: Flow[]) {
-    ddFlows.innerHTML = "";
-    flows.forEach(flow => {
-        if (flow.id != flowId)
-            ddFlows.innerHTML += `<li><a class="dropdown-item" href="/Flow/Step/${flow.id}">${flow.id}</a></li>`
-        else
-            ddFlows.innerHTML += `<li><a class="dropdown-item active" aria-current="true">${flow.id}</a></li>`
-    });
-}
-
-export function UpdateFlowState(id: string, state: string) {
-    fetch("/api/Flows/" + id + "/" + state, {
-        method: "PUT"
-    })
-        .then(response => {
-            if (response.ok) {
-                console.log(`Flow ${prevFlowId} ${state}!`)
-                return true;
-            }
-            return false;
-        })
-        .catch(error => console.error("Error:", error))
-}
-
-
-function UpdateCurrentFlowState() {
-    console.log(prevFlowId);
-    if (prevFlowId != null)
-        UpdateFlowState(prevFlowId, 'Inactive');
-    UpdateFlowState(String(flowId), 'Active');
-    sessionStorage.setItem('prevFlowId', String(flowId));
-    console.log(prevFlowId);
-}
-
-window.onload = () => UpdateCurrentFlowState();
