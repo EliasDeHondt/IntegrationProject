@@ -126,4 +126,11 @@ public class ProjectRepository
     {
         return _ctx.Flows.Where(project => project.Id == projectId);
     }
+    public Flow CreateFlowForProjectById(long projectId)
+    {
+        var flow = new Flow();
+        _ctx.Flows.Add(flow);
+
+        return flow;
+    }
 }

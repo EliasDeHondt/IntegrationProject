@@ -1,6 +1,6 @@
 ﻿import "./CreateSubThemeModal";
 import {
-    CheckNotEmpty,
+    CheckNotEmpty, createProjectFlow,
     fillExisting,
     getIdProject,
     getProjectWithId, loadFlowsProject,
@@ -8,6 +8,8 @@ import {
 } from "./API/ProjectAPI";
 import {generateCards, getSubThemesForProject} from "./API/SubThemeAPI";
 import {loadFlows, showFlows} from "../Theme/SubTheme/API/SubThemeAPI";
+import {GetFlows} from "../CreateFlow/FlowCreator";
+import {Modal} from "bootstrap";
 
 let inputTitle = (document.getElementById("inputTitle") as HTMLInputElement);
 let inputText = (document.getElementById("inputText") as HTMLInputElement);
@@ -20,6 +22,28 @@ const projectId = parseInt(projectIdString, 10);
 loadFlowsProject(projectId).then(flows => {
     showFlows(flows,"forProject");
 })
+
+const btnCreateFlowProject = document.getElementById("btnCreateFlowProject") as HTMLButtonElement;
+const butCancelCreateprojFlow = document.getElementById('butCancelCreateprojFlow') as HTMLButtonElement;
+const butCloseCreateprojFlow = document.getElementById('butCloseCreateprojFlow') as HTMLButtonElement;
+
+const projFlowModal = new Modal(document.getElementById('createprojFlowModal')!, {
+    keyboard: false,
+    focus: true,
+    backdrop: "static"
+});
+
+btnCreateFlowProject.onclick = async() => {
+    projFlowModal.show();
+    createProjectFlow(projectId);
+}
+butCancelCreateprojFlow.onclick = function () {
+    //inputSTSubject.value = '';
+    projFlowModal.hide();
+};
+butCloseCreateprojFlow.onclick = function () {
+    projFlowModal.hide();
+};
 
 document.addEventListener("DOMContentLoaded", async function () {
     const projectIdNumber = getIdProject();

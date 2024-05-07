@@ -85,4 +85,21 @@ export async function loadFlowsProject(id: number): Promise<Flow[]> {
 
 }
 
-//select subthemas
+export async function createProjectFlow(projectId: number) {
+    try {
+        const response = await fetch("/api/Projects/CreateProjectFlow/" + projectId, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.ok) {
+            console.log("Flow made successfully.");
+        } else {
+            console.error("Failed to make new flow.");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+    loadFlowsProject(projectId)
+}

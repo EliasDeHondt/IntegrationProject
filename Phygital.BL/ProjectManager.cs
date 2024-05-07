@@ -98,4 +98,9 @@ public class ProjectManager
     {
         return _repo.ReadFlowsForProjectById(projectId);
     }
+    
+    public Flow CreateFlowForProjectById(long projectId)
+    {
+        return _repo.CreateFlowForProjectById(projectId);
+    }
 }

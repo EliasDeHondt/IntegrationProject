@@ -204,8 +204,17 @@ button.accept-policy {
   width: 200px;
   height: 300px;
 }
-
-.flow-card:hover {
+.forSubtheme:hover {
+  width: 220px;
+  height: 730px;
+  background-color: map-get($themes, light, primary);
+}
+.forSubtheme#btnCreateFlowSub:hover {
+  width: 220px;
+  height: 730px;
+  background-color: map-get($themes, light, primary);
+}
+.forProject:hover {
   width: 220px;
   height: 330px;
   background-color: map-get($themes, light, primary);

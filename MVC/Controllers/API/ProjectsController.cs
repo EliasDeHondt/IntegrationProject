@@ -12,6 +12,7 @@ public class ProjectsController : Controller
 
     private readonly ProjectManager _projectManager;
     private readonly SharedPlatformManager _sharedPlatformManager;
+    private readonly FlowManager _flowmanager;
     private readonly UnitOfWork _uow;
 
     public ProjectsController(ProjectManager projectManager, SharedPlatformManager sharedPlatformManager, UnitOfWork uow)
@@ -108,5 +109,20 @@ public class ProjectsController : Controller
 
         return Ok(flows);
 
+    }
+    
+    [HttpPost("CreateProjectFlow/{flowType}")]
+    public IActionResult CreateFlow(string flowType)
+    {
+
+        FlowType type = Enum.Parse<FlowType>(flowType);
+        
+        _uow.BeginTransaction();
+        
+        Flow flow = _projectManager.CreateFlowForProjectById(1);
+        
+        _uow.Commit();
+        
+        return Created("CreateFlow", flow);
     }
 }

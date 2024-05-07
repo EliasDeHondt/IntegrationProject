@@ -5,7 +5,7 @@ import {GetFlows} from "../../CreateFlow/FlowCreator";
 const flowContainer = document.getElementById("flowContainer") as HTMLTableSectionElement;
 let themeId = Number((document.getElementById("subThemeId") as HTMLSpanElement).innerText);
 const saveButton = document.getElementById("btnSaveSubTheme") as HTMLButtonElement;
-const btnCreateFlow = document.getElementById("btnCreateFlow") as HTMLButtonElement;
+const btnCreateFlowSub = document.getElementById("btnCreateFlowSub") as HTMLButtonElement;
 
 
 loadFlows(themeId).then(flows => {
@@ -17,21 +17,21 @@ saveButton.onclick = () => {
     updateSubTheme(themeId, subject).then(() => showNotificationToast("The sub theme has been successfully updated!"));
 }
 
-btnCreateFlow.onclick = () => {
+btnCreateFlowSub.onclick = () => {
 console.log("click")
-    // let flowType = "Linear";
-    //
-    // try {
-    //     const response = fetch("/api/SubThemes/CreateSubthemeFlow/" + flowType, {
-    //         method: "POST",
-    //         headers: {
-    //             "Content-Type": "application/json"
-    //         }
-    //     });
-    //
-    // } catch (error) {
-    //     console.error("Error:", error);
-    // }
-    //
-    // GetFlows(0);
+    let flowType = "Linear";
+
+    try {
+        const response = fetch("/api/SubThemes/CreateSubthemeFlow/" + flowType, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+
+    loadFlows(themeId)
 }

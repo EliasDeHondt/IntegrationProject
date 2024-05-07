@@ -1,0 +1,30 @@
+<div class="modal" id="createprojFlowModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content border-3 border-accent">
+            <div class="modal-header bgColor border-0">
+                <button type="button" class="btn-close invisible"></button>
+                <h3 class="modal-title text-black text-end">Create a Flow</h3>
+                <button type="button" class="btn-close" id="butCloseCreateprojFlow"></button>
+            </div>
+            <div class="modal-body bgColor">
+                <div class="col ms-3" style="padding-left: 100px;">
+                    <form>
+                        <div class="radio-label" style="display: flex; align-items: center;">
+                            <input type="radio" id="infographic" name="options" value="Infographic" style="margin: 0; padding: 0; margin-right: 5px;">
+                            <label for="infographic" style="margin: 0; padding: 0;">Linear Flow</label>
+                        </div>
+                        <div class="radio-label" style="display: flex; align-items: center;">
+                            <input type="radio" id="singleQ" name="options" value="singleQ" style="margin: 0; padding: 0; margin-right: 5px;">
+                            <label for="singleQ" style="margin: 0; padding: 0;">Circular Flow</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="modal-footer border-0 bgColor">
+                <button type="button" class="btn bgSecondary text-white" id="butCancelCreateprojFlow">Cancel</button>
+                <button type="button" class="btn bgPrimary text-white" id="butConfirmCreateprojFlow">Create Flow</button>
+            </div>
+        </div>
+    </div>
+</div>
