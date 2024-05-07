@@ -12,8 +12,8 @@ public class KioskController : Controller
         _manager = manager;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(long projectId)
     {
-        return View();
+        return View(projectId);
     }
 }

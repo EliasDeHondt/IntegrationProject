@@ -21,12 +21,12 @@
         {
             <li class="list-item col-6">
                 <div class="card border-black border-2 bgAccent h-100">
-                    <button class="border-0 p-0  h-100" style="background: none">
+                    <a asp-action="Index" asp-controller="Kiosk" asp-route-projectId="@project.Id" class="border-0 p-0  h-100"  style="background: none">
                         <div class="card-body align-items-center d-block justify-content-center">
                             <i class="bi bi-folder" style="color: white; font-size: 10vh"></i>
                             <p class="text-light">@project.Title</p>
                         </div>
-                    </button>
+                    </a>
                 </div>
             </li>
         }
