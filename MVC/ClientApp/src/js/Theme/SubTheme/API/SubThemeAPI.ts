@@ -62,13 +62,9 @@ export function showFlows(flows: Flow[],forWhat: string) {
 
             flowContainer.appendChild(flowCard);
         });
-    } else {
-        const noFlowsMessage = document.createElement('p');
-        noFlowsMessage.classList.add('no-cards-message');
-        noFlowsMessage.textContent = 'There are currently no Flows in this project!';
-        flowContainer.appendChild(noFlowsMessage);
     }
     initializeCardLinks();
+    return flowContainer;
 }
 function initializeCardLinks() {
     let flowCards = document.querySelectorAll('.flow-card-btn') as NodeListOf<HTMLAnchorElement>;

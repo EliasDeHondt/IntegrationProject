@@ -124,7 +124,7 @@ public class ProjectRepository
     
     public IEnumerable<Flow> ReadFlowsForProjectById(long projectId)
     {
-        return _ctx.Flows.Where(project => project.Id == projectId);
+        return _ctx.Flows.Where(project => project.Theme.Id == projectId);//todo
     }
     public Flow CreateFlowForProject(FlowType type, long themeId)
     {

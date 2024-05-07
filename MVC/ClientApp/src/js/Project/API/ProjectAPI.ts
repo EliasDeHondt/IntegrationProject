@@ -1,6 +1,7 @@
-import {Project} from "../../Types/ProjectObjects";
+import {Project, SubTheme} from "../../Types/ProjectObjects";
 import {Flow} from "../../Flow/FlowObjects";
 import {showFlows} from "../../Theme/SubTheme/API/SubThemeAPI";
+import {generateCards} from "./SubThemeAPI";
 
 export function fillExisting(project: Project, inputTitle: HTMLInputElement, inputText: HTMLInputElement): void{
     inputTitle.value = project.title
@@ -102,7 +103,11 @@ export async function createProjectFlow(flowtype:string,projectId: number) {
     } catch (error) {
         console.error("Error:", error);
     }
-    loadFlowsProject(projectId).then(flows => {
-        showFlows(flows,"forProject");
-    })
+}
+export function resetFlowsProject(flows: Flow[], flowcontainer: HTMLDivElement){
+    let length = flowcontainer.children.length
+    for (let i = length - 1; i > 0; i--){
+        flowcontainer.children[i].remove();
+    }
+    showFlows(flows, "forProject");
 }
