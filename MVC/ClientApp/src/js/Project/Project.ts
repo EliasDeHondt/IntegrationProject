@@ -21,6 +21,7 @@ const projectIdString = parts[parts.length - 1]; //laatste
 const projectId = parseInt(projectIdString, 10);
 
 const projectFlowToast = new Toast(document.getElementById("projectFlowToast")!);
+const toastBody = document.getElementById('toastprojtext') as HTMLDivElement;
 
 const flowContainer = document.getElementById("flow-cards") as HTMLDivElement;
 const btnCreateFlowProject = document.getElementById("btnCreateFlowProject") as HTMLButtonElement;
@@ -44,22 +45,34 @@ btnCreateFlowProject.onclick = async() => {
             .then(flows => resetFlowsProject(flows, flowContainer));
     }
     butConfirmCreateprojFlow.onclick = async() => {
+        let checked = false;
         let flowtype = ""
         if(linear.checked){
             flowtype = "Linear"
+            checked = true;
         }else if(circular.checked){
             flowtype = "Circular"
-        }else{
-            
+            checked = true;
         }
-        createProjectFlow(flowtype,getIdProject()).then(() => {
+        if (checked) {
+            toastBody.textContent = "New flow has been created!";
+            createProjectFlow(flowtype,getIdProject()).then(() => {
+            }).then(() =>{
+                projFlowModal.hide();
+                reset();
+            }).then(() => projectFlowToast.show());
+            
+        } else {
+            toastBody.textContent = "Please select a flow type.";
             projectFlowToast.show()
-            let closeProjectFlowToast = document.getElementById("closeProjectFlowToast") as HTMLButtonElement
-            closeProjectFlowToast.onclick = () => projectFlowToast.hide()
-        }).then(() =>{
-            projFlowModal.hide();
-            reset();
-        });
+            projFlowModal.show();
+        }
+        
+        
+        let closeProjectFlowToast = document.getElementById("closeProjectFlowToast") as HTMLButtonElement
+        closeProjectFlowToast.onclick = () => projectFlowToast.hide()
+        
+        
     }
     butCancelCreateprojFlow.onclick = function () {
         projFlowModal.hide();
