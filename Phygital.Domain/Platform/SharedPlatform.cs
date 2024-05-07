@@ -19,7 +19,8 @@ public class SharedPlatform
     public SharedPlatform(string logo, string privacyLink, string organisationLink, string organisationName,
         ICollection<Project> projects, ICollection<Facilitator> faciliators, ICollection<SpAdmin> admins, long id = 0) : this(organisationName, logo, id)
     {
-        Logo = logo;
+        var buffer = new Span<byte>(new byte[logo.Length]);
+        Logo = Convert.TryFromBase64String(logo, buffer, out _) ? logo : GenerateBase64(logo);
         PrivacyLink = privacyLink;
         OrganisationLink = organisationLink;
         Projects = projects;
@@ -40,7 +41,8 @@ public class SharedPlatform
     {
         OrganisationName = organisationName;
         Id = id;
-        Logo = logo;
+        var buffer = new Span<byte>(new byte[logo.Length]);
+        Logo = Convert.TryFromBase64String(logo, buffer, out _) ? logo : GenerateBase64(logo);
         PrivacyLink = string.Empty;
         OrganisationLink = string.Empty;
         Projects = new List<Project>();
@@ -58,5 +60,12 @@ public class SharedPlatform
         Projects = new List<Project>();
         Faciliators = new List<Facilitator>();
         Admins = new List<SpAdmin>();
+    }
+    
+    private string GenerateBase64(string path)
+    {
+        using MemoryStream ms = new();
+        byte[] imageBytes = File.ReadAllBytes(path);
+        return Convert.ToBase64String(imageBytes);
     }
 }
