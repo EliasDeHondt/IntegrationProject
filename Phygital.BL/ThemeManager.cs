@@ -61,4 +61,9 @@ public class ThemeManager
     {
         _repository.UpdateSubTheme(id, subject);
     }
+
+    public void DeleteSubTheme(long id)
+    {
+        _repository.DeleteSubTheme(id);
+    }
 }

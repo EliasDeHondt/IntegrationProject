@@ -66,5 +66,17 @@ public class SubThemesController : ControllerBase
         _uow.Commit();
         return NoContent();
     }
-    
+
+    [HttpDelete("DeleteSubTheme/{id:long}")]
+    public IActionResult DeleteSubTheme(long id)
+    {
+        _uow.BeginTransaction();
+        
+        _manager.DeleteSubTheme(id);
+        
+        _uow.Commit();
+
+        return NoContent();
+    }
+
 }
