@@ -1,6 +1,5 @@
 ﻿import * as signalR from "@microsoft/signalr";
 import "./ChooseFlow";
-import "./FlowTypeModal";
 import {flowTypeModal} from "./FlowTypeModal";
 import {GetFlows} from "../Kiosk/FlowAPI";
 import {Flow} from "./FlowObjects"
@@ -88,7 +87,7 @@ function ConnectionClosed() {
     currentState.innerText = "Inactive"
 }
 
-export function ActivateFlow(flowId: string) {
+function ActivateFlow(flowId: string) {
     connection.invoke("ActivateFlow", code, flowId).then(() => console.log(`Activate flow ${flowId}`));
 }
 
@@ -127,7 +126,7 @@ function GenerateFlowCard(flow: Flow): HTMLDivElement {
     return cardContainer;
 }
 
-export function GenerateFlowCards(flows: Flow[], flowContainer: HTMLDivElement) {
+function GenerateFlowCards(flows: Flow[], flowContainer: HTMLDivElement) {
     const cards = flows.map(GenerateFlowCard);
     cards.forEach(card => {
         flowContainer.appendChild(card);
