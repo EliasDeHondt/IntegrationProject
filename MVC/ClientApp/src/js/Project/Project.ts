@@ -10,6 +10,7 @@ import {generateCards, getSubThemesForProject, resetCards} from "./API/SubThemeA
 import {loadFlows} from "../Theme/SubTheme/API/SubThemeAPI";
 import {GetFlows} from "../CreateFlow/FlowCreator";
 import {Modal, Toast} from "bootstrap";
+import {deleteFlow} from "../CreateFlow/API/DeleteFlowAPI";
 
 let inputTitle = (document.getElementById("inputTitle") as HTMLInputElement);
 let inputText = (document.getElementById("inputText") as HTMLInputElement);
@@ -28,6 +29,13 @@ const btnCreateFlowProject = document.getElementById("btnCreateFlowProject") as 
 const butCancelCreateprojFlow = document.getElementById('butCancelCreateprojFlow') as HTMLButtonElement;
 const butCloseCreateprojFlow = document.getElementById('butCloseCreateprojFlow') as HTMLButtonElement;
 const butConfirmCreateprojFlow = document.getElementById('butConfirmCreateprojFlow') as HTMLButtonElement;
+
+let deleteButtons: NodeListOf<HTMLButtonElement>;
+let id: number;
+
+
+const butConfirmDeleteFlow = document.getElementById("btnConfirmDeleteFlow") as HTMLButtonElement
+const butCancelDeleteFlowModal = document.getElementById("btnCancelDeleteFlowModal") as HTMLButtonElement
 
 const linear = document.getElementById("linear") as HTMLInputElement;
 const circular = document.getElementById("circular") as HTMLInputElement;
@@ -82,12 +90,43 @@ btnCreateFlowProject.onclick = async() => {
     };
 }
 
+async function checkFlowsNotEmpty() {
+    try {
+        const flows = await loadFlowsProject(getIdProject());
+        const deleteFlowModalElement = document.getElementById("deleteFlowModal");
+        if (deleteFlowModalElement) { //niet leeg
+            const deleteFlowModal = new Modal(deleteFlowModalElement, {
+                keyboard: false,
+                focus: true,
+                backdrop: "static"
+            });
+            
+            butConfirmDeleteFlow.onclick = () => {
+                deleteFlow(id)
+                    .then(() => {
+                        GetFlows(0);
+                        deleteFlowModal.hide();
+                    });
+            }
+
+            butCancelDeleteFlowModal.onclick = () => {
+                deleteFlowModal.hide();
+            }
+        } else {
+            console.log("Flows array is empty");
+        }
+    } catch (error) {
+        console.error("Error loading flows:", error);
+    }
+}
+
 
 
 document.addEventListener("DOMContentLoaded", async function () {
     // loadFlowsProject(getIdProject()).then(flows => {
     //     showFlows(flows,"forProject");
     // })
+    checkFlowsNotEmpty()
     
     const projectIdNumber = getIdProject();
     const project = await getProjectWithId(projectIdNumber);
