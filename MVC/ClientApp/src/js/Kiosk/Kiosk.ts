@@ -23,7 +23,7 @@ let storedFlows = sessionStorage.getItem("flowOptions");
 
 document.addEventListener("DOMContentLoaded", async () => {
     console.log(code)
-    const connectionCode = document.getElementById("connectionCode") as HTMLSpanElement;
+    const connectionCode = document.getElementById("connectionCode") as HTMLParagraphElement;
     connectionCode.innerText = code;
 
     await connection.start().then(() => {

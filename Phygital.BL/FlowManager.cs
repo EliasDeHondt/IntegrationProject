@@ -61,6 +61,11 @@ public class FlowManager
         return _repository.ReadAllFlows();
     }
 
+    public IEnumerable<Flow> GetAllFlowsByType(string type)
+    {
+        return _repository.ReadAllFlowsByType(type);
+    }
+
     public IEnumerable<Flow> GetAllFlowsWithTheme()
     {
         return _repository.ReadAllFlowsWithTheme();

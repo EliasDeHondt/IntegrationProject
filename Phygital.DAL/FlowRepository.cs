@@ -52,6 +52,15 @@ public class FlowRepository
             .ToList();
     }
 
+    public IEnumerable<Flow> ReadAllFlowsByType(string type)
+    {
+        if (type.Equals("linear"))
+            return _context.Flows.AsNoTracking().Where(flow => flow.FlowType.Equals(FlowType.Linear)).ToList();
+        if (type.Equals("circular"))
+            return _context.Flows.AsNoTracking().Where(flow => flow.FlowType.Equals(FlowType.Circular)).ToList();
+        return ReadAllFlows();
+    }
+
     public IEnumerable<Flow> ReadAllFlowsWithTheme()
     {
         return _context.Flows
@@ -125,7 +134,7 @@ public class FlowRepository
         _context.Entry(q).Reference(qstep => qstep.QuestionBase).Load();
         _context.Steps.Remove(q);
         DeleteAnswers(q.QuestionBase);
-        if(q.QuestionBase is ChoiceQuestionBase cq) DeleteChoices(cq);
+        if (q.QuestionBase is ChoiceQuestionBase cq) DeleteChoices(cq);
         _context.Questions.Remove(q.QuestionBase);
     }
 
@@ -135,7 +144,7 @@ public class FlowRepository
         _context.Entry(c).Reference(cstep => cstep.QuestionBase).Load();
         _context.Steps.Remove(c);
         DeleteAnswers(c.QuestionBase);
-        if(c.QuestionBase is ChoiceQuestionBase cq) DeleteChoices(cq);
+        if (c.QuestionBase is ChoiceQuestionBase cq) DeleteChoices(cq);
         _context.Information.Remove(c.InformationBase);
         _context.Questions.Remove(c.QuestionBase);
     }
@@ -146,7 +155,7 @@ public class FlowRepository
             .AsNoTracking()
             .Include(flow => flow.Steps)
             .First(flow => flow.Id == flowId);
-        
+
         return flow.Steps;
     }
 

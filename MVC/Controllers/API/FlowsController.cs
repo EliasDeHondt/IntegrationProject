@@ -62,7 +62,25 @@ public class FlowsController : Controller
         }));
     }
     
-    [HttpGet("{id}")]
+    [HttpGet("{type}")]
+    public ActionResult GetFlowsByType(string type)
+    {
+        var flows = _manager.GetAllFlowsByType(type);
+
+        if (!flows.Any())
+            return NoContent();
+
+        return Ok(flows.Select(flow => new FlowViewModel
+        {
+            Id = flow.Id,
+            FlowType = flow.FlowType,
+            Steps = flow.Steps,
+            Participations = flow.Participations,
+            ThemeId = flow.Theme.Id
+        }));
+    }
+    
+    [HttpGet("{id:long}")]
     public ActionResult GetFlowById(long id)
     {
         var flow = _manager.GetFlowByIdWithTheme(id);

@@ -1,4 +1,4 @@
-﻿import {code} from "./Kiosk";
+﻿import * as kiosk from "./Kiosk";
 import * as signalR from "@microsoft/signalr";
 import {HubConnectionState} from "@microsoft/signalr";
 import {Modal} from "bootstrap";
@@ -18,8 +18,8 @@ let currStateOfFlow = "";
 
 document.addEventListener("DOMContentLoaded", async () => {
     await connection.start().then(() => {
-        connection.invoke("JoinConnection", code).then(() => {
-            connection.invoke("ActivateFlow", code, currFlow.innerText)
+        connection.invoke("JoinConnection", kiosk.code).then(() => {
+            connection.invoke("ActivateFlow", kiosk.code, currFlow.innerText)
                 .then(() => {
                     btnExitFlow.onclick = async () => {
                         window.location.href = `/Kiosk`

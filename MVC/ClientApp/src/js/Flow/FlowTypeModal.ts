@@ -1,5 +1,5 @@
 ﻿import {Modal} from "bootstrap";
-import {GetFlows} from "../Kiosk/FlowAPI";
+import {GetFlows, GetTypeOfFlows} from "../Kiosk/FlowAPI";
 import {GenerateOptions, SubmitFlows} from "./ChooseFlow";
 import {connection, code} from "./Facilitator";
 
@@ -21,7 +21,7 @@ if (btnSubmitFlows)
 
 
 function FillOptions(type: string) {
-    GetFlows().then((flows) => {
+    GetTypeOfFlows(type).then((flows) => {
         GenerateOptions(flows, divFlows, type)
     });
 }
