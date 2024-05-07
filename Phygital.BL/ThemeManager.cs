@@ -1,4 +1,4 @@
-﻿/***************************************
+/***************************************
  *                                     *
  * Created by CodeForge                *
  * Visit https://codeforge.eliasdh.com *
@@ -61,6 +61,11 @@ public class ThemeManager
     {
         _repository.UpdateSubTheme(id, subject);
     }
+
+    public Flow CreateFlowForSub(FlowType type, long themeId)
+    {
+        return _repository.CreateFlowForSub(type,themeId);
+
 
     public void DeleteSubTheme(long id)
     {

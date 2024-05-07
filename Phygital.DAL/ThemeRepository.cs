@@ -1,4 +1,4 @@
-﻿/***************************************
+/***************************************
  *                                     *
  * Created by CodeForge                *
  * Visit https://codeforge.eliasdh.com *
@@ -82,6 +82,15 @@ public class ThemeRepository
         _context.SubThemes.Find(id)!.Subject = subject;
     }
 
+    
+    public Flow CreateFlowForSub(FlowType type, long themeId)
+    {
+        var theme = _context.SubThemes.Find(themeId);
+        var flow = new Flow(type,theme);
+        _context.Flows.Add(flow);
+
+        return flow;
+
     public void DeleteSubTheme(long id)
     {
         SubTheme subTheme = _context.SubThemes.Find(id)!;
@@ -90,5 +99,6 @@ public class ThemeRepository
         
         _context.Flows.RemoveRange(flows);
         _context.SubThemes.Remove(subTheme);
+
     }
 }

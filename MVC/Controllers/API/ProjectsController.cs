@@ -12,6 +12,7 @@ public class ProjectsController : Controller
 
     private readonly ProjectManager _projectManager;
     private readonly SharedPlatformManager _sharedPlatformManager;
+    private readonly FlowManager _flowmanager;
     private readonly UnitOfWork _uow;
 
     public ProjectsController(ProjectManager projectManager, SharedPlatformManager sharedPlatformManager, UnitOfWork uow)
@@ -99,5 +100,29 @@ public class ProjectsController : Controller
         };
 
         return Ok(projectDto); 
+    }
+    
+    [HttpGet("GetFlowsForProject/{projectId}")]
+    public IActionResult GetFlowsForProject(int projectId)
+    {
+        var flows = _projectManager.GetFlowsForProjectById(projectId);
+
+        return Ok(flows);
+
+    }
+    
+    [HttpPost("CreateProjectFlow/{flowType}/{themeId}")]
+    public IActionResult CreateFlow(string flowType,int themeId)
+    {
+
+        FlowType type = Enum.Parse<FlowType>(flowType);
+        
+        _uow.BeginTransaction();
+        
+        Flow flow = _projectManager.CreateFlowForProject(type, themeId);
+        
+        _uow.Commit();
+        
+        return Created("CreateFlow", flow);
     }
 }

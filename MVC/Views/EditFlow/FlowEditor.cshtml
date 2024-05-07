@@ -1,5 +1,5 @@
 @{
-    Layout = "_Layout";
+    Layout = "_NavLayout";
     ViewData["Title"] = "Flow Editor";
 }
 
@@ -10,28 +10,43 @@
     <title>Flow Editor</title>
     <link rel="stylesheet" href="~/dist/site.css"/>
 </head>
-<body>
-
-<div class="container-sm editor-shared-outer-container" id="input-container">
-    <div class="editor-shared-inner-container" id="btn-area-1">
-        <button class="btn-primary" id="saveFlow">Save Flow</button>
-    </div>
-    <div class="editor-shared-inner-container" id="btn-area-2">
+<body class="row h-100 w-100">
+<div class="text-center">
+    <div class="row">
+        <!-- Dashboard -->
+        @* <partial name="../Layout/NavigationLayout.cshtml"/> *@
         
-    </div>
-</div>
+        <div class="col-lg-10 col-md-9 col-sm-8 col-6">
+            <div class="py-3">
+                <div class="row align-items-center">
 
-<div class="container-lg editor-shared-outer-container" id="step-view">
-    <div class="editor-shared-inner-container" id="step-view-container"> <!--Wordt automatisch gevuld in FlowEditor.ts!-->
-        <div id="partialInformationContainer"></div>
-        <div id="partialQuestionContainer"></div>
-    </div>
-</div>
+                    <div class="container-sm editor-shared-outer-container" id="input-container">
+                        <div class="editor-shared-inner-container" id="btn-area-1" style="display: flex; justify-content: center; align-items: center;">
+                            <button class="btn-primary" id="saveFlow" style="padding: 1px 1px;">Save Flow</button>
+                        </div>
+                        <div class="editor-shared-inner-container" id="btn-area-2">
+        
+                        </div>
+                    </div>
 
-<div class="container-sm editor-shared-outer-container" id="step-container">
-    <div class="editor-shared-inner-container" id="steps-list"> <!--Wordt automatisch gevuld in FlowEditor.ts!-->
+
+
+                    <div class="container-lg editor-shared-outer-container" id="step-view">
+                        <div class="editor-shared-inner-container" id="step-view-container"> <!--Wordt automatisch gevuld in FlowEditor.ts!-->
+                            <div id="partialInformationContainer"></div>
+                            <div id="partialQuestionContainer"></div>
+                        </div>
+                    </div>
+
+                    <div class="container-sm editor-shared-outer-container" id="step-container">
+                        <div class="editor-shared-inner-container" id="steps-list"> <!--Wordt automatisch gevuld in FlowEditor.ts!-->
+                        </div>
+                        <button class="btn-primary" id="btn-add-step">Add Step</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <button class="btn-primary" id="btn-add-step">Add Step</button>
 </div>
 
 </body>

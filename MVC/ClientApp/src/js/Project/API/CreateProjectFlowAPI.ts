@@ -1,35 +1,21 @@
-import {Flow} from "../Flow/FlowObjects";
-import {initializeDeleteButtons} from "./DeleteFlowModal";
+import {Flow} from "../../Flow/FlowObjects";
 
-const btnCreateFlow = document.getElementById("btnCreateFlow") as HTMLButtonElement;
-
-export async function GetFlows(projectId: number) {
-    console.log("Fetching flows...")
-    await fetch("CreateFlow/GetFlows", {
-        method: "GET",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
-    })
-        .then(response => response.json())
-        .then(data => UpdateFlowList(Object.values(data)))
-        .then(() => initializeDeleteButtons())
-        .catch(error => console.error("Error:", error))
-    
-}
-
-export function UpdateFlowList(flows: Flow[]) {
-    
-    const flowContainer = document.getElementById("flow-cards") as HTMLElement;
+export function showFlows(flows: Flow[],forWhat: string,flowContainer: HTMLDivElement) {
     flowContainer.innerHTML = "";
-    
     if (flows.length > 0) {
         flows.forEach(flow => {
             //Card container
             const flowCard = document.createElement('div');
             flowCard.classList.add("flow-card");
             flowCard.dataset.flowId = flow.id.toString();
+
+            if(forWhat === "forProject"){
+                flowCard.classList.add("forProject");
+            }
+            if(forWhat === "forSubtheme"){
+                flowCard.classList.add("forSubtheme");
+            }
+
             const flowButton = document.createElement('a');
             flowButton.classList.add("btn","flow-card-btn");
             flowButton.dataset.flowId = flow.id.toString();
@@ -53,40 +39,10 @@ export function UpdateFlowList(flows: Flow[]) {
 
             flowContainer.appendChild(flowCard);
         });
-    } else {
-        const noFlowsMessage = document.createElement('p');
-        noFlowsMessage.classList.add('no-cards-message');
-        noFlowsMessage.textContent = 'There are currently no Flows in this project!';
-        flowContainer.appendChild(noFlowsMessage);
     }
-    
     initializeCardLinks();
-    
+    return flowContainer;
 }
-
-btnCreateFlow.onclick = async() => {
-
-    let flowType = "Linear";
-    
-    try {
-        const response = await fetch("CreateFlow/CreateFlow/" + flowType, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        if (response.ok) {
-            console.log("Flow made successfully.");
-        } else {
-            console.error("Failed to make new flow.");
-        }
-    } catch (error) {
-        console.error("Error:", error);
-    }
-    
-    GetFlows(0);
-}
-
 function initializeCardLinks() {
     let flowCards = document.querySelectorAll('.flow-card-btn') as NodeListOf<HTMLAnchorElement>;
 
@@ -105,10 +61,3 @@ function initializeCardLinks() {
         });
     });
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    
-    GetFlows(0).then(response => { initializeCardLinks(); }
-        
-    );
-});
