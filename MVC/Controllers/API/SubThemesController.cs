@@ -70,15 +70,15 @@ public class SubThemesController : ControllerBase
     }
     
     
-    [HttpPost("CreateSubthemeFlow/{flowType}")]
-    public IActionResult CreateFlow(string flowType)
+    [HttpPost("CreateSubthemeFlow/{flowType}/{themeId}")]
+    public IActionResult CreateFlow(string flowType,int themeId)
     {
 
         FlowType type = Enum.Parse<FlowType>(flowType);
         
         _uow.BeginTransaction();
         
-        Flow flow = _flowmanager.Add(type);
+        Flow flow = _manager.CreateFlowForSub(type, themeId);
         
         _uow.Commit();
         

@@ -1,15 +1,19 @@
-import {loadFlows, updateSubTheme} from "./API/SubThemeAPI";
+import {createSubthemeFlow, loadFlowsSub, resetFlowsSub, updateSubTheme} from "./API/SubThemeAPI";
 import {showNotificationToast} from "../../Toast/NotificationToast";
 import {GetFlows} from "../../CreateFlow/FlowCreator";
 import {showFlows} from "../../Project/API/CreateProjectFlowAPI";
+import {Modal, Toast} from "bootstrap";
+import {createProjectFlow, getIdProject, loadFlowsProject, resetFlowsProject} from "../../Project/API/ProjectAPI";
 
 const flowContainer = document.getElementById("flow-cards") as HTMLTableSectionElement;
 let themeId = Number((document.getElementById("subThemeId") as HTMLSpanElement).innerText);
 const saveButton = document.getElementById("btnSaveSubTheme") as HTMLButtonElement;
 const btnCreateFlowSub = document.getElementById("btnCreateFlowSub") as HTMLButtonElement;
 
+const subFlowToast = new Toast(document.getElementById("subFlowToast")!);
 
-loadFlows(themeId).then(flows => {
+
+loadFlowsSub(themeId).then(flows => {
     showFlows(flows,"forSubtheme",flowContainer);
 })
 
@@ -18,21 +22,21 @@ saveButton.onclick = () => {
     updateSubTheme(themeId, subject).then(() => showNotificationToast("The sub theme has been successfully updated!"));
 }
 
-btnCreateFlowSub.onclick = () => {
-console.log("click")
-    let flowType = "Linear";
 
-    try {
-        const response = fetch("/api/SubThemes/CreateSubthemeFlow/" + flowType, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-
-    } catch (error) {
-        console.error("Error:", error);
+btnCreateFlowSub.onclick = async() => {
+    function reset() {
+        loadFlowsSub(themeId)
+            .then(flows => resetFlowsSub(flows, flowContainer));
     }
+    
+    let flowtype = "Linear"
 
-    loadFlows(themeId)
+    createSubthemeFlow(flowtype,themeId).then(() => {
+    }).then(() =>{
+        reset();
+    }).then(() => subFlowToast.show());
+    
+    let closeSubFlowToast = document.getElementById("closeSubFlowToast") as HTMLButtonElement
+    closeSubFlowToast.onclick = () => subFlowToast.hide()
+    
 }

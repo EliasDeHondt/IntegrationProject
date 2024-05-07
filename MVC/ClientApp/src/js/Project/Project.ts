@@ -7,7 +7,7 @@ import {
     SetProject,
 } from "./API/ProjectAPI";
 import {generateCards, getSubThemesForProject, resetCards} from "./API/SubThemeAPI";
-import {loadFlows} from "../Theme/SubTheme/API/SubThemeAPI";
+import {loadFlowsSub} from "../Theme/SubTheme/API/SubThemeAPI";
 import {GetFlows} from "../CreateFlow/FlowCreator";
 import {Modal, Toast} from "bootstrap";
 import {deleteFlow} from "../CreateFlow/API/DeleteFlowAPI";
@@ -91,33 +91,33 @@ btnCreateFlowProject.onclick = async() => {
 }
 
 async function checkFlowsNotEmpty() {
-    try {
-        const flows = await loadFlowsProject(getIdProject());
-        const deleteFlowModalElement = document.getElementById("deleteFlowModal");
-        if (deleteFlowModalElement) { //niet leeg
-            const deleteFlowModal = new Modal(deleteFlowModalElement, {
-                keyboard: false,
-                focus: true,
-                backdrop: "static"
-            });
-            
-            butConfirmDeleteFlow.onclick = () => {
-                deleteFlow(id)
-                    .then(() => {
-                        GetFlows(0);
-                        deleteFlowModal.hide();
-                    });
-            }
-
-            butCancelDeleteFlowModal.onclick = () => {
-                deleteFlowModal.hide();
-            }
-        } else {
-            console.log("Flows array is empty");
-        }
-    } catch (error) {
-        console.error("Error loading flows:", error);
-    }
+    //try {
+    //     const flows = await loadFlowsProject(getIdProject());
+    //     const deleteFlowModalElement = document.getElementById("deleteFlowModal");
+    //     if (deleteFlowModalElement) { //niet leeg
+    //         const deleteFlowModal = new Modal(deleteFlowModalElement, {
+    //             keyboard: false,
+    //             focus: true,
+    //             backdrop: "static"
+    //         });
+    //        
+    //         butConfirmDeleteFlow.onclick = () => {
+    //             deleteFlow(id)
+    //                 .then(() => {
+    //                     GetFlows(0);
+    //                     deleteFlowModal.hide();
+    //                 });
+    //         }
+    //
+    //         butCancelDeleteFlowModal.onclick = () => {
+    //             deleteFlowModal.hide();
+    //         }
+    //     } else {
+    //         console.log("Flows array is empty");
+    //     }
+    // } catch (error) {
+    //     console.error("Error loading flows:", error);
+    // }
 }
 
 

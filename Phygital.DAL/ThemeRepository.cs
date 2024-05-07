@@ -81,4 +81,13 @@ public class ThemeRepository
     {
         _context.SubThemes.Find(id)!.Subject = subject;
     }
+    
+    public Flow CreateFlowForSub(FlowType type, long themeId)
+    {
+        var theme = _context.SubThemes.Find(themeId);
+        var flow = new Flow(type,theme);
+        _context.Flows.Add(flow);
+
+        return flow;
+    }
 }
