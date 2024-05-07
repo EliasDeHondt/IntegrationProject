@@ -1,5 +1,6 @@
 import {Step} from "./Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
+import * as phyAPI from "../Webcam/WebCamDetection";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
@@ -14,6 +15,9 @@ let flowId = Number((document.getElementById("flowId") as HTMLSpanElement).inner
 let stepTotal = Number((document.getElementById("stepTotal") as HTMLSpanElement).innerText);
 let flowtype = sessionStorage.getItem("flowType")!;
 let sessionCode = sessionStorage.getItem("connectionCode")!;
+let timerInterval: NodeJS.Timeout;
+let nextStepInterval: NodeJS.Timeout;
+let time: number = 29;
 
 hideDigitalElements();
 codediv.innerText = `Facilitator code: ${sessionCode}`
@@ -99,7 +103,7 @@ function GetNextStep(stepNumber: number, flowId: number) {
 }
 
 async function ShowStep(data: Step) {
-    (document.getElementById("stepNr") as HTMLSpanElement).innerText = currentStepNumber.toString();
+    if(flowtype.toUpperCase() != "PHYSICAL") (document.getElementById("stepNr") as HTMLSpanElement).innerText = currentStepNumber.toString();
     informationContainer.innerHTML = "";
     questionContainer.innerHTML = "";
     if (data.informationViewModel != undefined) {
@@ -132,8 +136,13 @@ async function ShowStep(data: Step) {
             }
         }
     }
-
     if (data.questionViewModel != undefined) {
+        if(flowtype.toUpperCase() == "PHYSICAL" && (data.questionViewModel.questionType == "MultipleChoiceQuestion" || data.questionViewModel.questionType == "OpenQuestion")) {
+            nextStep().then(() => {
+                timerInterval.refresh();
+                nextStepInterval.refresh();
+            });
+        }
         let p = document.createElement("p");
         p.innerText = data.questionViewModel.question;
         p.classList.add("text-start");
@@ -268,16 +277,34 @@ async function saveAnswerToDatabase(answers: string[], openAnswer: string, flowI
     }
 }
 
-function hideDigitalElements(){
+async function hideDigitalElements(){
     if(flowtype.toUpperCase() == "PHYSICAL") {
         const digitalElements = document.getElementsByClassName("digital-element");
         for (let i = 0; i < digitalElements.length; i++) {
             digitalElements[i].classList.add("visually-hidden");
         }
+        const webcam = document.getElementById("webcamDiv") as HTMLDivElement;
+        const topLeft = document.getElementById("topLeft") as HTMLDivElement;
+        const themeDiv = document.getElementById("themeDiv") as HTMLDivElement;
+        const themeDivInner = themeDiv.innerHTML
+        topLeft.innerHTML = `<h1>${themeDivInner}</h1>`
+        webcam.classList.remove("visually-hidden");
+
+        const timer = document.getElementById("timer") as HTMLDivElement;
+        timer.innerText = "Loading physical setup...";
+        
+        let model = await phyAPI.loadModel();
+        phyAPI.startPhysical(model).then(() => {
+            GetNextStep(++currentStepNumber, flowId);
+            startTimers();
+        });
+    } else {
+        btnNextStep.onclick = async () => {
+            // Proceed to the next step
+            await nextStep();
+        }
     }
 }
-
-let time: number = 29;
 
 async function nextStep(){
     if (userAnswers.length > 0 || openUserAnswer.length > 0) {
@@ -301,15 +328,11 @@ function updateClock(){
     timer.innerText = time.toString();
 }
 
-if(flowtype.toUpperCase() == "PHYSICAL") {
-    setInterval(updateClock, 1000);
-    setInterval(nextStep, 30000);
-} else {
-    btnNextStep.onclick = async () => {
-        // Proceed to the next step
-        await nextStep();
-    }
+function startTimers(){
+    timerInterval = setInterval(updateClock, 1000);
+    nextStepInterval = setInterval(nextStep, 30000);
 }
+
 
 
 btnRestartFlow.onclick = () => {

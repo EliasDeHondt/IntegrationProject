@@ -1,6 +1,6 @@
 ﻿import * as tf from "@tensorflow/tfjs";
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
-import { ChoiceBox} from "./WebCamUtil";
+import {ChoiceBox} from "./WebCamUtil";
 
 const video: HTMLVideoElement = document.getElementById("vidInput") as HTMLVideoElement;
 const detectionCanvas: HTMLCanvasElement = document.getElementById("canvasDetection") as HTMLCanvasElement;
@@ -12,9 +12,12 @@ const choiceBoxes: ChoiceBox[] = [];
 video.disablePictureInPicture = true;
 
 
-async function startPhysical(){
+export async function loadModel(): Promise<cocoSsd.ObjectDetection> {
+    return await cocoSsd.load();
+}
+
+export async function startPhysical(model: cocoSsd.ObjectDetection){
     await tf.setBackend('webgl');
-    const model = await cocoSsd.load();
     navigator.mediaDevices.getUserMedia({video: true, audio: false})
         .then(stream => {
             video.srcObject = stream;
@@ -24,7 +27,6 @@ async function startPhysical(){
                     detectionCanvas.height = video.videoHeight;
                     choiceCanvas.width = video.videoWidth;
                     choiceCanvas.height = video.videoHeight;
-                    drawChoiceBoundaries(5, detectionCanvas.width, detectionCanvas.height);
                     predictWebcam();
                 });
                 
@@ -57,7 +59,7 @@ async function startPhysical(){
 
 
 
-function drawChoiceBoundaries(choices: number, width: number, height: number){
+export function drawChoiceBoundaries(choices: number, width: number, height: number){
     let lineDiff: number = width/choices;
     const rectWidth: number = 10;
     ctxChoice.fillStyle = 'green';
@@ -66,5 +68,3 @@ function drawChoiceBoundaries(choices: number, width: number, height: number){
         if(i > 0) ctxChoice.fillRect((lineDiff * i) - (rectWidth/2), 0, rectWidth, height);
     }
 }
-
-startPhysical().then(() => console.log("Object detection started"));

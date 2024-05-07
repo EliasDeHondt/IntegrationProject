@@ -30,9 +30,9 @@
     </div>
 </div>
 <div class="kiosk-top-left">
-    <div class="kiosk-container-top-left">
-        <h1><span id="flowtype">@Model.FlowType.ToString()</span> Flow <span id="flowId">@Model.Id</span> - Step <span id="stepNr"></span> / <span id="stepTotal">@Model.getStepCount()</span></h1>
-        <p>Theme <span id="theme">@Model.Theme.Id</span> - @Model.Theme.Subject</p>
+    <div id="topLeft" class="kiosk-container-top-left">
+        <h1 class="digital-element"><span id="flowtype">@Model.FlowType.ToString()</span> Flow <span id="flowId">@Model.Id</span> - Step <span id="stepNr"></span> / <span id="stepTotal">@Model.getStepCount()</span></h1>
+        <div id="themeDiv">Theme <span id="theme">@Model.Theme.Id</span> - @Model.Theme.Subject</div>
     </div>
 </div>
 <div class="kiosk-top-right">
@@ -42,6 +42,11 @@
     <div class="kiosk-container-center-center">
         <div>
             <div id="informationContainer"></div>
+            <div id="webcamDiv" class="visually-hidden">
+                    <video id="vidInput" style="position: absolute; left: 0; top: 0; z-index: 0;"></video>
+                    <canvas id="canvasDetection" style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
+                    <canvas id="canvasChoices" style="position: absolute; left: 0; top: 0; z-index: 2;"></canvas>
+                </div>
             <div id="questionContainer"></div>
         </div>
     </div>
