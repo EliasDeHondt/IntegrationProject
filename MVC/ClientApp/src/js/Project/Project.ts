@@ -1,4 +1,5 @@
 ﻿import "./CreateSubThemeModal";
+import "./DeleteSubThemeModal"
 import {
     CheckNotEmpty,
     fillExisting,

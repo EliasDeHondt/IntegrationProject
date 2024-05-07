@@ -104,7 +104,6 @@
 
     <ItemGroup>
       <Folder Include="ClientApp\src\js\Layout\API\" />
-      <Folder Include="Views\Project\Modals\" />
       <Folder Include="Views\Statistics\" />
     </ItemGroup>
 
