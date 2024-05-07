@@ -13,7 +13,7 @@ function GenerateOption(flow: Flow): HTMLDivElement {
     input.id = `flow${flow.id}`
     input.value = `${flow.id}`
 
-    if (flowType == "circular") {
+    if (flowType == "circular" || flowType == "physical") {
         input.type = "radio"
         input.name = `flowRadios`
     }
@@ -59,7 +59,7 @@ export function SubmitFlows(connection: signalR.HubConnection, code: string) {
         if (options.length == 1)
             selectedFlows.push(parseInt((options[0] as HTMLInputElement).value))
     }
-    connection.invoke("SendSelectedFlowIds", code, selectedFlows);
+    connection.invoke("SendSelectedFlowIds", code, selectedFlows, flowType);
 }
 
 export function getFlowType(): string {

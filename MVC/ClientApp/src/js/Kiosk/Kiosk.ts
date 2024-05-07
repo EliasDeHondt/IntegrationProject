@@ -33,8 +33,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     })
 })
 
-connection.on("ReceiveSelectedFlowIds", async (ids) => {
-    await GenerateFlowOptions(ids);
+connection.on("ReceiveSelectedFlowIds", async (ids, flowType) => {
+    if(flowType != "physical"){
+        await GenerateFlowOptions(ids);
+    } else {
+        window.location.href = `/Flow/Step/${ids[0]}`
+    }
+    sessionStorage.setItem("flowType", flowType);
     sessionStorage.setItem("flowOptions", ids);
     storedFlows = sessionStorage.getItem("flowOptions")
 })
@@ -68,5 +73,5 @@ window.onclose = () => {
 }
 
 connection.on("FlowActivated", (id) => {
-    window.location.href = `/Flow/Step/${getFlowType()}/${id}`
+    window.location.href = `/Flow/Step/${id}`
 })

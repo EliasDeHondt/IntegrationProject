@@ -23,10 +23,9 @@ public class FlowController : Controller
         _manager = manager;
     }
     
-    public IActionResult Step(string flowType, long id)
+    public IActionResult Step(long id)
     {
         var flow = _manager.GetFlowByIdWithTheme(id);
-        flow.FlowType = Enum.Parse<FlowType>(flowType);
         return View(flow);
     }
     

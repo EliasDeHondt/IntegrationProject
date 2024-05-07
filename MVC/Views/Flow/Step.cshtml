@@ -47,17 +47,24 @@
     </div>
 </div>
 <div class="kiosk-bottom-left">
-    <div class="kiosk-container-bottom-left">
+    <div class="kiosk-container-bottom-left digital-element">
         <button class="kiosk-button-step-control" id="btnNextStep">Next step</button>
         <button class="kiosk-button-step-control" id="btnRestartFlow">Restart flow</button>
+    </div>
+    <div id="timer" class="kiosk-container-bottom-left">
+        
     </div>
 </div>
 <div class="kiosk-bottom-center">
     <div class="kiosk-container-bottom-center">
         &copy; @DateTime.Now.Year - CodeForge - <a asp-area="" asp-controller="Home" asp-action="PrivacyPolicy">Privacy Policy</a> - <a asp-area="" asp-controller="Home" asp-action="LegalGuidelines">Legal Guidelines</a>
+        <br/>
+        <div id="codediv">
+                Facilitator code: 
+            </div>
     </div>
 </div>
-<div class="kiosk-bottom-right">
+<div class="kiosk-bottom-right digital-element">
     <div class="kiosk-container-bottom-right">
         <div class="kiosk-input-container">
             <input class="kiosk-input-email" id="inputEmail" type="email" placeholder="Enter email for more info...">

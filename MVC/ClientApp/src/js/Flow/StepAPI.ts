@@ -6,12 +6,17 @@ const informationContainer = document.getElementById("informationContainer") as 
 const btnNextStep = document.getElementById("btnNextStep") as HTMLButtonElement;
 const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonElement;
 const btnEmail = document.getElementById("btnEmail") as HTMLButtonElement;
+const codediv = document.getElementById("codediv") as HTMLDivElement;
 let currentStepNumber: number = 0;
 let userAnswers: string[] = []; // Array to store user answers
 let openUserAnswer: string = "";
 let flowId = Number((document.getElementById("flowId") as HTMLSpanElement).innerText);
 let stepTotal = Number((document.getElementById("stepTotal") as HTMLSpanElement).innerText);
-let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerText;
+let flowtype = sessionStorage.getItem("flowType")!;
+let sessionCode = sessionStorage.getItem("connectionCode")!;
+
+hideDigitalElements();
+codediv.innerText = `Facilitator code: ${sessionCode}`
 
 //email checken
 function CheckEmail(inputEmail: string): boolean {
@@ -263,22 +268,49 @@ async function saveAnswerToDatabase(answers: string[], openAnswer: string, flowI
     }
 }
 
-btnNextStep.onclick = async () => {
+function hideDigitalElements(){
+    if(flowtype.toUpperCase() == "PHYSICAL") {
+        const digitalElements = document.getElementsByClassName("digital-element");
+        for (let i = 0; i < digitalElements.length; i++) {
+            digitalElements[i].classList.add("visually-hidden");
+        }
+    }
+}
+
+let time: number = 29;
+
+async function nextStep(){
     if (userAnswers.length > 0 || openUserAnswer.length > 0) {
         await saveAnswerToDatabase(userAnswers, openUserAnswer, flowId, currentStepNumber);
         // Clear the userAnswers array for the next step
         userAnswers = [];
         openUserAnswer = "";
     }
-    // Proceed to the next step
-    if (flowtype.toUpperCase() == "CIRCULAR" || flowtype.toUpperCase() == "PHYSICAL" && currentStepNumber >= stepTotal) {
+    if ((flowtype.toUpperCase() == "CIRCULAR" || flowtype.toUpperCase() == "PHYSICAL") && currentStepNumber >= stepTotal) {
         currentStepNumber = 0;
         GetNextStep(++currentStepNumber, flowId);
     } else {
         GetNextStep(++currentStepNumber, flowId);
     }
-
+    time = 30;
 }
+
+function updateClock(){
+    const timer = document.getElementById("timer") as HTMLDivElement;
+    time -= 1
+    timer.innerText = time.toString();
+}
+
+if(flowtype.toUpperCase() == "PHYSICAL") {
+    setInterval(updateClock, 1000);
+    setInterval(nextStep, 30000);
+} else {
+    btnNextStep.onclick = async () => {
+        // Proceed to the next step
+        await nextStep();
+    }
+}
+
 
 btnRestartFlow.onclick = () => {
     currentStepNumber = 0;
