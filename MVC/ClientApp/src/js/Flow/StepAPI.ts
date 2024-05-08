@@ -1,6 +1,8 @@
-import {Step} from "./Step/StepObjects";
+import {Information, Question, Step} from "./Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
 import * as phyAPI from "../Webcam/WebCamDetection";
+import {detectionCanvas, drawChoiceBoundaries, getResult} from "../Webcam/WebCamDetection";
+import {delay} from "../Util";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
@@ -15,9 +17,10 @@ let flowId = Number((document.getElementById("flowId") as HTMLSpanElement).inner
 let stepTotal = Number((document.getElementById("stepTotal") as HTMLSpanElement).innerText);
 let flowtype = sessionStorage.getItem("flowType")!;
 let sessionCode = sessionStorage.getItem("connectionCode")!;
-let timerInterval: NodeJS.Timeout;
-let nextStepInterval: NodeJS.Timeout;
+let timerInterval
+let nextStepInterval;
 let time: number = 29;
+let choices: string[] = [];
 
 hideDigitalElements();
 codediv.innerText = `Facilitator code: ${sessionCode}`
@@ -98,31 +101,42 @@ function GetNextStep(stepNumber: number, flowId: number) {
         }
     })
         .then(response => response.json())
-        .then(data => ShowStep(data))
+        .then(async (data) => {
+            if(flowtype.toUpperCase() == "PHYSICAL"){
+                await showPhysicalStep(data)
+            } else {
+                await ShowStep(data)
+            }
+        } )
         .catch(error => console.error("Error:", error))
 }
 
-async function ShowStep(data: Step) {
-    if(flowtype.toUpperCase() != "PHYSICAL") (document.getElementById("stepNr") as HTMLSpanElement).innerText = currentStepNumber.toString();
+
+async function showPhysicalStep(data: Step){
     informationContainer.innerHTML = "";
     questionContainer.innerHTML = "";
-    if (data.informationViewModel != undefined) {
-        switch (data.informationViewModel.informationType) {
+    await showInformationStep(data.informationViewModel);
+    showPhysicalQuestionStep(data.questionViewModel);
+}
+
+async function showInformationStep(data: Information){
+    if (data != undefined) {
+        switch (data.informationType) {
             case "Text": {
                 let p = document.createElement("p");
-                p.innerText = data.informationViewModel.information;
+                p.innerText = data.information;
                 p.classList.add("text-center");
                 informationContainer.appendChild(p);
                 break;
             }
             case "Image": {
                 let img = document.createElement("img");
-                img.src = "data:image/png;base64," + data.informationViewModel.information;
+                img.src = "data:image/png;base64," + data.information;
                 informationContainer.appendChild(img);
                 break;
             }
             case "Video": {
-                let path = await downloadVideoFromBucket(data.informationViewModel.information);
+                let path = await downloadVideoFromBucket(data.information);
                 let video = document.createElement("video");
                 if (typeof path === "string") {
                     path = path.substring(1, path.length - 1);
@@ -136,22 +150,60 @@ async function ShowStep(data: Step) {
             }
         }
     }
-    if (data.questionViewModel != undefined) {
-        if(flowtype.toUpperCase() == "PHYSICAL" && (data.questionViewModel.questionType == "MultipleChoiceQuestion" || data.questionViewModel.questionType == "OpenQuestion")) {
-            nextStep().then(() => {
-                timerInterval.refresh();
-                nextStepInterval.refresh();
-            });
+}
+
+function showPhysicalQuestionStep(data: Question){
+    choices = [];
+    if (data != undefined) {
+        switch(data.questionType){
+            case "RangeQuestion":
+                createQuestion(data)
+                break;
+            case "SingleChoiceQuestion":
+                createQuestion(data)
+                break;
+            default:
+                nextStep(false).then(() => {
+                    return
+                })
         }
+    }
+}
+
+function createQuestion(data: Question){
+    let p = document.createElement("p");
+    p.innerText = data.question;
+    p.classList.add("text-start");
+    p.classList.add("m-auto");
+    p.classList.add("mb-3");
+    questionContainer.appendChild(p);
+    drawChoiceBoundaries(data.choices.length, detectionCanvas.width, detectionCanvas.height);
+    let rowDiv = document.createElement("div");
+    rowDiv.classList.add("row");
+    for (const element of data.choices) {
+        let colDiv = document.createElement("div");
+        colDiv.classList.add("col");
+        let choice = document.createElement("p");
+        choice.innerText = element.text;
+        choices.push(element.text);
+        colDiv.appendChild(choice);
+        rowDiv.appendChild(colDiv);
+    }
+    questionContainer.appendChild(rowDiv);
+}
+
+function showQuestionStep(data: Question){
+    if (data != undefined) {
+        
         let p = document.createElement("p");
-        p.innerText = data.questionViewModel.question;
+        p.innerText = data.question;
         p.classList.add("text-start");
         p.classList.add("m-auto");
         p.classList.add("mb-3");
         questionContainer.appendChild(p);
-        switch (data.questionViewModel.questionType) {
+        switch (data.questionType) {
             case "SingleChoiceQuestion":
-                for (const element of data.questionViewModel.choices) {
+                for (const element of data.choices) {
                     let choice = document.createElement("input");
                     let label = document.createElement("label");
                     let div = document.createElement("div");
@@ -171,7 +223,7 @@ async function ShowStep(data: Step) {
                 }
                 break;
             case "MultipleChoiceQuestion":
-                for (const element of data.questionViewModel.choices) {
+                for (const element of data.choices) {
                     let choice = document.createElement("input");
                     let label = document.createElement("label");
                     let div = document.createElement("div");
@@ -205,23 +257,23 @@ async function ShowStep(data: Step) {
                 div.classList.add("m-auto");
                 slider.type = 'range';
                 slider.min = String(0);
-                slider.max = String(data.questionViewModel.choices.length - 1);
+                slider.max = String(data.choices.length - 1);
                 slider.step = String(1);
 
-                userAnswers = [data.questionViewModel.choices[Number(slider.value)].text];
+                userAnswers = [data.choices[Number(slider.value)].text];
 
                 div.appendChild(slider);
 
                 let label = document.createElement("label");
-                label.innerText = data.questionViewModel.choices[Number(slider.value)].text;
+                label.innerText = data.choices[Number(slider.value)].text;
                 div.appendChild(label);
                 questionContainer.appendChild(div);
                 questionContainer.appendChild(label);
 
                 slider.addEventListener('input', function () {
                     // Update the label to reflect the current choice
-                    userAnswers = [data.questionViewModel.choices[Number(slider.value)].text];
-                    label.innerText = data.questionViewModel.choices[Number(slider.value)].text;
+                    userAnswers = [data.choices[Number(slider.value)].text];
+                    label.innerText = data.choices[Number(slider.value)].text;
                 });
                 break;
             }
@@ -249,10 +301,18 @@ async function ShowStep(data: Step) {
                 break;
             }
             default:
-                console.log("This question type is not currently supported. (QuestionType: " + data.questionViewModel.questionType);
+                console.log("This question type is not currently supported. (QuestionType: " + data.questionType);
                 break;
         }
     }
+}
+
+async function ShowStep(data: Step) {
+    (document.getElementById("stepNr") as HTMLSpanElement).innerText = currentStepNumber.toString();
+    informationContainer.innerHTML = "";
+    questionContainer.innerHTML = "";
+    await showInformationStep(data.informationViewModel);
+    showQuestionStep(data.questionViewModel);
 }
 
 async function saveAnswerToDatabase(answers: string[], openAnswer: string, flowId: number, stepNumber: number): Promise<void> {
@@ -294,7 +354,8 @@ async function hideDigitalElements(){
         timer.innerText = "Loading physical setup...";
         
         let model = await phyAPI.loadModel();
-        phyAPI.startPhysical(model).then(() => {
+        phyAPI.startPhysical(model).then(async () => {
+            await delay(1000);
             GetNextStep(++currentStepNumber, flowId);
             startTimers();
         });
@@ -306,12 +367,28 @@ async function hideDigitalElements(){
     }
 }
 
-async function nextStep(){
-    if (userAnswers.length > 0 || openUserAnswer.length > 0) {
-        await saveAnswerToDatabase(userAnswers, openUserAnswer, flowId, currentStepNumber);
-        // Clear the userAnswers array for the next step
-        userAnswers = [];
-        openUserAnswer = "";
+async function nextStep(save: boolean = true){
+    if(save) {
+        if (flowtype.toUpperCase() == "PHYSICAL") {
+            let answers: number[] = getResult();
+            if(choices.length > 0){
+                answers.forEach(answer => {
+                    userAnswers.push(choices[answer]);
+                })
+            }
+            if (userAnswers.length > 0) {
+                await saveAnswerToDatabase(userAnswers, openUserAnswer, flowId, currentStepNumber).then(() => {
+                    userAnswers = [];
+                });
+            }
+        } else {
+            if (userAnswers.length > 0 || openUserAnswer.length > 0) {
+                await saveAnswerToDatabase(userAnswers, openUserAnswer, flowId, currentStepNumber);
+                // Clear the userAnswers array for the next step
+                userAnswers = [];
+                openUserAnswer = "";
+            }
+        }
     }
     if ((flowtype.toUpperCase() == "CIRCULAR" || flowtype.toUpperCase() == "PHYSICAL") && currentStepNumber >= stepTotal) {
         currentStepNumber = 0;

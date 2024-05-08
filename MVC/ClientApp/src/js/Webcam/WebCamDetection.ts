@@ -3,11 +3,12 @@ import * as cocoSsd from '@tensorflow-models/coco-ssd';
 import {ChoiceBox} from "./WebCamUtil";
 
 const video: HTMLVideoElement = document.getElementById("vidInput") as HTMLVideoElement;
-const detectionCanvas: HTMLCanvasElement = document.getElementById("canvasDetection") as HTMLCanvasElement;
+export const detectionCanvas: HTMLCanvasElement = document.getElementById("canvasDetection") as HTMLCanvasElement;
 const choiceCanvas: HTMLCanvasElement = document.getElementById("canvasChoices") as HTMLCanvasElement;
 const ctx: CanvasRenderingContext2D= detectionCanvas.getContext("2d") ?? new CanvasRenderingContext2D();
 const ctxChoice: CanvasRenderingContext2D= choiceCanvas.getContext("2d") ?? new CanvasRenderingContext2D();
 const choiceBoxes: ChoiceBox[] = [];
+let predictionResult: cocoSsd.DetectedObject[] = [];
 
 video.disablePictureInPicture = true;
 
@@ -39,6 +40,7 @@ export async function startPhysical(model: cocoSsd.ObjectDetection){
     function predictWebcam(){
         model.detect(video).then(predictions => {
             ctx.clearRect(0, 0, detectionCanvas.width, detectionCanvas.height);
+            predictionResult = predictions;
             predictions.forEach(prediction => {
                 if(prediction.score > 0.66 && prediction.class === "person"){
                     let box = prediction.bbox;
@@ -54,12 +56,28 @@ export async function startPhysical(model: cocoSsd.ObjectDetection){
         })
     }
     
+    
+}
+
+export function getResult(): number[]{
+    let answers: number[] = [];
+    predictionResult.forEach(prediction => {
+        if(prediction.score > 0.66 && prediction.class === "person") {
+            let box = prediction.bbox;
+            for(let i = 0; i < choiceBoxes.length; i++){
+                if(choiceBoxes[i].isInside(box[0] + (box[2]/2))) answers.push(i);
+            }
+        }
+    })
+    return answers;
 }
 
 
 
 
 export function drawChoiceBoundaries(choices: number, width: number, height: number){
+    choiceBoxes.length = 0;
+    ctxChoice.reset();
     let lineDiff: number = width/choices;
     const rectWidth: number = 10;
     ctxChoice.fillStyle = 'green';
