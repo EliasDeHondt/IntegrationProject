@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CodeForge</title>
+    <link rel="stylesheet" href="~/dist/site.css" />
+</head>
+<body>
+    <div class="col-lg-2 bgPrimary" id="navbar" style="padding-right: 2%; padding-left: 2%; margin-right: 0; margin-left: 0; padding-bottom: 100px; border-radius: 10px;">
+        <ul class="nav flex-column mb-auto" id="maincontent" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+            <div class="logo">
+                <img src="/favicon.ico" alt="Logo">
+            </div>
+            
+            <li id="tohideAN" class="nav-item" style="background: white; padding-bottom: 20px; padding-top: 20px; border-radius: 5px;">
+                <a id="accountname"></a>
+            </li>
+            <li id="tohideD" class="nav-item bgPrimary" style="padding-bottom: 10px; padding-top: 20px;">
+                <a href="/SharedPlatform/Dashboard" class="bhover nav-link active text-dark bgAccent" aria-current="page" style="display: block; padding: 20px 0; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">Dashboard</a>
+            </li>
+            <li id="tohideS" class="nav-item bgPrimary" style="padding-bottom: 10px; padding-top: 10px;">
+                <a href="/Statistics/Statistics" class="bhover nav-link text-dark bgAccent" aria-current="page" style="display: block; padding: 20px 0; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">Statistics</a>
+            </li>
+    
+                    
+            <li id="tohideLO" class="nav-item bgAccent bhover" style="padding: 10px 0; margin-top: auto;  border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">
+                <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <a href="/Account/Logout" class="d-block text-dark" >
+                        <button id="logout" type="submit" class="btn btn-link text-dark w-100 text-decoration-none" style="font-size: 20px;">Sign Out</button>
+                    </a>
+                </form>
+            </li>
+    
+            <div class="d-flex justify-content-between">
+                <div class="nav-item" id="language" style="padding-top: 20px;">
+                    <button class="bhover text-dark w-100 bgAccent" style="padding: 20px; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">NED</button>
+                </div>
+                    
+                <div class="nav-item" id="collapseButton" style="padding-top: 20px;">
+                    <button class="bhover text-dark w-100 bgAccent" style="padding: 20px; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;"><i id="icon" class="bi bi-caret-left-fill" style="font-size: 20px;"></i></button>
+                </div>
+            </div>
+                    
+        </ul>
+    </div>
+
+    
+<div class="container col-lg-10">
+        <main role="main" class="py-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; @DateTime.Now.Year - CodeForge - <a asp-area="" asp-controller="Home" asp-action="PrivacyPolicy">Privacy Policy</a> - <a asp-area="" asp-controller="Home" asp-action="LegalGuidelines">Legal Guidelines</a>
+        </div>
+    </footer>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+

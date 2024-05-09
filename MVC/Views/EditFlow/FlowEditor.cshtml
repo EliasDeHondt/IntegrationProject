@@ -1,5 +1,5 @@
 @{
-    Layout = "_Layout";
+    Layout = "_NavLayout";
     ViewData["Title"] = "Flow Editor";
 }
 
@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="~/dist/site.css"/>
 </head>
 <body>
-
+<div class="text-center">
+    <div class="row">
 <div class="container-sm editor-shared-outer-container" id="input-container">
     <div class="editor-shared-inner-container" id="btn-area-1">
         <button class="btn-primary" id="saveFlow">Save Flow</button>
@@ -36,6 +37,8 @@
     </div>
     <button class="btn-primary" id="btn-add-step">Add Step</button>
 </div>
+    </div>
+</div>
 
 </body>
 </html>
@@ -46,3 +49,4 @@
 }
 
 <partial name="Modals/CreateStepModal"/>
+<partial name="Modals/ViewFlowModal"/>

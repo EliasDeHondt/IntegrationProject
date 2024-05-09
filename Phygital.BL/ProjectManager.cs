@@ -41,11 +41,7 @@ public class ProjectManager
     
     public void AddProjectOrganizer(Facilitator facilitator, Project project)
     {
-        var projectOrganizer = new ProjectOrganizer
-        {
-            Facilitator = facilitator,
-            Project = project
-        };
+        var projectOrganizer = new ProjectOrganizer(project, facilitator);
         _repo.CreateProjectOrganizer(projectOrganizer);
     }
 
@@ -96,5 +92,15 @@ public class ProjectManager
     {
         return _repo.ReadProjectThroughMainTheme(id);
         
+    }
+    
+    public IEnumerable<Flow> GetFlowsForProjectById(long projectId)
+    {
+        return _repo.ReadFlowsForProjectById(projectId);
+    }
+    
+    public Flow CreateFlowForProject(FlowType type, long themeId)
+    {
+        return _repo.CreateFlowForProject(type,themeId);
     }
 }

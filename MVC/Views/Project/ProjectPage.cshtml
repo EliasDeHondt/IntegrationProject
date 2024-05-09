@@ -1,7 +1,7 @@
 @model Domain.ProjectLogics.Project
 
 @{
-    Layout = null;
+    Layout = "_NavLayout";
     ViewData["Title"] = $"Project {Model.Id}";
 }
 
@@ -9,19 +9,16 @@
 
 <html lang="" class="h-100 w-100 overflow-hidden">
 <head>
-    <title>title</title>
     <link rel="stylesheet" href="~/dist/site.css"/>
 </head>
 <body class="row h-100 w-100">
-<div class="text-center">
+<div class="text-center col-lg-10">
     <div class="row">
         <!-- Dashboard -->
-        <partial name="../Layout/NavigationLayout.cshtml"/>
         
         <!-- Titel -->
-        <div class="col-lg-10 col-md-9 col-sm-8 col-6">
             <div class="py-3">
-                <div class="row align-items-center">
+                <div class="d-flex row">
                     <div class="col">
                         <div class=" card border-black border-2 bgAccent">
                             <input id="inputTitle" class="m-1" placeholder="Project Title.">
@@ -36,7 +33,7 @@
             
             <div class="col">
                 <div class="row row-cols-3 ps-4 pe-4 m-4 ">
-                    <div>
+                    <div class="flex-fill" style="overflow-y: auto;">
                         <!-- Text -->
                         <div class="row">
                             <div class="col mt-3 mb-3">
@@ -49,17 +46,29 @@
                         </div>
                         
                         <!-- Flows -->
-                        <div class="col mt-3 mb-3">
-                            <div class="card-footer d-flex justify-content-center">
-                                <button class="btn btn-primary mx-2">Edit Lineaire Flow</button>
-                                <button class="btn btn-secondary mx-2">Edit Circulaire Flow</button>
+                        <div class="d-flex justify-content-between" style="padding-bottom: 10px">
+                            <div class="card border-black border-2 bgAccent align-items-lg-start">
+                                <span style="color: white;" class="m-1">Edit Flows</span>
                             </div>
                         </div>
+                        
+                        <div class="col" style="text-align: left;">
+                            <div class="flow-container" style="display: flex;">
+                                <div class="flow-card" id="btnCreateFlowProject" style="width: 200px; height: 300px;">
+                                    <a class="btn ">
+                                        <h2 class="flow-card-header"><i class="bi bi-plus"></i></h2>
+                                        <h3 class="flow-card-footer">New Flow</h3>
+                                    </a>
+                                </div>
+                                <div id="flow-cards" ></div> <!-- This gets filled automatically in FlowCreator.ts -->
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
                 
                 <!-- Subthemas -->
-                <div class="col-lg-10 col-md-9 col-sm-8 col-6">
+                <div>
                     <div class="py-3">
                         <partial name="Partials/SubThemePartial"/>
                     </div>
@@ -68,11 +77,18 @@
             
         </div>
     </div>
-</div>
 
 </body>
 </html>
 @* <p class="visually-hidden" id="platformId">@Model.Id</p> *@
 <partial name="Modals/CreateSubThemeModal"/>
+
+<partial name="Modals/CreateProjFlowModal"/>
+
+<partial name="Toasts/_ProjectFlowCreateToast"/>
+
+<partial name="Modals/DeleteSubThemeModal"/>
+
+
 <script src="~/dist/site.entry.js" defer></script>
 <script src="~/dist/project.entry.js" defer></script>

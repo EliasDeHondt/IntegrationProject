@@ -1,4 +1,7 @@
-﻿import {SubTheme} from "../../Theme/Types/ThemeObjects";
+﻿import {SubTheme} from "../../Types/ProjectObjects";
+import {subThemeModal} from "../DeleteSubThemeModal";
+
+const btnDeleteSubTheme = document.getElementById('butConfirmDeleteSubTheme') as HTMLButtonElement;
 
 function generateCard(subTheme: SubTheme): HTMLDivElement{
     const cardContainer = document.createElement("div");
@@ -10,10 +13,15 @@ function generateCard(subTheme: SubTheme): HTMLDivElement{
     card.style.height = "150px";
 
     const deleteButton = document.createElement("button");
-    deleteButton.classList.add("border-0", "p-0", "position-absolute", "top-0", "end-0", "me-2");
+    deleteButton.classList.add("border-0", "p-0", "position-absolute", "top-0", "end-0", "me-2", "btn-delete-subtheme");
     deleteButton.style.background = "none";
     deleteButton.innerHTML = `<i class="bi bi-folder-minus" style="color: white;"></i>`;
-    //deleteButton.addEventListener("click", onDelete);
+    deleteButton.dataset.subthemeId = subTheme.id.toString();
+    
+    deleteButton.onclick = () => {
+        btnDeleteSubTheme.dataset.subthemeId = deleteButton.dataset.subthemeId;
+        subThemeModal.show();
+    }
     
     const cardBody = document.createElement("div");
     cardBody.classList.add("card-body", "align-items-center", "d-flex", "justify-content-center");

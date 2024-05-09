@@ -4,12 +4,16 @@
         <TargetFramework>net7.0</TargetFramework>
         <RootNamespace>Business_Layer</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>disable</Nullable>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Phygital.DAL\Phygital.DAL.csproj" />
       <ProjectReference Include="..\Phygital.Domain\Phygital.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     </ItemGroup>
 
 </Project>

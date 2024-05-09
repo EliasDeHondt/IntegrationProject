@@ -1,4 +1,4 @@
-﻿/***************************************
+/***************************************
  *                                     *
  * Created by CodeForge                *
  * Visit https://codeforge.eliasdh.com *
@@ -18,6 +18,7 @@ public class ThemeRepository
     public ThemeRepository(CodeForgeDbContext context)
     {
         _context = context;
+        
     }
 
     public IEnumerable<MainTheme> ReadAllMainThemes()
@@ -80,5 +81,39 @@ public class ThemeRepository
     public void UpdateSubTheme(long id, string subject)
     {
         _context.SubThemes.Find(id)!.Subject = subject;
+    }
+
+
+    public Flow CreateFlowForSub(FlowType type, long themeId)
+    {
+        var theme = _context.SubThemes.Find(themeId);
+        var flow = new Flow(type, theme);
+        _context.Flows.Add(flow);
+
+        return flow;
+    }
+
+    public void DeleteSubTheme(long id)
+    {
+        SubTheme subTheme = _context.SubThemes.Find(id)!;
+        
+        _context.SubThemes.Remove(subTheme);
+
+    }
+
+    public IEnumerable<long> GetSubThemeFlows(long id)
+    {
+        IEnumerable<long> flowIds = Array.Empty<long>();
+        
+        SubTheme subTheme = _context.SubThemes.Find(id)!;
+        
+        IEnumerable<Flow> flows = subTheme.Flows;
+
+        foreach (Flow flow in flows)
+        {
+            flowIds = flowIds.Append(flow.Id);
+        }
+
+        return flowIds;
     }
 }

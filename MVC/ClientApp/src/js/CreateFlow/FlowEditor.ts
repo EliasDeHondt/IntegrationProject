@@ -3,8 +3,10 @@ import {downloadVideoFromBucket} from "../StorageAPI";
 import {Modal} from "bootstrap";
 import {Flow, Participation} from "../Flow/FlowObjects";
 
+
 const stepsList = document.getElementById('steps-list') as HTMLElement;
 const btnAddStep = document.getElementById('btn-add-step') as HTMLButtonElement;
+const btnViewFlow = document.getElementById('viewFlow') as HTMLButtonElement;
 
 const btnAddChoice = document.getElementById('btn-add-choice') as HTMLButtonElement;
 const btnAddText = document.getElementById('btn-add-text') as HTMLButtonElement;
@@ -157,14 +159,17 @@ function UpdateStepList(steps: Step[]) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const parts = document.URL.split('/');
-    const lastPart = parts[parts.length - 1];
-    flowId = parseInt(lastPart, 10);
-
-    if (isNaN(flowId)) {
-        console.error("The ID provided in the URL is not a number.")
-    }
-
+  const parts = document.URL.split('/');
+  const lastPart = parts[parts.length - 1];
+  const btnViewFlow = document.getElementById("viewFlow") as HTMLAnchorElement;
+  flowId = parseInt(lastPart, 10);
+  
+  if (isNaN(flowId)) { console.error("The ID provided in the URL is not a number.")}
+  
+  // GetSteps(flowId).then(() => { 
+  //   initializeCardLinks();
+  //   btnViewFlow.setAttribute('href', "/Flow/Step/" + flowId);
+  // });
     GetSteps(flowId)
         .then(steps => UpdateStepList(steps))
         .then(() => toggleButtons())
@@ -507,4 +512,32 @@ butConfirmCreateStep.onclick = () => {
 
 function clearModal() {
     CreateStepModal.hide();
+    ViewStepModal.hide();
+}
+
+const btnCancelViewFlowModal = document.getElementById("btnCancelViewFlowModal") as HTMLButtonElement;
+const btnSaveViewFlowModal = document.getElementById("btnSaveViewFlowModal") as HTMLButtonElement;
+const btnConfirmViewFlow = document.getElementById("btnConfirmViewFlow") as HTMLAnchorElement;
+
+const ViewStepModal = new Modal(document.getElementById('ViewFlowModal')!, {
+  keyboard: false,
+  focus: true,
+  backdrop: "static"
+});
+
+btnViewFlow.onclick = () => {
+  ViewStepModal.show();
+  btnConfirmViewFlow.setAttribute('href', "/Flow/Step/" + flowId);
+}
+
+btnCancelViewFlowModal.onclick = () => {
+  clearModal();
+}
+
+btnSaveViewFlowModal.onclick = () => {
+  //TODO: after merge with Jana, add saveFlow method here.
+}
+
+btnConfirmViewFlow.onclick = () => {
+  clearModal();
 }

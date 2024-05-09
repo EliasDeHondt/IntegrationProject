@@ -59,7 +59,16 @@ public class SharedPlatformRepository
 
     public void AddProjectToPlatform(Project project, long sharedPlatformId)
     {
-        _ctx.SharedPlatforms.Where(platform => platform.Id == sharedPlatformId).Single().Projects.Add(project);
-        _ctx.SaveChanges();
+        _ctx.SharedPlatforms.Single(platform => platform.Id == sharedPlatformId).Projects.Add(project);
+    }
+
+    public IEnumerable<SharedPlatform> ReadAllSharedPlatforms()
+    {
+        return _ctx.SharedPlatforms.AsNoTracking().ToList();
+    }
+
+    public SharedPlatform CreateSharedPlatform(SharedPlatform sharedPlatform)
+    {
+        return _ctx.SharedPlatforms.Add(sharedPlatform).Entity;
     }
 }

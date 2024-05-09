@@ -13,10 +13,12 @@ namespace Business_Layer;
 public class ThemeManager
 {
     private readonly ThemeRepository _repository;
+    private readonly FlowRepository _flowRepository;
     
-    public ThemeManager(ThemeRepository repository)
+    public ThemeManager(ThemeRepository repository, FlowRepository flowRepository)
     {
         _repository = repository;
+        _flowRepository = flowRepository;
     }
 
     public IEnumerable<MainTheme> GetAllMainThemes()
@@ -60,5 +62,22 @@ public class ThemeManager
     public void UpdateSubTheme(long id, string subject)
     {
         _repository.UpdateSubTheme(id, subject);
+    }
+
+    public Flow CreateFlowForSub(FlowType type, long themeId)
+    {
+        return _repository.CreateFlowForSub(type,themeId);
+    }
+    
+    public void DeleteSubTheme(long id)
+    {
+        IEnumerable<long> flowIds = _repository.GetSubThemeFlows(id);
+
+        foreach (long flowId in flowIds)
+        {
+            _flowRepository.DeleteFlowById(flowId);
+        }
+        
+        _repository.DeleteSubTheme(id);
     }
 }

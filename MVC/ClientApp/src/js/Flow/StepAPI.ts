@@ -25,6 +25,7 @@ let themeId = Number((document.getElementById("theme") as HTMLSpanElement).inner
 let stepTotal = Number((document.getElementById("stepTotal") as HTMLSpanElement).innerText);
 let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerText;
 let prevFlowId = sessionStorage.getItem('prevFlowId');
+let currentState: string = "";
 
 //email checken
 function CheckEmail(inputEmail: string): boolean {
@@ -305,65 +306,3 @@ btnRestartFlow.onclick = () => {
     currentStepNumber = 0;
     GetNextStep(++currentStepNumber, flowId);
 };
-
-btnPauseFlow.onclick = () => {
-    UpdateFlowState(String(flowId), "Paused");
-    modal.show();
-};
-
-if (btnUnPauseFlow)
-    btnUnPauseFlow.onclick = () => {
-        UpdateFlowState(String(flowId), "Active");
-        modal.hide();
-    }
-
-btnExitFlow.onclick = () => UpdateFlowState(String(flowId), "Inactive");
-
-btnShowFlows.onclick = () => {
-    fetch(`/api/SubThemes/` + themeId + `/Flows`, {
-        method: "GET",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
-    })
-        .then(response => response.json())
-        .then(data => ShowFlows(data))
-        .catch(error => console.error("Error:", error))
-};
-
-function ShowFlows(flows: Flow[]) {
-    ddFlows.innerHTML = "";
-    flows.forEach(flow => {
-        if (flow.id != flowId)
-            ddFlows.innerHTML += `<li><a class="dropdown-item" href="/Flow/Step/${flow.id}">${flow.id}</a></li>`
-        else
-            ddFlows.innerHTML += `<li><a class="dropdown-item active" aria-current="true">${flow.id}</a></li>`
-    });
-}
-
-export function UpdateFlowState(id: string, state: string) {
-    fetch("/api/Flows/" + id + "/" + state, {
-        method: "PUT"
-    })
-        .then(response => {
-            if (response.ok) {
-                console.log(`Flow ${prevFlowId} ${state}!`)
-                return true;
-            }
-            return false;
-        })
-        .catch(error => console.error("Error:", error))
-}
-
-
-function UpdateCurrentFlowState() {
-    console.log(prevFlowId);
-    if (prevFlowId != null)
-        UpdateFlowState(prevFlowId, 'Inactive');
-    UpdateFlowState(String(flowId), 'Active');
-    sessionStorage.setItem('prevFlowId', String(flowId));
-    console.log(prevFlowId);
-}
-
-window.onload = () => UpdateCurrentFlowState();

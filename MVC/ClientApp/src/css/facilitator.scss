@@ -1,0 +1,221 @@
+﻿/***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************/
+
+.facilitator-body * {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Relative Positioning */
+.facilitator-top-center {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ffffff;
+}
+
+.facilitator-center-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+}
+
+.facilitator-bottom-center {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ffffff;
+}
+/* Relative Positioning */
+
+/* Relative Positioning Container */
+.facilitator-container-top-center {
+  border: 1px solid #ffffff;
+  border-radius: 24px;
+  background-color: #479ecd;
+  width: 600px;
+  height: 300px;
+  margin: 24px;
+  padding: 24px;
+}
+
+.facilitator-container-center-center {
+  border: 1px solid #ffffff;
+  border-radius: 24px;
+  background-color: #479ecd;
+  width: 600px;
+  height: 250px;
+  margin: 24px;
+  padding: 24px;
+}
+
+.facilitator-container-bottom-center {
+  border: 1px solid #ffffff;
+  border-radius: 24px;
+  background-color: #479ecd;
+  width: 600px;
+  height: 300px;
+  margin: 24px;
+  padding: 24px;
+}
+/* Relative Positioning Container */
+
+/* Button */
+.facilitator-button-step-control {
+  padding: 24px 40px;
+  border-radius: 50px;
+  cursor: pointer;
+  border: 0;
+  background-color: white;
+  box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-size: 24px;
+  transition: all 0.5s ease;
+}
+
+.facilitator-button-flow-control {
+  padding: 48px 80px;
+  margin: 24px;
+  border-radius: 80px;
+  cursor: pointer;
+  border: 0;
+  background-color: white;
+  box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-size: 24px;
+  transition: all 0.5s ease;
+}
+
+.facilitator-button-step-control:hover, .kiosk-button-flow-control:hover {
+  letter-spacing: 3px;
+  background-color: #e9521c;
+  color: hsl(0, 0%, 100%);
+  box-shadow: #e9521c;
+}
+
+.facilitator-button-step-control:active, .kiosk-button-flow-control:hover {
+  letter-spacing: 3px;
+  background-color: #e9521c;
+  color: hsl(0, 0%, 100%);
+  box-shadow: #e9521c;
+  transform: translateY(10px);
+  transition: 100ms;
+}
+/* Button */
+
+/* Input Code */
+.facilitator-input-container {
+  position: relative;
+  display: flex;
+  height: 60px;
+  width: 450px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 20px 20px 30px rgba(0, 0, 0, .05);
+}
+
+.facilitator-input-container .facilitator-input-code {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  background-color: transparent;
+  padding: 0.625rem 70px 0.625rem 0.75rem;
+  font-size: 16px;
+  line-height: 1.25rem;
+  font-weight: 400;
+  color: #000000;
+  outline: none;
+  transition: all .15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.facilitator-input-container .facilitator-input-code:focus {
+  border: 1px solid #e9521c;
+}
+
+.facilitator-invite-btn {
+  position: absolute;
+  width: 170px;
+  right: 4px;
+  top: 4px;
+  bottom: 4px;
+  z-index: 10;
+  border-radius: 4px;
+  background-color: #e9521c;
+  color: #ffffff;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 24px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border: none;
+  transition: .6s ease;
+}
+
+.facilitator-invite-btn:hover {
+  right: 2px;
+  top: 2px;
+  bottom: 2px;
+  border-radius: 8px;
+}
+
+.input-container .facilitator-input-code:placeholder-shown ~ .facilitator-invite-btn {
+  pointer-events: none;
+  background-color: #e9521c;
+  opacity: 0.5;
+}
+/* Input Code */
+
+/* Mobile */
+@media (max-width: 768px) {
+  .facilitator-top-center, .facilitator-center-center, .facilitator-bottom-center {
+    position: static;
+    transform: none;
+    left: auto;
+    top: auto;
+    bottom: auto;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    height: auto;
+  }
+
+  .facilitator-container-top-center, .facilitator-container-center-center, .facilitator-container-bottom-center {
+    width: 80%;
+    max-width: 500px;
+    height: auto;
+    padding: 12px;
+    margin: 12px auto;
+  }
+
+  .facilitator-body * {
+    font-size: 14px;
+  }
+
+  .facilitator-invite-btn {
+    width: 60px;
+  }
+
+  .facilitator-input-container {
+    height: 40px;
+    width: 70%;
+  }
+
+  .facilitator-button-step-control {
+    padding: 12px 20px;
+  }
+
+  .facilitator-button-flow-control {
+    padding: 24px 40px;
+    margin: 24px;
+  }
+}
+/* Mobile */

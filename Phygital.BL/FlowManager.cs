@@ -5,6 +5,7 @@
  *                                     *
  ***************************************/
 
+using System.Collections;
 using Data_Access_Layer;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
@@ -27,7 +28,6 @@ public class FlowManager
     //This function makes a GLOBAL Flow, not project specific!
     public Flow Add(FlowType type)
     {
-
         Flow newFlow = new Flow
         {
             FlowType = type
@@ -37,16 +37,16 @@ public class FlowManager
 
         return newFlow;
     }
-    
+
     public Flow GetFlowById(long id)
     {
         return _repository.ReadFlowById(id);
     }
 
     /** Returns all steps in the given flow.
-     * 
+     *
      * parameter: flowId -> The ID of the flow from which we are getting the steps.
-     */ 
+     */
     public IEnumerable<StepBase> GetAllStepsFromFlow(long flowId)
     {
         return _repository.ReadAllStepsFromFlow(flowId);
@@ -56,14 +56,25 @@ public class FlowManager
     {
         return _repository.ReadFlowByIdIncludingTheme(id);
     }
-    
+
     public IEnumerable<Flow> GetAllFlows()
     {
         return _repository.ReadAllFlows();
     }
-    public void SetParticipationByFlow(long flowId,string email)
+
+    public IEnumerable<Flow> GetAllFlowsByType(string type)
     {
-        _repository.AddParticipationByFlow(flowId,email);
+        return _repository.ReadAllFlowsByType(type);
+    }
+
+    public IEnumerable<Flow> GetAllFlowsWithTheme()
+    {
+        return _repository.ReadAllFlowsWithTheme();
+    }
+
+    public void SetParticipationByFlow(long flowId, string email)
+    {
+        _repository.AddParticipationByFlow(flowId, email);
     }
 
     public void ChangeFlowState(Flow flow)
@@ -102,9 +113,14 @@ public class FlowManager
         return step;
 
     }
-    
+
     public void UpdateFlow(Flow flow)
     {
         _repository.UpdateSubTheme(flow);
+    }
+
+    public void DeleteFlowById(long flowId)
+    {
+        _repository.DeleteFlowById(flowId);
     }
 }

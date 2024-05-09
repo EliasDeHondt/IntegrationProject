@@ -13,5 +13,7 @@ namespace Domain.Accounts;
 
 public class SystemAdmin: IdentityUser
 {
- public SharedPlatform SharedPlatform { get; set; }
+ 
+ 
+ 
 }
