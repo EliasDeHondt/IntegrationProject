@@ -40,6 +40,16 @@
   margin: 5px;
 }
 
+#question-textarea, #text-textarea {
+  min-height: 50px;
+  height: 80px;
+  max-height: 200px;
+  width: 800px;
+  margin: 5px;
+  overflow: auto;
+  resize: none;
+}
+
 .choice-container {
   display: flex;
   align-items: center;
@@ -58,7 +68,7 @@
   background-color: gray;
 }
 
-.question-header {
+.question-container {
   padding: 1em;
   margin: 1em;
   width: 1200px;
@@ -68,7 +78,7 @@
   overflow-wrap: normal;
 }
 
-#choices-container {
+#choices-container, #question-container, #text-container {
   padding: 10px;
   align-items: center;
   justify-items: center;

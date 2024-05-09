@@ -1,6 +1,7 @@
 using Business_Layer;
 using Domain.ProjectLogics.Steps;
 using Microsoft.AspNetCore.Mvc;
+using MVC.Models;
 
 namespace MVC.Controllers.API;
 
@@ -9,18 +10,20 @@ namespace MVC.Controllers.API;
 public class EditFlowsController : Controller
 {
     private readonly FlowManager _manager;
+    private readonly StepManager _stepManager;
     private readonly UnitOfWork _uow;
 
-    public EditFlowsController(FlowManager manager, UnitOfWork uow)
+    public EditFlowsController(FlowManager manager, StepManager stepManager, UnitOfWork uow)
     {
         _manager = manager;
+        _stepManager = stepManager;
         _uow = uow;
     }
 
     [HttpGet("/EditFlows/GetSteps/{flowId:long}")]
     public IActionResult GetSteps(long flowId)
     {
-        var steps = _manager.GetAllStepsInFlow(flowId);
+        var steps = _stepManager.GetAllStepsForFlow(flowId);
         return Ok(steps);
     }
 
@@ -29,7 +32,7 @@ public class EditFlowsController : Controller
     {
         _uow.BeginTransaction();
         
-        StepBase step = _manager.AddStep(flowId, stepNumber, stepType);
+        StepBase step = _manager.CreateStep(flowId, stepNumber, stepType);
 
         _uow.Commit();
 

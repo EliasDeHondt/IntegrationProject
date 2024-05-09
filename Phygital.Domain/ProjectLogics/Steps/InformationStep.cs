@@ -14,15 +14,15 @@ namespace Domain.ProjectLogics.Steps;
 
 public class InformationStep : StepBase
 {
-    public InformationBase InformationBase { get; set; }
+    public ICollection<InformationBase> InformationBases { get; set; }
     
-    public InformationStep(int stepNumber, InformationBase informationBase, Flow flow, long id = 0) : base(stepNumber, flow, id)
+    public InformationStep(int stepNumber, ICollection<InformationBase> informationBases, Flow flow, long id = 0) : base(stepNumber, flow, id)
     {
-        InformationBase = informationBase;
+        InformationBases = informationBases;
     }
 
     public InformationStep()
     {
-        InformationBase = new Text();
+        InformationBases = new List<InformationBase>();
     }
 }

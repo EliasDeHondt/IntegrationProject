@@ -63,18 +63,22 @@ public class FlowRepository
         _context.Flows.Update(flow);
     }
 
-    public IEnumerable<StepBase> GetAllSteps(long flowId)
+    public IEnumerable<StepBase> ReadAllStepsFromFlow(long flowId)
     {
-        Flow flow = _context.Flows
+        return _context.Flows
             .AsNoTracking()
-            .Include(flow => flow.Steps)
-            .First(flow => flow.Id == flowId);
-        
-        return flow.Steps;
+            .Include(f => f.Steps)
+            .First(f => f.Id == flowId)
+            .Steps;
     }
 
     public void AddStepToFlow(long flowId, StepBase step)
     {
         _context.Flows.Find(flowId)!.Steps.Add(step);
+    }
+    
+    public void UpdateSubTheme(Flow flow)
+    {
+        _context.Flows.Update(flow);
     }
 }

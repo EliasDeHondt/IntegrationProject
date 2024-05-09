@@ -17,5 +17,5 @@ public class InformationStepViewModel : StepViewModel
     [Key]
     public long Id { get; set; }
     [Required]
-    public InformationViewModel InformationViewModel { get; set; }
+    public ICollection<InformationViewModel> InformationViewModel { get; set; }
 }

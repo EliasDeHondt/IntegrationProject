@@ -134,7 +134,7 @@ public static class DataSeeder
         step4.StepName = "Single Choice Question";
         step5.StepName = "Single Choice Question";
         step6.StepName = "Single Choice Question";
-        
+
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
         flow.Steps.Add(step3);
@@ -280,7 +280,7 @@ public static class DataSeeder
         step3.StepName = "Multiple Choice Question";
         step4.StepName = "Multiple Choice Question";
         step5.StepName = "Multiple Choice Question";
-        
+
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
         flow.Steps.Add(step3);
@@ -418,7 +418,7 @@ public static class DataSeeder
         step3.StepName = "Ranged Question";
         step4.StepName = "Ranged Question";
         step5.StepName = "Ranged Question";
-        
+
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
         flow.Steps.Add(step3);
@@ -459,9 +459,9 @@ public static class DataSeeder
         Flow flow = new Flow(FlowType.Linear, subTheme1);
         Flow flow1 = new Flow(FlowType.Circular, subTheme1);
         Participation participation1 = new Participation(flow); //for respondents
-        participation1.Respondents.Add(new Respondent("test@mail.com",participation1));
+        participation1.Respondents.Add(new Respondent("test@mail.com", participation1));
         flow.Participations.Add(participation1);
-        
+
         Text textInfo = new Text("Lokale Verkiezingen");
         Image imageInfo = new Image(ImageUrls.Verkiezingen);
         imageInfo.StepName = "Information";
@@ -477,10 +477,10 @@ public static class DataSeeder
         GenerateRangeQuestions(ctx, flow1);
         GenerateOpenQuestions(ctx, flow1);
 
-        InformationStep step1 = new InformationStep(19, imageInfo, flow);
-        InformationStep step2 = new InformationStep(20, videoInfo, flow);
-        InformationStep step3 = new InformationStep(19, imageInfo, flow1);
-        InformationStep step4 = new InformationStep(20, videoInfo, flow1);
+        InformationStep step1 = new InformationStep(19, new List<InformationBase> {imageInfo}, flow);
+        InformationStep step2 = new InformationStep(20, new List<InformationBase> {imageInfo}, flow);
+        InformationStep step3 = new InformationStep(19, new List<InformationBase> {imageInfo}, flow1);
+        InformationStep step4 = new InformationStep(20, new List<InformationBase> {imageInfo}, flow1);
 
         flow.Steps.Add(step1);
         flow.Steps.Add(step2);
@@ -509,8 +509,17 @@ public static class DataSeeder
         Project project2 = new Project(mainTheme2.Subject,mainTheme2, sp);
         Flow flow2 = new Flow(FlowType.Circular, mainTheme2);
 
-        GenerateSingleQuestions(ctx, flow2); 
+        GenerateSingleQuestions(ctx, flow2);
         
+        Text textInfo1 = new Text("This is information!");
+        Text textInfo2 = new Text("This is even more information");
+        
+        var info2 = new List<InformationBase> { imageInfo, textInfo1, textInfo2 };
+        
+        InformationStep step5 = new InformationStep(7, info2, flow2);
+        
+        flow2.Steps.Add(step5);
+
         ctx.Projects.Add(project1);
         ctx.Projects.Add(project2);
         

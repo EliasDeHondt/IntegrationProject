@@ -43,10 +43,18 @@ public static class StepModelFactory
     
     private static InformationStepViewModel CreateInformationStepViewModel(InformationStep step)
     {
+        var informationViewModels = new List<InformationViewModel>();
+
+        foreach (var informationBase in step.InformationBases)
+        {
+            var informationViewModel = CreateInformationViewModel(informationBase);
+            informationViewModels.Add(informationViewModel);
+        }
+        
         return new InformationStepViewModel
         {
             Id = step.Id,
-            InformationViewModel = CreateInformationViewModel(step.InformationBase),
+            InformationViewModel = informationViewModels,
             StepNumber = step.StepNumber
         };
     }

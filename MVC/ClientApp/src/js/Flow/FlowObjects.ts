@@ -4,9 +4,9 @@ export interface Flow {
     id: number;
     flowType: string;
     steps: Step[];
-    participations: Participations[];
+    participations: Participation[];
 }
 
-export interface Participations {
+export interface Participation {
     
 }

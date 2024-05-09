@@ -1,6 +1,7 @@
-import {Step} from "../Flow/Step/StepObjects";
+import {Choice, Information, Question, Step} from "../Flow/Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
 import {Modal} from "bootstrap";
+import {Flow, Participation} from "../Flow/FlowObjects";
 
 const stepsList = document.getElementById('steps-list') as HTMLElement;
 const btnAddStep = document.getElementById('btn-add-step') as HTMLButtonElement;
@@ -17,380 +18,447 @@ let currentViewingStep: Step;
 
 let flowId: number;
 
-async function GetSteps(flowId : number) {
-  console.log("Fetching steps...");
-  await fetch("/EditFlows/GetSteps/" + flowId, {
-    method: "GET",
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json"
-    }
-  })
-      .then(response => response.json())
-      .then(data => UpdateStepList(Object.values(data)))
-      .catch(error => console.error("Error:", error))
-  
+async function GetSteps(flowId: number): Promise<Step[]> {
+    console.log("Fetching steps...");
+    return await fetch(`/EditFlows/GetSteps/${flowId}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
 }
 
-function GetStepById(stepNumber: number, flowId: number) {
-  fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
-    method: "GET",
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json"
-    }
-  })
-      .then(response => response.json())
-      .then(data => {
-        ShowStepInContainer(data);
-        currentViewingStep = data;
-      })
-      .then(() => toggleButtons())
-      .catch(error => console.error("Error:", error))
+function GetStepById(stepNumber: number, flowId: number): Promise<Step> {
+    return fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data;
+        })
 }
 
 async function AddStep(stepNumber: number, stepType: string) {
-  await fetch("/EditFlows/CreateStep/" + flowId + "/" + stepNumber + "/" + stepType, {
-    method: "POST",
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json"
-    }
-  })
-      .then(response => response.json())
-      .catch(error => console.error("Error:", error))
+    await fetch("/EditFlows/CreateStep/" + flowId + "/" + stepNumber + "/" + stepType, {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .catch(error => console.error("Error:", error))
+}
+
+async function UpdateStep(flowId: number, stepNr: number, step: Step) {
+    await fetch(`/api/Steps/${flowId}/Update/${step.stepNumber}`, {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(step)
+    })
+}
+
+async function GetFlowById(flowId: number): Promise<Flow> {
+    return await fetch(`/api/Flows/${flowId}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data;
+        })
+}
+
+async function UpdateFlow(flow: Flow) {
+    await fetch(`/api/Flows/${flow.id}/Update`, {
+        method: "PUT",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(flow)
+    })
 }
 
 function toggleButtons() {
-  
-  console.log("disabling all buttons")
-  btnAddText.disabled = true;
-  btnAddImage.disabled = true;
-  btnAddVideo.disabled = true;
-  btnAddChoice.disabled = true;
 
-  if (currentViewingStep == undefined) {
-    return;
-  }
-  
-  if (currentViewingStep.informationViewModel != undefined) {
-    console.log("enabling all info buttons")
-    btnAddText.disabled = false;
-    btnAddImage.disabled = false;
-    btnAddVideo.disabled = false;
-  }
-  if (currentViewingStep.questionViewModel != undefined && currentViewingStep.questionViewModel.questionType != "OpenQuestion") {
-    console.log("enabling all question buttons")
-    btnAddChoice.disabled = false;
-  }
+    console.log("disabling all buttons")
+    btnAddText.disabled = true;
+    btnAddImage.disabled = true;
+    btnAddVideo.disabled = true;
+    btnAddChoice.disabled = true;
+
+    if (currentViewingStep == undefined) {
+        return;
+    }
+
+    if (currentViewingStep.informationViewModel != undefined) {
+        console.log("enabling all info buttons")
+        btnAddText.disabled = false;
+        btnAddImage.disabled = false;
+        btnAddVideo.disabled = false;
+    }
+    if (currentViewingStep.questionViewModel != undefined && currentViewingStep.questionViewModel.questionType != "OpenQuestion") {
+        console.log("enabling all question buttons")
+        btnAddChoice.disabled = false;
+    }
 }
 
 function UpdateStepList(steps: Step[]) {
-  
-  steps.sort((a, b) => a.stepNumber - b.stepNumber);
-  
-  currentStepList = steps;
-  
-  const stepsList = document.getElementById("steps-list") as HTMLDivElement;
-  
-  stepsList.innerHTML = "";
-  
-  if (steps.length > 0) {
-    steps.forEach(step => {
 
-      //Card container
-      const stepCard = document.createElement('a');
-      stepCard.classList.add("step-card", "btn");
-      stepCard.dataset.stepId = step.id.toString();
-      stepCard.dataset.stepNumber = step.stepNumber.toString();
-      //Card Header
-      const cardHeader = document.createElement('h2');
-      cardHeader.classList.add("step-card-header");
-      cardHeader.innerText = "Step " + step.stepNumber.toString() + "\n" + step.stepName;
-      
-      stepCard.appendChild(cardHeader);
+    steps.sort((a, b) => a.stepNumber - b.stepNumber);
 
-      stepsList.appendChild(stepCard);
-    })
-  } else {
-    const noFlowsMessage = document.createElement('p');
-    noFlowsMessage.classList.add('no-cards-message');
-    noFlowsMessage.textContent = 'There are currently no Steps in this flow!';
-    stepsList.appendChild(noFlowsMessage);
-  }
-  
+    currentStepList = steps;
+
+    console.log(currentStepList)
+
+    const stepsList = document.getElementById("steps-list") as HTMLDivElement;
+
+    stepsList.innerHTML = "";
+
+    if (steps.length > 0) {
+        steps.forEach(step => {
+
+            //Card container
+            const stepCard = document.createElement('a');
+            stepCard.classList.add("step-card", "btn");
+            stepCard.dataset.stepNumber = step.stepNumber.toString();
+            //Card Header
+            const cardHeader = document.createElement('h2');
+            cardHeader.classList.add("step-card-header");
+            cardHeader.innerText = "Step " + step.stepNumber.toString();
+
+            stepCard.appendChild(cardHeader);
+
+            stepsList.appendChild(stepCard);
+        })
+    } else {
+        const noFlowsMessage = document.createElement('p');
+        noFlowsMessage.classList.add('no-cards-message');
+        noFlowsMessage.textContent = 'There are currently no Steps in this flow!';
+        stepsList.appendChild(noFlowsMessage);
+    }
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const parts = document.URL.split('/');
-  const lastPart = parts[parts.length - 1];
-  flowId = parseInt(lastPart, 10);
-  
-  if (isNaN(flowId)) { console.error("The ID provided in the URL is not a number.")}
-  
-  GetSteps(flowId)
-      .then(() => initializeCardLinks())
-      .then(() => toggleButtons());
-  
+    const parts = document.URL.split('/');
+    const lastPart = parts[parts.length - 1];
+    flowId = parseInt(lastPart, 10);
+
+    if (isNaN(flowId)) {
+        console.error("The ID provided in the URL is not a number.")
+    }
+
+    GetSteps(flowId)
+        .then(steps => UpdateStepList(steps))
+        .then(() => toggleButtons())
+        .then(() => initializeCardLinks())
 });
 
 btnAddChoice.addEventListener('click', () => {
-  console.log("Add choice")
-  let div = document.createElement("div");
-  div.classList.add("text-start", "m-auto", "choice-container")
+    console.log("Add choice")
+    let div = document.createElement("div");
+    div.classList.add("text-start", "m-auto", "choice-container")
 
-  const radioButton = document.createElement("input");
-  radioButton.classList.add("btn-choice")
-  radioButton.type = "radio";
-  radioButton.name = "choices";
-  radioButton.value = "";
+    const textArea = document.createElement("input");
+    textArea.classList.add("choice-textarea")
 
-  const textArea = document.createElement("input");
-  textArea.classList.add("choice-textarea")
+    let choiceContainer = document.getElementById("choices-container") as HTMLDivElement;
 
-  div.append(radioButton);
-  div.append(textArea);
-  
-  let choiceContainer = document.getElementById("choices-container") as HTMLDivElement;
-  
-  choiceContainer.appendChild(div);
+    div.append(textArea);
+    choiceContainer.appendChild(div);
 });
 
 btnAddText.addEventListener('click', () => {
-  console.log("Add text")
+    console.log("Add text")
+    let div = document.createElement("div");
+    div.id = "text-container"
+    div.classList.add("text-start", "m-auto")
+
+    const textArea = document.createElement("textarea");
+    textArea.id = "text-textarea"
+
+    div.append(textArea);
+    partialInformationContainer.appendChild(div);
 });
 
 btnAddImage.addEventListener('click', () => {
-  console.log("Add Image")
-  //TODO: add image logica
+    console.log("Add Image")
+    //TODO: add image logica
 });
 
 btnAddVideo.addEventListener('click', () => {
-  console.log("Add Video")
-  //TODO: add video logica
+    console.log("Add Video")
+    //TODO: add video logica
 });
 
 btnSaveFlow.addEventListener('click', () => {
-  console.log("Saving flow...")
-  if (currentViewingStep == undefined) { return; }
-  if (currentViewingStep.informationViewModel != undefined) {
-    const contentElements = partialInformationContainer.children; // Get all child elements of the content div
+    console.log("Saving flow...");
+    GetStepData();
+    GetFlowById(flowId)
+        .then(flow => GetNewFlowData(flow))
+        .then(flow => {
+            UpdateFlow(flow);
+        })
+});
 
-    // Initialize arrays to store content and information types
-    const content: string[] = [];
-    const informationTypes: string[] = [];
 
-    // Loop through each child element of the content div
-    for (let i = 0; i < contentElements.length; i++) {
-      const element = contentElements[i] as HTMLElement; // Cast to HTMLElement
-
-      // Determine the tag name and cast the element accordingly
-      switch (element.tagName) {
-        case 'P':
-          const paragraphElement = element as HTMLParagraphElement;
-          content.push(paragraphElement.textContent as string); // Add text content or empty string
-          informationTypes.push('Text'); // Set information type to Text
-          break;
-        case 'IMG':
-          const imageElement = element as HTMLImageElement;
-          content.push(imageElement.src); // Add image source or empty string
-          informationTypes.push('Image'); // Set information type to Image
-          break;
-        case 'VIDEO':
-          const videoElement = element as HTMLVideoElement;
-          content.push(videoElement.src); // Add video source or empty string
-          informationTypes.push('Video'); // Set information type to Video
-          break;
-        case 'INPUT':
-          const inputElement = element as HTMLInputElement;
-          content.push(inputElement.value); // Add input value or empty string
-          informationTypes.push('Text'); // Set information type to Text
-          break;
-        default:
-          // Handle other element types if needed
-          break;
-      }
+function GetStepData() {
+    if (!currentViewingStep) {
+        return;
     }
 
-    // Prepare data to send in the fetch request
-    const data = {
-      content,
-      informationTypes
-    };
-    
-    //TODO: Jana maakt dit verder af -> fetch hier.
-  }
-})
+    let informationArray: Information[] = [];
+    let choicesArray: Choice[] = [];
+
+    const index = currentStepList.findIndex(step => step.stepNumber === currentViewingStep.stepNumber);
+
+    if (currentViewingStep.informationViewModel) {
+        const contentElements = partialInformationContainer.children;
+
+        for (let i = 0; i < contentElements.length; i++) {
+            const element = contentElements[i] as HTMLElement;
+
+            let information: string = "";
+            let informationType: string = "";
+
+            switch (element.tagName) {
+                case 'TEXTAREA':
+                    const textAreaElement = element as HTMLTextAreaElement;
+                    information = textAreaElement.value;
+                    informationType = 'Text';
+                    break;
+                case 'IMG':
+                    const imageElement = element as HTMLImageElement;
+                    information = imageElement.src;
+                    informationType = 'Image';
+                    break;
+                case 'VIDEO':
+                    const videoElement = element as HTMLVideoElement;
+                    information = videoElement.src;
+                    informationType = 'Video';
+                    break;
+            }
+
+            informationArray.push({information: information, informationType: informationType});
+        }
+        if (index !== -1) {
+            currentStepList[index].informationViewModel = informationArray;
+        }
+    }
+
+    if (currentViewingStep.questionViewModel) {
+        const questionContainer = partialQuestionContainer.children[1] as HTMLDivElement;
+        const choicesContainer = partialQuestionContainer.children[2] as HTMLDivElement;
+
+        for (let i = 0; i < choicesContainer.children.length; i++) {
+            const element = choicesContainer.children[i].children[0] as HTMLInputElement;
+            choicesArray.push({text: element.value});
+        }
+
+        const questionElement = questionContainer.children[0] as HTMLTextAreaElement;
+
+        let questionText = questionElement.value;
+        let questionType = partialQuestionContainer.children[0].innerHTML;
+
+        let question: Question = {question: questionText, questionType: questionType, choices: choicesArray}
+
+        if (index !== -1) {
+            currentStepList[index].questionViewModel = question;
+        }
+    }
+}
+
+async function GetNewFlowData(flow: Flow): Promise<Flow> {
+    let flowData: Flow = {
+        id: flow.id,
+        flowType: flow.flowType,
+        steps: [] as Step[],
+        participations: [] as Participation[]
+    }
+
+    for (const step of currentStepList) {
+        let stepData: Step = {
+            stepNumber: step.stepNumber,
+            informationViewModel: step.informationViewModel,
+            questionViewModel: step.questionViewModel
+        };
+
+        if (step.questionViewModel && step.questionViewModel.questionType !== "OpenQuestion") {
+            const choices: Choice[] = [];
+            for (const choice of step.questionViewModel.choices) {
+                choices.push({text: choice.text});
+            }
+            if (stepData.questionViewModel)
+                stepData.questionViewModel.choices = choices;
+        }
+
+        flowData.steps.push(stepData);
+    }
+
+    return flowData;
+}
 
 function initializeCardLinks() {
-  let stepCards = document.querySelectorAll('.step-card') as NodeListOf<HTMLAnchorElement>;
+    let stepCards = document.querySelectorAll('.step-card') as NodeListOf<HTMLAnchorElement>;
 
-  stepCards.forEach(stepCard => {
-    stepCard.addEventListener('click', () => {
-      const stepNumber = stepCard.dataset.stepNumber;
+    stepCards.forEach(stepCard => {
+        stepCard.addEventListener('click', () => {
+            const stepNumber = stepCard.dataset.stepNumber;
 
-      if (stepNumber) {
-        GetStepById(parseInt(stepNumber), flowId);        
-      } else {
-        console.error('Step ID not defined in dataset');
-      }
+            if (stepNumber) {
+                GetStepById(parseInt(stepNumber), flowId).then(s => {
+                    ShowStepInContainer(s);
+                    currentViewingStep = s;
+                    toggleButtons();
+                });
+            } else {
+                console.error('Step ID not defined in dataset');
+            }
+        });
     });
-  });
 }
 
 const partialInformationContainer = document.getElementById("partialInformationContainer") as HTMLDivElement;
 const partialQuestionContainer = document.getElementById("partialQuestionContainer") as HTMLDivElement;
 
 async function ShowStepInContainer(data: Step) {
-  partialInformationContainer.innerHTML = "";
-  partialQuestionContainer.innerHTML = "";
-  if (data.informationViewModel != undefined) {
-    switch (data.informationViewModel.informationType) {
-      case "Text": {
-        let p = document.createElement("p");
-        p.innerText = data.informationViewModel.information;
-        p.classList.add("text-center");
-        p.classList.add("col-md-12");
-        partialInformationContainer.appendChild(p);
-        break;
-      }
-      case "Image": {
-        let img = document.createElement("img");
-        img.src = "data:image/png;base64," + data.informationViewModel.information;
-        img.classList.add("col-m-12", "w-100", "h-100");
-        partialInformationContainer.appendChild(img);
-        break;
-      }
-      case "Video": {
-        let path = await downloadVideoFromBucket(data.informationViewModel.information);
-        let video = document.createElement("video");
-        if (typeof path === "string") {
-          path = path.substring(1, path.length - 1);
-          video.src = path;
+    partialInformationContainer.innerHTML = "";
+    partialQuestionContainer.innerHTML = "";
+    toggleButtons();
+    console.log(data)
+    if (data.informationViewModel != undefined) {
+        for (const infoStep of data.informationViewModel) {
+            switch (infoStep.informationType) {
+                case "Text": {
+                    let textArea = document.createElement("textarea");
+                    textArea.id = "text-textarea"
+                    textArea.value = infoStep.information;
+
+                    partialInformationContainer.appendChild(textArea);
+                }
+                    break;
+                case "Image": {
+                    let img = document.createElement("img");
+                    img.src = "data:image/png;base64," + infoStep.information;
+                    img.classList.add("col-m-12", "w-100", "h-100");
+                    partialInformationContainer.appendChild(img);
+                    break;
+                }
+                case "Video": {
+                    let path = await downloadVideoFromBucket(infoStep.information);
+                    let video = document.createElement("video");
+                    if (typeof path === "string") {
+                        path = path.substring(1, path.length - 1);
+                        video.src = path;
+                    }
+                    video.autoplay = true;
+                    video.loop = true;
+                    video.controls = false;
+                    video.classList.add("h-100", "w-100");
+                    partialInformationContainer.appendChild(video);
+                    break;
+                }
+            }
         }
-        video.autoplay = true;
-        video.loop = true;
-        video.controls = false;
-        video.classList.add("h-100", "w-100");
-        partialInformationContainer.appendChild(video);
-        break;
-      }
     }
-  }
 
-  if (data.questionViewModel != undefined) {
-    let p = document.createElement("input");
-    p.value = data.questionViewModel.question;
-    p.classList.add("text-start", "m-auto", "mb-3", "question-header");
-    partialQuestionContainer.appendChild(p);
-    
-    let choiceContainer = document.createElement('div');
-    choiceContainer.id = "choices-container";
-    switch (data.questionViewModel.questionType) {
-      case "SingleChoiceQuestion":
-        for (const element of data.questionViewModel.choices) {
-          
-          let div = document.createElement("div");
-          div.classList.add("text-start", "m-auto", "choice-container")
-          
-          const radioButton = document.createElement("input");
-          radioButton.classList.add("btn-choice")
-          radioButton.type = "radio";
-          radioButton.name = "choices";
-          radioButton.value = element.text;
+    if (data.questionViewModel != undefined) {
+        let questionType = document.createElement('p');
+        partialQuestionContainer.appendChild(questionType);
+        let questionContainer = document.createElement("div");
+        questionContainer.id = "question-container"
+        questionContainer.classList.add("text-start", "m-auto");
 
-          const textArea = document.createElement("input");
-          textArea.classList.add("choice-textarea")
-          textArea.value = element.text;
-          
-          div.append(radioButton);
-          div.append(textArea);
-          choiceContainer.appendChild(div);
+        const textArea = document.createElement("textarea");
+        textArea.id = "question-textarea"
+        textArea.value = data.questionViewModel.question;
+
+        questionContainer.append(textArea);
+        partialQuestionContainer.appendChild(questionContainer);
+
+        let choiceContainer = document.createElement('div');
+        choiceContainer.id = "choices-container";
+        questionType.innerText = data.questionViewModel.questionType;
+        switch (data.questionViewModel.questionType) {
+            case "SingleChoiceQuestion":
+                for (const element of data.questionViewModel.choices) {
+                    let div = document.createElement("div");
+                    div.classList.add("text-start", "m-auto", "choice-container")
+
+                    const textArea = document.createElement("input");
+                    textArea.classList.add("choice-textarea")
+                    textArea.value = element.text;
+
+                    div.append(textArea);
+                    choiceContainer.appendChild(div);
+                }
+                break;
+            case "MultipleChoiceQuestion":
+                for (const element of data.questionViewModel.choices) {
+                    let div = document.createElement("div");
+                    div.classList.add("text-start", "m-auto", "choice-container")
+
+                    const textArea = document.createElement("input");
+                    textArea.classList.add("choice-textarea")
+                    textArea.value = element.text;
+
+                    div.append(textArea);
+                    choiceContainer.appendChild(div);
+                }
+                break;
+            case "RangeQuestion":
+                for (const element of data.questionViewModel.choices) {
+                    let div = document.createElement("div");
+                    div.classList.add("text-start", "m-auto", "choice-container")
+
+                    const textArea = document.createElement("input");
+                    textArea.classList.add("choice-textarea")
+                    textArea.value = element.text;
+
+                    div.append(textArea);
+                    choiceContainer.appendChild(div);
+                }
+                break;
+            case "OpenQuestion": {
+                let div = document.createElement("div");
+                div.classList.add("m-auto");
+
+                partialQuestionContainer.appendChild(div);
+                break;
+            }
+            default:
+                console.log("This question type is not currently supported. (QuestionType: " + data.questionViewModel.questionType);
+                break;
         }
-        break;
-      case "MultipleChoiceQuestion":
-        for (const element of data.questionViewModel.choices) {
-          let choice = document.createElement("input");
-          let label = document.createElement("label");
-          let div = document.createElement("div");
-          div.classList.add("text-start", "m-auto")
-          choice.type = 'checkbox';
-          choice.name = 'choice';
-          choice.value = element.text;
-          label.appendChild(choice);
-          label.append(element.text);
-          label.style.display = 'block';
-          div.appendChild(label);
-          partialQuestionContainer.appendChild(div);
-        }
-        break;
-      case "RangeQuestion": {
-        let slider = document.createElement("input");
-        let div = document.createElement("div");
-        div.classList.add("m-auto");
-        slider.type = 'range';
-        slider.min = String(0);
-        slider.max = String(data.questionViewModel.choices.length - 1);
-        slider.step = String(1);
-
-        div.appendChild(slider);
-
-        let label = document.createElement("label");
-        label.innerText = data.questionViewModel.choices[Number(slider.value)].text;
-        div.appendChild(label);
-        partialQuestionContainer.appendChild(div);
-        partialQuestionContainer.appendChild(label);
-        break;
-      }
-      case "OpenQuestion": {
-        let textInput = document.createElement("textarea");
-        let openDiv = document.createElement("div");
-        openDiv.classList.add("m-auto");
-        textInput.classList.add("w-100");
-        textInput.name = 'answer';
-        textInput.rows = 8;
-        textInput.cols = 75;
-        textInput.maxLength = 650;
-        textInput.placeholder = "Your answer here... (Max 650 characters)"
-
-        // Event listener that ensures the 650 character limit.
-        textInput.addEventListener('input', function () {
-          let currentLength = textInput.value.length;
-          if (currentLength > 650) {
-            textInput.value = textInput.value.substring(0, 650);
-          }
-        });
-        openDiv.append(textInput);
-        partialQuestionContainer.appendChild(openDiv);
-        break;
-      }
-      default:
-        console.log("This question type is not currently supported. (QuestionType: " + data.questionViewModel.questionType);
-        break;
+        partialQuestionContainer.appendChild(choiceContainer);
     }
-    partialQuestionContainer.appendChild(choiceContainer);
-  }
 }
 
-
-
-// btnAddStep.addEventListener('click', () => {
-//  
-//   let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
-//
-//   //Right now only makes information steps.
-//   AddStep(newStepNumber,"Information")
-//       .then(() => GetSteps(flowId))
-//       .then(() => initializeCardLinks());
-// });
 const CreateStepModal = new Modal(document.getElementById('CreateStepModal')!, {
-  keyboard: false,
-  focus: true,
-  backdrop: "static"
+    keyboard: false,
+    focus: true,
+    backdrop: "static"
 });
 
 btnAddStep.onclick = () => {
-  CreateStepModal.show();
+    CreateStepModal.show();
 }
 
 
@@ -405,11 +473,11 @@ const rangeQ = document.getElementById("rangeQ") as HTMLInputElement;
 const openQ = document.getElementById("openQ") as HTMLInputElement;
 
 butCancelCreateStep.onclick = () => {
-  clearModal()
+    clearModal()
 }
 
 butCloseCreateStep.onclick = () => {
-  clearModal()
+    clearModal()
 }
 butConfirmCreateStep.onclick = () => {
   let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
@@ -436,6 +504,7 @@ butConfirmCreateStep.onclick = () => {
   }
   clearModal()
 }
+
 function clearModal() {
-  CreateStepModal.hide();
+    CreateStepModal.hide();
 }
