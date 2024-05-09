@@ -2,8 +2,8 @@ import {Step} from "../Flow/Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
 import {Modal} from "bootstrap";
 
-const stepsList = document.getElementById('steps-list') as HTMLElement;
 const btnAddStep = document.getElementById('btn-add-step') as HTMLButtonElement;
+const btnViewFlow = document.getElementById('viewFlow') as HTMLButtonElement;
 
 let currentStepList: Step[];
 
@@ -88,11 +88,15 @@ function UpdateStepList(steps: Step[]) {
 document.addEventListener('DOMContentLoaded', () => {
   const parts = document.URL.split('/');
   const lastPart = parts[parts.length - 1];
+  const btnViewFlow = document.getElementById("viewFlow") as HTMLAnchorElement;
   flowId = parseInt(lastPart, 10);
   
   if (isNaN(flowId)) { console.error("The ID provided in the URL is not a number.")}
   
-  GetSteps(flowId).then(() => { initializeCardLinks(); });
+  GetSteps(flowId).then(() => { 
+    initializeCardLinks();
+    btnViewFlow.setAttribute('href', "/Flow/Step/" + flowId);
+  });
   
 });
 
@@ -237,17 +241,6 @@ async function ShowStepInContainer(data: Step) {
   }
 }
 
-
-
-// btnAddStep.addEventListener('click', () => {
-//  
-//   let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
-//
-//   //Right now only makes information steps.
-//   AddStep(newStepNumber,"Information")
-//       .then(() => GetSteps(flowId))
-//       .then(() => initializeCardLinks());
-// });
 const CreateStepModal = new Modal(document.getElementById('CreateStepModal')!, {
   keyboard: false,
   focus: true,
@@ -257,7 +250,6 @@ const CreateStepModal = new Modal(document.getElementById('CreateStepModal')!, {
 btnAddStep.onclick = () => {
   CreateStepModal.show();
 }
-
 
 const butCloseCreateStep = document.getElementById("butCloseCreateStep") as HTMLButtonElement;
 const butCancelCreateStep = document.getElementById("butCancelCreateStep") as HTMLButtonElement;
@@ -303,4 +295,32 @@ butConfirmCreateStep.onclick = () => {
 }
 function clearModal() {
   CreateStepModal.hide();
+  ViewStepModal.hide();
+}
+
+const btnCancelViewFlowModal = document.getElementById("btnCancelViewFlowModal") as HTMLButtonElement;
+const btnSaveViewFlowModal = document.getElementById("btnSaveViewFlowModal") as HTMLButtonElement;
+const btnConfirmViewFlow = document.getElementById("btnConfirmViewFlow") as HTMLAnchorElement;
+
+const ViewStepModal = new Modal(document.getElementById('ViewFlowModal')!, {
+  keyboard: false,
+  focus: true,
+  backdrop: "static"
+});
+
+btnViewFlow.onclick = () => {
+  ViewStepModal.show();
+  btnConfirmViewFlow.setAttribute('href', "/Flow/Step/" + flowId);
+}
+
+btnCancelViewFlowModal.onclick = () => {
+  clearModal();
+}
+
+btnSaveViewFlowModal.onclick = () => {
+  //TODO: after merge with Jana, add saveFlow method here.
+}
+
+btnConfirmViewFlow.onclick = () => {
+  clearModal();
 }

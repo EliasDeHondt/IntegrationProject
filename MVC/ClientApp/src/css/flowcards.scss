@@ -24,3 +24,14 @@
 .flow-card-view-btn:hover {
   background-color: map-get($themes, light, accent)
 }
+
+#viewFlow {
+  position: relative;
+  right: 0;
+  border-radius: 5px;
+  border: thin black solid;
+}
+
+#viewFlow:hover {
+  background-color: map-get($themes, light, secondary);
+}
