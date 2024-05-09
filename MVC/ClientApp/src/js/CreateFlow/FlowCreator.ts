@@ -19,7 +19,7 @@ export async function GetFlows(projectId: number) {
     
 }
 
-function UpdateFlowList(flows: Flow[]) {
+export function UpdateFlowList(flows: Flow[]) {
     
     const flowContainer = document.getElementById("flow-cards") as HTMLElement;
     flowContainer.innerHTML = "";

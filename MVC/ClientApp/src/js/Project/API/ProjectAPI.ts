@@ -1,4 +1,7 @@
 import {Project} from "../../Types/ProjectObjects";
+import {Flow} from "../../Flow/FlowObjects";
+import {showFlows} from "./CreateProjectFlowAPI";
+import {initializeDeleteButtons} from "../../CreateFlow/DeleteFlowModal";
 
 export function fillExisting(project: Project, inputTitle: HTMLInputElement, inputText: HTMLInputElement): void{
     inputTitle.value = project.title
@@ -65,9 +68,44 @@ export async function getMainThemeId(): Promise<number>{
     return getProjectWithId(getIdProject()).then( project => {
         return project.mainThemeId
     })
-    
 }
 
-//Nav
+export async function loadFlowsProject(id: number): Promise<Flow[]> {
+    return await fetch(`/api/Projects/GetFlowsForProject/${id}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
+        .catch(error => console.error("Error:", error))
+}
 
-//select subthemas
+export async function createProjectFlow(flowtype:string,projectId: number) {
+    try {
+        const response = await fetch("/api/Projects/CreateProjectFlow/" + flowtype + "/" + projectId, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.ok) {
+            console.log("Flow made successfully.");
+        } else {
+            console.error("Failed to make new flow.");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+export function resetFlowsProject(flows: Flow[], flowcontainer: HTMLDivElement){
+    let length = flowcontainer.children.length
+    for (let i = length - 1; i > 0; i--){
+        flowcontainer.children[i].remove();
+    }
+    showFlows(flows, "forProject",flowcontainer);
+}

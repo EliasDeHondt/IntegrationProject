@@ -64,6 +64,11 @@ public class ThemeManager
         _repository.UpdateSubTheme(id, subject);
     }
 
+    public Flow CreateFlowForSub(FlowType type, long themeId)
+    {
+        return _repository.CreateFlowForSub(type,themeId);
+    }
+    
     public void DeleteSubTheme(long id)
     {
         IEnumerable<long> flowIds = _repository.GetSubThemeFlows(id);

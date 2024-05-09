@@ -1,1 +1,2 @@
 ﻿import "./PlatformCardGenerator"
+import "./AddPlatformModal"

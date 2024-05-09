@@ -177,7 +177,6 @@ button.accept-policy {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  height: 350px;
   overflow-x: scroll;
   scrollbar-width: none; // Hide scrollbar for firefox
 }
@@ -186,10 +185,11 @@ button.accept-policy {
 #flow-cards::-webkit-scrollbar {
   width: 0;
 }
-
-.flow-card {
+.forSubtheme{
   width: 200px;
-  height: 300px;
+  height: 700px;
+}
+.flow-card {
   background-color: map-get($themes, light, primary);
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -201,13 +201,30 @@ button.accept-policy {
   margin: .5em;
   transition: width 0.3s ease, height 0.3s ease;
 }
-
-.flow-card:hover {
+.forProject {
+  width: 200px;
+  height: 300px;
+}
+.forSubtheme:hover {
+  width: 220px;
+  height: 730px;
+  background-color: map-get($themes, light, primary);
+}
+.forSubtheme#btnCreateFlowSub:hover {
+  width: 220px;
+  height: 730px;
+  background-color: map-get($themes, light, primary);
+}
+.forProject:hover {
   width: 220px;
   height: 330px;
   background-color: map-get($themes, light, primary);
 }
-
+.flow-card#btnCreateFlowProject:hover {
+  width: 220px;
+  height: 330px;
+  background-color: map-get($themes, light, primary);
+}
 .flow-card-header {
   text-align: center;
   font-weight: bolder;
