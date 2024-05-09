@@ -37,6 +37,10 @@ function UpdateFlowList(flows: Flow[]) {
             const flowCardDeleteBtn = document.createElement('button');
             flowCardDeleteBtn.innerHTML = '<i class="bi bi-trash3-fill"></i>';
             flowCardDeleteBtn.classList.add("btn", "btn-secondary", "flow-card-delete-btn");
+            //Card View Button
+            const flowCardViewBtn = document.createElement('a');
+            flowCardViewBtn.innerHTML = '<i class="bi bi-eye-fill"></i>';
+            flowCardViewBtn.classList.add("btn", "btn-secondary", "flow-card-view-btn")
             //Card Header
             const cardHeader = document.createElement('h2');
             cardHeader.classList.add("flow-card-header");
@@ -46,6 +50,7 @@ function UpdateFlowList(flows: Flow[]) {
             cardFooter.classList.add("flow-card-footer");
             cardFooter.innerText = flow.flowType.toString();
 
+            flowCard.appendChild(flowCardViewBtn);
             flowCard.appendChild(flowCardDeleteBtn);
             flowButton.appendChild(cardHeader);
             flowButton.appendChild(cardFooter);
@@ -99,6 +104,28 @@ function initializeCardLinks() {
                 const baseUrl = '/EditFlow/FlowEditor/';
                 const url = `${baseUrl}${flowId}`;
                 flowCard.setAttribute('href', url);
+            } else {
+                console.error('Flow ID not found in dataset');
+            }
+        });
+    });
+    
+    initializeViewLinks();
+}
+
+function initializeViewLinks() {
+    let flowViewButtons = document.querySelectorAll('.flow-card-view-btn') as NodeListOf<HTMLAnchorElement>;
+
+    flowViewButtons.forEach(viewButton => {
+        viewButton.addEventListener('click', () => {
+            // Extract flow ID from viewButton dataset
+            let flowCard = viewButton.parentNode as HTMLDivElement;
+            const flowId = flowCard.dataset.flowId;
+
+            if (flowId) {
+                const baseUrl = '/Flow/Step/';
+                const url = `${baseUrl}${flowId}`;
+                viewButton.setAttribute('href', url);
             } else {
                 console.error('Flow ID not found in dataset');
             }
