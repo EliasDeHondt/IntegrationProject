@@ -1,11 +1,22 @@
 import {Step} from "./Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
+import {Flow} from "./FlowObjects";
+import {Modal} from "bootstrap";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
 const btnNextStep = document.getElementById("btnNextStep") as HTMLButtonElement;
 const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonElement;
+const btnPauseFlow = document.getElementById("btnPauseFlow") as HTMLButtonElement;
+const btnUnPauseFlow = document.getElementById("btnUnPauseFlow") as HTMLButtonElement;
 const btnEmail = document.getElementById("btnEmail") as HTMLButtonElement;
+const btnExitFlow = document.getElementById("butExitFlow") as HTMLButtonElement;
+const modal = new Modal(document.getElementById("pausedFlowModal") as HTMLDivElement, {
+    backdrop: 'static',
+    keyboard: false
+});
+const btnShowFlows = document.getElementById("flowDropdownBtn") as HTMLButtonElement;
+const ddFlows = document.getElementById("flowDropdown") as HTMLUListElement;
 let currentStepNumber: number = 0;
 let userAnswers: string[] = []; // Array to store user answers
 let openUserAnswer: string = "";
@@ -101,32 +112,37 @@ async function ShowStep(data: Step) {
     informationContainer.innerHTML = "";
     questionContainer.innerHTML = "";
     if (data.informationViewModel != undefined) {
-        switch (data.informationViewModel.informationType) {
-            case "Text": {
-                let p = document.createElement("p");
-                p.innerText = data.informationViewModel.information;
-                p.classList.add("text-center");
-                informationContainer.appendChild(p);
-                break;
-            }
-            case "Image": {
-                let img = document.createElement("img");
-                img.src = "data:image/png;base64," + data.informationViewModel.information;
-                informationContainer.appendChild(img);
-                break;
-            }
-            case "Video": {
-                let path = await downloadVideoFromBucket(data.informationViewModel.information);
-                let video = document.createElement("video");
-                if (typeof path === "string") {
-                    path = path.substring(1, path.length - 1);
-                    video.src = path;
+        for (const infoStep of data.informationViewModel) {
+            switch (infoStep.informationType) {
+                case "Text": {
+                    let p = document.createElement("p");
+                    p.innerText = infoStep.information;
+                    p.classList.add("text-center");
+                    p.classList.add("col-md-12");
+                    informationContainer.appendChild(p);
+                    break;
                 }
-                video.autoplay = true;
-                video.loop = true;
-                video.controls = false;
-                informationContainer.appendChild(video);
-                break;
+                case "Image": {
+                    let img = document.createElement("img");
+                    img.src = "data:image/png;base64," + infoStep.information;
+                    img.classList.add("col-m-12", "w-100", "h-100");
+                    informationContainer.appendChild(img);
+                    break;
+                }
+                case "Video": {
+                    let path = await downloadVideoFromBucket(infoStep.information);
+                    let video = document.createElement("video");
+                    if (typeof path === "string") {
+                        path = path.substring(1, path.length - 1);
+                        video.src = path;
+                    }
+                    video.autoplay = true;
+                    video.loop = true;
+                    video.controls = false;
+                    video.classList.add("h-100", "w-100");
+                    informationContainer.appendChild(video);
+                    break;
+                }
             }
         }
     }
@@ -209,8 +225,10 @@ async function ShowStep(data: Step) {
 
                 slider.addEventListener('input', function () {
                     // Update the label to reflect the current choice
-                    userAnswers = [data.questionViewModel.choices[Number(slider.value)].text];
-                    label.innerText = data.questionViewModel.choices[Number(slider.value)].text;
+                    if (data.questionViewModel) {
+                        userAnswers = [data.questionViewModel.choices[Number(slider.value)].text];
+                        label.innerText = data.questionViewModel.choices[Number(slider.value)].text;
+                    }
                 });
                 break;
             }
@@ -218,6 +236,7 @@ async function ShowStep(data: Step) {
                 let textInput = document.createElement("textarea");
                 let openDiv = document.createElement("div");
                 openDiv.classList.add("m-auto");
+                textInput.classList.add("w-100");
                 textInput.name = 'answer';
                 textInput.rows = 8;
                 textInput.cols = 75;

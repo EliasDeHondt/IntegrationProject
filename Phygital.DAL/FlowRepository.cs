@@ -82,7 +82,26 @@ public class FlowRepository
         _context.Flows.Update(flow);
     }
 
-    public void DeleteFlowById(long flowId)
+    public IEnumerable<StepBase> ReadAllStepsFromFlow(long flowId)
+    {
+        return _context.Flows
+            .AsNoTracking()
+            .Include(f => f.Steps)
+            .First(f => f.Id == flowId)
+            .Steps;
+    }
+
+    public void AddStepToFlow(long flowId, StepBase step)
+    {
+        _context.Flows.Find(flowId)!.Steps.Add(step);
+    }
+    
+    public void UpdateSubTheme(Flow flow)
+    {
+        _context.Flows.Update(flow);
+    }
+    
+        public void DeleteFlowById(long flowId)
     {
         Flow flow = _context.Flows
             .Include(f => f.Steps)
@@ -124,9 +143,9 @@ public class FlowRepository
 
     private void DeleteInformationStep(InformationStep i)
     {
-        _context.Entry(i).Reference(istep => istep.InformationBase).Load();
+        _context.Entry(i).Reference(istep => istep.InformationBases).Load();
         _context.Steps.Remove(i);
-        _context.Information.Remove(i.InformationBase);
+        _context.Information.RemoveRange(i.InformationBases);
     }
 
     private void DeleteQuestionStep(QuestionStep q)
@@ -157,10 +176,5 @@ public class FlowRepository
             .First(flow => flow.Id == flowId);
 
         return flow.Steps;
-    }
-
-    public void AddStepToFlow(long flowId, StepBase step)
-    {
-        _context.Flows.Find(flowId)!.Steps.Add(step);
     }
 }

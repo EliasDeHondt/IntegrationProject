@@ -10,6 +10,7 @@ using System.Text.Json.Serialization;
 using Business_Layer;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
+using Domain.ProjectLogics.Steps.Information;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 
@@ -30,11 +31,22 @@ public class StepsController : Controller
     public ActionResult GetNextStep(int stepNumber, long flowId)
     {
         StepBase stepBase = _manager.GetStepForFlowByNumber(flowId, stepNumber);
-        
+
         var stepViewModel = StepModelFactory.CreateStepViewModel<StepViewModel, StepBase>(stepBase);
-        
+
         return Ok(stepViewModel);
-        
     }
-    
+
+    [HttpPost("/{flowId:long}/Update/{stepNr:int}")]
+    public IActionResult UpdateStep(long flowId, int stepNr, StepViewModel step)
+    {
+        var newStep = _manager.GetStepForFlowByNumber(flowId, stepNr);
+
+        if (newStep == null)
+            return NotFound();
+
+        _manager.ChangeStep(newStep);
+
+        return NoContent();
+    }
 }

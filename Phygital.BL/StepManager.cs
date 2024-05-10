@@ -8,6 +8,7 @@
 using Data_Access_Layer;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
+using Domain.ProjectLogics.Steps.Information;
 
 namespace Business_Layer;
 
@@ -29,4 +30,13 @@ public class StepManager
         return _repo.ReadFlowByNumber(flowId);
     }
     
+    public void ChangeStep(StepBase step)
+    {
+        _repo.UpdateStep(step);
+    }
+
+    public IEnumerable<StepBase> GetAllStepsForFlow(long flowId)
+    {
+        return _repo.ReadAllStepsForFlow(flowId);
+    }
 }
