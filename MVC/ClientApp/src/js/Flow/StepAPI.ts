@@ -9,7 +9,6 @@ const informationContainer = document.getElementById("informationContainer") as 
 const btnNextStep = document.getElementById("btnNextStep") as HTMLButtonElement;
 const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonElement;
 const btnEmail = document.getElementById("btnEmail") as HTMLButtonElement;
-const codediv = document.getElementById("codediv") as HTMLDivElement;
 let currentStepNumber: number = 0;
 let userAnswers: string[] = []; // Array to store user answers
 let openUserAnswer: string = "";
@@ -23,7 +22,6 @@ let time: number = 29;
 let choices: string[] = [];
 
 hideDigitalElements();
-codediv.innerText = `Facilitator code: ${sessionCode}`
 
 //email checken
 function CheckEmail(inputEmail: string): boolean {
@@ -115,12 +113,17 @@ function GetNextStep(stepNumber: number, flowId: number) {
 async function showPhysicalStep(data: Step){
     informationContainer.innerHTML = "";
     questionContainer.innerHTML = "";
+    if(data.informationViewModel != undefined && data.questionViewModel != undefined) nextStep(false).then(() => {
+        return
+    });
     await showInformationStep(data.informationViewModel);
     showPhysicalQuestionStep(data.questionViewModel);
 }
 
 async function showInformationStep(data: Information){
     if (data != undefined) {
+        const webcam = document.getElementById("webcamDiv") as HTMLDivElement;
+        webcam.classList.add("visually-hidden");
         switch (data.informationType) {
             case "Text": {
                 let p = document.createElement("p");
@@ -155,6 +158,8 @@ async function showInformationStep(data: Information){
 function showPhysicalQuestionStep(data: Question){
     choices = [];
     if (data != undefined) {
+        const webcam = document.getElementById("webcamDiv") as HTMLDivElement;
+        webcam.classList.remove("visually-hidden");
         switch(data.questionType){
             case "RangeQuestion":
                 createQuestion(data)
@@ -176,15 +181,20 @@ function createQuestion(data: Question){
     p.classList.add("text-start");
     p.classList.add("m-auto");
     p.classList.add("mb-3");
+    p.style.fontSize = "36px";
     questionContainer.appendChild(p);
     drawChoiceBoundaries(data.choices.length, detectionCanvas.width, detectionCanvas.height);
     let rowDiv = document.createElement("div");
     rowDiv.classList.add("row");
+    rowDiv.classList.add("m-auto");
+    rowDiv.classList.add("w-50");
     for (const element of data.choices) {
         let colDiv = document.createElement("div");
         colDiv.classList.add("col");
+        
         let choice = document.createElement("p");
         choice.innerText = element.text;
+        choice.style.fontSize = "24px";
         choices.push(element.text);
         colDiv.appendChild(choice);
         rowDiv.appendChild(colDiv);
@@ -347,9 +357,15 @@ async function hideDigitalElements(){
         const topLeft = document.getElementById("topLeft") as HTMLDivElement;
         const themeDiv = document.getElementById("themeDiv") as HTMLDivElement;
         const themeDivInner = themeDiv.innerHTML
-        topLeft.innerHTML = `<h1>${themeDivInner}</h1>`
+        topLeft.style.height = "120px";
+        topLeft.innerHTML = `<h1>${themeDivInner}</h1><p>Facilitator code: ${sessionCode}</p>`
         webcam.classList.remove("visually-hidden");
 
+        const centerDiv = document.getElementById("kioskCenter") as HTMLDivElement;
+        centerDiv.style.top = "58%";
+        const centerContainerDiv = document.getElementById("kioskContainerCenter") as HTMLDivElement;
+        centerContainerDiv.style.height = "800px";
+        
         const timer = document.getElementById("timer") as HTMLDivElement;
         timer.innerText = "Loading physical setup...";
         
