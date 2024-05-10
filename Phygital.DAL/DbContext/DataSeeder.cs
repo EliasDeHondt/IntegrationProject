@@ -91,6 +91,42 @@ namespace Data_Access_Layer.DbContext
                     flow.Steps.Add(step4);
                     dbContext.QuestionSteps.Add(step4);
                     break;
+                case 5:
+                    SingleChoiceQuestion singleQuestion5 = new SingleChoiceQuestion("Which area of technology do you believe will revolutionize daily life the most in the next decade? Choose one.");
+                    
+                    Choice choice24 = new Choice("Artificial Intelligence and Machine Learning", singleQuestion5);
+                    Choice choice25 = new Choice("Augmented Reality and Virtual Reality", singleQuestion5);
+                    Choice choice26 = new Choice("Blockchain and Cryptocurrency", singleQuestion5);
+                    Choice choice27 = new Choice("Internet of Things", singleQuestion5);
+                    Choice choice28 = new Choice("Biotechnology and Genetic Engineering", singleQuestion5);
+                    Choice choice29 = new Choice("Renewable Energy Technology", singleQuestion5);
+
+                    dbContext.ChoiceQuestions.AddRange(singleQuestion5);
+                    dbContext.Choices.AddRange(choice24, choice25, choice26, choice27, choice28, choice29);
+
+                    // Add to step
+                    QuestionStep step5 = new QuestionStep(stepIndexFlow, singleQuestion5, flow);
+                    flow.Steps.Add(step5);
+                    dbContext.QuestionSteps.Add(step5);
+                    break;
+                case 6:
+                    SingleChoiceQuestion singleQuestion6 = new SingleChoiceQuestion("When considering the environmental impact of technology, which factor do you prioritize the most? Choose one.");
+                    
+                    Choice choice30 = new Choice("Energy efficiency and sustainability of manufacturing processes", singleQuestion6);
+                    Choice choice31 = new Choice("Use of recyclable materials and eco-friendly packaging", singleQuestion6);
+                    Choice choice32 = new Choice("Reduction of carbon emissions and greenhouse gases", singleQuestion6);
+                    Choice choice33 = new Choice("Preservation of natural resources and biodiversity", singleQuestion6);
+                    Choice choice34 = new Choice("Implementation of sustainable waste management practices", singleQuestion6);
+                    Choice choice35 = new Choice("Promotion of renewable energy sources in technology infrastructure", singleQuestion6);
+
+                    dbContext.ChoiceQuestions.AddRange(singleQuestion6);
+                    dbContext.Choices.AddRange(choice30, choice31, choice32, choice33, choice34, choice35);
+
+                    // Add to step
+                    QuestionStep step6 = new QuestionStep(stepIndexFlow, singleQuestion6, flow);
+                    flow.Steps.Add(step6);
+                    dbContext.QuestionSteps.Add(step6);
+                    break;
             }
         }
 
@@ -132,6 +168,60 @@ namespace Data_Access_Layer.DbContext
                     flow.Steps.Add(step2);
                     dbContext.QuestionSteps.Add(step2);
                     break;
+                case 3:
+                    MultipleChoiceQuestion multipleChoiceQuestions3 = new MultipleChoiceQuestion("How can technology best contribute to promoting equal access to education and opportunities for underprivileged communities? (Select all that apply)");
+                    
+                    Choice choice11 = new Choice("Providing online educational resources and remote learning platforms", multipleChoiceQuestions3);
+                    Choice choice12 = new Choice("Offering mentorship programs and digital skills training initiatives", multipleChoiceQuestions3);
+                    Choice choice13 = new Choice("Facilitating access to affordable internet and digital devices", multipleChoiceQuestions3);
+                    Choice choice14 = new Choice("Supporting community-based organizations and grassroots initiatives", multipleChoiceQuestions3);
+                    Choice choice15 = new Choice("Developing innovative solutions for healthcare and sanitation in underserved areas", multipleChoiceQuestions3);
+                    Choice choice16 = new Choice("Empowering local entrepreneurs and small businesses through e-commerce and digital marketplaces", multipleChoiceQuestions3);
+                    
+                    dbContext.ChoiceQuestions.AddRange(multipleChoiceQuestions3);
+                    dbContext.Choices.AddRange(choice11, choice12, choice13, choice14, choice15, choice16);
+                    
+                    // Add to step
+                    QuestionStep step3 = new QuestionStep(stepIndexFlow, multipleChoiceQuestions3, flow);
+                    flow.Steps.Add(step3);
+                    dbContext.QuestionSteps.Add(step3);
+                    break;
+                case 4:
+                    MultipleChoiceQuestion multipleChoiceQuestions4 = new MultipleChoiceQuestion("How do you think technology can best contribute to environmental sustainability and combating climate change? (Select all that apply)");
+                    
+                    Choice choice17 = new Choice("Developing renewable energy sources and energy-efficient technologies", multipleChoiceQuestions4);
+                    Choice choice18 = new Choice("Monitoring and managing environmental resources through IoT and sensor networks", multipleChoiceQuestions4);
+                    Choice choice19 = new Choice("Encouraging sustainable consumption and waste reduction through digital platforms", multipleChoiceQuestions4);
+                    Choice choice20 = new Choice("Enhancing climate modeling and prediction capabilities using big data and AI", multipleChoiceQuestions4);
+                    Choice choice21 = new Choice("Facilitating global collaboration and knowledge sharing on climate solutions through digital platforms", multipleChoiceQuestions4);
+                    Choice choice22 = new Choice("Supporting eco-conscious lifestyles and green initiatives through social media and online communities", multipleChoiceQuestions4);
+                    
+                    dbContext.ChoiceQuestions.AddRange(multipleChoiceQuestions4);
+                    dbContext.Choices.AddRange(choice17, choice18, choice19, choice20, choice21, choice22);
+                    
+                    // Add to step
+                    QuestionStep step4 = new QuestionStep(stepIndexFlow, multipleChoiceQuestions4, flow);
+                    flow.Steps.Add(step4);
+                    dbContext.QuestionSteps.Add(step4);
+                    break;
+                case 5:
+                    MultipleChoiceQuestion multipleChoiceQuestions5 = new MultipleChoiceQuestion("What measures do you think are necessary to ensure the ethical development and use of emerging technologies? (Select all that apply)");
+                    
+                    Choice choice23 = new Choice("Establishing clear guidelines and regulations for data privacy and security", multipleChoiceQuestions5);
+                    Choice choice24 = new Choice("Promoting transparency and accountability in algorithmic decision-making processes", multipleChoiceQuestions5);
+                    Choice choice25 = new Choice("Fostering interdisciplinary collaboration between technologists, ethicists, and policymakers", multipleChoiceQuestions5);
+                    Choice choice26 = new Choice("Encouraging public dialogue and engagement on ethical issues related to technology", multipleChoiceQuestions5);
+                    Choice choice27 = new Choice("Investing in research and education on the ethical implications of emerging technologies", multipleChoiceQuestions5);
+                    Choice choice28 = new Choice("Holding technology companies accountable for ethical violations through legal and regulatory mechanisms", multipleChoiceQuestions5);
+                    
+                    dbContext.ChoiceQuestions.AddRange(multipleChoiceQuestions5);
+                    dbContext.Choices.AddRange(choice23, choice24, choice25, choice26, choice27, choice28);
+                    
+                    // Add to step
+                    QuestionStep step5 = new QuestionStep(stepIndexFlow, multipleChoiceQuestions5, flow);
+                    flow.Steps.Add(step5);
+                    dbContext.QuestionSteps.Add(step5);
+                    break;
             }
         }
 
@@ -172,6 +262,40 @@ namespace Data_Access_Layer.DbContext
                     QuestionStep step2 = new QuestionStep(stepIndexFlow, rangeQuestions2, flow);
                     flow.Steps.Add(step2);
                     dbContext.QuestionSteps.Add(step2);
+                    break;
+                case 3:
+                    RangeQuestion rangeQuestions3 = new RangeQuestion("How optimistic are you about the potential of technology to address social and environmental challenges?");
+                    
+                    Choice choice11 = new Choice("Not optimistic at all", rangeQuestions3);
+                    Choice choice12 = new Choice("Not so optimistic", rangeQuestions3);
+                    Choice choice13 = new Choice("Neutral", rangeQuestions3);
+                    Choice choice14 = new Choice("Optimistic", rangeQuestions3);
+                    Choice choice15 = new Choice("Very optimistic", rangeQuestions3);
+                    
+                    dbContext.ChoiceQuestions.AddRange(rangeQuestions3);
+                    dbContext.Choices.AddRange(choice11, choice12, choice13, choice14, choice15);
+                    
+                    // Add to step
+                    QuestionStep step3 = new QuestionStep(stepIndexFlow, rangeQuestions3, flow);
+                    flow.Steps.Add(step3);
+                    dbContext.QuestionSteps.Add(step3);
+                    break;
+                case 4:
+                    RangeQuestion rangeQuestions4 = new RangeQuestion("How concerned are you about the ethical implications of emerging technologies such as artificial intelligence and biotechnology?");
+                    
+                    Choice choice16 = new Choice("Not concerned at all", rangeQuestions4);
+                    Choice choice17 = new Choice("Not so concerned", rangeQuestions4);
+                    Choice choice18 = new Choice("Neutral", rangeQuestions4);
+                    Choice choice19 = new Choice("Concerned", rangeQuestions4);
+                    Choice choice20 = new Choice("Very concerned", rangeQuestions4);
+                    
+                    dbContext.ChoiceQuestions.AddRange(rangeQuestions4);
+                    dbContext.Choices.AddRange(choice16, choice17, choice18, choice19, choice20);
+                    
+                    // Add to step
+                    QuestionStep step4 = new QuestionStep(stepIndexFlow, rangeQuestions4, flow);
+                    flow.Steps.Add(step4);
+                    dbContext.QuestionSteps.Add(step4);
                     break;
             }
         }
@@ -243,6 +367,20 @@ namespace Data_Access_Layer.DbContext
                     dbContext.OpenQuestions.Add(openQuestions9);
                     dbContext.QuestionSteps.Add(step9);
                     break;
+                case 10:
+                    OpenQuestion openQuestions1O = new OpenQuestion("In what ways do you think technology can be harnessed to empower marginalized communities and promote social justice? Share your thoughts.");
+                    QuestionStep step1O = new QuestionStep(stepIndexFlow, openQuestions1O, flow);
+                    flow.Steps.Add(step1O);
+                    dbContext.OpenQuestions.Add(openQuestions1O);
+                    dbContext.QuestionSteps.Add(step1O);
+                    break;
+                case 11:
+                    OpenQuestion openQuestions11 = new OpenQuestion("How can we ensure that technological innovation is guided by ethical principles and values that prioritize the well-being of society and the environment? Provide your insights.");
+                    QuestionStep step11 = new QuestionStep(stepIndexFlow, openQuestions11, flow);
+                    flow.Steps.Add(step11);
+                    dbContext.OpenQuestions.Add(openQuestions11);
+                    dbContext.QuestionSteps.Add(step11);
+                    break;
             }
         }
 
@@ -265,6 +403,11 @@ namespace Data_Access_Layer.DbContext
             SubTheme subTheme3 = new SubTheme("Sustainable Development", mainTheme2);
             Flow flow3 = new Flow(FlowType.Linear, subTheme3);
 
+            // Create Main Themes & Sub Themes (2)
+            MainTheme mainTheme3 = new MainTheme("Technology");
+            SubTheme subTheme4 = new SubTheme("Impact On Society", mainTheme3);
+            Flow flow4 = new Flow(FlowType.Linear, subTheme4);
+
             // Add steps to flow 1 (Linear Flow)
             GenerateSingleQuestions(dbContext, flow1, 1, 1);
             GenerateMultipleChoiceQuestions(dbContext, flow1, 1, 2);
@@ -286,6 +429,17 @@ namespace Data_Access_Layer.DbContext
             GenerateOpenQuestions(dbContext, flow3, 8, 6);
             GenerateOpenQuestions(dbContext, flow3, 9, 7);
             
+            // Add steps to flow 4 (Linear Flow)
+            GenerateSingleQuestions(dbContext, flow4, 5, 1);
+            GenerateSingleQuestions(dbContext, flow4, 6, 2);
+            GenerateMultipleChoiceQuestions(dbContext, flow4, 3, 3);
+            GenerateMultipleChoiceQuestions(dbContext, flow4, 4, 4);
+            GenerateMultipleChoiceQuestions(dbContext, flow4, 5, 5);
+            GenerateRangeQuestions(dbContext, flow4, 3, 6);
+            GenerateRangeQuestions(dbContext, flow4, 4, 7);
+            GenerateOpenQuestions(dbContext, flow4, 10, 8);
+            GenerateOpenQuestions(dbContext, flow4, 11, 9);
+            
             Image imageInfo = new Image(ImageUrls.Elections);
             Video videoInfo = new Video("?"); // TODO: Google Bucket URL
             
@@ -298,6 +452,7 @@ namespace Data_Access_Layer.DbContext
             SharedPlatform sharedPlatform2 = new SharedPlatform("Tree company", "../Phygital.DAL/Assets/tree.png");
             Project project1 = new Project(mainTheme1.Subject, mainTheme1, sharedPlatform);
             Project project2 = new Project(mainTheme2.Subject, mainTheme2, sharedPlatform);
+            Project project3 = new Project(mainTheme3.Subject, mainTheme3, sharedPlatform);
 
             ((SpAdmin)dbContext.Users.Single(u => u.Email == "Henk@CodeForge.com")).SharedPlatform = sharedPlatform;
             ((SpAdmin)dbContext.Users.Single(u => u.Email == "CodeForge.noreply@gmail.com")).SharedPlatform =
@@ -319,6 +474,7 @@ namespace Data_Access_Layer.DbContext
             dbContext.ProjectOrganizers.Add(projectOrganizer1);
             sharedPlatform.Projects.Add(project1);
             sharedPlatform.Projects.Add(project2);
+            sharedPlatform.Projects.Add(project3);
             
             // Save changes
             dbContext.SaveChanges();

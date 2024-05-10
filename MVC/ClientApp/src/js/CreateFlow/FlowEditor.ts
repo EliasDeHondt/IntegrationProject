@@ -35,8 +35,8 @@ async function GetSteps(flowId: number): Promise<Step[]> {
         })
 }
 
-function GetStepById(stepNumber: number, flowId: number): Promise<Step> {
-    return fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
+async function GetStepById(stepNumber: number, flowId: number): Promise<Step> {
+    return await fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
         method: "GET",
         headers: {
             "Accept": "application/json",
@@ -114,11 +114,20 @@ function toggleButtons() {
         btnAddText.disabled = false;
         btnAddImage.disabled = false;
         btnAddVideo.disabled = false;
+        if (currentViewingStep.informationViewModel.length >= 2) {
+            btnAddText.disabled = true;
+            btnAddImage.disabled = true;
+            btnAddVideo.disabled = true;
+        }
     }
     if (currentViewingStep.questionViewModel != undefined && currentViewingStep.questionViewModel.questionType != "OpenQuestion") {
         console.log("enabling all question buttons")
         btnAddChoice.disabled = false;
+        if (currentViewingStep.questionViewModel.choices.length >= 6)
+            btnAddChoice.disabled = true;
     }
+
+
 }
 
 function UpdateStepList(steps: Step[]) {
@@ -142,10 +151,16 @@ function UpdateStepList(steps: Step[]) {
             stepCard.dataset.stepNumber = step.stepNumber.toString();
             //Card Header
             const cardHeader = document.createElement('h2');
+            const cardText = document.createElement('p');
             cardHeader.classList.add("step-card-header");
             cardHeader.innerText = "Step " + step.stepNumber.toString();
+            if (step.questionViewModel != undefined)
+                cardText.innerText = step.questionViewModel.questionType.toString();
+            if (step.informationViewModel != undefined)
+                cardText.innerText = "Information"
 
             stepCard.appendChild(cardHeader);
+            stepCard.appendChild(cardText);
 
             stepsList.appendChild(stepCard);
         })
@@ -159,17 +174,21 @@ function UpdateStepList(steps: Step[]) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const parts = document.URL.split('/');
-  const lastPart = parts[parts.length - 1];
-  const btnViewFlow = document.getElementById("viewFlow") as HTMLAnchorElement;
-  flowId = parseInt(lastPart, 10);
-  
-  if (isNaN(flowId)) { console.error("The ID provided in the URL is not a number.")}
-  
-  // GetSteps(flowId).then(() => { 
-  //   initializeCardLinks();
-  //   btnViewFlow.setAttribute('href', "/Flow/Step/" + flowId);
-  // });
+    const parts = document.URL.split('/');
+    const lastPart = parts[parts.length - 1];
+    const btnViewFlow = document.getElementById("viewFlow") as HTMLAnchorElement;
+    flowId = parseInt(lastPart, 10);
+
+    if (isNaN(flowId)) {
+        console.error("The ID provided in the URL is not a number.")
+    }
+
+    GetSteps(flowId).then(steps => console.log(steps))
+
+    // GetSteps(flowId).then(() => { 
+    //   initializeCardLinks();
+    //   btnViewFlow.setAttribute('href', "/Flow/Step/" + flowId);
+    // });
     GetSteps(flowId)
         .then(steps => UpdateStepList(steps))
         .then(() => toggleButtons())
@@ -177,6 +196,12 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 btnAddChoice.addEventListener('click', () => {
+    currentViewingStep.questionViewModel.choices.length++
+
+    if (currentViewingStep.questionViewModel.choices.length >= 6) {
+        btnAddChoice.disabled = true;
+    }
+
     console.log("Add choice")
     let div = document.createElement("div");
     div.classList.add("text-start", "m-auto", "choice-container")
@@ -191,6 +216,14 @@ btnAddChoice.addEventListener('click', () => {
 });
 
 btnAddText.addEventListener('click', () => {
+    currentViewingStep.informationViewModel.length++
+
+    if (currentViewingStep.informationViewModel.length >= 2) {
+        btnAddText.disabled = true;
+        btnAddImage.disabled = true;
+        btnAddVideo.disabled = true;
+    }
+
     console.log("Add text")
     let div = document.createElement("div");
     div.id = "text-container"
@@ -265,6 +298,7 @@ function GetStepData() {
         }
         if (index !== -1) {
             currentStepList[index].informationViewModel = informationArray;
+            currentViewingStep.informationViewModel = informationArray;
         }
     }
 
@@ -286,6 +320,7 @@ function GetStepData() {
 
         if (index !== -1) {
             currentStepList[index].questionViewModel = question;
+            currentViewingStep.questionViewModel = question;
         }
     }
 }
@@ -385,8 +420,6 @@ async function ShowStepInContainer(data: Step) {
     }
 
     if (data.questionViewModel != undefined) {
-        let questionType = document.createElement('p');
-        partialQuestionContainer.appendChild(questionType);
         let questionContainer = document.createElement("div");
         questionContainer.id = "question-container"
         questionContainer.classList.add("text-start", "m-auto");
@@ -400,7 +433,6 @@ async function ShowStepInContainer(data: Step) {
 
         let choiceContainer = document.createElement('div');
         choiceContainer.id = "choices-container";
-        questionType.innerText = data.questionViewModel.questionType;
         switch (data.questionViewModel.questionType) {
             case "SingleChoiceQuestion":
                 for (const element of data.questionViewModel.choices) {
@@ -485,29 +517,29 @@ butCloseCreateStep.onclick = () => {
     clearModal()
 }
 butConfirmCreateStep.onclick = () => {
-  let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
-  if(infographic.checked){
-    AddStep(newStepNumber,"Information")
-      .then(() => GetSteps(flowId))
-      .then(() => initializeCardLinks());
-  } else if (singleQ.checked) {
-    AddStep(newStepNumber, "Single Choice Question")
-        .then(() => GetSteps(flowId))
-        .then(() => initializeCardLinks());
-  } else if (multipleQ.checked) {
-    AddStep(newStepNumber, "Multiple Choice Question")
-        .then(() => GetSteps(flowId))
-        .then(() => initializeCardLinks());
-  } else if (rangeQ.checked) {
-    AddStep(newStepNumber, "Ranged Question")
-        .then(() => GetSteps(flowId))
-        .then(() => initializeCardLinks());
-  } else if (openQ.checked) {
-    AddStep(newStepNumber, "Open Question")
-        .then(() => GetSteps(flowId))
-        .then(() => initializeCardLinks());
-  }
-  clearModal()
+    let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
+    if (infographic.checked) {
+        AddStep(newStepNumber, "Information")
+            .then(() => GetSteps(flowId))
+            .then(() => initializeCardLinks());
+    } else if (singleQ.checked) {
+        AddStep(newStepNumber, "Single Choice Question")
+            .then(() => GetSteps(flowId))
+            .then(() => initializeCardLinks());
+    } else if (multipleQ.checked) {
+        AddStep(newStepNumber, "Multiple Choice Question")
+            .then(() => GetSteps(flowId))
+            .then(() => initializeCardLinks());
+    } else if (rangeQ.checked) {
+        AddStep(newStepNumber, "Ranged Question")
+            .then(() => GetSteps(flowId))
+            .then(() => initializeCardLinks());
+    } else if (openQ.checked) {
+        AddStep(newStepNumber, "Open Question")
+            .then(() => GetSteps(flowId))
+            .then(() => initializeCardLinks());
+    }
+    clearModal()
 }
 
 function clearModal() {
@@ -520,24 +552,24 @@ const btnSaveViewFlowModal = document.getElementById("btnSaveViewFlowModal") as 
 const btnConfirmViewFlow = document.getElementById("btnConfirmViewFlow") as HTMLAnchorElement;
 
 const ViewStepModal = new Modal(document.getElementById('ViewFlowModal')!, {
-  keyboard: false,
-  focus: true,
-  backdrop: "static"
+    keyboard: false,
+    focus: true,
+    backdrop: "static"
 });
 
 btnViewFlow.onclick = () => {
-  ViewStepModal.show();
-  btnConfirmViewFlow.setAttribute('href', "/Flow/Step/" + flowId);
+    ViewStepModal.show();
+    btnConfirmViewFlow.setAttribute('href', "/Flow/Step/" + flowId);
 }
 
 btnCancelViewFlowModal.onclick = () => {
-  clearModal();
+    clearModal();
 }
 
 btnSaveViewFlowModal.onclick = () => {
-  //TODO: after merge with Jana, add saveFlow method here.
+    //TODO: after merge with Jana, add saveFlow method here.
 }
 
 btnConfirmViewFlow.onclick = () => {
-  clearModal();
+    clearModal();
 }
