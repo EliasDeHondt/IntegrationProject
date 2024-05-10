@@ -143,9 +143,9 @@ public class FlowRepository
 
     private void DeleteInformationStep(InformationStep i)
     {
-        _context.Entry(i).Reference(istep => istep.InformationBase).Load();
+        _context.Entry(i).Reference(istep => istep.InformationBases).Load();
         _context.Steps.Remove(i);
-        _context.Information.Remove(i.InformationBase);
+        _context.Information.RemoveRange(i.InformationBases);
     }
 
     private void DeleteQuestionStep(QuestionStep q)
