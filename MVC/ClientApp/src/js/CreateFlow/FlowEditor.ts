@@ -246,13 +246,7 @@ btnAddVideo.addEventListener('click', () => {
 });
 
 btnSaveFlow.addEventListener('click', () => {
-    console.log("Saving flow...");
-    GetStepData();
-    GetFlowById(flowId)
-        .then(flow => GetNewFlowData(flow))
-        .then(flow => {
-            UpdateFlow(flow);
-        })
+    saveFlow();
 });
 
 
@@ -516,7 +510,8 @@ butCloseCreateStep.onclick = () => {
     clearModal()
 }
 butConfirmCreateStep.onclick = () => {
-    let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
+    let newStepNumber = 1
+    if (currentStepList.length != 0) {newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1}
     if (infographic.checked) {
         AddStep(newStepNumber, "Information")
             .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
@@ -566,9 +561,19 @@ btnCancelViewFlowModal.onclick = () => {
 }
 
 btnSaveViewFlowModal.onclick = () => {
-    //TODO: after merge with Jana, add saveFlow method here.
+    saveFlow();
 }
 
 btnConfirmViewFlow.onclick = () => {
     clearModal();
+}
+
+function saveFlow() {
+    console.log("Saving flow...");
+    GetStepData();
+    GetFlowById(flowId)
+        .then(flow => GetNewFlowData(flow))
+        .then(flow => {
+            UpdateFlow(flow);
+        });
 }

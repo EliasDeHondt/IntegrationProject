@@ -338,9 +338,10 @@ button.accept-policy {
   height: 35%;
 }
 
-#container-content-body {
+.container-content-body {
   height: 100vh;
   overflow-y: scroll;
+  overflow-x: hidden;
   /* Firefox */
   scrollbar-width: thin;
   scrollbar-color: map-get($themes, light, primary) map-get($themes, light, secondary);
@@ -348,16 +349,16 @@ button.accept-policy {
 
 /* Chrome, Safari, ... */
 /*
-#container-content-body::-webkit-scrollbar {
+.container-content-body::-webkit-scrollbar {
   width: 10px;
 }
 
-#container-content-body::-webkit-scrollbar-thumb {
+.container-content-body::-webkit-scrollbar-thumb {
   background: map-get($themes, light, primary);
   border-radius: 20px;
 }
 
-#container-content-body::-webkit-scrollbar-track {
+.container-content-body::-webkit-scrollbar-track {
   background: map-get($themes, light, secondary);
   border-radius: 20px;
 }
