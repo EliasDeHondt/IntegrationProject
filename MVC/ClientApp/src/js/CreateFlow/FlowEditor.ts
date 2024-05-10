@@ -144,23 +144,22 @@ function UpdateStepList(steps: Step[]) {
 
     if (steps.length > 0) {
         steps.forEach(step => {
-
             //Card container
             const stepCard = document.createElement('a');
             stepCard.classList.add("step-card", "btn");
             stepCard.dataset.stepNumber = step.stepNumber.toString();
             //Card Header
             const cardHeader = document.createElement('h2');
-            const cardText = document.createElement('p');
             cardHeader.classList.add("step-card-header");
             cardHeader.innerText = "Step " + step.stepNumber.toString();
-            if (step.questionViewModel != undefined)
-                cardText.innerText = step.questionViewModel.questionType.toString();
-            if (step.informationViewModel != undefined)
-                cardText.innerText = "Information"
+            GetStepById(step.stepNumber, flowId).then(s => {
+                if (s.questionViewModel != undefined)
+                    cardHeader.innerText += "\n" + s.questionViewModel.questionType.toString();
+                if (s.informationViewModel != undefined)
+                    cardHeader.innerText = "\nInformation"
+            })
 
             stepCard.appendChild(cardHeader);
-            stepCard.appendChild(cardText);
 
             stepsList.appendChild(stepCard);
         })

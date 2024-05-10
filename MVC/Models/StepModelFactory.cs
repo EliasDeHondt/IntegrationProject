@@ -27,10 +27,9 @@ public static class StepModelFactory
                 return CreateQuestionStepViewModel(qStep) as TViewModel;
             default:
                 return null;
-            
         }
     }
-    
+
     private static CombinedStepViewModel CreateCombinedStepViewModel(CombinedStep step)
     {
         return new CombinedStepViewModel
@@ -40,7 +39,7 @@ public static class StepModelFactory
             StepNumber = step.StepNumber
         };
     }
-    
+
     private static InformationStepViewModel CreateInformationStepViewModel(InformationStep step)
     {
         var informationViewModels = new List<InformationViewModel>();
@@ -50,7 +49,7 @@ public static class StepModelFactory
             var informationViewModel = CreateInformationViewModel(informationBase);
             informationViewModels.Add(informationViewModel);
         }
-        
+
         return new InformationStepViewModel
         {
             Id = step.Id,
@@ -59,7 +58,7 @@ public static class StepModelFactory
         };
     }
 
-   private static InformationViewModel CreateInformationViewModel(InformationBase information)
+    private static InformationViewModel CreateInformationViewModel(InformationBase information)
     {
         return new InformationViewModel
         {

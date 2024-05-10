@@ -23,7 +23,8 @@ public class EditFlowsController : Controller
     [HttpGet("/EditFlows/GetSteps/{flowId:long}")]
     public IActionResult GetSteps(long flowId)
     {
-        var steps = _stepManager.GetAllStepsForFlow(flowId); // Moet omgezet worden in StepViewModels
+        var steps = _stepManager.GetAllStepsForFlow(flowId);
+        // return Ok(steps.Select(StepModelFactory.CreateStepViewModel<StepViewModel, StepBase>));
         return Ok(steps);
     }
 
