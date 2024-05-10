@@ -146,7 +146,7 @@ function UpdateStepList(steps: Step[]) {
         steps.forEach(step => {
             //Card container
             const stepCard = document.createElement('a');
-            stepCard.classList.add("step-card", "btn");
+            stepCard.classList.add("step-card", "btn", "justify-content-center", "align-items-center");
             stepCard.dataset.stepNumber = step.stepNumber.toString();
             //Card Header
             const cardHeader = document.createElement('h2');
@@ -156,7 +156,7 @@ function UpdateStepList(steps: Step[]) {
                 if (s.questionViewModel != undefined)
                     cardHeader.innerText += "\n" + s.questionViewModel.questionType.toString();
                 if (s.informationViewModel != undefined)
-                    cardHeader.innerText = "\nInformation"
+                    cardHeader.innerText += "\nInformation"
             })
 
             stepCard.appendChild(cardHeader);
