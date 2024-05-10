@@ -519,23 +519,23 @@ butConfirmCreateStep.onclick = () => {
     let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
     if (infographic.checked) {
         AddStep(newStepNumber, "Information")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (singleQ.checked) {
         AddStep(newStepNumber, "Single Choice Question")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (multipleQ.checked) {
         AddStep(newStepNumber, "Multiple Choice Question")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (rangeQ.checked) {
         AddStep(newStepNumber, "Ranged Question")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (openQ.checked) {
         AddStep(newStepNumber, "Open Question")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     }
     clearModal()
