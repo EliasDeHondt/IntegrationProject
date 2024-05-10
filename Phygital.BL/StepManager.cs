@@ -25,6 +25,12 @@ public class StepManager
     {
         return _repo.ReadStepForFlowByNumber(flowId, stepNumber);
     }
+    
+    public StepBase GetStepForFlowByContentId(long flowId, long contentId)
+    {
+        return _repo.ReadStepForFlowByContentId(flowId, contentId);
+    }
+    
     public Flow GetFlowByNumber(long flowId)
     {
         return _repo.ReadFlowByNumber(flowId);

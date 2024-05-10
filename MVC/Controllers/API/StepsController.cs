@@ -37,6 +37,16 @@ public class StepsController : Controller
         return Ok(stepViewModel);
     }
 
+    [HttpGet("GetConditionalNextStep/{flowId:long}/{contentId:long}")]
+    public ActionResult GetConditionalNextStep(long flowId, long contentId)
+    {
+        StepBase stepBase = _manager.GetStepForFlowByContentId(flowId, contentId);
+
+        var stepViewModel = StepModelFactory.CreateStepViewModel<StepViewModel, StepBase>(stepBase);
+
+        return Ok(stepViewModel);
+    }
+
     [HttpPost("/{flowId:long}/Update/{stepNr:int}")]
     public IActionResult UpdateStep(long flowId, int stepNr, StepViewModel step)
     {

@@ -13,7 +13,6 @@ namespace MVC.Models;
 
 public static class StepModelFactory
 {
-
     public static TViewModel CreateStepViewModel<TViewModel, TStep>(TStep step)
         where TViewModel : StepViewModel where TStep : StepBase
     {
@@ -90,14 +89,40 @@ public static class StepModelFactory
                     QuestionType = question.GetType().Name
                 };
             case ChoiceQuestionBase cQ:
+                var choiceViewModels = new List<ChoiceViewModel>();
+
+                foreach (var choice in cQ.Choices)
+                {
+                    var choiceViewModel = CreateChoiceViewModel(choice);
+                    choiceViewModels.Add(choiceViewModel);
+                }
+
                 return new QuestionViewModel
                 {
                     Id = question.Id,
                     Question = question.Question,
                     QuestionType = question.GetType().Name,
-                    Choices = cQ.Choices
+                    Choices = choiceViewModels
                 };
             default: return new QuestionViewModel();
         }
+    }
+
+    private static ChoiceViewModel CreateChoiceViewModel(Choice choice)
+    {
+        if (choice.NextQuestionBase != null)
+            return new ChoiceViewModel
+            {
+                Id = choice.Id,
+                Text = choice.Text,
+                NextQuestionId = choice.NextQuestionBase.Id
+            };
+        
+        return new ChoiceViewModel
+        {
+            Id = choice.Id,
+            Text = choice.Text,
+            NextQuestionId = null
+        };
     }
 }

@@ -40,6 +40,8 @@ public class StepRepository
                 {
                     _ctx.Entry(cqBase)
                         .Collection(qb => qb.Choices)
+                        .Query()
+                        .Include(choice => choice.NextQuestionBase)
                         .Load();
                 }
 
@@ -62,6 +64,39 @@ public class StepRepository
             .Steps.First(step => step.StepNumber == stepNumber);
 
         return ReadExtendedStep(tempStep);
+    }
+
+    public StepBase? ReadStepForFlowByContentId(long flowId, long contentId)
+    {
+        var steps = _ctx.Flows
+            .AsNoTracking()
+            .Include(flow => flow.Steps)
+            .First(flow => flow.Id == flowId)
+            .Steps;
+
+        foreach (var step in steps)
+        {
+            switch (step)
+            {
+                case InformationStep:
+                    return _ctx.InformationSteps
+                        .Include(s => s.InformationBases)
+                        .FirstOrDefault(s => s.Flow.Id == flowId && s.InformationBases.Any(i => i.Id == contentId));
+                case QuestionStep:
+                    return _ctx.QuestionSteps
+                        .Include(s => s.QuestionBase)
+                        .FirstOrDefault(s => s.Flow.Id == flowId && s.QuestionBase.Id == contentId);
+                case CombinedStep:
+                    return _ctx.CombinedSteps
+                        .Include(s => s.QuestionBase)
+                        .Include(s => s.InformationBase)
+                        .FirstOrDefault(s =>
+                            s.Flow.Id == flowId &&
+                            (s.QuestionBase.Id == contentId || s.InformationBase.Id == contentId));
+            }
+        }
+
+        return null;
     }
 
     public IEnumerable<StepBase> ReadAllStepsForFlow(long flowId)

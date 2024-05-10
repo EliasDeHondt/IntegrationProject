@@ -307,7 +307,7 @@ function GetStepData() {
 
         for (let i = 0; i < choicesContainer.children.length; i++) {
             const element = choicesContainer.children[i].children[0] as HTMLInputElement;
-            choicesArray.push({text: element.value});
+            choicesArray.push({text: element.value, nextQuestionId: 0});
         }
 
         const questionElement = questionContainer.children[0] as HTMLTextAreaElement;
@@ -342,7 +342,7 @@ async function GetNewFlowData(flow: Flow): Promise<Flow> {
         if (step.questionViewModel && step.questionViewModel.questionType !== "OpenQuestion") {
             const choices: Choice[] = [];
             for (const choice of step.questionViewModel.choices) {
-                choices.push({text: choice.text});
+                choices.push({text: choice.text, nextQuestionId: 0});
             }
             if (stepData.questionViewModel)
                 stepData.questionViewModel.choices = choices;
