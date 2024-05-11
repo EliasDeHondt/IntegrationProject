@@ -17,5 +17,5 @@ export interface Question {
 
 export interface Choice {
     text: string;
-    nextQuestionId?: number;
+    nextStepId?: number;
 }

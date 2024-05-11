@@ -41,7 +41,7 @@ public class StepRepository
                     _ctx.Entry(cqBase)
                         .Collection(qb => qb.Choices)
                         .Query()
-                        .Include(choice => choice.NextQuestionBase)
+                        .Include(choice => choice.NextStep)
                         .Load();
                 }
 
@@ -66,37 +66,14 @@ public class StepRepository
         return ReadExtendedStep(tempStep);
     }
 
-    public StepBase? ReadStepForFlowByContentId(long flowId, long contentId)
+    public StepBase? ReadStepById(long? stepId)
     {
-        var steps = _ctx.Flows
+        StepBase tempStep = _ctx.Steps
             .AsNoTracking()
-            .Include(flow => flow.Steps)
-            .First(flow => flow.Id == flowId)
-            .Steps;
+            .Include(s => s.Flow)
+            .First(s => s.Id == stepId);
 
-        foreach (var step in steps)
-        {
-            switch (step)
-            {
-                case InformationStep:
-                    return _ctx.InformationSteps
-                        .Include(s => s.InformationBases)
-                        .FirstOrDefault(s => s.Flow.Id == flowId && s.InformationBases.Any(i => i.Id == contentId));
-                case QuestionStep:
-                    return _ctx.QuestionSteps
-                        .Include(s => s.QuestionBase)
-                        .FirstOrDefault(s => s.Flow.Id == flowId && s.QuestionBase.Id == contentId);
-                case CombinedStep:
-                    return _ctx.CombinedSteps
-                        .Include(s => s.QuestionBase)
-                        .Include(s => s.InformationBase)
-                        .FirstOrDefault(s =>
-                            s.Flow.Id == flowId &&
-                            (s.QuestionBase.Id == contentId || s.InformationBase.Id == contentId));
-            }
-        }
-
-        return null;
+        return ReadExtendedStep(tempStep);
     }
 
     public IEnumerable<StepBase> ReadAllStepsForFlow(long flowId)

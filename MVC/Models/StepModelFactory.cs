@@ -110,19 +110,19 @@ public static class StepModelFactory
 
     private static ChoiceViewModel CreateChoiceViewModel(Choice choice)
     {
-        if (choice.NextQuestionBase != null)
+        if (choice.NextStep != null)
             return new ChoiceViewModel
             {
                 Id = choice.Id,
                 Text = choice.Text,
-                NextQuestionId = choice.NextQuestionBase.Id
+                NextStepId = choice.NextStep.Id
             };
         
         return new ChoiceViewModel
         {
             Id = choice.Id,
             Text = choice.Text,
-            NextQuestionId = null
+            NextStepId = null
         };
     }
 }

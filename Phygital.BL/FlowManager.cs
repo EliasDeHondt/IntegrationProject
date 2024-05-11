@@ -112,7 +112,6 @@ public class FlowManager
                 break;
         }
         
-        _stepRepository.AddStep(step);
         _repository.AddStepToFlow(flowId, step);
 
         return step;

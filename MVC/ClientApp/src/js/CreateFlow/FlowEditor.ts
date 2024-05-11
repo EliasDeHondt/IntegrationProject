@@ -2,6 +2,7 @@ import {Choice, Information, Question, Step} from "../Flow/Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
 import {Modal} from "bootstrap";
 import {Flow, Participation} from "../Flow/FlowObjects";
+import {op} from "@tensorflow/tfjs";
 
 
 const stepsList = document.getElementById('steps-list') as HTMLElement;
@@ -95,6 +96,20 @@ async function UpdateFlow(flow: Flow) {
         },
         body: JSON.stringify(flow)
     })
+}
+
+async function GetConditionalNextStep(stepId: number): Promise<Step> {
+    return await fetch(`/api/Steps/GetConditionalNextStep/${stepId}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
 }
 
 function toggleButtons() {
@@ -208,9 +223,14 @@ btnAddChoice.addEventListener('click', () => {
     const textArea = document.createElement("input");
     textArea.classList.add("choice-textarea")
 
+    const select = document.createElement("select");
+    select.classList.add("choice-select");
+    fillConditionalPoints(select, undefined);
+
     let choiceContainer = document.getElementById("choices-container") as HTMLDivElement;
 
     div.append(textArea);
+    div.append(select);
     choiceContainer.appendChild(div);
 });
 
@@ -302,12 +322,22 @@ function GetStepData() {
     }
 
     if (currentViewingStep.questionViewModel) {
-        const questionContainer = partialQuestionContainer.children[1] as HTMLDivElement;
-        const choicesContainer = partialQuestionContainer.children[2] as HTMLDivElement;
+        const questionContainer = partialQuestionContainer.children[0] as HTMLDivElement;
+        const choicesContainer = partialQuestionContainer.children[1] as HTMLDivElement;
 
         for (let i = 0; i < choicesContainer.children.length; i++) {
             const element = choicesContainer.children[i].children[0] as HTMLInputElement;
-            choicesArray.push({text: element.value, nextQuestionId: 0});
+            const select = choicesContainer.children[i].children[1] as HTMLSelectElement;
+            let nextStepId : number | undefined = 0;
+            for (let j = 0; j < select.children.length; j++) {
+                const option = select.children[j] as HTMLOptionElement;
+                if (option.selected && option.value == "undefined") {
+                    nextStepId = undefined;
+                } else if (option.selected) {
+                    nextStepId = Number(option.value); 
+                }
+            }
+            choicesArray.push({text: element.value, nextStepId: nextStepId});
         }
 
         const questionElement = questionContainer.children[0] as HTMLTextAreaElement;
@@ -342,7 +372,7 @@ async function GetNewFlowData(flow: Flow): Promise<Flow> {
         if (step.questionViewModel && step.questionViewModel.questionType !== "OpenQuestion") {
             const choices: Choice[] = [];
             for (const choice of step.questionViewModel.choices) {
-                choices.push({text: choice.text, nextQuestionId: 0});
+                choices.push({text: choice.text, nextStepId: choice.nextStepId});
             }
             if (stepData.questionViewModel)
                 stepData.questionViewModel.choices = choices;
@@ -351,6 +381,7 @@ async function GetNewFlowData(flow: Flow): Promise<Flow> {
         flowData.steps.push(stepData);
     }
 
+    console.log(flowData);
     return flowData;
 }
 
@@ -442,7 +473,12 @@ async function ShowStepInContainer(data: Step) {
                     textArea.classList.add("choice-textarea")
                     textArea.value = element.text;
 
+                    const select = document.createElement("select");
+                    select.classList.add("choice-select");
+                    fillConditionalPoints(select, element.nextStepId);
+
                     div.append(textArea);
+                    div.append(select);
                     choiceContainer.appendChild(div);
                 }
                 break;
@@ -455,7 +491,12 @@ async function ShowStepInContainer(data: Step) {
                     textArea.classList.add("choice-textarea")
                     textArea.value = element.text;
 
+                    const select = document.createElement("select");
+                    select.classList.add("choice-select");
+                    fillConditionalPoints(select, element.nextStepId);
+
                     div.append(textArea);
+                    div.append(select);
                     choiceContainer.appendChild(div);
                 }
                 break;
@@ -468,7 +509,12 @@ async function ShowStepInContainer(data: Step) {
                     textArea.classList.add("choice-textarea")
                     textArea.value = element.text;
 
+                    const select = document.createElement("select");
+                    select.classList.add("choice-select");
+                    fillConditionalPoints(select, element.nextStepId);
+
                     div.append(textArea);
+                    div.append(select);
                     choiceContainer.appendChild(div);
                 }
                 break;
@@ -484,6 +530,29 @@ async function ShowStepInContainer(data: Step) {
                 break;
         }
         partialQuestionContainer.appendChild(choiceContainer);
+    }
+}
+
+function fillConditionalPoints(select: HTMLSelectElement, nextStepId?: number) {
+    let option = document.createElement("option");
+    option.value = "undefined";
+    option.innerText = "Next step"
+    option.selected = true;
+    select.appendChild(option);
+    GetSteps(flowId).then(steps => steps.forEach(step => {
+        let option = document.createElement("option");
+        option.value = step.stepNumber.toString();
+        option.innerText = `Step ${step.stepNumber}`
+        select.appendChild(option);
+    }))
+    
+    if (nextStepId) {
+        GetConditionalNextStep(nextStepId).then(step => {
+            let defaultOption = select.children[0] as HTMLOptionElement;
+            defaultOption.selected = false;
+            let optionSelected = select.children[step.stepNumber] as HTMLOptionElement;
+            optionSelected.selected = true;
+        })
     }
 }
 
@@ -519,23 +588,23 @@ butConfirmCreateStep.onclick = () => {
     let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
     if (infographic.checked) {
         AddStep(newStepNumber, "Information")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (singleQ.checked) {
         AddStep(newStepNumber, "Single Choice Question")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (multipleQ.checked) {
         AddStep(newStepNumber, "Multiple Choice Question")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (rangeQ.checked) {
         AddStep(newStepNumber, "Ranged Question")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (openQ.checked) {
         AddStep(newStepNumber, "Open Question")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     }
     clearModal()

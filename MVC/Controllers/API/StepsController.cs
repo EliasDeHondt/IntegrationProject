@@ -37,26 +37,13 @@ public class StepsController : Controller
         return Ok(stepViewModel);
     }
 
-    [HttpGet("GetConditionalNextStep/{flowId:long}/{contentId:long}")]
-    public ActionResult GetConditionalNextStep(long flowId, long contentId)
+    [HttpGet("GetConditionalNextStep/{stepId:long}")]
+    public ActionResult GetConditionalNextStep(long stepId)
     {
-        StepBase stepBase = _manager.GetStepForFlowByContentId(flowId, contentId);
+        StepBase stepBase = _manager.GetStepById(stepId);
 
         var stepViewModel = StepModelFactory.CreateStepViewModel<StepViewModel, StepBase>(stepBase);
 
         return Ok(stepViewModel);
-    }
-
-    [HttpPost("/{flowId:long}/Update/{stepNr:int}")]
-    public IActionResult UpdateStep(long flowId, int stepNr, StepViewModel step)
-    {
-        var newStep = _manager.GetStepForFlowByNumber(flowId, stepNr);
-
-        if (newStep == null)
-            return NotFound();
-
-        _manager.ChangeStep(newStep);
-
-        return NoContent();
     }
 }

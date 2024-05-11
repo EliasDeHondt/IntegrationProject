@@ -9,6 +9,7 @@ using Data_Access_Layer;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
+using Domain.ProjectLogics.Steps.Questions;
 
 namespace Business_Layer;
 
@@ -26,9 +27,9 @@ public class StepManager
         return _repo.ReadStepForFlowByNumber(flowId, stepNumber);
     }
     
-    public StepBase GetStepForFlowByContentId(long flowId, long contentId)
+    public StepBase? GetStepById(long? stepId)
     {
-        return _repo.ReadStepForFlowByContentId(flowId, contentId);
+        return _repo.ReadStepById(stepId);
     }
     
     public Flow GetFlowByNumber(long flowId)

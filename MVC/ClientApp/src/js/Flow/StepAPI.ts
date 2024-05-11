@@ -109,8 +109,8 @@ async function GetNextStep(stepNumber: number, flowId: number): Promise<Step> {
         })
 }
 
-async function GetConditionalNextStep(flowId: number, contentId: number): Promise<Step> {
-    return await fetch(`/api/Steps/GetConditionalNextStep/${flowId}/${contentId}`, {
+async function GetConditionalNextStep(stepId: number): Promise<Step> {
+    return await fetch(`/api/Steps/GetConditionalNextStep/${stepId}`, {
         method: "GET",
         headers: {
             "Accept": "application/json",
@@ -127,6 +127,7 @@ async function ShowStep(data: Step) {
     (document.getElementById("stepNr") as HTMLSpanElement).innerText = currentStepNumber.toString();
     informationContainer.innerHTML = "";
     questionContainer.innerHTML = "";
+    console.log(data);
     if (data.informationViewModel != undefined) {
         for (const infoStep of data.informationViewModel) {
             switch (infoStep.informationType) {
@@ -188,8 +189,8 @@ async function ShowStep(data: Step) {
                     // Add event listener to capture user input
                     choice.addEventListener('change', function () {
                         userAnswers = [choice.value];
-                        if (element.nextQuestionId != undefined)
-                            conditionalAnswer = element.nextQuestionId;
+                        if (element.nextStepId != undefined)
+                            conditionalAnswer = element.nextStepId;
                     });
                 }
                 break;
@@ -212,8 +213,8 @@ async function ShowStep(data: Step) {
                         if (choice.checked) {
                             // Add selected choice to userAnswers array
                             userAnswers.push(choice.value);
-                            if (element.nextQuestionId != undefined)
-                                conditionalAnswer = element.nextQuestionId;
+                            if (element.nextStepId != undefined)
+                                conditionalAnswer = element.nextStepId;
                         } else {
                             // Remove deselected choice from userAnswers array
                             const index = userAnswers.indexOf(choice.value);
@@ -249,9 +250,9 @@ async function ShowStep(data: Step) {
                         userAnswers = [data.questionViewModel.choices[Number(slider.value)].text];
                         label.innerText = data.questionViewModel.choices[Number(slider.value)].text;
                     }
-                    const nextQuestionId = data.questionViewModel.choices[Number(slider.value)].nextQuestionId;
-                    if (nextQuestionId !== undefined) {
-                        conditionalAnswer = nextQuestionId;
+                    const nextStepId = data.questionViewModel.choices[Number(slider.value)].nextStepId;
+                    if (nextStepId !== undefined) {
+                        conditionalAnswer = nextStepId;
                     }
                 });
                 break;
@@ -322,7 +323,7 @@ btnNextStep.onclick = async () => {
         await GetNextStep(++currentStepNumber, flowId).then(step => ShowStep(step));
     } else {
         if (conditionalAnswer > 0) {
-            await GetConditionalNextStep(flowId, conditionalAnswer).then(step => {
+            await GetConditionalNextStep(conditionalAnswer).then(step => {
                 conditionalAnswer = 0;
                 currentStepNumber = step.stepNumber
                 GetNextStep(currentStepNumber, flowId).then(step => ShowStep(step))

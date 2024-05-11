@@ -345,7 +345,7 @@ namespace Data_Access_Layer.DbContext
             dbContext.QuestionSteps.Add(step7);
             
             // Add conditional points
-            choice18.NextQuestionBase = openQuestions3;
+            choice18.NextStep = step7;
         }
 
         public static void Seed(CodeForgeDbContext dbContext)
