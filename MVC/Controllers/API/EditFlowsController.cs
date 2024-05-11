@@ -1,5 +1,6 @@
 using Business_Layer;
 using Domain.ProjectLogics.Steps;
+using Domain.ProjectLogics.Steps.Questions;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 
@@ -38,6 +39,18 @@ public class EditFlowsController : Controller
         _uow.Commit();
 
         return Created("CreateStep", step);
+    }
+
+    [HttpPost("/EditFlows/CreateChoice/{flowId:long}/{stepNr:int}")]
+    public IActionResult CreateChoice(long flowId, int stepNr)
+    {
+        _uow.BeginTransaction();
+
+        Choice choice = _stepManager.CreateChoice(flowId, stepNr);
+        
+        _uow.Commit();
+
+        return Created("CreateChoice", choice);
     }
 
 }

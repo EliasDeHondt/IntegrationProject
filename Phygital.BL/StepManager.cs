@@ -46,4 +46,26 @@ public class StepManager
     {
         return _repo.ReadAllStepsForFlow(flowId);
     }
+
+    public Choice CreateChoice(long flowId, int stepNr)
+    {
+        var step = _repo.ReadStepForFlowByNumber(flowId, stepNr);
+
+        Choice choice;
+
+        switch (step)
+        {
+            case QuestionStep questionStep:
+                switch (questionStep.QuestionBase)
+                {
+                    case ChoiceQuestionBase choiceQuestion:
+                        choice = new Choice(" ", choiceQuestion);
+                        _repo.AddChoice(choiceQuestion, choice);
+                        return choice;
+                }
+                break;
+        }
+
+        return null;
+    }
 }

@@ -62,6 +62,21 @@ async function AddStep(stepNumber: number, stepType: string) {
         .catch(error => console.error("Error:", error))
 }
 
+async function AddChoice(stepNr: number) {
+    await fetch(`/EditFlows/CreateChoice/${flowId}/${stepNr}`, {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => {
+            console.log("Response:", response);
+            return response.json();
+        })
+        .catch(error => console.error("Error:", error))
+}
+
 async function UpdateStep(flowId: number, stepNr: number, step: Step) {
     await fetch(`/api/Steps/${flowId}/Update/${step.stepNumber}`, {
         method: "POST",
@@ -209,12 +224,14 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(() => initializeCardLinks())
 });
 
-btnAddChoice.addEventListener('click', () => {
+btnAddChoice.addEventListener('click', async () => {
     currentViewingStep.questionViewModel.choices.length++
 
     if (currentViewingStep.questionViewModel.choices.length >= 6) {
         btnAddChoice.disabled = true;
     }
+
+    await AddChoice(currentViewingStep.stepNumber);
 
     console.log("Add choice")
     let div = document.createElement("div");

@@ -132,4 +132,9 @@ public class StepRepository
                 break;
         }
     }
+
+    public void AddChoice(ChoiceQuestionBase question, Choice choice)
+    {
+        _ctx.ChoiceQuestions.Find(question.Id)!.Choices.Add(choice);
+    }
 }
