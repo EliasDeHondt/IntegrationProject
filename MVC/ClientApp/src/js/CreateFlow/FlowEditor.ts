@@ -427,7 +427,9 @@ async function ShowStepInContainer(data: Step) {
                 case "Image": {
                     let img = document.createElement("img");
                     img.src = "data:image/png;base64," + infoStep.information;
-                    img.classList.add("col-m-12", "w-100", "h-100");
+                    img.classList.add("col-m-12");
+                    img.style.width = '600px'; //schalen image
+                    img.style.height = '600px';
                     partialInformationContainer.appendChild(img);
                     break;
                 }
