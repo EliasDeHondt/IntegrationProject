@@ -13,6 +13,7 @@ const btnAddText = document.getElementById('btn-add-text') as HTMLButtonElement;
 const btnAddImage = document.getElementById('btn-add-image') as HTMLButtonElement;
 const btnAddVideo = document.getElementById('btn-add-video') as HTMLButtonElement;
 const btnSaveFlow = document.getElementById("saveFlow") as HTMLButtonElement;
+const btnAddLink = document.getElementById("btn-add-hyperlink") as HTMLButtonElement;
 
 let currentStepList: Step[];
 
@@ -104,6 +105,7 @@ function toggleButtons() {
     btnAddImage.disabled = true;
     btnAddVideo.disabled = true;
     btnAddChoice.disabled = true;
+    btnAddLink.disabled = true;
 
     if (currentViewingStep == undefined) {
         return;
@@ -114,10 +116,12 @@ function toggleButtons() {
         btnAddText.disabled = false;
         btnAddImage.disabled = false;
         btnAddVideo.disabled = false;
+        btnAddLink.disabled = false;
         if (currentViewingStep.informationViewModel.length >= 2) {
             btnAddText.disabled = true;
             btnAddImage.disabled = true;
             btnAddVideo.disabled = true;
+            btnAddLink.disabled = true;
         }
     }
     if (currentViewingStep.questionViewModel != undefined && currentViewingStep.questionViewModel.questionType != "OpenQuestion") {
@@ -135,8 +139,6 @@ function UpdateStepList(steps: Step[]) {
     steps.sort((a, b) => a.stepNumber - b.stepNumber);
 
     currentStepList = steps;
-
-    console.log(currentStepList)
 
     const stepsList = document.getElementById("steps-list") as HTMLDivElement;
 
@@ -175,7 +177,6 @@ function UpdateStepList(steps: Step[]) {
 document.addEventListener('DOMContentLoaded', () => {
     const parts = document.URL.split('/');
     const lastPart = parts[parts.length - 1];
-    const btnViewFlow = document.getElementById("viewFlow") as HTMLAnchorElement;
     flowId = parseInt(lastPart, 10);
 
     if (isNaN(flowId)) {
@@ -183,16 +184,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     GetSteps(flowId).then(steps => console.log(steps))
-
-    // GetSteps(flowId).then(() => { 
-    //   initializeCardLinks();
-    //   btnViewFlow.setAttribute('href', "/Flow/Step/" + flowId);
-    // });
+    
     GetSteps(flowId)
-        .then(steps => UpdateStepList(steps))
+        .then(steps => {
+            UpdateStepList(steps);
+        })
         .then(() => toggleButtons())
         .then(() => initializeCardLinks())
 });
+
+/* This function checks if the provided URL is valid */
+function checkURLValidity(url: string): boolean {
+    let urlRegex = /(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?\/[a-zA-Z0-9]{2,}|((https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?)|(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})?/g;
+
+    return urlRegex.test(url);
+}
 
 btnAddChoice.addEventListener('click', () => {
     currentViewingStep.questionViewModel.choices.length++
@@ -217,11 +223,7 @@ btnAddChoice.addEventListener('click', () => {
 btnAddText.addEventListener('click', () => {
     currentViewingStep.informationViewModel.length++
 
-    if (currentViewingStep.informationViewModel.length >= 2) {
-        btnAddText.disabled = true;
-        btnAddImage.disabled = true;
-        btnAddVideo.disabled = true;
-    }
+    toggleButtons();
 
     console.log("Add text")
     let div = document.createElement("div");
@@ -234,6 +236,33 @@ btnAddText.addEventListener('click', () => {
     div.append(textArea);
     partialInformationContainer.appendChild(div);
 });
+
+btnAddLink.addEventListener('click', () => {
+    console.log("Add Link")
+    
+    currentViewingStep.informationViewModel.length++
+    toggleButtons();
+
+    let div = document.createElement("div");
+    div.id = "text-container";
+    div.classList.add("text-start", "m-auto");
+
+    const textArea = document.createElement("textarea");
+    textArea.classList.add("input-hyperlink-iframe");
+    textArea.addEventListener('change', async () => {
+        let isWorkingURL = checkURLValidity(textArea.value)
+        if (isWorkingURL) {
+            textArea.dataset.allowed = String(1);
+            textArea.classList.add("hyperlink-allowed");
+        } else {
+            textArea.dataset.allowed = String(0);
+            textArea.classList.add("hyperlink-disallowed");
+        }
+    })
+
+    div.append(textArea);
+    partialInformationContainer.appendChild(div);
+})
 
 btnAddImage.addEventListener('click', () => {
     console.log("Add Image")
@@ -285,6 +314,11 @@ function GetStepData() {
                     information = videoElement.src;
                     informationType = 'Video';
                     break;
+                case 'IFRAME':
+                    const linkTextAreaElement = element as HTMLTextAreaElement;
+                    information = linkTextAreaElement.value;
+                    informationType = 'Hyperlink'
+                    break;
             }
 
             informationArray.push({information: information, informationType: informationType});
@@ -296,8 +330,9 @@ function GetStepData() {
     }
 
     if (currentViewingStep.questionViewModel) {
-        const questionContainer = partialQuestionContainer.children[1] as HTMLDivElement;
-        const choicesContainer = partialQuestionContainer.children[2] as HTMLDivElement;
+        
+        const questionContainer = partialQuestionContainer.children[0] as HTMLDivElement;
+        const choicesContainer = partialQuestionContainer.children[1] as HTMLDivElement;
 
         for (let i = 0; i < choicesContainer.children.length; i++) {
             const element = choicesContainer.children[i].children[0] as HTMLInputElement;
@@ -333,17 +368,21 @@ async function GetNewFlowData(flow: Flow): Promise<Flow> {
             questionViewModel: step.questionViewModel
         };
 
-        if (step.questionViewModel && step.questionViewModel.questionType !== "OpenQuestion") {
+        /*if (step.questionViewModel && step.questionViewModel.questionType !== "OpenQuestion") {
             const choices: Choice[] = [];
             for (const choice of step.questionViewModel.choices) {
                 choices.push({text: choice.text});
             }
             if (stepData.questionViewModel)
                 stepData.questionViewModel.choices = choices;
-        }
+        }*/
+        
+        console.log(stepData)
 
         flowData.steps.push(stepData);
     }
+    
+    console.log(flowData.steps)
 
     return flowData;
 }
@@ -374,7 +413,6 @@ const partialQuestionContainer = document.getElementById("partialQuestionContain
 async function ShowStepInContainer(data: Step) {
     partialInformationContainer.innerHTML = "";
     partialQuestionContainer.innerHTML = "";
-    toggleButtons();
     console.log(data)
     if (data.informationViewModel != undefined) {
         for (const infoStep of data.informationViewModel) {
@@ -406,6 +444,26 @@ async function ShowStepInContainer(data: Step) {
                     video.controls = false;
                     video.classList.add("h-100", "w-100");
                     partialInformationContainer.appendChild(video);
+                    break;
+                }
+                case "Hyperlink": {
+                    let url = infoStep.information;
+                    let iframe = document.createElement("textarea");
+                    iframe.value = url;
+                    iframe.classList.add("input-hyperlink-iframe");
+                    iframe.addEventListener('change', async () => {
+                        let isWorkingURL = checkURLValidity(iframe.value)
+                        if (isWorkingURL) {
+                            iframe.dataset.allowed = String(1);
+                            iframe.classList.remove("hyperlink-disallowed");
+                            iframe.classList.add("hyperlink-allowed");
+                        } else {
+                            iframe.dataset.allowed = String(0);
+                            iframe.classList.remove("hyperlink-allowed");
+                            iframe.classList.add("hyperlink-disallowed");
+                        }
+                    })
+                    partialInformationContainer.appendChild(iframe);
                     break;
                 }
             }

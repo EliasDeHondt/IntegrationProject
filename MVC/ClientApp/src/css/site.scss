@@ -364,4 +364,14 @@ button.accept-policy {
 }
 */
 
+.hyperlink-iframe {
+  aspect-ratio: inherit;
+  width: 100%;
+  height: 25em;
+  align-self: center;
+  justify-self: center;
+  border: thick map-get($themes, light, secondary) solid;
+  border-radius: 20px;
+}
+
 

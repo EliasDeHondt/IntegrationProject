@@ -442,8 +442,10 @@ namespace Data_Access_Layer.DbContext
             
             Image imageInfo = new Image(ImageUrls.Elections);
             Video videoInfo = new Video("?"); // TODO: Google Bucket URL
+            Hyperlink hyperlinkInfo = new Hyperlink("https://levuur.be/");
             
             flow1.Steps.Add(new InformationStep(5, new List<InformationBase> {imageInfo}, flow1));
+            flow1.Steps.Add(new InformationStep(6, new List<InformationBase> {hyperlinkInfo}, flow1));
             flow2.Steps.Add(new InformationStep(5, new List<InformationBase> {videoInfo}, flow2));
 
             // Create Shared Platform & Projects
