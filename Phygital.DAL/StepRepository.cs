@@ -137,4 +137,18 @@ public class StepRepository
     {
         _ctx.ChoiceQuestions.Find(question.Id)!.Choices.Add(choice);
     }
+
+    public void AddInformation(InformationStep step, InformationBase information)
+    {
+        _ctx.InformationSteps.Find(step.Id)!.InformationBases.Add(information);
+    }
+
+    public long ReadStepId(long flowId, int stepNr)
+    {
+        return _ctx.Flows
+            .AsNoTracking()
+            .Include(flow => flow.Steps)
+            .First(flow => flow.Id == flowId)
+            .Steps.First(step => step.StepNumber == stepNr).Id;
+    }
 }

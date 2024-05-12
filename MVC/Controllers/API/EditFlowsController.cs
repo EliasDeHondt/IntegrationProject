@@ -1,5 +1,6 @@
 using Business_Layer;
 using Domain.ProjectLogics.Steps;
+using Domain.ProjectLogics.Steps.Information;
 using Domain.ProjectLogics.Steps.Questions;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
@@ -25,8 +26,7 @@ public class EditFlowsController : Controller
     public IActionResult GetSteps(long flowId)
     {
         var steps = _stepManager.GetAllStepsForFlow(flowId);
-        // return Ok(steps.Select(StepModelFactory.CreateStepViewModel<StepViewModel, StepBase>));
-        return Ok(steps);
+        return Ok(steps.Select(step => StepModelFactory.CreateStepViewModel<StepViewModel, StepBase>(step)));
     }
 
     [HttpPost("/EditFlows/CreateStep/{flowId:long}/{stepNumber:int}/{stepType}")]
@@ -51,6 +51,25 @@ public class EditFlowsController : Controller
         _uow.Commit();
 
         return Created("CreateChoice", choice);
+    }
+
+    [HttpPost("/EditFlows/CreateInformation/{flowId:long}/{stepNr:int}/{type}")]
+    public IActionResult CreateInformation(long flowId, int stepNr, string type)
+    {
+        _uow.BeginTransaction();
+
+        InformationBase information = _stepManager.CreateInformation(flowId, stepNr, type);
+        
+        _uow.Commit();
+
+        return Created("CreateChoice", information);
+    }
+
+    [HttpGet("/EditFlows/GetStepId/{flowId:long}/{stepNr:int}")]
+    public IActionResult GetStepId(long flowId, int stepNr)
+    {
+        var stepId = _stepManager.GetStepId(flowId, stepNr);
+        return Ok(stepId);
     }
 
 }

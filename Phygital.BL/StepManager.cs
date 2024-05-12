@@ -15,28 +15,28 @@ namespace Business_Layer;
 
 public class StepManager
 {
-
     private readonly StepRepository _repo;
+
     public StepManager(StepRepository repo)
     {
         _repo = repo;
     }
-    
+
     public StepBase GetStepForFlowByNumber(long flowId, int stepNumber)
     {
         return _repo.ReadStepForFlowByNumber(flowId, stepNumber);
     }
-    
+
     public StepBase? GetStepById(long? stepId)
     {
         return _repo.ReadStepById(stepId);
     }
-    
+
     public Flow GetFlowByNumber(long flowId)
     {
         return _repo.ReadFlowByNumber(flowId);
     }
-    
+
     public void ChangeStep(StepBase step)
     {
         _repo.UpdateStep(step);
@@ -63,9 +63,44 @@ public class StepManager
                         _repo.AddChoice(choiceQuestion, choice);
                         return choice;
                 }
+
                 break;
         }
 
         return null;
+    }
+
+    public InformationBase CreateInformation(long flowId, int stepNr, string type)
+    {
+        var step = _repo.ReadStepForFlowByNumber(flowId, stepNr);
+
+        InformationBase information = null;
+
+        switch (step)
+        {
+            case InformationStep informationStep:
+                switch (type)
+                {
+                    case "Text":
+                        information = new Text();
+                        break;
+                    case "Image":
+                        information = new Image();
+                        break;
+                    case "Video":
+                        information = new Video();
+                        break;
+                }
+
+                _repo.AddInformation(informationStep, information);
+                break;
+        }
+
+        return information;
+    }
+
+    public long GetStepId(long flowId, int stepNr)
+    {
+        return _repo.ReadStepId(flowId, stepNr);
     }
 }
