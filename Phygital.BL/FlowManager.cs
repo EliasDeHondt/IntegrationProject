@@ -82,15 +82,16 @@ public class FlowManager
         _repository.UpdateFlowState(flow);
     }
 
-    public StepBase CreateStep(long flowId, int stepNumber, string stepType)
+    public StepBase CreateStep(long flowId, int stepNumber, string stepType, ICollection<InformationBase>? informationBases = null)
     {
         Flow flow = _repository.ReadFlowById(flowId);
 
         //InformationStep stepI = null;
-        StepBase step = null;
+        StepBase step = null!;
         switch (stepType)
         {
-            case "Information": step = new InformationStep(stepNumber, new List<InformationBase>(),flow);
+            case "Information":
+                step = new InformationStep(stepNumber, informationBases!,flow);
                 // step.StepName = "Information";
                 break;
             case "Single Choice Question": 
@@ -112,10 +113,9 @@ public class FlowManager
                 break;
         }
         
-        _stepRepository.AddStep(step);
-        _repository.AddStepToFlow(flowId, step);
+        _repository.AddStepToFlow(flowId, step!);
 
-        return step;
+        return step!;
 
     }
 
