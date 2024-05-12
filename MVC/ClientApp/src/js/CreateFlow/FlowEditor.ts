@@ -2,6 +2,7 @@ import {Choice, Information, Question, Step} from "../Flow/Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
 import {Modal} from "bootstrap";
 import {Flow, Participation} from "../Flow/FlowObjects";
+import {op} from "@tensorflow/tfjs";
 
 
 const stepsList = document.getElementById('steps-list') as HTMLElement;
@@ -62,20 +63,8 @@ async function AddStep(stepNumber: number, stepType: string) {
         .catch(error => console.error("Error:", error))
 }
 
-async function AddChoice(stepNr: number) {
-    await fetch(`/EditFlows/CreateChoice/${flowId}/${stepNr}`, {
-        method: "POST",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
-    })
-        .then(response => response.json())
-        .catch(error => console.error("Error:", error))
-}
-
-async function AddInformation(stepNr: number, type: string) {
-    await fetch(`/EditFlows/CreateInformation/${flowId}/${stepNr}/${type}`, {
+async function UpdateStep(flowId: number, stepNr: number, step: Step) {
+    await fetch(`/api/Steps/${flowId}/Update/${step.stepNumber}`, {
         method: "POST",
         headers: {
             "Accept": "application/json",
@@ -263,7 +252,7 @@ btnAddChoice.addEventListener('click', async () => {
         btnAddChoice.disabled = true;
     }
 
-    await AddChoice(currentViewingStep.stepNumber);
+    //await AddChoice(currentViewingStep.stepNumber);
 
     console.log("Add choice")
     let div = document.createElement("div");
@@ -283,13 +272,14 @@ btnAddChoice.addEventListener('click', async () => {
     choiceContainer.appendChild(div);
 });
 
-btnAddText.addEventListener('click', async () => {
+btnAddText.addEventListener('click', () => {
     currentViewingStep.informationViewModel.length++
 
-    toggleButtons();
-
-    await AddInformation(currentViewingStep.stepNumber, "Text");
-
+    if (currentViewingStep.informationViewModel.length >= 2) {
+        btnAddText.disabled = true;
+        btnAddImage.disabled = true;
+        btnAddVideo.disabled = true;
+    }
     console.log("Add text")
     let div = document.createElement("div");
     div.id = "text-container"
@@ -304,7 +294,7 @@ btnAddText.addEventListener('click', async () => {
 
 btnAddLink.addEventListener('click', () => {
     console.log("Add Link")
-    
+
     currentViewingStep.informationViewModel.length++
     toggleButtons();
 
@@ -392,7 +382,7 @@ async function GetStepData() {
                     break;
             }
 
-            informationArray[i] = {information: information, informationType: informationType};
+            informationArray.push({information: information, informationType: informationType});
         }
         if (index !== -1) {
             currentStepList[index].informationViewModel = informationArray;
@@ -407,24 +397,23 @@ async function GetStepData() {
         for (let i = 0; i < choicesContainer.children.length; i++) {
             const element = choicesContainer.children[i].children[0] as HTMLInputElement;
             const select = choicesContainer.children[i].children[1] as HTMLSelectElement;
-
-            let nextStepId: number = 0;
-
-            let selectedOption = select.options[select.selectedIndex];
-
-            if (selectedOption.value != "undefined") {
-                choicesArray[i] = {text: element.value, nextStepId: Number(selectedOption.value)};
-            } else {
-                choicesArray[i] = {text: element.value, nextStepId: undefined};
+            let nextStepId : number | undefined = 0;
+            for (let j = 0; j < select.children.length; j++) {
+                const option = select.children[j] as HTMLOptionElement;
+                if (option.selected && option.value == "undefined") {
+                    nextStepId = undefined;
+                } else if (option.selected) {
+                    nextStepId = Number(option.value);
+                }
             }
+            choicesArray.push({text: element.value, nextStepId: nextStepId});
         }
 
-        console.log(choicesArray)
 
         const questionElement = questionContainer.children[0] as HTMLTextAreaElement;
 
         let questionText = questionElement.value;
-        let questionType = currentViewingStep.questionViewModel.questionType;
+        let questionType = partialQuestionContainer.children[0].innerHTML;
 
         let question: Question = {question: questionText, questionType: questionType, choices: choicesArray}
 
@@ -458,12 +447,12 @@ async function GetNewFlowData(flow: Flow): Promise<Flow> {
             if (stepData.questionViewModel)
                 stepData.questionViewModel.choices = choices;
         }
-        
+
         console.log(stepData)
 
         flowData.steps.push(stepData);
     }
-    
+
     console.log(flowData.steps)
 
     console.log(flowData);
@@ -649,106 +638,110 @@ function fillConditionalPoints(select: HTMLSelectElement, nextStepId?: number) {
     option.value = "undefined";
     option.innerText = "Next step"
     select.appendChild(option);
-    GetSteps(flowId).then(async steps => {
-        steps.sort((a, b) => a.stepNumber - b.stepNumber);
-        for (const step of steps) {
-            let option = document.createElement("option");
-            await GetStepId(step.stepNumber).then(id => option.value = id.toString());
-            option.innerText = `Step ${step.stepNumber}`
-            select.appendChild(option);
-            if (Number(option.value) == nextStepId)
-                option.selected = true;
-        }
-    })
-}
+    GetSteps(flowId).then(steps => steps.forEach(step => {
+        let option = document.createElement("option");
+        option.value = step.stepNumber.toString();
+        option.innerText = `Step ${step.stepNumber}`
+        select.appendChild(option);
+    }))
 
-const CreateStepModal = new Modal(document.getElementById('CreateStepModal')!, {
-    keyboard: false,
-    focus: true,
-    backdrop: "static"
-});
-
-btnAddStep.onclick = () => {
-    CreateStepModal.show();
-}
-
-
-const butCloseCreateStep = document.getElementById("butCloseCreateStep") as HTMLButtonElement;
-const butCancelCreateStep = document.getElementById("butCancelCreateStep") as HTMLButtonElement;
-const butConfirmCreateStep = document.getElementById("butConfirmCreateStep") as HTMLButtonElement;
-
-const infographic = document.getElementById("infographic") as HTMLInputElement;
-const singleQ = document.getElementById("singleQ") as HTMLInputElement;
-const multipleQ = document.getElementById("multipleQ") as HTMLInputElement;
-const rangeQ = document.getElementById("rangeQ") as HTMLInputElement;
-const openQ = document.getElementById("openQ") as HTMLInputElement;
-
-butCancelCreateStep.onclick = () => {
-    clearModal()
-}
-
-butCloseCreateStep.onclick = () => {
-    clearModal()
-}
-butConfirmCreateStep.onclick = () => {
-    currentStepList.sort((a, b) => a.stepNumber - b.stepNumber);
-    let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
-    if (infographic.checked) {
-        AddStep(newStepNumber, "Information")
-            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
-            .then(() => initializeCardLinks());
-    } else if (singleQ.checked) {
-        AddStep(newStepNumber, "Single Choice Question")
-            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
-            .then(() => initializeCardLinks());
-    } else if (multipleQ.checked) {
-        AddStep(newStepNumber, "Multiple Choice Question")
-            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
-            .then(() => initializeCardLinks());
-    } else if (rangeQ.checked) {
-        AddStep(newStepNumber, "Ranged Question")
-            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
-            .then(() => initializeCardLinks());
-    } else if (openQ.checked) {
-        AddStep(newStepNumber, "Open Question")
-            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
-            .then(() => initializeCardLinks());
+    if (nextStepId) {
+        GetConditionalNextStep(nextStepId).then(step => {
+            let defaultOption = select.children[0] as HTMLOptionElement;
+            defaultOption.selected = false;
+            let optionSelected = select.children[step.stepNumber] as HTMLOptionElement;
+            optionSelected.selected = true;
+        })
     }
-    clearModal()
 }
 
-function clearModal() {
-    CreateStepModal.hide();
-    ViewStepModal.hide();
-}
+    const CreateStepModal = new Modal(document.getElementById('CreateStepModal')!, {
+        keyboard: false,
+        focus: true,
+        backdrop: "static"
+    });
 
-const btnCancelViewFlowModal = document.getElementById("btnCancelViewFlowModal") as HTMLButtonElement;
-const btnSaveViewFlowModal = document.getElementById("btnSaveViewFlowModal") as HTMLButtonElement;
-const btnConfirmViewFlow = document.getElementById("btnConfirmViewFlow") as HTMLAnchorElement;
+    btnAddStep.onclick = () => {
+        CreateStepModal.show();
+    }
 
-const ViewStepModal = new Modal(document.getElementById('ViewFlowModal')!, {
-    keyboard: false,
-    focus: true,
-    backdrop: "static"
-});
 
-btnViewFlow.onclick = () => {
-    ViewStepModal.show();
-    btnConfirmViewFlow.setAttribute('href', "/Flow/Step/" + flowId);
-}
+    const butCloseCreateStep = document.getElementById("butCloseCreateStep") as HTMLButtonElement;
+    const butCancelCreateStep = document.getElementById("butCancelCreateStep") as HTMLButtonElement;
+    const butConfirmCreateStep = document.getElementById("butConfirmCreateStep") as HTMLButtonElement;
 
-btnCancelViewFlowModal.onclick = () => {
-    clearModal();
-}
+    const infographic = document.getElementById("infographic") as HTMLInputElement;
+    const singleQ = document.getElementById("singleQ") as HTMLInputElement;
+    const multipleQ = document.getElementById("multipleQ") as HTMLInputElement;
+    const rangeQ = document.getElementById("rangeQ") as HTMLInputElement;
+    const openQ = document.getElementById("openQ") as HTMLInputElement;
 
-btnSaveViewFlowModal.onclick = () => {
-    //TODO: after merge with Jana, add saveFlow
-    //saveFlow();
-}
+    butCancelCreateStep.onclick = () => {
+        clearModal()
+    }
 
-btnConfirmViewFlow.onclick = () => {
-    clearModal();
-}
+    butCloseCreateStep.onclick = () => {
+        clearModal()
+    }
+    butConfirmCreateStep.onclick = () => {
+        currentStepList.sort((a, b) => a.stepNumber - b.stepNumber);
+        let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
+        if (infographic.checked) {
+            AddStep(newStepNumber, "Information")
+                .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
+                .then(() => initializeCardLinks());
+        } else if (singleQ.checked) {
+            AddStep(newStepNumber, "Single Choice Question")
+                .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
+                .then(() => initializeCardLinks());
+        } else if (multipleQ.checked) {
+            AddStep(newStepNumber, "Multiple Choice Question")
+                .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
+                .then(() => initializeCardLinks());
+        } else if (rangeQ.checked) {
+            AddStep(newStepNumber, "Ranged Question")
+                .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
+                .then(() => initializeCardLinks());
+        } else if (openQ.checked) {
+            AddStep(newStepNumber, "Open Question")
+                .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
+                .then(() => initializeCardLinks());
+        }
+        clearModal()
+    }
+
+    function clearModal() {
+        CreateStepModal.hide();
+        ViewStepModal.hide();
+    }
+
+    const btnCancelViewFlowModal = document.getElementById("btnCancelViewFlowModal") as HTMLButtonElement;
+    const btnSaveViewFlowModal = document.getElementById("btnSaveViewFlowModal") as HTMLButtonElement;
+    const btnConfirmViewFlow = document.getElementById("btnConfirmViewFlow") as HTMLAnchorElement;
+
+    const ViewStepModal = new Modal(document.getElementById('ViewFlowModal')!, {
+        keyboard: false,
+        focus: true,
+        backdrop: "static"
+    });
+
+    btnViewFlow.onclick = () => {
+        ViewStepModal.show();
+        btnConfirmViewFlow.setAttribute('href', "/Flow/Step/" + flowId);
+    }
+
+    btnCancelViewFlowModal.onclick = () => {
+        clearModal();
+    }
+
+    btnSaveViewFlowModal.onclick = () => {
+        //TODO: after merge with Jana, add saveFlow
+        //saveFlow();
+    }
+
+    btnConfirmViewFlow.onclick = () => {
+        clearModal();
+    }
 
 // function saveFlow() {
 //     console.log("Saving flow...");
