@@ -18,7 +18,7 @@ public class Choice
     public ChoiceQuestionBase QuestionBase { get; set; }
     public ICollection<Selection> Selections { get; set; }
     
-    public QuestionBase? NextQuestionBase { get; set; }
+    public StepBase? NextStep { get; set; }
 
     public Choice(string text, ChoiceQuestionBase questionBase, ICollection<Selection> selections, long id = 0)
     {
@@ -28,13 +28,13 @@ public class Choice
         Selections = selections;
     }
 
-    public Choice(string text, ChoiceQuestionBase questionBase, QuestionBase nextQuestionBase, long id = 0)
+    public Choice(string text, ChoiceQuestionBase questionBase, StepBase nextStep, long id = 0)
     {
         Id = id;
         Text = text;
         QuestionBase = questionBase;
         Selections = new List<Selection>();
-        NextQuestionBase = nextQuestionBase;
+        NextStep = nextStep;
     }
 
     public Choice(string text, ChoiceQuestionBase questionBase, long id = 0)

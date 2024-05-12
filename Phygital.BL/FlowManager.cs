@@ -91,31 +91,29 @@ public class FlowManager
         switch (stepType)
         {
             case "Information": step = new InformationStep(stepNumber, new List<InformationBase>(),flow);
-                // step.StepName = "Information";
                 break;
             case "Single Choice Question": 
                 SingleChoiceQuestion singleChoiceQuestion = new SingleChoiceQuestion(); 
                 step =  new QuestionStep(stepNumber,singleChoiceQuestion,flow);
-                //step.StepName = "Single Choice Question"; 
                 break;
             case "Multiple Choice Question":
                 MultipleChoiceQuestion multipleChoiceQuestion = new MultipleChoiceQuestion(); 
-                step =  new QuestionStep(stepNumber,multipleChoiceQuestion,flow); //step.StepName = "Multiple Choice Question"; 
+                step =  new QuestionStep(stepNumber,multipleChoiceQuestion,flow); 
                 break;
             case "Ranged Question":
                 RangeQuestion rangeQuestion = new RangeQuestion(); 
-                step =  new QuestionStep(stepNumber,rangeQuestion,flow); //step.StepName = "Ranged Question"; 
+                step =  new QuestionStep(stepNumber,rangeQuestion,flow);
                 break;
             case "Open Question": 
                 OpenQuestion openQuestion = new OpenQuestion(); 
-                step =  new QuestionStep(stepNumber,openQuestion,flow); //step.StepName = "Open Question"; 
+                step =  new QuestionStep(stepNumber,openQuestion,flow);
                 break;
         }
         
-        _stepRepository.AddStep(step);
-        _repository.AddStepToFlow(flowId, step);
+       // _repository.AddStepToFlow(flowId, step);
+        _repository.AddStepToFlow(flowId, step!);
 
-        return step;
+        return step!;
 
     }
 
