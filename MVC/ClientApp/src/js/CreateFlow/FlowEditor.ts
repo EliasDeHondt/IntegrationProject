@@ -13,6 +13,7 @@ const btnAddText = document.getElementById('btn-add-text') as HTMLButtonElement;
 const btnAddImage = document.getElementById('btn-add-image') as HTMLButtonElement;
 const btnAddVideo = document.getElementById('btn-add-video') as HTMLButtonElement;
 const btnSaveFlow = document.getElementById("saveFlow") as HTMLButtonElement;
+const btnAddLink = document.getElementById("btn-add-hyperlink") as HTMLButtonElement;
 
 let currentStepList: Step[] = [];
 
@@ -145,6 +146,7 @@ function toggleButtons() {
     btnAddImage.disabled = true;
     btnAddVideo.disabled = true;
     btnAddChoice.disabled = true;
+    btnAddLink.disabled = true;
 
     if (currentViewingStep == undefined) {
         return;
@@ -155,10 +157,12 @@ function toggleButtons() {
         btnAddText.disabled = false;
         btnAddImage.disabled = false;
         btnAddVideo.disabled = false;
+        btnAddLink.disabled = false;
         if (currentViewingStep.informationViewModel.length >= 2) {
             btnAddText.disabled = true;
             btnAddImage.disabled = true;
             btnAddVideo.disabled = true;
+            btnAddLink.disabled = true;
         }
     }
     if (currentViewingStep.questionViewModel != undefined && currentViewingStep.questionViewModel.questionType != "OpenQuestion") {
@@ -182,6 +186,8 @@ function UpdateStepList(steps: Step[]) {
 
     currentStepList.sort((a, b) => a.stepNumber - b.stepNumber);
     steps.sort((a, b) => a.stepNumber - b.stepNumber);
+
+    currentStepList = steps;
 
     console.log(currentStepList)
 
@@ -229,15 +235,26 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("The ID provided in the URL is not a number.")
     }
 
+    GetSteps(flowId).then(steps => console.log(steps))
+
     // GetSteps(flowId).then(() => { 
     //   initializeCardLinks();
     //   btnViewFlow.setAttribute('href', "/Flow/Step/" + flowId);
     // });
     GetSteps(flowId)
-        .then(steps => UpdateStepList(steps))
+        .then(steps => {
+            UpdateStepList(steps);
+        })
         .then(() => toggleButtons())
         .then(() => initializeCardLinks())
 });
+
+/* This function checks if the provided URL is valid */
+function checkURLValidity(url: string): boolean {
+    let urlRegex = /(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?\/[a-zA-Z0-9]{2,}|((https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?)|(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})?/g;
+
+    return urlRegex.test(url);
+}
 
 btnAddChoice.addEventListener('click', async () => {
     currentViewingStep.questionViewModel.choices.length++
@@ -269,11 +286,7 @@ btnAddChoice.addEventListener('click', async () => {
 btnAddText.addEventListener('click', async () => {
     currentViewingStep.informationViewModel.length++
 
-    if (currentViewingStep.informationViewModel.length >= 2) {
-        btnAddText.disabled = true;
-        btnAddImage.disabled = true;
-        btnAddVideo.disabled = true;
-    }
+    toggleButtons();
 
     await AddInformation(currentViewingStep.stepNumber, "Text");
 
@@ -288,6 +301,33 @@ btnAddText.addEventListener('click', async () => {
     div.append(textArea);
     partialInformationContainer.appendChild(div);
 });
+
+btnAddLink.addEventListener('click', () => {
+    console.log("Add Link")
+    
+    currentViewingStep.informationViewModel.length++
+    toggleButtons();
+
+    let div = document.createElement("div");
+    div.id = "text-container";
+    div.classList.add("text-start", "m-auto");
+
+    const textArea = document.createElement("textarea");
+    textArea.classList.add("input-hyperlink-iframe");
+    textArea.addEventListener('change', async () => {
+        let isWorkingURL = checkURLValidity(textArea.value)
+        if (isWorkingURL) {
+            textArea.dataset.allowed = String(1);
+            textArea.classList.add("hyperlink-allowed");
+        } else {
+            textArea.dataset.allowed = String(0);
+            textArea.classList.add("hyperlink-disallowed");
+        }
+    })
+
+    div.append(textArea);
+    partialInformationContainer.appendChild(div);
+})
 
 btnAddImage.addEventListener('click', () => {
     console.log("Add Image")
@@ -344,6 +384,11 @@ async function GetStepData() {
                     const videoElement = element as HTMLVideoElement;
                     information = videoElement.src;
                     informationType = 'Video';
+                    break;
+                case 'IFRAME':
+                    const linkTextAreaElement = element as HTMLTextAreaElement;
+                    information = linkTextAreaElement.value;
+                    informationType = 'Hyperlink'
                     break;
             }
 
@@ -413,9 +458,13 @@ async function GetNewFlowData(flow: Flow): Promise<Flow> {
             if (stepData.questionViewModel)
                 stepData.questionViewModel.choices = choices;
         }
+        
+        console.log(stepData)
 
         flowData.steps.push(stepData);
     }
+    
+    console.log(flowData.steps)
 
     console.log(flowData);
     return flowData;
@@ -451,7 +500,7 @@ async function ShowStepInContainer(stepNr: number) {
 
     partialInformationContainer.innerHTML = "";
     partialQuestionContainer.innerHTML = "";
-    toggleButtons();
+    //toggleButtons();
     console.log(data)
     if (data.informationViewModel != undefined) {
         for (const infoStep of data.informationViewModel) {
@@ -485,6 +534,26 @@ async function ShowStepInContainer(stepNr: number) {
                     video.controls = false;
                     video.classList.add("h-100", "w-100");
                     partialInformationContainer.appendChild(video);
+                    break;
+                }
+                case "Hyperlink": {
+                    let url = infoStep.information;
+                    let iframe = document.createElement("textarea");
+                    iframe.value = url;
+                    iframe.classList.add("input-hyperlink-iframe");
+                    iframe.addEventListener('change', async () => {
+                        let isWorkingURL = checkURLValidity(iframe.value)
+                        if (isWorkingURL) {
+                            iframe.dataset.allowed = String(1);
+                            iframe.classList.remove("hyperlink-disallowed");
+                            iframe.classList.add("hyperlink-allowed");
+                        } else {
+                            iframe.dataset.allowed = String(0);
+                            iframe.classList.remove("hyperlink-allowed");
+                            iframe.classList.add("hyperlink-disallowed");
+                        }
+                    })
+                    partialInformationContainer.appendChild(iframe);
                     break;
                 }
             }
@@ -673,9 +742,20 @@ btnCancelViewFlowModal.onclick = () => {
 }
 
 btnSaveViewFlowModal.onclick = () => {
-    //TODO: after merge with Jana, add saveFlow method here.
+    //TODO: after merge with Jana, add saveFlow
+    //saveFlow();
 }
 
 btnConfirmViewFlow.onclick = () => {
     clearModal();
 }
+
+// function saveFlow() {
+//     console.log("Saving flow...");
+//     GetStepData();
+//     GetFlowById(flowId)
+//         .then(flow => GetNewFlowData(flow))
+//         .then(flow => {
+//             UpdateFlow(flow);
+//         });
+// }

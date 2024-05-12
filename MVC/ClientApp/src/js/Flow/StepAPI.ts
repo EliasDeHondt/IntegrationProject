@@ -160,6 +160,14 @@ async function ShowStep(data: Step) {
                     informationContainer.appendChild(video);
                     break;
                 }
+                case "Hyperlink": {
+                    let url = infoStep.information;
+                    let iframe = document.createElement("iframe");
+                    iframe.src = url;
+                    iframe.classList.add("hyperlink-iframe");
+                    informationContainer.appendChild(iframe);
+                    break;
+                }
             }
         }
     }

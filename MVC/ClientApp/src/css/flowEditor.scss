@@ -126,6 +126,7 @@
   border: thin solid black;
   border-radius: 5px;
   background-color: map-get($themes, light, background);
+  padding: 1em;
 }
 
 #step-container {
@@ -141,4 +142,19 @@
 
 #btn-add-step {
   margin: 10px;
+}
+
+.input-hyperlink-iframe {
+  min-height: 5em;
+  min-width: 40em;
+}
+
+.hyperlink-allowed {
+  background-color: hsla(112, 64%, 45%, 0.72);
+  border: green thin solid;
+}
+
+.hyperlink-disallowed {
+  background-color: hsla(0, 64%, 45%, 0.72);
+  border: darkred thin solid;
 }

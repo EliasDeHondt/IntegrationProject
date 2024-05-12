@@ -37,6 +37,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Text> Texts { get; set; } = null!;
     public DbSet<Image> Images { get; set; } = null!;
     public DbSet<Video> Videos { get; set; } = null!;
+    public DbSet<Hyperlink> Hyperlinks { get; set; } = null!;
     public DbSet<Participation> Participations { get; set; } = null!;
     public DbSet<Answer> Answers { get; set; } = null!;
     public DbSet<Choice> Choices { get; set; } = null!;
