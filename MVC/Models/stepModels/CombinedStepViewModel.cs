@@ -12,10 +12,5 @@ namespace MVC.Models;
 public class CombinedStepViewModel : StepViewModel
 {
     [Required]
-    [Range(0, int.MaxValue)]
-    public int StepNumber { get; set; }
-    [Key]
-    public long Id { get; set; }
-    [Required]
     public InformationViewModel InformationViewModel { get; set; }
 }

@@ -26,6 +26,7 @@ let stepTotal = Number((document.getElementById("stepTotal") as HTMLSpanElement)
 let flowtype = (document.getElementById("flowtype") as HTMLSpanElement).innerText;
 let prevFlowId = sessionStorage.getItem('prevFlowId');
 let currentState: string = "";
+let conditionalAnswer: number = 0;
 
 //email checken
 function CheckEmail(inputEmail: string): boolean {
@@ -94,8 +95,8 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 });
 
-function GetNextStep(stepNumber: number, flowId: number) {
-    fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
+async function GetNextStep(stepNumber: number, flowId: number): Promise<Step> {
+    return await fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
         method: "GET",
         headers: {
             "Accept": "application/json",
@@ -103,14 +104,30 @@ function GetNextStep(stepNumber: number, flowId: number) {
         }
     })
         .then(response => response.json())
-        .then(data => ShowStep(data))
-        .catch(error => console.error("Error:", error))
+        .then(data => {
+            return data
+        })
+}
+
+async function GetConditionalNextStep(stepId: number): Promise<Step> {
+    return await fetch(`/api/Steps/GetConditionalNextStep/${stepId}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data
+    })
 }
 
 async function ShowStep(data: Step) {
     (document.getElementById("stepNr") as HTMLSpanElement).innerText = currentStepNumber.toString();
     informationContainer.innerHTML = "";
     questionContainer.innerHTML = "";
+    console.log(data);
     if (data.informationViewModel != undefined) {
         for (const infoStep of data.informationViewModel) {
             switch (infoStep.informationType) {
@@ -172,6 +189,8 @@ async function ShowStep(data: Step) {
                     // Add event listener to capture user input
                     choice.addEventListener('change', function () {
                         userAnswers = [choice.value];
+                        if (element.nextStepId != undefined)
+                            conditionalAnswer = element.nextStepId;
                     });
                 }
                 break;
@@ -194,6 +213,8 @@ async function ShowStep(data: Step) {
                         if (choice.checked) {
                             // Add selected choice to userAnswers array
                             userAnswers.push(choice.value);
+                            if (element.nextStepId != undefined)
+                                conditionalAnswer = element.nextStepId;
                         } else {
                             // Remove deselected choice from userAnswers array
                             const index = userAnswers.indexOf(choice.value);
@@ -228,6 +249,10 @@ async function ShowStep(data: Step) {
                     if (data.questionViewModel) {
                         userAnswers = [data.questionViewModel.choices[Number(slider.value)].text];
                         label.innerText = data.questionViewModel.choices[Number(slider.value)].text;
+                    }
+                    const nextStepId = data.questionViewModel.choices[Number(slider.value)].nextStepId;
+                    if (nextStepId !== undefined) {
+                        conditionalAnswer = nextStepId;
                     }
                 });
                 break;
@@ -295,14 +320,22 @@ btnNextStep.onclick = async () => {
     // Proceed to the next step
     if (flowtype.toUpperCase() == "CIRCULAR" && currentStepNumber >= stepTotal) {
         currentStepNumber = 0;
-        GetNextStep(++currentStepNumber, flowId);
+        await GetNextStep(++currentStepNumber, flowId).then(step => ShowStep(step));
     } else {
-        GetNextStep(++currentStepNumber, flowId);
+        if (conditionalAnswer > 0) {
+            await GetConditionalNextStep(conditionalAnswer).then(step => {
+                conditionalAnswer = 0;
+                currentStepNumber = step.stepNumber
+                GetNextStep(currentStepNumber, flowId).then(step => ShowStep(step))
+            })
+        } else {
+            await GetNextStep(++currentStepNumber, flowId).then(step => ShowStep(step));
+        }
     }
 
 }
 
 btnRestartFlow.onclick = () => {
     currentStepNumber = 0;
-    GetNextStep(++currentStepNumber, flowId);
+    GetNextStep(++currentStepNumber, flowId).then(step => ShowStep(step));
 };

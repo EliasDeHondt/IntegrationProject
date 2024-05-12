@@ -14,7 +14,7 @@ const btnAddImage = document.getElementById('btn-add-image') as HTMLButtonElemen
 const btnAddVideo = document.getElementById('btn-add-video') as HTMLButtonElement;
 const btnSaveFlow = document.getElementById("saveFlow") as HTMLButtonElement;
 
-let currentStepList: Step[];
+let currentStepList: Step[] = [];
 
 let currentViewingStep: Step;
 
@@ -61,15 +61,28 @@ async function AddStep(stepNumber: number, stepType: string) {
         .catch(error => console.error("Error:", error))
 }
 
-async function UpdateStep(flowId: number, stepNr: number, step: Step) {
-    await fetch(`/api/Steps/${flowId}/Update/${step.stepNumber}`, {
+async function AddChoice(stepNr: number) {
+    await fetch(`/EditFlows/CreateChoice/${flowId}/${stepNr}`, {
         method: "POST",
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json"
-        },
-        body: JSON.stringify(step)
+        }
     })
+        .then(response => response.json())
+        .catch(error => console.error("Error:", error))
+}
+
+async function AddInformation(stepNr: number, type: string) {
+    await fetch(`/EditFlows/CreateInformation/${flowId}/${stepNr}/${type}`, {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .catch(error => console.error("Error:", error))
 }
 
 async function GetFlowById(flowId: number): Promise<Flow> {
@@ -86,15 +99,43 @@ async function GetFlowById(flowId: number): Promise<Flow> {
         })
 }
 
-async function UpdateFlow(flow: Flow) {
-    await fetch(`/api/Flows/${flow.id}/Update`, {
+async function UpdateFlow(steps: Step[]) {
+    await fetch(`/api/Flows/${flowId}/Update`, {
         method: "PUT",
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(flow)
+        body: JSON.stringify(steps)
     })
+}
+
+async function GetConditionalNextStep(stepId: number): Promise<Step> {
+    return await fetch(`/api/Steps/GetConditionalNextStep/${stepId}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
+}
+
+async function GetStepId(stepNr: number): Promise<number> {
+    return await fetch(`/EditFlows/GetStepId/${flowId}/${stepNr}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
 }
 
 function toggleButtons() {
@@ -132,9 +173,15 @@ function toggleButtons() {
 
 function UpdateStepList(steps: Step[]) {
 
-    steps.sort((a, b) => a.stepNumber - b.stepNumber);
+    currentStepList = [];
 
-    currentStepList = steps;
+    GetSteps(flowId).then(steps => steps.forEach(step => {
+        GetStepById(step.stepNumber, flowId)
+            .then(s => currentStepList.push(s));
+    }))
+
+    currentStepList.sort((a, b) => a.stepNumber - b.stepNumber);
+    steps.sort((a, b) => a.stepNumber - b.stepNumber);
 
     console.log(currentStepList)
 
@@ -182,8 +229,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("The ID provided in the URL is not a number.")
     }
 
-    GetSteps(flowId).then(steps => console.log(steps))
-
     // GetSteps(flowId).then(() => { 
     //   initializeCardLinks();
     //   btnViewFlow.setAttribute('href', "/Flow/Step/" + flowId);
@@ -194,12 +239,14 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(() => initializeCardLinks())
 });
 
-btnAddChoice.addEventListener('click', () => {
+btnAddChoice.addEventListener('click', async () => {
     currentViewingStep.questionViewModel.choices.length++
 
     if (currentViewingStep.questionViewModel.choices.length >= 6) {
         btnAddChoice.disabled = true;
     }
+
+    await AddChoice(currentViewingStep.stepNumber);
 
     console.log("Add choice")
     let div = document.createElement("div");
@@ -208,13 +255,18 @@ btnAddChoice.addEventListener('click', () => {
     const textArea = document.createElement("input");
     textArea.classList.add("choice-textarea")
 
+    const select = document.createElement("select");
+    select.classList.add("choice-select");
+    fillConditionalPoints(select, undefined);
+
     let choiceContainer = document.getElementById("choices-container") as HTMLDivElement;
 
     div.append(textArea);
+    div.append(select);
     choiceContainer.appendChild(div);
 });
 
-btnAddText.addEventListener('click', () => {
+btnAddText.addEventListener('click', async () => {
     currentViewingStep.informationViewModel.length++
 
     if (currentViewingStep.informationViewModel.length >= 2) {
@@ -222,6 +274,8 @@ btnAddText.addEventListener('click', () => {
         btnAddImage.disabled = true;
         btnAddVideo.disabled = true;
     }
+
+    await AddInformation(currentViewingStep.stepNumber, "Text");
 
     console.log("Add text")
     let div = document.createElement("div");
@@ -245,18 +299,18 @@ btnAddVideo.addEventListener('click', () => {
     //TODO: add video logica
 });
 
-btnSaveFlow.addEventListener('click', () => {
+btnSaveFlow.addEventListener('click', async () => {
     console.log("Saving flow...");
-    GetStepData();
+    await GetStepData();
     GetFlowById(flowId)
         .then(flow => GetNewFlowData(flow))
         .then(flow => {
-            UpdateFlow(flow);
+            UpdateFlow(flow.steps);
         })
 });
 
 
-function GetStepData() {
+async function GetStepData() {
     if (!currentViewingStep) {
         return;
     }
@@ -293,7 +347,7 @@ function GetStepData() {
                     break;
             }
 
-            informationArray.push({information: information, informationType: informationType});
+            informationArray[i] = {information: information, informationType: informationType};
         }
         if (index !== -1) {
             currentStepList[index].informationViewModel = informationArray;
@@ -302,18 +356,30 @@ function GetStepData() {
     }
 
     if (currentViewingStep.questionViewModel) {
-        const questionContainer = partialQuestionContainer.children[1] as HTMLDivElement;
-        const choicesContainer = partialQuestionContainer.children[2] as HTMLDivElement;
+        const questionContainer = partialQuestionContainer.children[0] as HTMLDivElement;
+        const choicesContainer = partialQuestionContainer.children[1] as HTMLDivElement;
 
         for (let i = 0; i < choicesContainer.children.length; i++) {
             const element = choicesContainer.children[i].children[0] as HTMLInputElement;
-            choicesArray.push({text: element.value});
+            const select = choicesContainer.children[i].children[1] as HTMLSelectElement;
+
+            let nextStepId: number = 0;
+
+            let selectedOption = select.options[select.selectedIndex];
+
+            if (selectedOption.value != "undefined") {
+                choicesArray[i] = {text: element.value, nextStepId: Number(selectedOption.value)};
+            } else {
+                choicesArray[i] = {text: element.value, nextStepId: undefined};
+            }
         }
+
+        console.log(choicesArray)
 
         const questionElement = questionContainer.children[0] as HTMLTextAreaElement;
 
         let questionText = questionElement.value;
-        let questionType = partialQuestionContainer.children[0].innerHTML;
+        let questionType = currentViewingStep.questionViewModel.questionType;
 
         let question: Question = {question: questionText, questionType: questionType, choices: choicesArray}
 
@@ -342,7 +408,7 @@ async function GetNewFlowData(flow: Flow): Promise<Flow> {
         if (step.questionViewModel && step.questionViewModel.questionType !== "OpenQuestion") {
             const choices: Choice[] = [];
             for (const choice of step.questionViewModel.choices) {
-                choices.push({text: choice.text});
+                choices.push({text: choice.text, nextStepId: choice.nextStepId});
             }
             if (stepData.questionViewModel)
                 stepData.questionViewModel.choices = choices;
@@ -351,6 +417,7 @@ async function GetNewFlowData(flow: Flow): Promise<Flow> {
         flowData.steps.push(stepData);
     }
 
+    console.log(flowData);
     return flowData;
 }
 
@@ -358,12 +425,13 @@ function initializeCardLinks() {
     let stepCards = document.querySelectorAll('.step-card') as NodeListOf<HTMLAnchorElement>;
 
     stepCards.forEach(stepCard => {
-        stepCard.addEventListener('click', () => {
+        stepCard.addEventListener('click', async () => {
+            await GetStepData();
             const stepNumber = stepCard.dataset.stepNumber;
 
             if (stepNumber) {
                 GetStepById(parseInt(stepNumber), flowId).then(s => {
-                    ShowStepInContainer(s);
+                    ShowStepInContainer(s.stepNumber);
                     currentViewingStep = s;
                     toggleButtons();
                 });
@@ -377,7 +445,10 @@ function initializeCardLinks() {
 const partialInformationContainer = document.getElementById("partialInformationContainer") as HTMLDivElement;
 const partialQuestionContainer = document.getElementById("partialQuestionContainer") as HTMLDivElement;
 
-async function ShowStepInContainer(data: Step) {
+async function ShowStepInContainer(stepNr: number) {
+    let stepIndex = currentStepList.findIndex(s => s.stepNumber == stepNr);
+    let data = currentStepList[stepIndex];
+
     partialInformationContainer.innerHTML = "";
     partialQuestionContainer.innerHTML = "";
     toggleButtons();
@@ -396,7 +467,9 @@ async function ShowStepInContainer(data: Step) {
                 case "Image": {
                     let img = document.createElement("img");
                     img.src = "data:image/png;base64," + infoStep.information;
-                    img.classList.add("col-m-12", "w-100", "h-100");
+                    img.classList.add("col-m-12");
+                    img.style.width = '600px'; //schalen image
+                    img.style.height = '600px';
                     partialInformationContainer.appendChild(img);
                     break;
                 }
@@ -442,7 +515,12 @@ async function ShowStepInContainer(data: Step) {
                     textArea.classList.add("choice-textarea")
                     textArea.value = element.text;
 
+                    const select = document.createElement("select");
+                    select.classList.add("choice-select");
+                    fillConditionalPoints(select, element.nextStepId);
+
                     div.append(textArea);
+                    div.append(select);
                     choiceContainer.appendChild(div);
                 }
                 break;
@@ -455,7 +533,12 @@ async function ShowStepInContainer(data: Step) {
                     textArea.classList.add("choice-textarea")
                     textArea.value = element.text;
 
+                    const select = document.createElement("select");
+                    select.classList.add("choice-select");
+                    fillConditionalPoints(select, element.nextStepId);
+
                     div.append(textArea);
+                    div.append(select);
                     choiceContainer.appendChild(div);
                 }
                 break;
@@ -468,7 +551,12 @@ async function ShowStepInContainer(data: Step) {
                     textArea.classList.add("choice-textarea")
                     textArea.value = element.text;
 
+                    const select = document.createElement("select");
+                    select.classList.add("choice-select");
+                    fillConditionalPoints(select, element.nextStepId);
+
                     div.append(textArea);
+                    div.append(select);
                     choiceContainer.appendChild(div);
                 }
                 break;
@@ -485,6 +573,24 @@ async function ShowStepInContainer(data: Step) {
         }
         partialQuestionContainer.appendChild(choiceContainer);
     }
+}
+
+function fillConditionalPoints(select: HTMLSelectElement, nextStepId?: number) {
+    let option = document.createElement("option");
+    option.value = "undefined";
+    option.innerText = "Next step"
+    select.appendChild(option);
+    GetSteps(flowId).then(async steps => {
+        steps.sort((a, b) => a.stepNumber - b.stepNumber);
+        for (const step of steps) {
+            let option = document.createElement("option");
+            await GetStepId(step.stepNumber).then(id => option.value = id.toString());
+            option.innerText = `Step ${step.stepNumber}`
+            select.appendChild(option);
+            if (Number(option.value) == nextStepId)
+                option.selected = true;
+        }
+    })
 }
 
 const CreateStepModal = new Modal(document.getElementById('CreateStepModal')!, {
@@ -516,26 +622,27 @@ butCloseCreateStep.onclick = () => {
     clearModal()
 }
 butConfirmCreateStep.onclick = () => {
+    currentStepList.sort((a, b) => a.stepNumber - b.stepNumber);
     let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
     if (infographic.checked) {
         AddStep(newStepNumber, "Information")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (singleQ.checked) {
         AddStep(newStepNumber, "Single Choice Question")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (multipleQ.checked) {
         AddStep(newStepNumber, "Multiple Choice Question")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (rangeQ.checked) {
         AddStep(newStepNumber, "Ranged Question")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (openQ.checked) {
         AddStep(newStepNumber, "Open Question")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     }
     clearModal()

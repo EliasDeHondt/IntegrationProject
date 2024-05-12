@@ -17,5 +17,5 @@ public class QuestionViewModel
     [Required]
     public string Question { get; set; }
     public string QuestionType { get; set; }
-    public ICollection<Choice> Choices { get; set; }
+    public ICollection<ChoiceViewModel> Choices { get; set; }
 }

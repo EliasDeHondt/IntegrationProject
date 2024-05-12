@@ -40,6 +40,8 @@ public class StepRepository
                 {
                     _ctx.Entry(cqBase)
                         .Collection(qb => qb.Choices)
+                        .Query()
+                        .Include(choice => choice.NextStep)
                         .Load();
                 }
 
@@ -60,6 +62,16 @@ public class StepRepository
             .Include(flow => flow.Steps)
             .First(flow => flow.Id == flowId)
             .Steps.First(step => step.StepNumber == stepNumber);
+
+        return ReadExtendedStep(tempStep);
+    }
+
+    public StepBase? ReadStepById(long? stepId)
+    {
+        StepBase tempStep = _ctx.Steps
+            .AsNoTracking()
+            .Include(s => s.Flow)
+            .First(s => s.Id == stepId);
 
         return ReadExtendedStep(tempStep);
     }
@@ -119,5 +131,24 @@ public class StepRepository
                 _ctx.CombinedSteps.Update(c);
                 break;
         }
+    }
+
+    public void AddChoice(ChoiceQuestionBase question, Choice choice)
+    {
+        _ctx.ChoiceQuestions.Find(question.Id)!.Choices.Add(choice);
+    }
+
+    public void AddInformation(InformationStep step, InformationBase information)
+    {
+        _ctx.InformationSteps.Find(step.Id)!.InformationBases.Add(information);
+    }
+
+    public long ReadStepId(long flowId, int stepNr)
+    {
+        return _ctx.Flows
+            .AsNoTracking()
+            .Include(flow => flow.Steps)
+            .First(flow => flow.Id == flowId)
+            .Steps.First(step => step.StepNumber == stepNr).Id;
     }
 }
