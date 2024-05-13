@@ -36,4 +36,11 @@ public class Statistic
         var fileHelperEngine = new FileHelperEngine<QuestionBase>();
         fileHelperEngine.WriteFile("testoutput.csv", flows);
     }
+
+    public void testPacket2()
+    {
+        var fileHelperEngine = new FileHelperEngine<QuestionBase>();
+        fileHelperEngine.ReadFile("testoutput.csv");
+        //fileHelperEngine.
+    }
 }

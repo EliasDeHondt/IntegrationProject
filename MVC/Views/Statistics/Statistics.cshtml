@@ -1,20 +1,123 @@
 @model Domain.Platform.Statistic
-
+@* TODO: ALLES IS TEMP !!!*@
 @{
-    Layout = null;
+    Layout = "_Layout";
 }
+@{
 
+    
+    // var db = Database.Open("SmallBakery");
+    // var data = db.Query("SELECT Name, Price FROM Product");
+    // var myChart = new Chart(width: 600, height: 400)
+    //     .AddTitle("Product Sales")
+    //     .DataBindTable(dataSource: data, xField: "Name")
+    //     .Write();
+}
 <!DOCTYPE html>
 
 <html lang="" class="h-100 w-100 overflow-hidden">
 <head>
     <title>title</title>
     <link rel="stylesheet" href="~/dist/site.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+       #chart-container {
+           /*width: 800px; */
+           /*height: 800px;*/
+           margin: 0 auto; 
+           display: flex; 
+           flex-wrap: wrap; 
+           /*justify-content: space-between; */
+       }
+       canvas {
+                   width: 750px; /* Adjust width of individual charts */
+                   height: 600px; /* Adjust height of individual charts */
+               }
+               
+    </style>
 </head>
 <body class="row h-100 w-100">
-<div class="text-center">
+<div class="d-flex justify-content-center align-items-center" >
+    <h1>STATISTICS</h1>
 </div>
-STATISTICS
+
+@* <div class="text-center"> *@
+@*     <canvas id="myChart" width="600" height="400"></canvas> *@
+@* </div> *@
+<div id="chart-container">
+    <div>
+        <canvas id="barChart"></canvas>
+        <canvas id="lineChart"></canvas>
+    </div>
+    <div>
+        <canvas id="doughnutChart"></canvas>
+    </div>
+    <div>
+        <canvas id="radarChart"></canvas>
+    </div>
+</div>
+
+
+
+<script>
+    // Data for the chart
+    var chartData = {
+        labels: ["Single", "Multiple", "Open", "Info", "Link"],
+        datasets: [{
+            label: 'Step types',
+            data: [2, 6, 4, 5, 3],
+            backgroundColor: 'rgba(54, 162, 235, 0.2)', 
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1 
+        }]
+    };
+
+    // Config chart
+    var chartOptions = {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        },
+        title: {
+            display: true,
+            text: 'Chart Title'
+        }
+    };
+
+    var barCtx = document.getElementById('barChart').getContext('2d');
+    var lineCtx = document.getElementById('lineChart').getContext('2d');
+    var doughnutCtx = document.getElementById('doughnutChart').getContext('2d');
+    var radarCtx = document.getElementById('radarChart').getContext('2d');
+            
+
+    var barChart = new Chart(barCtx, {
+        type: 'bar', 
+        data: chartData, 
+        options: chartOptions 
+    });
+
+    var lineChart = new Chart(lineCtx, {
+        type: 'line', 
+        data: chartData, 
+        options: chartOptions 
+    });
+    var doughnutChart = new Chart(doughnutCtx, {
+        type: 'doughnut', 
+        data: chartData, 
+        options: chartOptions 
+    });
+
+    var radarChart = new Chart(radarCtx, {
+        type: 'radar', 
+        data: chartData, 
+        options: chartOptions
+    });
+           
+            
+</script>
 </body>
 </html>
 
