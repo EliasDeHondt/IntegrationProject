@@ -150,6 +150,8 @@ public class Startup
                 if (dbContext.CreateDatabase(true))
                 {
                     SeedDatabase(uow, userManager, roleManager, dbContext);
+                    Statistic a = new Statistic(dbContext);
+                    a.testPacket();
                 }
                 break;
             }
@@ -158,6 +160,8 @@ public class Startup
                 if (dbContext.IsEmpty())
                 {
                     SeedDatabase(uow, userManager, roleManager, dbContext);
+                    Statistic a = new Statistic(dbContext);
+                    a.testPacket();
                 }
 
                 break;

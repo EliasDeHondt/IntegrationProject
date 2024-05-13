@@ -22,8 +22,8 @@ startup.Configure(app, app.Environment);
 
 app.Run();
 
-Statistic a = new Statistic();
-a.testPacket();
+// Statistic a = new Statistic();
+// a.testPacket();
 
 return;
 

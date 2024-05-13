@@ -11,12 +11,15 @@ public class Statistic
     //todo: sprint 3
     //public AnswerRepository AnswerRepository;
     private CodeForgeDbContext _ctx;
-
+    //private readonly FlowManager _manager;
     // public Flow[] geta()
     // {
     //     return _ctx.Flows.ToArray();
     // }
-     
+    public Statistic(CodeForgeDbContext c)
+    {
+        _ctx = c;
+    }
     public void testPacket()
     {
         //AnswerRepository.
