@@ -60,7 +60,7 @@ public class StepManager
                 {
                     case ChoiceQuestionBase choiceQuestion:
                         choice = new Choice(" ", choiceQuestion);
-                        _repo.AddChoice(choiceQuestion, choice);
+                        _repo.CreateChoice(choiceQuestion, choice);
                         return choice;
                 }
 
@@ -92,7 +92,7 @@ public class StepManager
                         break;
                 }
 
-                _repo.AddInformation(informationStep, information);
+                _repo.CreateInformation(informationStep, information);
                 break;
         }
 

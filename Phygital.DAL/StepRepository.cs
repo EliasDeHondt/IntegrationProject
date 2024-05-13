@@ -30,11 +30,11 @@ public class StepRepository
             case InformationStep i:
                 return _ctx.InformationSteps
                     .Include(step => step.InformationBases)
-                    .First(step => step.Id == i.Id);
+                    .Single(step => step.Id == i.Id);
             case QuestionStep q:
                 var questionStep = _ctx.QuestionSteps
                     .Include(step => step.QuestionBase)
-                    .First(step => step.Id == q.Id);
+                    .Single(step => step.Id == q.Id);
 
                 if (questionStep.QuestionBase is ChoiceQuestionBase cqBase)
                 {
@@ -50,7 +50,7 @@ public class StepRepository
                 return _ctx.CombinedSteps
                     .Include(step => step.InformationBase)
                     .Include(step => step.QuestionBase)
-                    .First(step => step.Id == c.Id);
+                    .Single(step => step.Id == c.Id);
             default: return stepBase;
         }
     }
@@ -60,18 +60,19 @@ public class StepRepository
         StepBase tempStep = _ctx.Flows
             .AsNoTracking()
             .Include(flow => flow.Steps)
-            .First(flow => flow.Id == flowId)
-            .Steps.First(step => step.StepNumber == stepNumber);
+            .Where(flow => flow.Id == flowId)
+            .SelectMany(flow => flow.Steps)
+            .Single(step => step.StepNumber == stepNumber);
 
         return ReadExtendedStep(tempStep);
     }
 
-    public StepBase? ReadStepById(long? stepId)
+    public StepBase ReadStepById(long? stepId)
     {
         StepBase tempStep = _ctx.Steps
             .AsNoTracking()
             .Include(s => s.Flow)
-            .First(s => s.Id == stepId);
+            .Single(s => s.Id == stepId);
 
         return ReadExtendedStep(tempStep);
     }
@@ -81,7 +82,7 @@ public class StepRepository
         IEnumerable<StepBase> tempSteps = _ctx.Flows
             .AsNoTracking()
             .Include(flow => flow.Steps)
-            .First(flow => flow.Id == flowId)
+            .Single(flow => flow.Id == flowId)
             .Steps;
 
         List<StepBase> steps = new List<StepBase>();
@@ -98,10 +99,10 @@ public class StepRepository
     {
         return _ctx.Flows
             .Include(flow => flow.Steps)
-            .First(flow => flow.Id == flowId);
+            .Single(flow => flow.Id == flowId);
     }
 
-    public void AddStep(StepBase step)
+    public void CreateStep(StepBase step)
     {
         switch (step)
         {
@@ -133,22 +134,25 @@ public class StepRepository
         }
     }
 
-    public void AddChoice(ChoiceQuestionBase question, Choice choice)
+    public void CreateChoice(ChoiceQuestionBase question, Choice choice)
     {
         _ctx.ChoiceQuestions.Find(question.Id)!.Choices.Add(choice);
     }
 
-    public void AddInformation(InformationStep step, InformationBase information)
+    public void CreateInformation(InformationStep step, InformationBase information)
     {
         _ctx.InformationSteps.Find(step.Id)!.InformationBases.Add(information);
     }
 
     public long ReadStepId(long flowId, int stepNr)
     {
+
         return _ctx.Flows
             .AsNoTracking()
-            .Include(flow => flow.Steps)
-            .First(flow => flow.Id == flowId)
-            .Steps.First(step => step.StepNumber == stepNr).Id;
+            .Where(flow => flow.Id == flowId)
+            .SelectMany(flow => flow.Steps)
+            .Where(step => step.StepNumber == stepNr)
+            .Select(step => step.Id)
+            .Single();
     }
 }

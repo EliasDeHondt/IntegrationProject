@@ -6,8 +6,10 @@
  ***************************************/
 
 using Business_Layer;
+using Domain.Accounts;
 using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
@@ -29,6 +31,7 @@ public class FlowController : Controller
         return View(flow);
     }
     
+    [Authorize(Roles = UserRoles.Facilitator)]
     public IActionResult Facilitator()
     {
         return View();

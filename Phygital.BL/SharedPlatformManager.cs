@@ -36,7 +36,7 @@ public class SharedPlatformManager
 
     public void AddProjectToPlatform(Project project, long sharedPlatformId)
     {
-        _repo.AddProjectToPlatform(project,sharedPlatformId);
+        _repo.CreateProjectToPlatform(project,sharedPlatformId);
     }
 
     public IEnumerable<SharedPlatform> GetAllSharedPlatforms()

@@ -56,7 +56,7 @@ public class ProjectManager
 
     public IEnumerable<Project> ProjectCount()
     {
-        return _repo.ProjectCount();
+        return _repo.ReadProjectCount();
     }
     public IEnumerable<Project> GetPossibleProjectsForFacilitator(string email)
     {
@@ -70,7 +70,7 @@ public class ProjectManager
 
     public void DeleteProjectOrganizer(Facilitator user, Project project)
     {
-        _repo.RemoveProjectOrganizer(user, project);
+        _repo.DeleteProjectOrganizer(user, project);
     }
 
     public Project GetProjectWithId(long id)

@@ -17,12 +17,10 @@ namespace Business_Layer;
 public class FlowManager
 {
     private readonly FlowRepository _repository;
-    private readonly StepRepository _stepRepository;
 
-    public FlowManager(FlowRepository repository, StepRepository stepRepository)
+    public FlowManager(FlowRepository repository)
     {
         _repository = repository;
-        _stepRepository = stepRepository;
     }
 
     //This function makes a GLOBAL Flow, not project specific!
@@ -33,7 +31,7 @@ public class FlowManager
             FlowType = type
         };
 
-        _repository.AddFlow(newFlow);
+        _repository.CreateFlow(newFlow);
 
         return newFlow;
     }
@@ -74,7 +72,7 @@ public class FlowManager
 
     public void SetParticipationByFlow(long flowId, string email)
     {
-        _repository.AddParticipationByFlow(flowId, email);
+        _repository.CreateParticipationByFlow(flowId, email);
     }
 
     public void ChangeFlowState(Flow flow)

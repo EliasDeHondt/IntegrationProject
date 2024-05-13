@@ -71,7 +71,7 @@ public class ThemeManager
     
     public void DeleteSubTheme(long id)
     {
-        IEnumerable<long> flowIds = _repository.GetSubThemeFlows(id);
+        IEnumerable<long> flowIds = _repository.ReadSubThemeFlows(id);
 
         foreach (long flowId in flowIds)
         {
