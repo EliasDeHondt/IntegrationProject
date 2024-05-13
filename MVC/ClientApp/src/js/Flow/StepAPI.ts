@@ -3,6 +3,7 @@ import {downloadVideoFromBucket} from "../StorageAPI";
 import * as phyAPI from "../Webcam/WebCamDetection";
 import {detectionCanvas, drawChoiceBoundaries, getResult} from "../Webcam/WebCamDetection";
 import {delay} from "../Util";
+import {Timer} from "../Util/Timer";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
@@ -12,12 +13,14 @@ const btnEmail = document.getElementById("btnEmail") as HTMLButtonElement;
 let currentStepNumber: number = 0;
 let userAnswers: string[] = []; // Array to store user answers
 let openUserAnswer: string = "";
-let flowId = Number((document.getElementById("flowId") as HTMLSpanElement).innerText);
+let flowId :number = Number((document.getElementById("flowId") as HTMLSpanElement).innerText);
 let stepTotal = Number((document.getElementById("stepTotal") as HTMLSpanElement).innerText);
 let flowtype = sessionStorage.getItem("flowType")!;
 let sessionCode = sessionStorage.getItem("connectionCode")!;
-let timerInterval
-let nextStepInterval;
+
+export let stepTimer = new Timer(nextStep, 30000);
+export let clockTimer = new Timer(updateClock, 1000);
+
 let time: number = 29;
 let choices: string[] = [];
 
@@ -358,7 +361,7 @@ async function hideDigitalElements(){
         const themeDiv = document.getElementById("themeDiv") as HTMLDivElement;
         const themeDivInner = themeDiv.innerHTML
         topLeft.style.height = "120px";
-        topLeft.innerHTML = `<h1>${themeDivInner}</h1><p>Facilitator code: ${sessionCode}</p>`
+        topLeft.innerHTML = topLeft.innerHTML.concat(`<h1>${themeDivInner}</h1><p>Facilitator code: ${sessionCode}</p>`)
         webcam.classList.remove("visually-hidden");
 
         const centerDiv = document.getElementById("kioskCenter") as HTMLDivElement;
@@ -367,11 +370,12 @@ async function hideDigitalElements(){
         centerContainerDiv.style.height = "800px";
         
         const timer = document.getElementById("timer") as HTMLDivElement;
+        timer.classList.remove("visually-hidden");
         timer.innerText = "Loading physical setup...";
         
         let model = await phyAPI.loadModel();
         phyAPI.startPhysical(model).then(async () => {
-            await delay(1000);
+            await delay(2500);
             GetNextStep(++currentStepNumber, flowId);
             startTimers();
         });
@@ -422,8 +426,8 @@ function updateClock(){
 }
 
 function startTimers(){
-    timerInterval = setInterval(updateClock, 1000);
-    nextStepInterval = setInterval(nextStep, 30000);
+    clockTimer.start();
+    stepTimer.start();
 }
 
 

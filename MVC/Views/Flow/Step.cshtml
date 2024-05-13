@@ -31,8 +31,8 @@
 </div>
 <div class="kiosk-top-left">
     <div id="topLeft" class="kiosk-container-top-left">
-        <h1 class="digital-element"><span id="flowtype">@Model.FlowType.ToString()</span> Flow <span id="flowId">@Model.Id</span> - Step <span id="stepNr"></span> / <span id="stepTotal">@Model.getStepCount()</span></h1>
-        <div id="themeDiv">Theme <span id="theme">@Model.Theme.Id</span> - @Model.Theme.Subject</div>
+        <h1 class="digital-element"><span id="flowtype" class="digital-element">@Model.FlowType.ToString()</span> Flow <span id="flowId" class="digital-element">@Model.Id</span> - Step <span id="stepNr" class="digital-element"></span> / <span id="stepTotal">@Model.getStepCount()</span></h1>
+        <div class="digital-element" id="themeDiv">Theme <span id="theme">@Model.Theme.Id</span> - @Model.Theme.Subject</div>
     </div>
 </div>
 <div class="kiosk-top-right">
@@ -58,7 +58,7 @@
         <button class="kiosk-button-step-control" id="btnNextStep">Next step</button>
         <button class="kiosk-button-step-control" id="btnRestartFlow">Restart flow</button>
     </div>
-    <div id="timer" class="kiosk-container-bottom-left">
+    <div id="timer" class="kiosk-container-bottom-left visually-hidden">
 
     </div>
 </div>
@@ -79,6 +79,5 @@
 </body>
 </html>
 <!--JS-->
-<script src="/dist/step.entry.js" defer></script>
 <script src="/dist/flow.entry.js" defer></script>
 <!--JS-->

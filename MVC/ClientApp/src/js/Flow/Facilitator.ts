@@ -144,3 +144,10 @@ function GenerateFlowCards(flows: Flow[], flowContainer: HTMLDivElement) {
         flowContainer.appendChild(card);
     })
 }
+
+connection.on("ReceiveSelectedFlowIds", async (ids, flowType) => {
+    if(flowType.toUpperCase() == "PHYSICAL") {
+        currentFlow.innerText = `${ids[0]}`
+        currentState.innerText = "Active"
+    }
+})

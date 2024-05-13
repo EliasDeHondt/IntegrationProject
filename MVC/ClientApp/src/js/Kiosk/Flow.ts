@@ -1,6 +1,7 @@
 ﻿import * as kiosk from "./Kiosk";
 import * as signalR from "@microsoft/signalr";
 import {Modal} from "bootstrap";
+import {clockTimer, stepTimer} from "../Flow/StepAPI";
 
 const connection = new signalR.HubConnectionBuilder()
     .withUrl("/hub")
@@ -26,8 +27,12 @@ connection.on("ReceiveFlowUpdate", async (id, state) => {
     currStateOfFlow = state;
     if (currStateOfFlow.toLowerCase() == "paused") {
         modal.show()
+        stepTimer.pause();
+        clockTimer.pause();
     } else {
         modal.hide()
+        stepTimer.resume();
+        clockTimer.resume();
     }
 })
 

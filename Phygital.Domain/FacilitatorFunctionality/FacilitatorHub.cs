@@ -28,7 +28,7 @@ public class FacilitatorHub : Hub
         await Clients.OthersInGroup(code).SendAsync("FlowDeactivated");
 
     public async Task SendSelectedFlowIds(string code, long[] ids, string flowType) =>
-        await Clients.OthersInGroup(code).SendAsync("ReceiveSelectedFlowIds", ids, flowType);
+        await Clients.Group(code).SendAsync("ReceiveSelectedFlowIds", ids, flowType);
 
     public async Task SendProjectId(string code, long projectId) =>
         await Clients.OthersInGroup(code).SendAsync("ReceiveProjectId", projectId);

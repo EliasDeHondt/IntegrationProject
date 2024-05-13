@@ -24,6 +24,7 @@ let storedFlows = sessionStorage.getItem("flowOptions");
 document.addEventListener("DOMContentLoaded", async () => {
     console.log(code)
     const connectionCode = document.getElementById("connectionCode") as HTMLParagraphElement;
+    if(!connectionCode) return;
     connectionCode.innerText = code;
 
     await connection.start().then(() => {
@@ -54,6 +55,7 @@ async function GenerateFlowOptions(ids: string) {
     for (let i = 0; i < ids.length; i++) {
         await GetFlowById(ids[i]).then(flow => flows[i] = flow)
     }
+    if(!divFlows) return;
     GenerateCards(flows, divFlows);
 }
 
