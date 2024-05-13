@@ -84,13 +84,15 @@ public class ThemeRepository
     }
 
 
-    public Flow CreateFlowForSub(FlowType type, long themeId)
+    public Flow CreateFlowForSub(Flow flow)
     {
-        var theme = _context.SubThemes.Find(themeId);
-        var flow = new Flow(type, theme);
         _context.Flows.Add(flow);
 
         return flow;
+    }
+    public SubTheme ReadSubThemeById(long themeId)
+    {
+        return _context.SubThemes.Find(themeId)!;
     }
 
     public void DeleteSubTheme(long id)

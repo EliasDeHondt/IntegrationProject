@@ -66,7 +66,13 @@ public class ThemeManager
 
     public Flow CreateFlowForSub(FlowType type, long themeId)
     {
-        return _repository.CreateFlowForSub(type,themeId);
+        var theme = GetSubThemeById(themeId);
+        var flow = new Flow(type, theme);
+        return _repository.CreateFlowForSub(flow);
+    }
+    public SubTheme GetSubThemeById(long themeId)
+    {
+        return _repository.ReadSubThemeById(themeId);
     }
     
     public void DeleteSubTheme(long id)
