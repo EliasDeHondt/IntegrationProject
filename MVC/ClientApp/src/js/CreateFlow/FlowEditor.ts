@@ -2,8 +2,6 @@ import {Choice, Information, Question, Step} from "../Flow/Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
 import {Modal} from "bootstrap";
 import {Flow, Participation} from "../Flow/FlowObjects";
-import {types} from "sass";
-import Number = types.Number;
 
 
 const stepsList = document.getElementById('steps-list') as HTMLElement;
@@ -334,15 +332,14 @@ async function GetStepData() {
         return;
     }
 
-    let informationArray: Information[] = currentViewingStep.informationViewModel;
-    let choicesArray: Choice[] = currentViewingStep.questionViewModel.choices;
 
     const index = currentStepList.findIndex(step => step.stepNumber === currentViewingStep.stepNumber);
 
     if (currentViewingStep.informationViewModel) {
+        let informationArray: Information[] = currentViewingStep.informationViewModel;
         const contentElements = partialInformationContainer.children;
 
-        for (let i = 0; i < contentElements.length; i++) {
+        for (let i = 0; i < contentElements.length - 1; i++) {
             const element = contentElements[i] as HTMLElement;
 
             let information: string = "";
@@ -352,11 +349,12 @@ async function GetStepData() {
                 case 'TEXTAREA':
                     const textAreaElement = element as HTMLTextAreaElement;
                     information = textAreaElement.value;
+                    console.log(textAreaElement.value)
                     informationType = 'Text';
                     break;
                 case 'IMG':
                     const imageElement = element as HTMLImageElement;
-                    information = imageElement.src;
+                    information = imageElement.src.replace("data:image/png;base64,", "");
                     informationType = 'Image';
                     break;
                 case 'VIDEO':
@@ -383,11 +381,12 @@ async function GetStepData() {
     }
 
     if (currentViewingStep.questionViewModel) {
+        let choicesArray: Choice[] = currentViewingStep.questionViewModel.choices;
 
         const questionContainer = partialQuestionContainer.children[0] as HTMLDivElement;
         const choicesContainer = partialQuestionContainer.children[1] as HTMLDivElement;
 
-        for (let i = 0; i < choicesContainer.children.length; i++) {
+        for (let i = 0; i < choicesContainer.children.length - 1; i++) {
             const element = choicesContainer.children[i].children[0] as HTMLInputElement;
             const select = choicesContainer.children[i].children[1] as HTMLSelectElement;
             let nextStepId: number = 0;

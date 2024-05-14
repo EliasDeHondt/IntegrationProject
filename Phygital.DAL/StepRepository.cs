@@ -155,4 +155,19 @@ public class StepRepository
             .Select(step => step.Id)
             .Single();
     }
+
+    public void UpdateInformation(InformationBase information)
+    {
+        _ctx.Information.Update(information);
+    }
+
+    public void UpdateChoice(Choice choice)
+    {
+        _ctx.Choices.Update(choice);
+    }
+
+    public void UpdateQuestion(QuestionBase question)
+    {
+        _ctx.Questions.Update(question);
+    }
 }

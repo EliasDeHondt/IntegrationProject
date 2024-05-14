@@ -103,4 +103,19 @@ public class StepManager
     {
         return _repo.ReadStepId(flowId, stepNr);
     }
+
+    public void ChangeInformation(InformationBase information)
+    {
+        _repo.UpdateInformation(information);
+    }
+
+    public void ChangeChoice(Choice choice)
+    {
+        _repo.UpdateChoice(choice);
+    }
+
+    public void ChangeQuestion(QuestionBase question)
+    {
+        _repo.UpdateQuestion(question);
+    }
 }
