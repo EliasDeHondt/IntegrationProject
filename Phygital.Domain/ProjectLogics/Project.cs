@@ -5,6 +5,7 @@
  *                                     *
  ***************************************/
 
+using System.ComponentModel.DataAnnotations;
 using Domain.FacilitatorFunctionality;
 using Domain.Platform;
 
@@ -13,8 +14,11 @@ namespace Domain.ProjectLogics;
 public class Project
 {
     public long Id { get; set; }
+    [MaxLength(50)]
     public string Title { get; set; }
+    [MaxLength(600)]
     public string Description { get; set; }
+    [MaxLength(65000)]
     public string? Image { get; set; }
     public MainTheme MainTheme { get; set; }
     public SharedPlatform SharedPlatform { get; set; }

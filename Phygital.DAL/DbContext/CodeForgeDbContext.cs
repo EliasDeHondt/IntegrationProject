@@ -99,6 +99,10 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         builder.Entity<Choice>(entity => entity.Property(e => e.Text).IsRequired().HasMaxLength(50));
         builder.Entity<ThemeBase>(entity => entity.Property(e => e.Subject).IsRequired().HasMaxLength(600));
         builder.Entity<SharedPlatform>(entity => entity.Property(e => e.Logo).IsRequired().HasMaxLength(65000));
+        builder.Entity<Project>(entity => entity.Property(e => e.Title).IsRequired().HasMaxLength(50));
+        builder.Entity<Project>(entity => entity.Property(e => e.Description).IsRequired().HasMaxLength(600));
+        builder.Entity<Project>(entity => entity.Property(e => e.Image).HasMaxLength(65000));
+        
         
         builder.Entity<ChoiceAnswer>()
             .HasMany(a => a.Answers)
