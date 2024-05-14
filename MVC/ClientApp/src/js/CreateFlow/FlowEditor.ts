@@ -2,6 +2,8 @@ import {Choice, Information, Question, Step} from "../Flow/Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
 import {Modal} from "bootstrap";
 import {Flow, Participation} from "../Flow/FlowObjects";
+import {types} from "sass";
+import Number = types.Number;
 
 
 const stepsList = document.getElementById('steps-list') as HTMLElement;
@@ -22,7 +24,6 @@ let currentViewingStep: Step;
 let flowId: number;
 
 async function GetSteps(flowId: number): Promise<Step[]> {
-    console.log("Fetching steps...");
     return await fetch(`/EditFlows/GetSteps/${flowId}`, {
         method: "GET",
         headers: {
@@ -61,6 +62,7 @@ async function AddStep(stepNumber: number, stepType: string) {
         .then(response => response.json())
         .catch(error => console.error("Error:", error))
 }
+
 async function AddChoice(stepNr: number) {
     await fetch(`/EditFlows/CreateChoice/${flowId}/${stepNr}`, {
         method: "POST",
@@ -72,6 +74,7 @@ async function AddChoice(stepNr: number) {
         .then(response => response.json())
         .catch(error => console.error("Error:", error))
 }
+
 async function AddInformation(stepNr: number, type: string) {
     await fetch(`/EditFlows/CreateInformation/${flowId}/${stepNr}/${type}`, {
         method: "POST",
@@ -83,6 +86,7 @@ async function AddInformation(stepNr: number, type: string) {
         .then(response => response.json())
         .catch(error => console.error("Error:", error))
 }
+
 async function GetFlowById(flowId: number): Promise<Flow> {
     return await fetch(`/api/Flows/${flowId}`, {
         method: "GET",
@@ -96,6 +100,7 @@ async function GetFlowById(flowId: number): Promise<Flow> {
             return data;
         })
 }
+
 async function UpdateFlow(steps: Step[]) {
     await fetch(`/api/Flows/${flowId}/Update`, {
         method: "PUT",
@@ -120,6 +125,7 @@ async function GetConditionalNextStep(stepId: number): Promise<Step> {
             return data
         })
 }
+
 async function GetStepId(stepNr: number): Promise<number> {
     return await fetch(`/EditFlows/GetStepId/${flowId}/${stepNr}`, {
         method: "GET",
@@ -133,9 +139,8 @@ async function GetStepId(stepNr: number): Promise<number> {
             return data
         })
 }
-function toggleButtons() {
 
-    console.log("disabling all buttons")
+function toggleButtons() {
     btnAddText.disabled = true;
     btnAddImage.disabled = true;
     btnAddVideo.disabled = true;
@@ -147,7 +152,6 @@ function toggleButtons() {
     }
 
     if (currentViewingStep.informationViewModel != undefined) {
-        console.log("enabling all info buttons")
         btnAddText.disabled = false;
         btnAddImage.disabled = false;
         btnAddVideo.disabled = false;
@@ -160,7 +164,6 @@ function toggleButtons() {
         }
     }
     if (currentViewingStep.questionViewModel != undefined && currentViewingStep.questionViewModel.questionType != "OpenQuestion") {
-        console.log("enabling all question buttons")
         btnAddChoice.disabled = false;
         if (currentViewingStep.questionViewModel.choices.length >= 6)
             btnAddChoice.disabled = true;
@@ -177,7 +180,9 @@ function UpdateStepList(steps: Step[]) {
     }))
     currentStepList.sort((a, b) => a.stepNumber - b.stepNumber);
     steps.sort((a, b) => a.stepNumber - b.stepNumber);
-    console.log(currentStepList)
+
+    console.log(currentStepList);
+
     const stepsList = document.getElementById("steps-list") as HTMLDivElement;
 
     stepsList.innerHTML = "";
@@ -222,8 +227,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("The ID provided in the URL is not a number.")
     }
 
-    GetSteps(flowId).then(steps => console.log(steps))
-
     // GetSteps(flowId).then(() => { 
     //   initializeCardLinks();
     //   btnViewFlow.setAttribute('href', "/Flow/Step/" + flowId);
@@ -248,7 +251,6 @@ btnAddChoice.addEventListener('click', async () => {
         btnAddChoice.disabled = true;
     }
     await AddChoice(currentViewingStep.stepNumber);
-    console.log("Add choice")
     let div = document.createElement("div");
     div.classList.add("text-start", "m-auto", "choice-container")
 
@@ -273,7 +275,6 @@ btnAddText.addEventListener('click', async () => {
         btnAddVideo.disabled = true;
     }
     await AddInformation(currentViewingStep.stepNumber, "Text");
-    console.log("Add text")
     let div = document.createElement("div");
     div.id = "text-container"
     div.classList.add("text-start", "m-auto")
@@ -286,7 +287,6 @@ btnAddText.addEventListener('click', async () => {
 });
 
 btnAddLink.addEventListener('click', () => {
-    console.log("Add Link")
 
     currentViewingStep.informationViewModel.length++
     toggleButtons();
@@ -313,30 +313,29 @@ btnAddLink.addEventListener('click', () => {
 })
 
 btnAddImage.addEventListener('click', () => {
-    console.log("Add Image")
     //TODO: add image logica
 });
 
 btnAddVideo.addEventListener('click', () => {
-    console.log("Add Video")
     //TODO: add video logica
 });
 btnSaveFlow.addEventListener('click', async () => {
-    console.log("Saving flow...");
     await GetStepData();
     GetFlowById(flowId)
         .then(flow => GetNewFlowData(flow))
         .then(flow => {
+            console.log(flow.steps);
             UpdateFlow(flow.steps);
         })
 });
+
 async function GetStepData() {
     if (!currentViewingStep) {
         return;
     }
 
-    let informationArray: Information[] = [];
-    let choicesArray: Choice[] = [];
+    let informationArray: Information[] = currentViewingStep.informationViewModel;
+    let choicesArray: Choice[] = currentViewingStep.questionViewModel.choices;
 
     const index = currentStepList.findIndex(step => step.stepNumber === currentViewingStep.stepNumber);
 
@@ -371,7 +370,11 @@ async function GetStepData() {
                     informationType = 'Hyperlink'
                     break;
             }
-            informationArray[i] = {information: information, informationType: informationType};
+            informationArray[i] = {
+                id: informationArray[i].id,
+                information: information,
+                informationType: informationType
+            };
         }
         if (index !== -1) {
             currentStepList[index].informationViewModel = informationArray;
@@ -390,17 +393,25 @@ async function GetStepData() {
             let nextStepId: number = 0;
             let selectedOption = select.options[select.selectedIndex];
             if (selectedOption.value != "undefined") {
-                choicesArray[i] = {text: element.value, nextStepId: Number(selectedOption.value)};
+                choicesArray[i] = {
+                    id: choicesArray[i].id,
+                    text: element.value,
+                    nextStepId: parseInt(selectedOption.value)
+                };
             } else {
-                choicesArray[i] = {text: element.value, nextStepId: undefined};
+                choicesArray[i] = {id: choicesArray[i].id, text: element.value, nextStepId: undefined};
             }
         }
-        console.log(choicesArray)
         const questionElement = questionContainer.children[0] as HTMLTextAreaElement;
 
         let questionText = questionElement.value;
         let questionType = currentViewingStep.questionViewModel.questionType;
-        let question: Question = {question: questionText, questionType: questionType, choices: choicesArray}
+        let question: Question = {
+            id: currentStepList[index].questionViewModel.id,
+            question: questionText,
+            questionType: questionType,
+            choices: choicesArray
+        }
 
         if (index !== -1) {
             currentStepList[index].questionViewModel = question;
@@ -419,6 +430,7 @@ async function GetNewFlowData(flow: Flow): Promise<Flow> {
 
     for (const step of currentStepList) {
         let stepData: Step = {
+            id: step.id,
             stepNumber: step.stepNumber,
             informationViewModel: step.informationViewModel,
             questionViewModel: step.questionViewModel
@@ -427,19 +439,15 @@ async function GetNewFlowData(flow: Flow): Promise<Flow> {
         if (step.questionViewModel && step.questionViewModel.questionType !== "OpenQuestion") {
             const choices: Choice[] = [];
             for (const choice of step.questionViewModel.choices) {
-                choices.push({text: choice.text, nextStepId: choice.nextStepId});
+                choices.push({id: choice.id, text: choice.text, nextStepId: choice.nextStepId});
             }
             if (stepData.questionViewModel)
                 stepData.questionViewModel.choices = choices;
         }
 
-        console.log(stepData)
-
         flowData.steps.push(stepData);
     }
 
-    console.log(flowData.steps)
-    console.log(flowData);
     return flowData;
 }
 
@@ -466,13 +474,13 @@ function initializeCardLinks() {
 
 const partialInformationContainer = document.getElementById("partialInformationContainer") as HTMLDivElement;
 const partialQuestionContainer = document.getElementById("partialQuestionContainer") as HTMLDivElement;
+
 async function ShowStepInContainer(stepNr: number) {
     let stepIndex = currentStepList.findIndex(s => s.stepNumber == stepNr);
     let data = currentStepList[stepIndex];
     partialInformationContainer.innerHTML = "";
     partialQuestionContainer.innerHTML = "";
     toggleButtons();
-    console.log(data)
     if (data.informationViewModel != undefined) {
         for (const infoStep of data.informationViewModel) {
             switch (infoStep.informationType) {
@@ -608,7 +616,6 @@ async function ShowStepInContainer(stepNr: number) {
                 break;
             }
             default:
-                console.log("This question type is not currently supported. (QuestionType: " + data.questionViewModel.questionType);
                 break;
         }
         partialQuestionContainer.appendChild(choiceContainer);
@@ -628,7 +635,7 @@ function fillConditionalPoints(select: HTMLSelectElement, nextStepId?: number) {
             await GetStepId(step.stepNumber).then(id => option.value = id.toString());
             option.innerText = `Step ${step.stepNumber}`
             select.appendChild(option);
-            if (Number(option.value) == nextStepId)
+            if (parseInt(option.value) == nextStepId)
                 option.selected = true;
         }
     })
@@ -721,13 +728,3 @@ btnSaveViewFlowModal.onclick = () => {
 btnConfirmViewFlow.onclick = () => {
     clearModal();
 }
-
-// function saveFlow() {
-//     console.log("Saving flow...");
-//     GetStepData();
-//     GetFlowById(flowId)
-//         .then(flow => GetNewFlowData(flow))
-//         .then(flow => {
-//             UpdateFlow(flow);
-//         });
-// }
