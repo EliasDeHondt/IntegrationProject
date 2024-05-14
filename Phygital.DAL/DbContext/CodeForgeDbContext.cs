@@ -95,7 +95,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         builder.Entity<Video>(entity => entity.Property(e => e.FilePath).IsRequired().HasMaxLength(200));
         builder.Entity<OpenQuestion>(entity => entity.Property(e => e.TextField).IsRequired().HasMaxLength(600));
         builder.Entity<QuestionBase>(entity => entity.Property(e => e.Question).IsRequired().HasMaxLength(600));
-        builder.Entity<Choice>(entity => entity.Property(e => e.Text).IsRequired().HasMaxLength(100));
+        builder.Entity<Choice>(entity => entity.Property(e => e.Text).IsRequired().HasMaxLength(150));
         builder.Entity<ThemeBase>(entity => entity.Property(e => e.Subject).IsRequired().HasMaxLength(600));
         builder.Entity<SharedPlatform>(entity => entity.Property(e => e.Logo).IsRequired().HasMaxLength(65000));
         builder.Entity<SharedPlatform>(entity => entity.Property(e => e.PrivacyLink).IsRequired().HasMaxLength(150));

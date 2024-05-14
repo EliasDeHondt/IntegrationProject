@@ -13,7 +13,7 @@ namespace Domain.ProjectLogics.Steps.Questions;
 public class Choice
 {
     public long Id { get; set; }
-    [MaxLength(100)]
+    [MaxLength(150)]
     public string Text { get; set; }
     public ChoiceQuestionBase QuestionBase { get; set; }
     public ICollection<Selection> Selections { get; set; }

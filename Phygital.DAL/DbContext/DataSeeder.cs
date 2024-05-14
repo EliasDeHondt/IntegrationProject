@@ -79,7 +79,7 @@ namespace Data_Access_Layer.DbContext
                     
                     Choice choice19 = new Choice("Education and awareness-raising", singleQuestion4);
                     Choice choice20 = new Choice("Policy and governance reforms", singleQuestion4);
-                    Choice choice21 = new Choice("Community-based initiatives and grassroots movements", singleQuestion4);
+                    Choice choice21 = new Choice("Community-based initiatives", singleQuestion4);
                     Choice choice22 = new Choice("Private sector involvement and innovation", singleQuestion4);
                     Choice choice23 = new Choice("International cooperation and collaboration", singleQuestion4);
 
@@ -102,10 +102,10 @@ namespace Data_Access_Layer.DbContext
                     MultipleChoiceQuestion multipleChoiceQuestions1 = new MultipleChoiceQuestion("What would help you make a choice between the different parties?");
 
                     Choice choice1 = new Choice("More lessons at school about party programs", multipleChoiceQuestions1);
-                    Choice choice2 = new Choice("Activities in my youth club, sports club... related to elections", multipleChoiceQuestions1);
-                    Choice choice3 = new Choice("A visit from the parties to my school, youth/sports club, ...", multipleChoiceQuestions1);
-                    Choice choice4 = new Choice("A conversation with my parents about municipal politics", multipleChoiceQuestions1);
-                    Choice choice5 = new Choice("A debate organized by a youth center with the various parties", multipleChoiceQuestions1);
+                    Choice choice2 = new Choice("Activities related to elections", multipleChoiceQuestions1);
+                    Choice choice3 = new Choice("A visit from the parties to my school", multipleChoiceQuestions1);
+                    Choice choice4 = new Choice("A conversation with my parents", multipleChoiceQuestions1);
+                    Choice choice5 = new Choice("A debate organized by a youth center", multipleChoiceQuestions1);
 
                     dbContext.ChoiceQuestions.AddRange(multipleChoiceQuestions1);
                     dbContext.Choices.AddRange(choice1, choice2, choice3, choice4, choice5);
@@ -135,12 +135,12 @@ namespace Data_Access_Layer.DbContext
                 case 3:
                     MultipleChoiceQuestion multipleChoiceQuestions3 = new MultipleChoiceQuestion("How can technology best contribute to promoting equal access to education and opportunities for underprivileged communities? (Select all that apply)");
                     
-                    Choice choice11 = new Choice("Providing online educational resources and remote learning platforms", multipleChoiceQuestions3);
-                    Choice choice12 = new Choice("Offering mentorship programs and digital skills training initiatives", multipleChoiceQuestions3);
-                    Choice choice13 = new Choice("Facilitating access to affordable internet and digital devices", multipleChoiceQuestions3);
-                    Choice choice14 = new Choice("Supporting community-based organizations and grassroots initiatives", multipleChoiceQuestions3);
-                    Choice choice15 = new Choice("Developing innovative solutions for healthcare and sanitation in underserved areas", multipleChoiceQuestions3);
-                    Choice choice16 = new Choice("Empowering local entrepreneurs and small businesses through e-commerce and digital marketplaces", multipleChoiceQuestions3);
+                    Choice choice11 = new Choice("Providing online educational resources", multipleChoiceQuestions3);
+                    Choice choice12 = new Choice("Offering mentorship programs and digital skills", multipleChoiceQuestions3);
+                    Choice choice13 = new Choice("Facilitating access to affordable internet", multipleChoiceQuestions3);
+                    Choice choice14 = new Choice("Supporting community-based organizations", multipleChoiceQuestions3);
+                    Choice choice15 = new Choice("Developing innovative solutions for healthcare", multipleChoiceQuestions3);
+                    Choice choice16 = new Choice("Empowering local entrepreneurs and small business", multipleChoiceQuestions3);
                     
                     dbContext.ChoiceQuestions.AddRange(multipleChoiceQuestions3);
                     dbContext.Choices.AddRange(choice11, choice12, choice13, choice14, choice15, choice16);
@@ -279,12 +279,12 @@ namespace Data_Access_Layer.DbContext
             // Add multiple choice questions
             MultipleChoiceQuestion multipleChoiceQuestion1 = new MultipleChoiceQuestion("How do you think technology can best contribute to environmental sustainability and combating climate change? (Select all that apply)");
                     
-            Choice choice7 = new Choice("Developing renewable energy sources and energy-efficient technologies", multipleChoiceQuestion1);
-            Choice choice8 = new Choice("Monitoring and managing environmental resources through IoT and sensor networks", multipleChoiceQuestion1);
-            Choice choice9 = new Choice("Encouraging sustainable consumption and waste reduction through digital platforms", multipleChoiceQuestion1);
-            Choice choice10 = new Choice("Enhancing climate modeling and prediction capabilities using big data and AI", multipleChoiceQuestion1);
-            Choice choice11 = new Choice("Facilitating global collaboration and knowledge sharing on climate solutions through digital platforms", multipleChoiceQuestion1);
-            Choice choice12 = new Choice("Supporting eco-conscious lifestyles and green initiatives through social media and online communities", multipleChoiceQuestion1);
+            Choice choice7 = new Choice("Developing renewable energy sources", multipleChoiceQuestion1);
+            Choice choice8 = new Choice("Monitoring and managing environmental resources", multipleChoiceQuestion1);
+            Choice choice9 = new Choice("Encouraging sustainable consumption", multipleChoiceQuestion1);
+            Choice choice10 = new Choice("Enhancing climate modeling", multipleChoiceQuestion1);
+            Choice choice11 = new Choice("Facilitating global collaboration and knowledge", multipleChoiceQuestion1);
+            Choice choice12 = new Choice("Supporting eco-conscious lifestyles", multipleChoiceQuestion1);
                     
             dbContext.ChoiceQuestions.AddRange(multipleChoiceQuestion1);
             dbContext.Choices.AddRange(choice7, choice8, choice9, choice10, choice11, choice12);
@@ -295,12 +295,12 @@ namespace Data_Access_Layer.DbContext
                     
             MultipleChoiceQuestion multipleChoiceQuestion2 = new MultipleChoiceQuestion("What measures do you think are necessary to ensure the ethical development and use of emerging technologies? (Select all that apply)");
                     
-            Choice choice13 = new Choice("Establishing clear guidelines and regulations for data privacy and security", multipleChoiceQuestion2);
-            Choice choice14 = new Choice("Promoting transparency and accountability in algorithmic decision-making processes", multipleChoiceQuestion2);
-            Choice choice15 = new Choice("Fostering interdisciplinary collaboration between technologists, ethicists, and policymakers", multipleChoiceQuestion2);
-            Choice choice16 = new Choice("Encouraging public dialogue and engagement on ethical issues related to technology", multipleChoiceQuestion2);
-            Choice choice17 = new Choice("Investing in research and education on the ethical implications of emerging technologies", multipleChoiceQuestion2);
-            Choice choice18 = new Choice("Holding technology companies accountable for ethical violations through legal and regulatory mechanisms", multipleChoiceQuestion2);
+            Choice choice13 = new Choice("Establishing clear guidelines and regulations", multipleChoiceQuestion2);
+            Choice choice14 = new Choice("Promoting transparency and accountability", multipleChoiceQuestion2);
+            Choice choice15 = new Choice("Fostering interdisciplinary collaboration", multipleChoiceQuestion2);
+            Choice choice16 = new Choice("Encouraging public dialogue and engagement", multipleChoiceQuestion2);
+            Choice choice17 = new Choice("Investing in research and education", multipleChoiceQuestion2);
+            Choice choice18 = new Choice("Holding technology companies accountable", multipleChoiceQuestion2);
                     
             dbContext.ChoiceQuestions.AddRange(multipleChoiceQuestion2);
             dbContext.Choices.AddRange(choice13, choice14, choice15, choice16, choice17, choice18);
