@@ -8,7 +8,7 @@ namespace Domain.Platform;
 public class SharedPlatform
 {
     public long Id { get; set; }
-    [MaxLength(65000)] public string Logo { get; set; }
+    [MaxLength(10485759)] public string Logo { get; set; }
     [MaxLength(150)] public string PrivacyLink { get; set; }
     [MaxLength(150)] public string OrganisationLink { get; set; }
     [MaxLength(150)] public string OrganisationName { get; set; }

@@ -11,7 +11,7 @@ namespace Domain.ProjectLogics.Steps.Information;
 
 public class Image : InformationBase
 {
-    [MaxLength(65000)]
+    [MaxLength(10485759)]
     public string Base64 { get; set; }
 
     public Image(string pathOrBase64, long id = 0) : base(id)
