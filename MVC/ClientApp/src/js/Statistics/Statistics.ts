@@ -1,8 +1,13 @@
 import {Modal} from "bootstrap";
 import Chart from 'chart.js/auto';
+import {initializeDeleteButtons} from "../CreateFlow/DeleteFlowModal";
 
+const barCtx = document.getElementById('barChart') as HTMLCanvasElement;
+const lineCtx = document.getElementById('lineChart') as HTMLCanvasElement;
+const doughnutCtx = document.getElementById('doughnutChart') as HTMLCanvasElement;
+const radarCtx = document.getElementById('radarChart') as HTMLCanvasElement;
 function chartData(label: string, labels: string[], data: string[]) {
-    // Data for the chart
+    //data for the chart
     return {
         labels: labels,
         datasets: [{
@@ -15,55 +20,106 @@ function chartData(label: string, labels: string[], data: string[]) {
     };
 }
 
-// Get the canvas elements
-const barCtx = document.getElementById('barChart') as HTMLCanvasElement;
-const lineCtx = document.getElementById('lineChart') as HTMLCanvasElement;
-const doughnutCtx = document.getElementById('doughnutChart') as HTMLCanvasElement;
-const radarCtx = document.getElementById('radarChart') as HTMLCanvasElement;
-
-// Create chart data
-const barChartData = chartData('Step types', ["Single", "Multiple", "Open", "Info", "Link"], ["2", "6", "4", "5", "3"]);
-
-// Create the bar chart
-const barChart = new Chart(barCtx, {
-    type: 'bar',
-    data: barChartData,
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        },
-        plugins: {
-            title: {
-                display: true,
-                text: 'Bar Chart Title'
+//draw
+function drawBarChart(titel:string,chartData: { labels: string[]; datasets: { label: string; data: string[]; backgroundColor: string; borderColor: string; borderWidth: number; }[]; }){
+    const barChart = new Chart(barCtx, {
+        type: 'bar',
+        data: chartData,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: titel
+                }
             }
         }
-    }
-});
-
-
-var lineChart = new Chart(lineCtx, {
-    type: 'line',
-    data: barChartData,
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
+    });
+}
+function drawLineChart(titel:string,chartData: { labels: string[]; datasets: { label: string; data: string[]; backgroundColor: string; borderColor: string; borderWidth: number; }[]; }){
+    var lineChart = new Chart(lineCtx, {
+        type: 'line',
+        data: chartData,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: titel
+                }
             }
         }
-    }
-});
-var doughnutChart = new Chart(doughnutCtx, {
-    type: 'doughnut',
-    data: barChartData,
-    options: {}
-});
+    });
+}
+function drawDoughnutChart(titel:string,chartData: { labels: string[]; datasets: { label: string; data: string[]; backgroundColor: string; borderColor: string; borderWidth: number; }[]; }){
+    var doughnutChart = new Chart(doughnutCtx, {
+        type: 'doughnut',
+        data: chartData,
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: titel
+                }
+            }}
+    });
+}
+function drawRadarChart(titel:string,chartData: { labels: string[]; datasets: { label: string; data: string[]; backgroundColor: string; borderColor: string; borderWidth: number; }[]; }){
+    var radarChart = new Chart(radarCtx, {
+        type: 'radar',
+        data: chartData,
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: titel
+                }
+            }}
+    });
+}
 
-var radarChart = new Chart(radarCtx, {
-    type: 'radar',
-    data: barChartData,
-    options: {}
-});
+//get data
+export async function GetCountStepsPerFlow(){
+    console.log("Fetching count...")
+    await fetch("/api/Statistics/GetCountStepsPerFlow", {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => GetNamesPerFlow(data))
+        .catch(error => console.error("Error:", error))
+}
+export async function GetNamesPerFlow(data: string[]){
+    console.log("Fetching count...")
+    await fetch("/api/Statistics/GetNamesPerFlow", {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(labels => drawCharts(labels,data))
+        .catch(error => console.error("Error:", error))
+}
+function drawCharts(labels: string[],data: string[]){
+    drawBarChart("Aantal Steps per Flow",chartData('Aantal Steps', labels, data))
+    drawLineChart("Aantal Steps",chartData('Step types', labels, data))
+    drawDoughnutChart("Aantal Steps",chartData('Step types', labels, data))
+    drawRadarChart("Aantal Steps",chartData('Step types', labels, data))
+}
 
+// drawCharts()
+
+GetCountStepsPerFlow()

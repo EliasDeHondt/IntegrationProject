@@ -116,4 +116,14 @@ public class FlowManager
     {
         _repository.DeleteFlowById(flowId);
     }
+    
+    
+    public string[] GetCountStepsPerFlow()
+    {
+        return _repository.GetCountStepsPerFlow();
+    }
+    public string[] GetNamesPerFlow()
+    {
+        return _repository.GetNamesPerFlow();
+    }
 }

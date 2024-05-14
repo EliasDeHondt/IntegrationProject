@@ -163,4 +163,33 @@ public class FlowRepository
     {
         _context.Flows.Find(flowId)!.Steps.Add(step);
     }
+
+
+    public string[] GetCountStepsPerFlow()
+    {
+        var flows = ReadAllFlows();
+        var stepsPerFlow = new List<int>();
+
+        foreach (var flow in flows)
+        {
+            var stepsCount = GetAllSteps(flow.Id);
+            var v = stepsCount.Count();
+            stepsPerFlow.Add(v);
+        }
+        var a =  stepsPerFlow.Select(count => count.ToString()).ToArray();
+        return a;
+    }
+    public string[] GetNamesPerFlow()
+    {
+        var flows = ReadAllFlows();
+        var namesPerFlow = new List<string>();
+
+        foreach (var flow in flows)
+        {
+            var name = ReadFlowByIdIncludingTheme(flow.Id);
+            namesPerFlow.Add(name.Theme.Subject);
+        }
+        var a =  namesPerFlow.Select(count => count.ToString()).ToArray();
+        return a;
+    }
 }
