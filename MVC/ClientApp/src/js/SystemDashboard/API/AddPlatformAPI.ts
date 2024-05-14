@@ -1,4 +1,4 @@
-﻿export async function createPlatform(organisationName: string, logo?: File) {
+﻿export async function createPlatform(organisationName: string, username: string, password: string, email: string, logo?: File) {
 
     let base64String = null;
     
@@ -13,7 +13,10 @@
         },
         body: JSON.stringify({
             organisationName: organisationName,
-            logo: base64String
+            logo: base64String,
+            username: username,
+            password: password,
+            email: email
         })
     })
 }
