@@ -406,8 +406,8 @@ namespace Data_Access_Layer.DbContext
 
             // Create Shared Platform & Projects
             SharedPlatform sharedPlatform = new SharedPlatform("CodeForge", ImageUrls.Favicon);
-            SharedPlatform sharedPlatform1 = new SharedPlatform("Karel de Grote", "../Phygital.DAL//Assets/kdg.png");
-            SharedPlatform sharedPlatform2 = new SharedPlatform("Tree company", "../Phygital.DAL/Assets/tree.png");
+            SharedPlatform sharedPlatform1 = new SharedPlatform("Karel de Grote", ImageUrls.kdg);
+            SharedPlatform sharedPlatform2 = new SharedPlatform("Tree company", ImageUrls.tree);
             Project project1 = new Project(mainTheme1.Subject, mainTheme1, sharedPlatform);
             Project project2 = new Project(mainTheme2.Subject, mainTheme2, sharedPlatform);
             Project project3 = new Project(mainTheme3.Subject, mainTheme3, sharedPlatform);
