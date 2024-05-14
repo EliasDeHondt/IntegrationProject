@@ -1,48 +1,60 @@
 @model Domain.Platform.Statistic
-@* TODO: ALLES IS TEMP !!!*@
 @{
-    Layout = "_Layout";
+    Layout = "_NavLayout";
+    ViewData["Title"] = "Statistic";
 }
-@{
 
-    
-    // var db = Database.Open("SmallBakery");
-    // var data = db.Query("SELECT Name, Price FROM Product");
-    // var myChart = new Chart(width: 600, height: 400)
-    //     .AddTitle("Product Sales")
-    //     .DataBindTable(dataSource: data, xField: "Name")
-    //     .Write();
-}
 <!DOCTYPE html>
 
 <html lang="" class="h-100 w-100 overflow-hidden">
 <head>
-    <title>title</title>
     <link rel="stylesheet" href="~/dist/site.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        #chart-container {
+          /*width: 800px; */
+          /*height: 800px;*/
+          margin: 0 auto;
+          display: flex;
+          flex-wrap: wrap;
+          padding-left: 20px;
+        }
+        canvas {
+          width: 900px;
+          /*height: 80px;*/
+         font-size: 30px;
+        }
+        /*#chart-container .chartjs-title {*/
+        /*    font-size: 30px; !* Adjust the font size as desired *!*/
+        /*    font-weight: bold; !* Optionally adjust other font properties *!*/
+        /*}*/
+    </style>
 </head>
 <body class="row h-100 w-100">
-<div class="d-flex justify-content-center align-items-center" >
-    <h1>STATISTICS</h1>
+<div class="text-center col-lg-10">
+    <div class="d-flex justify-content-center align-items-center">
+        <h1>STATISTICS</h1>
+    </div>
+
+    <div id="chart-container">
+        <div>
+            <canvas id="barChart"></canvas>
+            <canvas id="lineChart"></canvas>
+        </div>
+        <div>
+            <canvas id="doughnutChart"></canvas>
+        </div>
+        <div>
+            <canvas id="radarChart"></canvas>
+        </div>
+    </div>
 </div>
 
-<div id="chart-container">
-    <div>
-        <canvas id="barChart"></canvas>
-        <canvas id="lineChart"></canvas>
-    </div>
-    <div>
-        <canvas id="doughnutChart"></canvas>
-    </div>
-    <div>
-        <canvas id="radarChart"></canvas>
-    </div>
-</div>
 </body>
 </html>
 
 @section Scripts
 {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="~/dist/site.entry.js" defer></script>
     <script src="~/dist/statistics.entry.js" defer></script>
 }

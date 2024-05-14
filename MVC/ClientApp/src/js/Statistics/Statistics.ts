@@ -28,14 +28,23 @@ function drawBarChart(titel:string,chartData: { labels: string[]; datasets: { la
         options: {
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    ticks: {
+                        font: {
+                            size: 22
+                        }
+                    }
                 }
             },
             plugins: {
                 title: {
                     display: true,
-                    text: titel
+                    text: titel,
+                    font: {
+                        size: 24
+                    }
                 }
+                
             }
         }
     });
@@ -110,16 +119,16 @@ export async function GetNamesPerFlow(data: string[]){
         }
     })
         .then(response => response.json())
-        .then(labels => drawCharts(labels,data))
+        .then(labels => drawBarChart("Aantal Steps per Flow",chartData('Aantal Steps', labels, data)))
         .catch(error => console.error("Error:", error))
 }
-function drawCharts(labels: string[],data: string[]){
-    drawBarChart("Aantal Steps per Flow",chartData('Aantal Steps', labels, data))
-    drawLineChart("Aantal Steps",chartData('Step types', labels, data))
-    drawDoughnutChart("Aantal Steps",chartData('Step types', labels, data))
-    drawRadarChart("Aantal Steps",chartData('Step types', labels, data))
-}
+// function drawCharts(labels: string[],data: string[]){
+//     drawBarChart("Aantal Steps per Flow",chartData('Aantal Steps', labels, data))
+//     drawLineChart("Aantal Steps",chartData('Step types', labels, data))
+//     drawDoughnutChart("Aantal Steps",chartData('Step types', labels, data))
+//     drawRadarChart("Aantal Steps",chartData('Step types', labels, data))
+// }
 
-// drawCharts()
+
 
 GetCountStepsPerFlow()
