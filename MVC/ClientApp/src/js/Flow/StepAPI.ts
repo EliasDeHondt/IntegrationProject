@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function GetNextStep(stepNumber: number, flowId: number): Promise<Step> {
-    return await fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
+    return fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
         method: "GET",
         headers: {
             "Accept": "application/json",
@@ -116,18 +116,20 @@ async function GetNextStep(stepNumber: number, flowId: number): Promise<Step> {
         }
     })
         .then(response => response.json())
-        .then(async (data) => {
-            if(flowtype.toUpperCase() == "PHYSICAL"){
-                await showPhysicalStep(data)
+        .then(async (data): Promise<Step> => {
+            if (flowtype.toUpperCase() == "PHYSICAL") {
+                await showPhysicalStep(data);
             } else {
-                await ShowStep(data)
+                await ShowStep(data);
             }
-        } )
-        .then(data => {
-            return data
+            return data;
         })
-        .catch(error => console.error("Error:", error))
+        .catch(error => {
+            console.error("Error:", error);
+            throw error;
+        });
 }
+
 
 async function GetConditionalNextStep(stepId: number): Promise<Step> {
     return await fetch(`/api/Steps/GetConditionalNextStep/${stepId}`, {
@@ -159,7 +161,7 @@ async function showInformationStep(data: Information[]){
         const webcam = document.getElementById("webcamDiv") as HTMLDivElement;
         webcam.classList.add("visually-hidden");
         for (const infoStep of data) {
-            switch (infoStep.InformationType) {
+            switch (infoStep.informationType) {
                 case "Text": {
                     let p = document.createElement("p");
                     p.innerText = infoStep.information;
@@ -423,7 +425,7 @@ async function hideDigitalElements(){
         let model = await phyAPI.loadModel();
         phyAPI.startPhysical(model).then(async () => {
             await delay(2500);
-            GetNextStep(++currentStepNumber, flowId);
+            await GetNextStep(++currentStepNumber, flowId);
             startTimers();
         });
     } else {
