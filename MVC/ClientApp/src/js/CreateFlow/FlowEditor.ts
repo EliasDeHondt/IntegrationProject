@@ -2,6 +2,7 @@ import {Choice, Information, Question, Step} from "../Flow/Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
 import {Modal} from "bootstrap";
 import {Flow, Participation} from "../Flow/FlowObjects";
+import {op} from "@tensorflow/tfjs";
 
 
 const stepsList = document.getElementById('steps-list') as HTMLElement;
@@ -13,6 +14,7 @@ const btnAddText = document.getElementById('btn-add-text') as HTMLButtonElement;
 const btnAddImage = document.getElementById('btn-add-image') as HTMLButtonElement;
 const btnAddVideo = document.getElementById('btn-add-video') as HTMLButtonElement;
 const btnSaveFlow = document.getElementById("saveFlow") as HTMLButtonElement;
+const btnAddLink = document.getElementById("btn-add-hyperlink") as HTMLButtonElement;
 
 let currentStepList: Step[];
 
@@ -70,6 +72,8 @@ async function UpdateStep(flowId: number, stepNr: number, step: Step) {
         },
         body: JSON.stringify(step)
     })
+        .then(response => response.json())
+        .catch(error => console.error("Error:", error))
 }
 
 async function GetFlowById(flowId: number): Promise<Flow> {
@@ -97,6 +101,20 @@ async function UpdateFlow(flow: Flow) {
     })
 }
 
+async function GetConditionalNextStep(stepId: number): Promise<Step> {
+    return await fetch(`/api/Steps/GetConditionalNextStep/${stepId}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
+}
+
 function toggleButtons() {
 
     console.log("disabling all buttons")
@@ -104,6 +122,7 @@ function toggleButtons() {
     btnAddImage.disabled = true;
     btnAddVideo.disabled = true;
     btnAddChoice.disabled = true;
+    btnAddLink.disabled = true;
 
     if (currentViewingStep == undefined) {
         return;
@@ -114,10 +133,12 @@ function toggleButtons() {
         btnAddText.disabled = false;
         btnAddImage.disabled = false;
         btnAddVideo.disabled = false;
+        btnAddLink.disabled = false;
         if (currentViewingStep.informationViewModel.length >= 2) {
             btnAddText.disabled = true;
             btnAddImage.disabled = true;
             btnAddVideo.disabled = true;
+            btnAddLink.disabled = true;
         }
     }
     if (currentViewingStep.questionViewModel != undefined && currentViewingStep.questionViewModel.questionType != "OpenQuestion") {
@@ -135,8 +156,6 @@ function UpdateStepList(steps: Step[]) {
     steps.sort((a, b) => a.stepNumber - b.stepNumber);
 
     currentStepList = steps;
-
-    console.log(currentStepList)
 
     const stepsList = document.getElementById("steps-list") as HTMLDivElement;
 
@@ -194,12 +213,21 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(() => initializeCardLinks())
 });
 
+/* This function checks if the provided URL is valid */
+function checkURLValidity(url: string): boolean {
+    let urlRegex = /(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?\/[a-zA-Z0-9]{2,}|((https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?)|(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})?/g;
+
+    return urlRegex.test(url);
+}
+
 btnAddChoice.addEventListener('click', () => {
     currentViewingStep.questionViewModel.choices.length++
 
     if (currentViewingStep.questionViewModel.choices.length >= 6) {
         btnAddChoice.disabled = true;
     }
+
+    //await AddChoice(currentViewingStep.stepNumber);
 
     console.log("Add choice")
     let div = document.createElement("div");
@@ -208,20 +236,27 @@ btnAddChoice.addEventListener('click', () => {
     const textArea = document.createElement("input");
     textArea.classList.add("choice-textarea")
 
+    const select = document.createElement("select");
+    select.classList.add("choice-select");
+    fillConditionalPoints(select, undefined);
+
     let choiceContainer = document.getElementById("choices-container") as HTMLDivElement;
 
     div.append(textArea);
+    div.append(select);
     choiceContainer.appendChild(div);
 });
 
 btnAddText.addEventListener('click', () => {
     currentViewingStep.informationViewModel.length++
 
-    if (currentViewingStep.informationViewModel.length >= 2) {
-        btnAddText.disabled = true;
-        btnAddImage.disabled = true;
-        btnAddVideo.disabled = true;
-    }
+    toggleButtons();
+
+    // if (currentViewingStep.informationViewModel.length >= 2) {
+    //     btnAddText.disabled = true;
+    //     btnAddImage.disabled = true;
+    //     btnAddVideo.disabled = true;
+    // }
 
     console.log("Add text")
     let div = document.createElement("div");
@@ -234,6 +269,33 @@ btnAddText.addEventListener('click', () => {
     div.append(textArea);
     partialInformationContainer.appendChild(div);
 });
+
+btnAddLink.addEventListener('click', () => {
+    console.log("Add Link")
+
+    currentViewingStep.informationViewModel.length++
+    toggleButtons();
+
+    let div = document.createElement("div");
+    div.id = "text-container";
+    div.classList.add("text-start", "m-auto");
+
+    const textArea = document.createElement("textarea");
+    textArea.classList.add("input-hyperlink-iframe");
+    textArea.addEventListener('change', async () => {
+        let isWorkingURL = checkURLValidity(textArea.value)
+        if (isWorkingURL) {
+            textArea.dataset.allowed = String(1);
+            textArea.classList.add("hyperlink-allowed");
+        } else {
+            textArea.dataset.allowed = String(0);
+            textArea.classList.add("hyperlink-disallowed");
+        }
+    })
+
+    div.append(textArea);
+    partialInformationContainer.appendChild(div);
+})
 
 btnAddImage.addEventListener('click', () => {
     console.log("Add Image")
@@ -291,6 +353,11 @@ function GetStepData() {
                     information = videoElement.src;
                     informationType = 'Video';
                     break;
+                case 'IFRAME':
+                    const linkTextAreaElement = element as HTMLTextAreaElement;
+                    information = linkTextAreaElement.value;
+                    informationType = 'Hyperlink'
+                    break;
             }
 
             informationArray.push({information: information, informationType: informationType});
@@ -302,12 +369,23 @@ function GetStepData() {
     }
 
     if (currentViewingStep.questionViewModel) {
-        const questionContainer = partialQuestionContainer.children[1] as HTMLDivElement;
-        const choicesContainer = partialQuestionContainer.children[2] as HTMLDivElement;
+
+        const questionContainer = partialQuestionContainer.children[0] as HTMLDivElement;
+        const choicesContainer = partialQuestionContainer.children[1] as HTMLDivElement;
 
         for (let i = 0; i < choicesContainer.children.length; i++) {
             const element = choicesContainer.children[i].children[0] as HTMLInputElement;
-            choicesArray.push({text: element.value});
+            const select = choicesContainer.children[i].children[1] as HTMLSelectElement;
+            let nextStepId : number | undefined = 0;
+            for (let j = 0; j < select.children.length; j++) {
+                const option = select.children[j] as HTMLOptionElement;
+                if (option.selected && option.value == "undefined") {
+                    nextStepId = undefined;
+                } else if (option.selected) {
+                    nextStepId = Number(option.value);
+                }
+            }
+            choicesArray.push({text: element.value, nextStepId: nextStepId});
         }
 
         const questionElement = questionContainer.children[0] as HTMLTextAreaElement;
@@ -342,15 +420,19 @@ async function GetNewFlowData(flow: Flow): Promise<Flow> {
         if (step.questionViewModel && step.questionViewModel.questionType !== "OpenQuestion") {
             const choices: Choice[] = [];
             for (const choice of step.questionViewModel.choices) {
-                choices.push({text: choice.text});
+                choices.push({text: choice.text, nextStepId: choice.nextStepId});
             }
             if (stepData.questionViewModel)
                 stepData.questionViewModel.choices = choices;
         }
 
+        console.log(stepData)
+
         flowData.steps.push(stepData);
     }
 
+    console.log(flowData.steps)
+    console.log(flowData);
     return flowData;
 }
 
@@ -396,7 +478,9 @@ async function ShowStepInContainer(data: Step) {
                 case "Image": {
                     let img = document.createElement("img");
                     img.src = "data:image/png;base64," + infoStep.information;
-                    img.classList.add("col-m-12", "w-100", "h-100");
+                    img.classList.add("col-m-12");
+                    img.style.width = '600px'; //schalen image
+                    img.style.height = '600px';
                     partialInformationContainer.appendChild(img);
                     break;
                 }
@@ -412,6 +496,26 @@ async function ShowStepInContainer(data: Step) {
                     video.controls = false;
                     video.classList.add("h-100", "w-100");
                     partialInformationContainer.appendChild(video);
+                    break;
+                }
+                case "Hyperlink": {
+                    let url = infoStep.information;
+                    let iframe = document.createElement("textarea");
+                    iframe.value = url;
+                    iframe.classList.add("input-hyperlink-iframe");
+                    iframe.addEventListener('change', async () => {
+                        let isWorkingURL = checkURLValidity(iframe.value)
+                        if (isWorkingURL) {
+                            iframe.dataset.allowed = String(1);
+                            iframe.classList.remove("hyperlink-disallowed");
+                            iframe.classList.add("hyperlink-allowed");
+                        } else {
+                            iframe.dataset.allowed = String(0);
+                            iframe.classList.remove("hyperlink-allowed");
+                            iframe.classList.add("hyperlink-disallowed");
+                        }
+                    })
+                    partialInformationContainer.appendChild(iframe);
                     break;
                 }
             }
@@ -442,7 +546,12 @@ async function ShowStepInContainer(data: Step) {
                     textArea.classList.add("choice-textarea")
                     textArea.value = element.text;
 
+                    const select = document.createElement("select");
+                    select.classList.add("choice-select");
+                    fillConditionalPoints(select, element.nextStepId);
+
                     div.append(textArea);
+                    div.append(select);
                     choiceContainer.appendChild(div);
                 }
                 break;
@@ -455,7 +564,12 @@ async function ShowStepInContainer(data: Step) {
                     textArea.classList.add("choice-textarea")
                     textArea.value = element.text;
 
+                    const select = document.createElement("select");
+                    select.classList.add("choice-select");
+                    fillConditionalPoints(select, element.nextStepId);
+
                     div.append(textArea);
+                    div.append(select);
                     choiceContainer.appendChild(div);
                 }
                 break;
@@ -468,7 +582,12 @@ async function ShowStepInContainer(data: Step) {
                     textArea.classList.add("choice-textarea")
                     textArea.value = element.text;
 
+                    const select = document.createElement("select");
+                    select.classList.add("choice-select");
+                    fillConditionalPoints(select, element.nextStepId);
+
                     div.append(textArea);
+                    div.append(select);
                     choiceContainer.appendChild(div);
                 }
                 break;
@@ -484,6 +603,29 @@ async function ShowStepInContainer(data: Step) {
                 break;
         }
         partialQuestionContainer.appendChild(choiceContainer);
+    }
+}
+
+function fillConditionalPoints(select: HTMLSelectElement, nextStepId?: number) {
+    let option = document.createElement("option");
+    option.value = "undefined";
+    option.innerText = "Next step"
+    option.selected = true;
+    select.appendChild(option);
+    GetSteps(flowId).then(steps => steps.forEach(step => {
+        let option = document.createElement("option");
+        option.value = step.stepNumber.toString();
+        option.innerText = `Step ${step.stepNumber}`
+        select.appendChild(option);
+    }))
+
+    if (nextStepId) {
+        GetConditionalNextStep(nextStepId).then(step => {
+            let defaultOption = select.children[0] as HTMLOptionElement;
+            defaultOption.selected = false;
+            let optionSelected = select.children[step.stepNumber] as HTMLOptionElement;
+            optionSelected.selected = true;
+        })
     }
 }
 
@@ -519,23 +661,23 @@ butConfirmCreateStep.onclick = () => {
     let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
     if (infographic.checked) {
         AddStep(newStepNumber, "Information")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (singleQ.checked) {
         AddStep(newStepNumber, "Single Choice Question")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (multipleQ.checked) {
         AddStep(newStepNumber, "Multiple Choice Question")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (rangeQ.checked) {
         AddStep(newStepNumber, "Ranged Question")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (openQ.checked) {
         AddStep(newStepNumber, "Open Question")
-            .then(() => GetSteps(flowId))
+            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
             .then(() => initializeCardLinks());
     }
     clearModal()
@@ -566,9 +708,20 @@ btnCancelViewFlowModal.onclick = () => {
 }
 
 btnSaveViewFlowModal.onclick = () => {
-    //TODO: after merge with Jana, add saveFlow method here.
+    //TODO: after merge with Jana, add saveFlow
+    //saveFlow();
 }
 
 btnConfirmViewFlow.onclick = () => {
     clearModal();
 }
+
+// function saveFlow() {
+//     console.log("Saving flow...");
+//     GetStepData();
+//     GetFlowById(flowId)
+//         .then(flow => GetNewFlowData(flow))
+//         .then(flow => {
+//             UpdateFlow(flow);
+//         });
+// }

@@ -155,7 +155,7 @@ public class Startup
             }
             case "Production":
             {
-                if (dbContext.IsEmpty())
+                if (dbContext.CreateDatabase(true))//dbContext.IsEmpty()
                 {
                     SeedDatabase(uow, userManager, roleManager, dbContext);
                 }

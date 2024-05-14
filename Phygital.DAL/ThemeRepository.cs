@@ -1,4 +1,4 @@
-/***************************************
+﻿/***************************************
  *                                     *
  * Created by CodeForge                *
  * Visit https://codeforge.eliasdh.com *
@@ -31,7 +31,7 @@ public class ThemeRepository
     public MainTheme ReadMainThemeById(long id)
     {
         return _context.MainThemes
-            .First(theme => theme.Id == id);
+            .Single(theme => theme.Id == id);
     }
 
 
@@ -40,7 +40,7 @@ public class ThemeRepository
         return _context.SubThemes
             .AsNoTracking()
             .Include(theme => theme.MainTheme)
-            .First(theme => theme.Id == id);
+            .Single(theme => theme.Id == id);
     }
 
     public IEnumerable<SubTheme> ReadSubThemesOfMainTheme(long id)
@@ -69,12 +69,12 @@ public class ThemeRepository
 
     public IEnumerable<SubTheme> ReadSubthemesForProject(long id)
     {
-        var mainTheme = _context.MainThemes.Find(id);
         var subThemes = _context.SubThemes
             .AsNoTracking()
             .Include(theme => theme.MainTheme)
-            .Where(theme => theme.MainTheme.Id == mainTheme!.Id)
+            .Where(theme => theme.MainTheme.Id == id)
             .ToList();
+        
         return subThemes;
     }
 
@@ -84,13 +84,15 @@ public class ThemeRepository
     }
 
 
-    public Flow CreateFlowForSub(FlowType type, long themeId)
+    public Flow CreateFlowForSub(Flow flow)
     {
-        var theme = _context.SubThemes.Find(themeId);
-        var flow = new Flow(type, theme);
         _context.Flows.Add(flow);
 
         return flow;
+    }
+    public SubTheme ReadSubThemeById(long themeId)
+    {
+        return _context.SubThemes.Find(themeId)!;
     }
 
     public void DeleteSubTheme(long id)
@@ -101,19 +103,16 @@ public class ThemeRepository
 
     }
 
-    public IEnumerable<long> GetSubThemeFlows(long id)
+    public IEnumerable<long> ReadSubThemeFlows(long id)
     {
-        IEnumerable<long> flowIds = Array.Empty<long>();
-        
-        SubTheme subTheme = _context.SubThemes.Find(id)!;
-        
-        IEnumerable<Flow> flows = subTheme.Flows;
 
-        foreach (Flow flow in flows)
-        {
-            flowIds = flowIds.Append(flow.Id);
-        }
-
+        var flowIds = _context.SubThemes
+            .AsNoTracking()
+            .Where(theme => theme.Id == id)
+            .SelectMany(theme => theme.Flows)
+            .Select(flow => flow.Id)
+            .ToList();
+        
         return flowIds;
     }
 }

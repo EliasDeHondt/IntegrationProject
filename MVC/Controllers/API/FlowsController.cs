@@ -15,14 +15,14 @@ namespace MVC.Controllers.API;
 public class FlowsController : Controller
 {
     private readonly FlowManager _manager;
+    private readonly StepManager _stepManager;
     private readonly UnitOfWork _uow;
-    private readonly IHubContext<FacilitatorHub> _hub;
 
-    public FlowsController(FlowManager manager, UnitOfWork uow, IHubContext<FacilitatorHub> hubContext)
+    public FlowsController(FlowManager manager, StepManager stepManager, UnitOfWork uow)
     {
         _manager = manager;
+        _stepManager = stepManager;
         _uow = uow;
-        _hub = hubContext;
     }
 
     [HttpPost("SetRespondentEmail/{flowId:int}/{inputEmail}")]
@@ -131,4 +131,19 @@ public class FlowsController : Controller
             ThemeId = flow.Theme.Id
         });
     }
+
+    [HttpGet("GetFlowsForProject/{id}")]
+    public IActionResult GetFlowsForProject(long id)
+    {
+        var flows = _manager.GetFlowsByProject(id);
+        return Ok(flows.Select(flow => new FlowViewModel
+        {
+            Id = flow.Id,
+            FlowType = flow.FlowType,
+            Steps = flow.Steps,
+            Participations = flow.Participations,
+            ThemeId = flow.Theme.Id
+        }));
+    }
+    
 }

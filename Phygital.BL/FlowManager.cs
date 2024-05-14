@@ -17,12 +17,10 @@ namespace Business_Layer;
 public class FlowManager
 {
     private readonly FlowRepository _repository;
-    private readonly StepRepository _stepRepository;
 
-    public FlowManager(FlowRepository repository, StepRepository stepRepository)
+    public FlowManager(FlowRepository repository)
     {
         _repository = repository;
-        _stepRepository = stepRepository;
     }
 
     //This function makes a GLOBAL Flow, not project specific!
@@ -33,7 +31,7 @@ public class FlowManager
             FlowType = type
         };
 
-        _repository.AddFlow(newFlow);
+        _repository.CreateFlow(newFlow);
 
         return newFlow;
     }
@@ -74,7 +72,7 @@ public class FlowManager
 
     public void SetParticipationByFlow(long flowId, string email)
     {
-        _repository.AddParticipationByFlow(flowId, email);
+        _repository.CreateParticipationByFlow(flowId, email);
     }
 
     public void ChangeFlowState(Flow flow)
@@ -85,8 +83,7 @@ public class FlowManager
     public StepBase CreateStep(long flowId, int stepNumber, string stepType, ICollection<InformationBase>? informationBases = null)
     {
         Flow flow = _repository.ReadFlowById(flowId);
-
-        //InformationStep stepI = null;
+        
         StepBase step = null!;
         switch (stepType)
         {
@@ -97,19 +94,18 @@ public class FlowManager
             case "Single Choice Question": 
                 SingleChoiceQuestion singleChoiceQuestion = new SingleChoiceQuestion(); 
                 step =  new QuestionStep(stepNumber,singleChoiceQuestion,flow);
-                //step.StepName = "Single Choice Question"; 
                 break;
             case "Multiple Choice Question":
                 MultipleChoiceQuestion multipleChoiceQuestion = new MultipleChoiceQuestion(); 
-                step =  new QuestionStep(stepNumber,multipleChoiceQuestion,flow); //step.StepName = "Multiple Choice Question"; 
+                step =  new QuestionStep(stepNumber,multipleChoiceQuestion,flow); 
                 break;
             case "Ranged Question":
                 RangeQuestion rangeQuestion = new RangeQuestion(); 
-                step =  new QuestionStep(stepNumber,rangeQuestion,flow); //step.StepName = "Ranged Question"; 
+                step =  new QuestionStep(stepNumber,rangeQuestion,flow);
                 break;
             case "Open Question": 
                 OpenQuestion openQuestion = new OpenQuestion(); 
-                step =  new QuestionStep(stepNumber,openQuestion,flow); //step.StepName = "Open Question"; 
+                step =  new QuestionStep(stepNumber,openQuestion,flow);
                 break;
         }
         
@@ -127,5 +123,10 @@ public class FlowManager
     public void DeleteFlowById(long flowId)
     {
         _repository.DeleteFlowById(flowId);
+    }
+
+    public IEnumerable<Flow> GetFlowsByProject(long id)
+    {
+        return _repository.ReadFlowsByProject(id);
     }
 }

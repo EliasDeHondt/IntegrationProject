@@ -72,7 +72,7 @@
 }
 
 .btn-add-element:disabled {
-  background-color: gray;
+  background-color: #7b8297;
 }
 
 .question-container {
@@ -126,6 +126,7 @@
   border: thin solid black;
   border-radius: 5px;
   background-color: map-get($themes, light, background);
+  padding: 1em;
 }
 
 #step-container {
@@ -141,4 +142,35 @@
 
 #btn-add-step {
   margin: 10px;
+}
+
+
+//.editor-shared-inner-container {
+//  display: flex;
+//  flex-direction: column;
+//  align-items: flex-start;
+//}
+//
+//.btn-primary {
+//  width: 150px;
+//  height: 150px;
+//  margin-bottom: 10px;
+//  border-radius: 5px;
+//  padding-top: 50px;
+//  padding-bottom: 40px;
+//}
+
+.input-hyperlink-iframe {
+  min-height: 5em;
+  min-width: 40em;
+}
+
+.hyperlink-allowed {
+  background-color: hsla(112, 64%, 45%, 0.72);
+  border: green thin solid;
+}
+
+.hyperlink-disallowed {
+  background-color: hsla(0, 64%, 45%, 0.72);
+  border: darkred thin solid;
 }

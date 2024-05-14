@@ -13,7 +13,7 @@ function GenerateOption(flow: Flow): HTMLDivElement {
     input.id = `flow${flow.id}`
     input.value = `${flow.id}`
 
-    if (flowType == "circular") {
+    if (flowType == "circular" || flowType == "physical") {
         input.type = "radio"
         input.name = `flowRadios`
     }
@@ -32,7 +32,13 @@ export function GenerateOptions(flows: Flow[], flowContainer: HTMLDivElement, ty
     flowContainer.innerHTML = "";
     totalFlows = 0;
     flowType = type;
-    const options = flows.map(GenerateOption);
+    if(type == "physical") type = "circular";
+    let options: HTMLDivElement[] = [];
+    flows.forEach(flows => {
+        if(flows.flowType.toUpperCase() == type.toUpperCase()){
+            options.push(GenerateOption(flows));
+        }
+    })
 
     options.forEach(option => {
         if (flowContainer)
@@ -46,12 +52,16 @@ export function SubmitFlows(connection: signalR.HubConnection, code: string) {
     if (flowType == "linear") {
         const options = document.querySelectorAll<HTMLInputElement>('.form-check-input[type="checkbox"]:checked');
         options.forEach((option: HTMLInputElement) => {
-                selectedFlows.push(parseInt(option.value));
+            selectedFlows.push(parseInt(option.value));
         })
-    } else if (flowType == "circular") {
+    } else if (flowType == "circular" || flowType == "physical") {
         const options = document.querySelectorAll<HTMLInputElement>('.form-check-input[name="flowRadios"]:checked');
         if (options.length == 1)
             selectedFlows.push(parseInt((options[0] as HTMLInputElement).value))
     }
-    connection.invoke("SendSelectedFlowIds", code, selectedFlows);
+    connection.invoke("SendSelectedFlowIds", code, selectedFlows, flowType);
+}
+
+export function getFlowType(): string {
+    return flowType;
 }

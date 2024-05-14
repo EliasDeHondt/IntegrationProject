@@ -10,7 +10,6 @@ using Domain.Accounts;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Questions;
-using Domain.ProjectLogics.Steps;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data_Access_Layer;
@@ -28,7 +27,7 @@ public class FlowRepository
     {
         return _context.Flows
             .AsNoTracking()
-            .First(flow => flow.Id == id);
+            .Single(flow => flow.Id == id);
     }
 
     public Flow ReadFlowByIdIncludingTheme(long id)
@@ -36,10 +35,10 @@ public class FlowRepository
         return _context.Flows
             .Include(f => f.Theme)
             .Include(f => f.Steps)
-            .First(f => f.Id == id);
+            .Single(f => f.Id == id);
     }
 
-    public void AddFlow(Flow flow)
+    public void CreateFlow(Flow flow)
     {
         _context.Flows.Add(flow);
     }
@@ -69,7 +68,7 @@ public class FlowRepository
             .ToList();
     }
 
-    public void AddParticipationByFlow(long flowId, string email)
+    public void CreateParticipationByFlow(long flowId, string email)
     {
         var participations = _context.Participations;
         Participation participation = new Participation(ReadFlowById(flowId));
@@ -87,7 +86,7 @@ public class FlowRepository
         return _context.Flows
             .AsNoTracking()
             .Include(f => f.Steps)
-            .First(f => f.Id == flowId)
+            .Single(f => f.Id == flowId)
             .Steps;
     }
 
@@ -95,18 +94,18 @@ public class FlowRepository
     {
         _context.Flows.Find(flowId)!.Steps.Add(step);
     }
-    
+
     public void UpdateSubTheme(Flow flow)
     {
         _context.Flows.Update(flow);
     }
-    
-        public void DeleteFlowById(long flowId)
+
+    public void DeleteFlowById(long flowId)
     {
         Flow flow = _context.Flows
             .Include(f => f.Steps)
             .Include(f => f.Participations)
-            .FirstOrDefault(f => f.Id == flowId)!;
+            .Single(f => f.Id == flowId);
 
         foreach (var step in flow.Steps)
         {
@@ -168,13 +167,21 @@ public class FlowRepository
         _context.Questions.Remove(c.QuestionBase);
     }
 
-    public IEnumerable<StepBase> GetAllSteps(long flowId)
+    public IEnumerable<StepBase> ReadAllSteps(long flowId)
     {
         Flow flow = _context.Flows
             .AsNoTracking()
             .Include(flow => flow.Steps)
-            .First(flow => flow.Id == flowId);
+            .Single(flow => flow.Id == flowId);
 
         return flow.Steps;
+    }
+
+    public IEnumerable<Flow> ReadFlowsByProject(long id)
+    {
+        return _context.Projects
+            .Where(p => p.Id == id)
+            .SelectMany(p => p.MainTheme.Themes.SelectMany(t => t.Flows))
+            .ToList();
     }
 }

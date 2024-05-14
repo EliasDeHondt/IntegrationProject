@@ -18,7 +18,7 @@ public class AnswerRepository
         return answer;
     }
 
-    public void AddSelections(IEnumerable<Selection> selections)
+    public void CreateSelections(IEnumerable<Selection> selections)
     {
         _ctx.Selections.AddRange(selections);
     }

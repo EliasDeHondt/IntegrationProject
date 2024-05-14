@@ -50,6 +50,7 @@ export function UpdateFlowList(flows: Flow[]) {
             cardFooter.classList.add("flow-card-footer");
             cardFooter.innerText = flow.flowType.toString();
 
+            console.log("Adding flowCardViewBtn for flow: " + flow.id);
             flowCard.appendChild(flowCardViewBtn);
             flowCard.appendChild(flowCardDeleteBtn);
             flowButton.appendChild(cardHeader);

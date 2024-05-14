@@ -23,8 +23,8 @@ export function GenerateCards(flows: Flow[], flowContainer: HTMLDivElement) {
     })
 }
 
-export async function GetFlows(): Promise<Flow[]> {
-    return await fetch(`/api/Flows`, {
+export async function GetFlowsForProject(projectId: number): Promise<Flow[]> {
+    return await fetch(`/api/Flows/GetFlowsForProject/${projectId}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

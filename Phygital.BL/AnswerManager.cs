@@ -39,7 +39,7 @@ public class AnswerManager
     
     public void AddSelections(ICollection<Selection> selections)
     {
-        _repo.AddSelections(selections);
+        _repo.CreateSelections(selections);
     }
     
     private bool ValidateObject(object obj,ref List<ValidationResult> errors)

@@ -23,6 +23,11 @@ export function showFlows(flows: Flow[],forWhat: string,flowContainer: HTMLDivEl
             const flowCardDeleteBtn = document.createElement('button');
             flowCardDeleteBtn.innerHTML = '<i class="bi bi-trash3-fill"></i>';
             flowCardDeleteBtn.classList.add("btn", "btn-secondary", "flow-card-delete-btn");
+            //Card View Button
+            const flowCardViewBtn = document.createElement('a');
+            flowCardViewBtn.innerHTML = '<i class="bi bi-eye-fill"></i>';
+            flowCardViewBtn.classList.add("btn", "btn-secondary", "flow-card-view-btn");
+            flowCardViewBtn.setAttribute('href', "/Flow/Step/" + flow.id);
             //Card Header
             const cardHeader = document.createElement('h2');
             cardHeader.classList.add("flow-card-header");
@@ -32,6 +37,7 @@ export function showFlows(flows: Flow[],forWhat: string,flowContainer: HTMLDivEl
             cardFooter.classList.add("flow-card-footer");
             cardFooter.innerText = flow.flowType.toString();
 
+            flowCard.appendChild(flowCardViewBtn);
             flowCard.appendChild(flowCardDeleteBtn);
             flowButton.appendChild(cardHeader);
             flowButton.appendChild(cardFooter);

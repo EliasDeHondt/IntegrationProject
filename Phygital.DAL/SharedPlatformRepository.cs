@@ -20,13 +20,13 @@ public class SharedPlatformRepository
         return _ctx.SharedPlatforms
             .AsNoTracking()
             .Include(platform => platform.Projects)
-            .First(platform => platform.Id == id);
+            .Single(platform => platform.Id == id);
     }
 
     public SharedPlatform ReadSharedPlatform(long id)
     {
         return _ctx.SharedPlatforms
-            .First(platform => platform.Id == id);
+            .Single(platform => platform.Id == id);
     }
 
     public IEnumerable<IdentityUser> ReadUsersForPlatform(long id)
@@ -34,13 +34,13 @@ public class SharedPlatformRepository
         var facilitators = _ctx.SharedPlatforms
             .AsNoTracking()
             .Include(platform => platform.Faciliators)
-            .First(platform => platform.Id == id)
+            .Single(platform => platform.Id == id)
             .Faciliators;
 
         var admins = _ctx.SharedPlatforms
             .AsNoTracking()
             .Include(platform => platform.Admins)
-            .First(platform => platform.Id == id)
+            .Single(platform => platform.Id == id)
             .Admins;
         
         var users = new List<IdentityUser>();
@@ -53,11 +53,11 @@ public class SharedPlatformRepository
     public IEnumerable<Project> ReadProjectsForPlatform(long platformId)
     {
         return _ctx.SharedPlatforms.Include(platform => platform.Projects)
-            .First(platform => platform.Id == platformId)
+            .Single(platform => platform.Id == platformId)
             .Projects;
     }
 
-    public void AddProjectToPlatform(Project project, long sharedPlatformId)
+    public void CreateProjectToPlatform(Project project, long sharedPlatformId)
     {
         _ctx.SharedPlatforms.Single(platform => platform.Id == sharedPlatformId).Projects.Add(project);
     }
