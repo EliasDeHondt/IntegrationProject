@@ -1,4 +1,6 @@
-﻿@{
+﻿@model long
+
+@{
     Layout = null;
     ViewData["Title"] = "Kiosk";
 }
@@ -36,6 +38,7 @@
     </div>
 </div>
 </body>
+<div class="visually-hidden" id="projectId" data-project-id="@Model"></div>
 </html>
 <!--JS-->
 <script src="/dist/kiosk.entry.js" defer></script>

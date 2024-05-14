@@ -131,4 +131,19 @@ public class FlowsController : Controller
             ThemeId = flow.Theme.Id
         });
     }
+
+    [HttpGet("GetFlowsForProject/{id}")]
+    public IActionResult GetFlowsForProject(long id)
+    {
+        var flows = _manager.GetFlowsByProject(id);
+        return Ok(flows.Select(flow => new FlowViewModel
+        {
+            Id = flow.Id,
+            FlowType = flow.FlowType,
+            Steps = flow.Steps,
+            Participations = flow.Participations,
+            ThemeId = flow.Theme.Id
+        }));
+    }
+    
 }

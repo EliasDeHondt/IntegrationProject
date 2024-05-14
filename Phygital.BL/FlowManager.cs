@@ -83,8 +83,7 @@ public class FlowManager
     public StepBase CreateStep(long flowId, int stepNumber, string stepType)
     {
         Flow flow = _repository.ReadFlowById(flowId);
-
-        //InformationStep stepI = null;
+        
         StepBase step = null;
         switch (stepType)
         {
@@ -108,7 +107,6 @@ public class FlowManager
                 break;
         }
         
-       // _repository.AddStepToFlow(flowId, step);
         _repository.AddStepToFlow(flowId, step!);
 
         return step!;
@@ -123,5 +121,10 @@ public class FlowManager
     public void DeleteFlowById(long flowId)
     {
         _repository.DeleteFlowById(flowId);
+    }
+
+    public IEnumerable<Flow> GetFlowsByProject(long id)
+    {
+        return _repository.ReadFlowsByProject(id);
     }
 }

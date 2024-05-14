@@ -1,7 +1,7 @@
 ﻿import * as signalR from "@microsoft/signalr";
 import "./ChooseFlow";
-import {flowTypeModal} from "./FlowTypeModal";
-import {GetFlows} from "../Kiosk/FlowAPI";
+import {flowTypeModal, setProjectId} from "./FlowTypeModal";
+import {GetFlowsForProject} from "../Kiosk/FlowAPI";
 import {Flow} from "./FlowObjects"
 
 export const connection = new signalR.HubConnectionBuilder()
@@ -17,9 +17,10 @@ let currentFlow = document.getElementById("currentFlow") as HTMLHeadingElement;
 let currentState = document.getElementById("currentState") as HTMLSpanElement;
 export let code = "";
 
+let projectId: number = 0;
 
 document.addEventListener("DOMContentLoaded", async () => {
-    GetFlows().then(flows => GenerateFlowCards(flows, flowContainer));
+
     
     const storedCode = sessionStorage.getItem("connectionCode");
     if (storedCode) {
@@ -36,8 +37,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 code = (document.getElementById("inputCode") as HTMLInputElement).value;
                 await connection.invoke("JoinConnection", code).then(() => {
                     connectionCode.innerText = code
+
+                    connection.on("ReceiveOngoingFlow", (ongoing) =>{
+                        if(!ongoing) flowTypeModal.show();
+                    })
                 })
-                flowTypeModal.show();
             };
         })
 
@@ -64,6 +68,14 @@ connection.on("UserLeftConnection", (message) => {
     console.log(message)
     connection.invoke("LeaveConnection", "Facilitator", code).then(() => ConnectionClosed());
 });
+
+connection.on("ReceiveProjectId", (id) => {
+    projectId = id;
+    GetFlowsForProject(projectId).then(flows => GenerateFlowCards(flows, flowContainer));
+    setProjectId(projectId);
+})
+
+
 
 function SendFlowUpdate() {
     connection.invoke("SendFlowUpdate", code, currentFlow.innerText, currentState.innerText)
@@ -132,3 +144,10 @@ function GenerateFlowCards(flows: Flow[], flowContainer: HTMLDivElement) {
         flowContainer.appendChild(card);
     })
 }
+
+connection.on("ReceiveSelectedFlowIds", async (ids, flowType) => {
+    if(flowType.toUpperCase() == "PHYSICAL") {
+        currentFlow.innerText = `${ids[0]}`
+        currentState.innerText = "Active"
+    }
+})
