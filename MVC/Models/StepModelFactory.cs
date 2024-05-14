@@ -13,7 +13,6 @@ namespace MVC.Models;
 
 public static class StepModelFactory
 {
-
     public static TViewModel CreateStepViewModel<TViewModel, TStep>(TStep step)
         where TViewModel : StepViewModel where TStep : StepBase
     {
@@ -27,10 +26,9 @@ public static class StepModelFactory
                 return CreateQuestionStepViewModel(qStep) as TViewModel;
             default:
                 return null;
-            
         }
     }
-    
+
     private static CombinedStepViewModel CreateCombinedStepViewModel(CombinedStep step)
     {
         return new CombinedStepViewModel
@@ -40,18 +38,26 @@ public static class StepModelFactory
             StepNumber = step.StepNumber
         };
     }
-    
+
     private static InformationStepViewModel CreateInformationStepViewModel(InformationStep step)
     {
+        var informationViewModels = new List<InformationViewModel>();
+
+        foreach (var informationBase in step.InformationBases)
+        {
+            var informationViewModel = CreateInformationViewModel(informationBase);
+            informationViewModels.Add(informationViewModel);
+        }
+
         return new InformationStepViewModel
         {
             Id = step.Id,
-            InformationViewModel = CreateInformationViewModel(step.InformationBase),
+            InformationViewModel = informationViewModels,
             StepNumber = step.StepNumber
         };
     }
 
-   private static InformationViewModel CreateInformationViewModel(InformationBase information)
+    private static InformationViewModel CreateInformationViewModel(InformationBase information)
     {
         return new InformationViewModel
         {
@@ -83,14 +89,32 @@ public static class StepModelFactory
                     QuestionType = question.GetType().Name
                 };
             case ChoiceQuestionBase cQ:
+                var choiceViewModels = new List<ChoiceViewModel>();
+
+                foreach (var choice in cQ.Choices)
+                {
+                    var choiceViewModel = CreateChoiceViewModel(choice);
+                    choiceViewModels.Add(choiceViewModel);
+                }
+
                 return new QuestionViewModel
                 {
                     Id = question.Id,
                     Question = question.Question,
                     QuestionType = question.GetType().Name,
-                    Choices = cQ.Choices
+                    Choices = choiceViewModels
                 };
             default: return new QuestionViewModel();
         }
+    }
+
+    private static ChoiceViewModel CreateChoiceViewModel(Choice choice)
+    {
+        return new ChoiceViewModel
+        {
+            Id = choice.Id,
+            Text = choice.Text,
+            NextStepId = choice.NextStep?.Id
+        };
     }
 }

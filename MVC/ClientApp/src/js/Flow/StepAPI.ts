@@ -4,12 +4,23 @@ import * as phyAPI from "../Webcam/WebCamDetection";
 import {detectionCanvas, drawChoiceBoundaries, getResult} from "../Webcam/WebCamDetection";
 import {delay} from "../Util";
 import {Timer} from "../Util/Timer";
+import {Flow} from "./FlowObjects";
+import {Modal} from "bootstrap";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
 const btnNextStep = document.getElementById("btnNextStep") as HTMLButtonElement;
 const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonElement;
+const btnPauseFlow = document.getElementById("btnPauseFlow") as HTMLButtonElement;
+const btnUnPauseFlow = document.getElementById("btnUnPauseFlow") as HTMLButtonElement;
 const btnEmail = document.getElementById("btnEmail") as HTMLButtonElement;
+const btnExitFlow = document.getElementById("butExitFlow") as HTMLButtonElement;
+const modal = new Modal(document.getElementById("pausedFlowModal") as HTMLDivElement, {
+    backdrop: 'static',
+    keyboard: false
+});
+const btnShowFlows = document.getElementById("flowDropdownBtn") as HTMLButtonElement;
+const ddFlows = document.getElementById("flowDropdown") as HTMLUListElement;
 let currentStepNumber: number = 0;
 let userAnswers: string[] = []; // Array to store user answers
 let openUserAnswer: string = "";
@@ -25,6 +36,9 @@ let time: number = 29;
 let choices: string[] = [];
 
 hideDigitalElements();
+let prevFlowId = sessionStorage.getItem('prevFlowId');
+let currentState: string = "";
+let conditionalAnswer: number = 0;
 
 //email checken
 function CheckEmail(inputEmail: string): boolean {
@@ -93,8 +107,8 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 });
 
-function GetNextStep(stepNumber: number, flowId: number) {
-    fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
+async function GetNextStep(stepNumber: number, flowId: number): Promise<Step> {
+    return await fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
         method: "GET",
         headers: {
             "Accept": "application/json",
@@ -109,7 +123,24 @@ function GetNextStep(stepNumber: number, flowId: number) {
                 await ShowStep(data)
             }
         } )
+        .then(data => {
+            return data
+        })
         .catch(error => console.error("Error:", error))
+}
+
+async function GetConditionalNextStep(stepId: number): Promise<Step> {
+    return await fetch(`/api/Steps/GetConditionalNextStep/${stepId}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data
+    })
 }
 
 
@@ -123,36 +154,43 @@ async function showPhysicalStep(data: Step){
     showPhysicalQuestionStep(data.questionViewModel);
 }
 
-async function showInformationStep(data: Information){
+async function showInformationStep(data: Information[]){
     if (data != undefined) {
         const webcam = document.getElementById("webcamDiv") as HTMLDivElement;
         webcam.classList.add("visually-hidden");
-        switch (data.informationType) {
-            case "Text": {
-                let p = document.createElement("p");
-                p.innerText = data.information;
-                p.classList.add("text-center");
-                informationContainer.appendChild(p);
-                break;
-            }
-            case "Image": {
-                let img = document.createElement("img");
-                img.src = "data:image/png;base64," + data.information;
-                informationContainer.appendChild(img);
-                break;
-            }
-            case "Video": {
-                let path = await downloadVideoFromBucket(data.information);
-                let video = document.createElement("video");
-                if (typeof path === "string") {
-                    path = path.substring(1, path.length - 1);
-                    video.src = path;
+        for (const infoStep of data) {
+            switch (infoStep.InformationType) {
+                case "Text": {
+                    let p = document.createElement("p");
+                    p.innerText = infoStep.information;
+                    p.classList.add("text-center");
+                    informationContainer.appendChild(p);
+                    break;
                 }
-                video.autoplay = true;
-                video.loop = true;
-                video.controls = false;
-                informationContainer.appendChild(video);
-                break;
+                case "Image": {
+                    let img = document.createElement("img");
+                    img.src = "data:image/png;base64," + infoStep.information;
+                    informationContainer.appendChild(img);
+                    break;
+                }
+                case "Video": {
+                    let path = await downloadVideoFromBucket(infoStep.information);
+                    let video = document.createElement("video");
+                    if (typeof path === "string") {
+                        path = path.substring(1, path.length - 1);
+                        video.src = path;
+                        
+                    }
+                    break;
+                }
+                case "Hyperlink": {
+                    let url = infoStep.information;
+                    let iframe = document.createElement("iframe");
+                    iframe.src = url;
+                    iframe.classList.add("hyperlink-iframe");
+                    informationContainer.appendChild(iframe);
+                    break;
+                }
             }
         }
     }
@@ -232,6 +270,8 @@ function showQuestionStep(data: Question){
                     // Add event listener to capture user input
                     choice.addEventListener('change', function () {
                         userAnswers = [choice.value];
+                        if (element.nextStepId != undefined)
+                            conditionalAnswer = element.nextStepId;
                     });
                 }
                 break;
@@ -254,6 +294,8 @@ function showQuestionStep(data: Question){
                         if (choice.checked) {
                             // Add selected choice to userAnswers array
                             userAnswers.push(choice.value);
+                            if (element.nextStepId != undefined)
+                                conditionalAnswer = element.nextStepId;
                         } else {
                             // Remove deselected choice from userAnswers array
                             const index = userAnswers.indexOf(choice.value);
@@ -287,6 +329,10 @@ function showQuestionStep(data: Question){
                     // Update the label to reflect the current choice
                     userAnswers = [data.choices[Number(slider.value)].text];
                     label.innerText = data.choices[Number(slider.value)].text;
+                    const nextStepId = data.choices[Number(slider.value)].nextStepId;
+                    if (nextStepId !== undefined) {
+                        conditionalAnswer = nextStepId;
+                    }
                 });
                 break;
             }
@@ -294,6 +340,7 @@ function showQuestionStep(data: Question){
                 let textInput = document.createElement("textarea");
                 let openDiv = document.createElement("div");
                 openDiv.classList.add("m-auto");
+                textInput.classList.add("w-100");
                 textInput.name = 'answer';
                 textInput.rows = 8;
                 textInput.cols = 75;
@@ -412,9 +459,17 @@ async function nextStep(save: boolean = true){
     }
     if ((flowtype.toUpperCase() == "CIRCULAR" || flowtype.toUpperCase() == "PHYSICAL") && currentStepNumber >= stepTotal) {
         currentStepNumber = 0;
-        GetNextStep(++currentStepNumber, flowId);
+        await GetNextStep(++currentStepNumber, flowId).then(step => ShowStep(step));
     } else {
-        GetNextStep(++currentStepNumber, flowId);
+        if (conditionalAnswer > 0) {
+            await GetConditionalNextStep(conditionalAnswer).then(step => {
+                conditionalAnswer = 0;
+                currentStepNumber = step.stepNumber
+                GetNextStep(currentStepNumber, flowId).then(step => ShowStep(step))
+            })
+        } else {
+            await GetNextStep(++currentStepNumber, flowId).then(step => ShowStep(step));
+        }
     }
     time = 30;
 }
@@ -434,5 +489,5 @@ function startTimers(){
 
 btnRestartFlow.onclick = () => {
     currentStepNumber = 0;
-    GetNextStep(++currentStepNumber, flowId);
+    GetNextStep(++currentStepNumber, flowId).then(step => ShowStep(step));
 };

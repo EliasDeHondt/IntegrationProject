@@ -18,6 +18,7 @@ public class ThemeRepository
     public ThemeRepository(CodeForgeDbContext context)
     {
         _context = context;
+        
     }
 
     public IEnumerable<MainTheme> ReadAllMainThemes()
@@ -30,7 +31,7 @@ public class ThemeRepository
     public MainTheme ReadMainThemeById(long id)
     {
         return _context.MainThemes
-            .First(theme => theme.Id == id);
+            .Single(theme => theme.Id == id);
     }
 
 
@@ -39,7 +40,7 @@ public class ThemeRepository
         return _context.SubThemes
             .AsNoTracking()
             .Include(theme => theme.MainTheme)
-            .First(theme => theme.Id == id);
+            .Single(theme => theme.Id == id);
     }
 
     public IEnumerable<SubTheme> ReadSubThemesOfMainTheme(long id)
@@ -68,12 +69,12 @@ public class ThemeRepository
 
     public IEnumerable<SubTheme> ReadSubthemesForProject(long id)
     {
-        var mainTheme = _context.MainThemes.Find(id);
         var subThemes = _context.SubThemes
             .AsNoTracking()
             .Include(theme => theme.MainTheme)
-            .Where(theme => theme.MainTheme.Id == mainTheme!.Id)
+            .Where(theme => theme.MainTheme.Id == id)
             .ToList();
+        
         return subThemes;
     }
 
@@ -82,13 +83,36 @@ public class ThemeRepository
         _context.SubThemes.Find(id)!.Subject = subject;
     }
 
+
+    public Flow CreateFlowForSub(Flow flow)
+    {
+        _context.Flows.Add(flow);
+
+        return flow;
+    }
+    public SubTheme ReadSubThemeById(long themeId)
+    {
+        return _context.SubThemes.Find(themeId)!;
+    }
+
     public void DeleteSubTheme(long id)
     {
         SubTheme subTheme = _context.SubThemes.Find(id)!;
-
-        IEnumerable<Flow> flows = subTheme.Flows;
         
-        _context.Flows.RemoveRange(flows);
         _context.SubThemes.Remove(subTheme);
+
+    }
+
+    public IEnumerable<long> ReadSubThemeFlows(long id)
+    {
+
+        var flowIds = _context.SubThemes
+            .AsNoTracking()
+            .Where(theme => theme.Id == id)
+            .SelectMany(theme => theme.Flows)
+            .Select(flow => flow.Id)
+            .ToList();
+        
+        return flowIds;
     }
 }
