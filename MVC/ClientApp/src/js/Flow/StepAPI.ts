@@ -461,16 +461,16 @@ async function nextStep(save: boolean = true){
     }
     if ((flowtype.toUpperCase() == "CIRCULAR" || flowtype.toUpperCase() == "PHYSICAL") && currentStepNumber >= stepTotal) {
         currentStepNumber = 0;
-        await GetNextStep(++currentStepNumber, flowId).then(step => ShowStep(step));
+        await GetNextStep(++currentStepNumber, flowId);
     } else {
         if (conditionalAnswer > 0) {
             await GetConditionalNextStep(conditionalAnswer).then(step => {
                 conditionalAnswer = 0;
                 currentStepNumber = step.stepNumber
-                GetNextStep(currentStepNumber, flowId).then(step => ShowStep(step))
+                GetNextStep(currentStepNumber, flowId);
             })
         } else {
-            await GetNextStep(++currentStepNumber, flowId).then(step => ShowStep(step));
+            await GetNextStep(++currentStepNumber, flowId);
         }
     }
     time = 30;
@@ -489,7 +489,7 @@ function startTimers(){
 
 
 
-btnRestartFlow.onclick = () => {
+btnRestartFlow.onclick = async () => {
     currentStepNumber = 0;
-    GetNextStep(++currentStepNumber, flowId).then(step => ShowStep(step));
+    await GetNextStep(++currentStepNumber, flowId);
 };
