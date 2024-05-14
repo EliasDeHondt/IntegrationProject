@@ -230,7 +230,7 @@ function createQuestion(data: Question){
     let rowDiv = document.createElement("div");
     rowDiv.classList.add("row");
     rowDiv.classList.add("m-auto");
-    rowDiv.classList.add("w-50");
+    rowDiv.classList.add("w-100");
     for (const element of data.choices) {
         let colDiv = document.createElement("div");
         colDiv.classList.add("col");
