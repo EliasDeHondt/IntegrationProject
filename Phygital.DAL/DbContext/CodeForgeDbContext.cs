@@ -95,14 +95,18 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         builder.Entity<Video>(entity => entity.Property(e => e.FilePath).IsRequired().HasMaxLength(200));
         builder.Entity<OpenQuestion>(entity => entity.Property(e => e.TextField).IsRequired().HasMaxLength(600));
         builder.Entity<QuestionBase>(entity => entity.Property(e => e.Question).IsRequired().HasMaxLength(600));
-        builder.Entity<QuestionBase>(entity => entity.Property(e => e.Question).IsRequired().HasMaxLength(600));
         builder.Entity<Choice>(entity => entity.Property(e => e.Text).IsRequired().HasMaxLength(50));
         builder.Entity<ThemeBase>(entity => entity.Property(e => e.Subject).IsRequired().HasMaxLength(600));
         builder.Entity<SharedPlatform>(entity => entity.Property(e => e.Logo).IsRequired().HasMaxLength(65000));
+        builder.Entity<SharedPlatform>(entity => entity.Property(e => e.PrivacyLink).IsRequired().HasMaxLength(150));
+        builder.Entity<SharedPlatform>(entity => entity.Property(e => e.OrganisationLink).IsRequired().HasMaxLength(150));
+        builder.Entity<SharedPlatform>(entity => entity.Property(e => e.OrganisationName).IsRequired().HasMaxLength(150));
         builder.Entity<Project>(entity => entity.Property(e => e.Title).IsRequired().HasMaxLength(50));
         builder.Entity<Project>(entity => entity.Property(e => e.Description).IsRequired().HasMaxLength(600));
         builder.Entity<Project>(entity => entity.Property(e => e.Image).HasMaxLength(65000));
-        
+        builder.Entity<OpenAnswer>(entity => entity.Property(e => e.Answer).IsRequired().HasMaxLength(300));
+        builder.Entity<Hyperlink>(entity => entity.Property(e => e.URL).IsRequired().HasMaxLength(600));
+        builder.Entity<Respondent>(entity => entity.Property(e => e.Email).IsRequired().HasMaxLength(320));
         
         builder.Entity<ChoiceAnswer>()
             .HasMany(a => a.Answers)
