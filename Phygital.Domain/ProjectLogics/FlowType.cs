@@ -11,5 +11,6 @@ public enum FlowType
 {
     Unknown,
     Circular,
-    Linear
+    Linear,
+    Physical
 }
