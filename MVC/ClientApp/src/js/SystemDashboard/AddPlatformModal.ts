@@ -3,6 +3,7 @@ import {createPlatform} from "./API/AddPlatformAPI";
 import {generatePlatformCards} from "./API/CardAPI";
 import {GetSharedPlatforms} from "./API/SharedPlatformAPI";
 import {isEmailInUse} from "../API/UserAPI";
+import {sendEmail} from "../Dashboard/API/CreateUserModalAPI";
 
 const modal = new Modal(document.getElementById("ModalCreatePlatform")!, {
     keyboard: false,
@@ -48,9 +49,13 @@ btnConfirmModal.onclick = () => {
                 .then(() => {
                     GetSharedPlatforms().then(platforms => {
                         cardContainer.innerHTML = generatePlatformCards(platforms);
-                        modal.hide();
-                        openModalEventListener()
                     })
+                    modal.hide();
+                    openModalEventListener();
+                })
+                .then(() => {
+                    sendEmail(inputEmail.value, inputPassword.value).then(() =>
+                        clearModal())
                 })
         }
     })
