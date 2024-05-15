@@ -1,0 +1,167 @@
+/***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************/
+
+.home-logo {
+  width: 200px;
+  height: 200px;
+}
+
+/* Relative Positioning */
+.home-top-center {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.home-top-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 5px;
+  margin-right: 5px;
+}
+
+.home-center-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+/* Relative Positioning */
+
+/* Absolute Positioning Background */
+.home-top-center h1 {
+  color: #ffffff;
+  font-size: 60px;
+  font-weight: 900;
+  font-family: 'Arial', sans-serif !important;
+}
+
+.home-top-center p {
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 400;
+  font-family: 'Arial', sans-serif !important;
+}
+
+/* Absolute Positioning Background */
+
+/* Button */
+.home-button-container {
+  width: 1000px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.home-button-container .home-button-btn {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 1100px;
+  height: 200px;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-button-container .home-button-btn a {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 15px 15px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  padding: 10px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  overflow: hidden;
+  color: #ffffff;
+  font-weight: 4000;
+  font-size: 100px;
+  font-family: 'Arial', sans-serif !important;
+  z-index: 1;
+  transition: 0.5s;
+  backdrop-filter: blur(15px);
+}
+
+.home-button-container .home-button-btn:hover a {
+  letter-spacing: 3px;
+}
+
+.home-button-container .home-button-btn a::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to left, rgba(255, 255, 255, 0.15), transparent);
+  transform: skewX(45deg) translate(0);
+  transition: 0.5s;
+  filter: blur(0px);
+}
+
+.home-button-container .home-button-btn:hover a::before {
+  transform: skewX(45deg) translate(200px);
+}
+
+.home-button-container .home-button-btn::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translatex(-50%);
+  bottom: -5px;
+  width: 30px;
+  height: 10px;
+  background: #e9521c;
+  border-radius: 10px;
+  transition: 0.5s;
+}
+
+.home-button-container .home-button-btn:hover::before {
+  bottom: 0;
+  height: 50%;
+  width: 80%;
+  border-radius: 30px;
+}
+
+.home-button-container .home-button-btn::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translatex(-50%);
+  top: -5px;
+  width: 30px;
+  height: 10px;
+  background: #e9521c;
+  border-radius: 10px;
+  transition: 0.5s;
+}
+
+.home-button-container .home-button-btn:hover::after {
+  top: 0;
+  height: 50%;
+  width: 80%;
+  border-radius: 30px;
+}
+
+.home-button-container .home-button-btn:nth-child(1)::before, .home-button-container .home-button-btn:nth-child(1)::after {
+  background: #e9521c;
+  box-shadow: 0 0 5px #e9521c, 0 0 15px #e9521c, 0 0 30px #e9521c,
+  0 0 60px #e9521c;
+}
+/* Button */

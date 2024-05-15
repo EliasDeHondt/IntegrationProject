@@ -1,7 +1,33 @@
 ﻿@{
+    Layout = null;
     ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome To CodeForge</h1>
-</div>
+<!DOCTYPE html>
+<!--Author Elias De Hondt-->
+<html class="h-100" lang="">
+<head>
+    <!--Meta + Title-->
+    <title>@ViewData["Title"]</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!--Meta + Title-->
+    <!--CSS-->
+    <link rel="stylesheet" href="~/dist/site.css"/>
+    <!--CSS-->
+</head>
+<body class="kiosk-background-colors-scheme kiosk-body overflow-hidden">
+    <div class="home-top-center">
+        <h1>Welcome to CodeForge</h1>
+        <p>Let's get started, shall we?</p>
+    </div>
+    <div class="home-top-right">
+        <img class="home-logo" src="~/favicon.ico" alt="CodeForge Logo"/>
+    </div>
+    <div class="home-center-center">
+	    <div class="home-button-container">
+		    <div class="home-button-btn"><a asp-area="Identity" asp-page="/Account/Login">Go for it</a></div>
+        </div>
+    </div>
+</body>
+</html>
