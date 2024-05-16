@@ -215,4 +215,32 @@ public class FlowRepository
         var a =  namesPerFlow.Select(count => count.ToString()).ToArray();
         return a;
     }
+
+    public Flow ReadFlowByName(string flowName)
+    {
+        return _context.Flows
+            .AsNoTracking()
+            .First(flow => flow.Theme.Subject == flowName);
+    }
+    public string[] GetQuestionCountsForFlow(string flowName)
+    {
+        var flow = ReadFlowByName(flowName);
+        var questionNamesPerFlow = new List<string>();
+
+        foreach (var q in ReadQuestionsFromFlow(flow.Id))
+        {
+            var qsCount = ReadQuestionsFromFlow(flow.Id);
+            var v = qsCount.Count();
+            questionNamesPerFlow.Add(v);
+        }
+        var a =  questionNamesPerFlow.Select(count => count.ToString()).ToArray();
+        return a;
+    }
+    
+    public List<QuestionStep> ReadQuestionsFromFlow(long flowId)
+    {
+        return _context.QuestionSteps
+            .Include(qs => qs.QuestionBase).Where(a => a.Flow.Id == flowId)
+            .ToList();
+    }
 }

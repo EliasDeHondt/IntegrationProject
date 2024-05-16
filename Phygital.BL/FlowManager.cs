@@ -130,4 +130,8 @@ public class FlowManager
     {
         return _repository.GetNamesPerFlow();
     }
+    public string[] GetQuestionCountsForFlow(string flowName)
+    {
+        return _repository.GetQuestionCountsForFlow(flowName);
+    }
 }

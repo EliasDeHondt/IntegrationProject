@@ -10,16 +10,13 @@
 <head>
     <link rel="stylesheet" href="~/dist/site.css"/>
     <style>
-        #chart-container {
-          /*width: 800px; */
-          /*height: 800px;*/
-          margin: 0 auto;
+        .chart-container {
           display: flex;
-          flex-wrap: wrap;
           padding-left: 20px;
         }
         canvas {
           width: 900px;
+          padding: 40px;
           /*height: 80px;*/
          /*font-size: 30px; werkt niet*/
         }
@@ -27,19 +24,27 @@
         /*    font-size: 30px; !* Adjust the font size as desired *!*/
         /*    font-weight: bold; !* Optionally adjust other font properties *!*/
         /*}*/
+        #container-selectFlow {
+        padding-left: 40px !important;
+        }
+        
+        
     </style>
 </head>
 <body class="row h-100 w-100">
 <div class="text-center col-lg-10">
     <div class="d-flex justify-content-center align-items-center">
-        <h1>FLOWS STATISTICS</h1>
+        <h2>FLOWS STATISTICS</h2>
     </div>
 
-    <div id="chart-container">
+    <div class="chart-container">
         <div>
             <canvas id="barChart"></canvas>
+        </div>
+        <div>
             <canvas id="lineChart"></canvas>
         </div>
+        
         @* <div> *@
         @*     <canvas id="doughnutChart"></canvas> *@
         @* </div> *@
@@ -49,14 +54,18 @@
     </div>
     
     <div class="d-flex justify-content-center align-items-center">
-        <h1>FLOW STATISTICS</h1>
+        <h2>FLOW STATISTICS</h2>
     </div>
-    <div class="kiosk-container-top-left">
+    <div id="container-selectFlow">
+    <div class="kiosk-container-top-left" >
         <label class="d-flex flex-column">
-            Select a Flow
-            <select multiple id="selectFlow">
+            @* </div> *@
+            @*     <label> *@
+            <p style="color: aliceblue">Select a Flow to get it's specific statistics.</p>
+            <select id="selectFlow">
             </select>
         </label>
+    </div>
     </div>
     <div id="chart-container">
         <div>
