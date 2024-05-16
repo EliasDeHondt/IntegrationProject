@@ -225,7 +225,7 @@ public class FlowRepository
     public string[] GetQuestionCountsForFlow(string flowName)
     {
         var flow = ReadFlowByName(flowName);
-        var questionNamesPerFlow = new List<string>();
+        var questionNamesPerFlow = new List<int>();
 
         foreach (var q in ReadQuestionsFromFlow(flow.Id))
         {
