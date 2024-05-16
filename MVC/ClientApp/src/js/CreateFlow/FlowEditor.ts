@@ -432,7 +432,8 @@ async function GetNewFlowData(flow: Flow): Promise<Flow> {
             id: step.id,
             stepNumber: step.stepNumber,
             informationViewModel: step.informationViewModel,
-            questionViewModel: step.questionViewModel
+            questionViewModel: step.questionViewModel,
+            notes: step.notes
         };
 
         if (step.questionViewModel && step.questionViewModel.questionType !== "OpenQuestion") {

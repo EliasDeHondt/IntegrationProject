@@ -3,6 +3,7 @@ export interface Step {
     stepNumber: number;
     informationViewModel: Information[];
     questionViewModel: Question;
+    notes: Note[];
 }
 
 export interface Information {
@@ -22,4 +23,9 @@ export interface Choice {
     id: number;
     text: string;
     nextStepId?: number;
+}
+
+export interface Note {
+    id: number;
+    textfield: string;
 }

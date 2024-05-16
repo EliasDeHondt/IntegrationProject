@@ -1,6 +1,7 @@
 ﻿using Business_Layer;
 using Domain.ProjectLogics;
 using Microsoft.AspNetCore.Mvc;
+using MVC.Models;
 using MVC.Models.projectModels;
 
 namespace MVC.Controllers.API;
@@ -124,5 +125,20 @@ public class ProjectsController : Controller
         _uow.Commit();
         
         return Created("CreateFlow", flow);
+    }
+
+    [HttpGet("GetNotesForProject/{projectId:long}")]
+    public IActionResult GetNotesForProject(long projectId)
+    {
+        var flows = _projectManager.GetNotesForProjectById(projectId);
+
+        return Ok(flows.Select(flow => new FlowViewModel
+        {
+            Id = flow.Id,
+            FlowType = flow.FlowType,
+            Steps = flow.Steps,
+            Participations = flow.Participations,
+            ThemeId = flow.Theme.Id
+        }));
     }
 }

@@ -148,7 +148,7 @@ public class StepRepository
     public Note CreateNote(StepBase step, string note)
     {
         var newNote = new Note(note);
-        _ctx.Steps.Find(step.Id)!.Notes.Add(new Note(note));
+        _ctx.Steps.Find(step.Id)!.Notes.Add(newNote);
         return newNote;
     }
 

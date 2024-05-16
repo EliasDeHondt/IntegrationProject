@@ -2,6 +2,7 @@ import {Project} from "../../Types/ProjectObjects";
 import {Flow} from "../../Flow/FlowObjects";
 import {showFlows} from "./CreateProjectFlowAPI";
 import {initializeDeleteButtons} from "../../CreateFlow/DeleteFlowModal";
+import {Note} from "../../Flow/Step/StepObjects";
 
 export function fillExisting(project: Project, inputTitle: HTMLInputElement, inputText: HTMLInputElement): void{
     inputTitle.value = project.title
@@ -54,10 +55,10 @@ export async function getProjectWithId(projectId: number): Promise<Project>{
 }
 export function getIdProject():number{
     let href = window.location.href;
-    let regex = RegExp(/\/Project\/ProjectPage\/(\d+)/).exec(href);
+    let regex = RegExp(/\/Project\/(ProjectPage|Notes)\/(\d+)/).exec(href);
 
     if (regex) {
-        return parseInt(regex[1], 10);
+        return parseInt(regex[2], 10);
     } else {
         console.error("Project ID not found in URL:", href);
         return 0;
@@ -108,4 +109,19 @@ export function resetFlowsProject(flows: Flow[], flowcontainer: HTMLDivElement){
         flowcontainer.children[i].remove();
     }
     showFlows(flows, "forProject",flowcontainer);
+}
+
+export async function loadNotesProject(id: number): Promise<Flow[]> {
+    return await fetch(`/api/Projects/GetNotesForProject/${id}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
+        .catch(error => console.error("Error:", error))
 }
