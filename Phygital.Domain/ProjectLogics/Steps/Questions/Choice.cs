@@ -13,10 +13,12 @@ namespace Domain.ProjectLogics.Steps.Questions;
 public class Choice
 {
     public long Id { get; set; }
-    [MaxLength(50)]
+    [MaxLength(150)]
     public string Text { get; set; }
     public ChoiceQuestionBase QuestionBase { get; set; }
     public ICollection<Selection> Selections { get; set; }
+    
+    public StepBase? NextStep { get; set; }
 
     public Choice(string text, ChoiceQuestionBase questionBase, ICollection<Selection> selections, long id = 0)
     {
@@ -24,6 +26,15 @@ public class Choice
         Text = text;
         QuestionBase = questionBase;
         Selections = selections;
+    }
+
+    public Choice(string text, ChoiceQuestionBase questionBase, StepBase nextStep, long id = 0)
+    {
+        Id = id;
+        Text = text;
+        QuestionBase = questionBase;
+        Selections = new List<Selection>();
+        NextStep = nextStep;
     }
 
     public Choice(string text, ChoiceQuestionBase questionBase, long id = 0)

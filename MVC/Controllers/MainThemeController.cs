@@ -6,6 +6,8 @@
  ***************************************/
 
 using Business_Layer;
+using Domain.Accounts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MVC.Controllers;
@@ -19,11 +21,7 @@ public class MainThemeController : Controller
         _manager = manager;
     }
 
-    public IActionResult MainThemes()
-    {
-        return View();
-    }
-
+    [Authorize(Roles = UserRoles.ProjectPermission)]
     public IActionResult MainTheme(long id)
     {
         var mainTheme = _manager.GetMainThemeById(id);

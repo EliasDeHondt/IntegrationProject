@@ -2,7 +2,9 @@ using System.Collections;
 using Business_Layer;
 using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics;
+using Domain.ProjectLogics.Steps;
 using Microsoft.AspNetCore.Mvc;
+using MVC.Models;
 using Microsoft.AspNetCore.SignalR;
 using MVC.Models;
 
@@ -13,12 +15,14 @@ namespace MVC.Controllers.API;
 public class FlowsController : Controller
 {
     private readonly FlowManager _manager;
-    private readonly IHubContext<FacilitatorHub> _hub;
+    private readonly StepManager _stepManager;
+    private readonly UnitOfWork _uow;
 
-    public FlowsController(FlowManager manager, IHubContext<FacilitatorHub> hubContext)
+    public FlowsController(FlowManager manager, StepManager stepManager, UnitOfWork uow)
     {
         _manager = manager;
-        _hub = hubContext;
+        _stepManager = stepManager;
+        _uow = uow;
     }
 
     [HttpPost("SetRespondentEmail/{flowId:int}/{inputEmail}")]
@@ -41,6 +45,36 @@ public class FlowsController : Controller
             flow.State = flowState;
         _manager.ChangeFlowState(flow);
         
+        return NoContent();
+    }
+
+    [HttpGet("{id}")]
+    public IActionResult GetFlow(long id)
+    {
+        var flow = _manager.GetFlowById(id);
+
+        if (flow == null)
+            return NotFound();
+
+        return Ok(new FlowViewModel
+        {
+            FlowType = flow.FlowType,
+            Id = flow.Id,
+            Participations = flow.Participations,
+            Steps = flow.Steps
+        });
+    }
+
+    [HttpPut("/{flowId}/Update")]
+    public IActionResult UpdateFlow(long flowId, [FromBody] FlowViewModel model)
+    {
+        var flow = _manager.GetFlowById(flowId);
+        
+        _uow.BeginTransaction();
+        flow.Steps = model.Steps.ToList();
+        _manager.UpdateFlow(flow);
+        _uow.Commit();
+
         return NoContent();
     }
     
@@ -97,4 +131,19 @@ public class FlowsController : Controller
             ThemeId = flow.Theme.Id
         });
     }
+
+    [HttpGet("GetFlowsForProject/{id}")]
+    public IActionResult GetFlowsForProject(long id)
+    {
+        var flows = _manager.GetFlowsByProject(id);
+        return Ok(flows.Select(flow => new FlowViewModel
+        {
+            Id = flow.Id,
+            FlowType = flow.FlowType,
+            Steps = flow.Steps,
+            Participations = flow.Participations,
+            ThemeId = flow.Theme.Id
+        }));
+    }
+    
 }

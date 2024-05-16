@@ -12,10 +12,12 @@ public class SharedPlatformsController : Controller
 {
 
     private readonly SharedPlatformManager _sharedPlatformManager;
+    private readonly UnitOfWork _uow;
 
-    public SharedPlatformsController(SharedPlatformManager sharedPlatformManager)
+    public SharedPlatformsController(SharedPlatformManager sharedPlatformManager, UnitOfWork uow)
     {
         _sharedPlatformManager = sharedPlatformManager;
+        _uow = uow;
     }
 
 
@@ -31,4 +33,21 @@ public class SharedPlatformsController : Controller
             Logo = p.Logo
         }));
     }
+    
+    [HttpPost]
+    [Authorize(Roles = UserRoles.SystemAdmin)]
+    public IActionResult CreateSharedPlatform(SharedPlatformDto sharedPlatformDto)
+    {
+        _uow.BeginTransaction();
+        var newPlatform = _sharedPlatformManager.AddSharedPlatform(sharedPlatformDto.OrganisationName, sharedPlatformDto.Logo);
+        var platformDto = new SharedPlatformDto
+        {
+            Id = newPlatform.Id,
+            OrganisationName = newPlatform.OrganisationName,
+            Logo = newPlatform.Logo
+        };
+        _uow.Commit();
+        return Created($"/api/SharedPlatforms/{platformDto.Id}", platformDto);
+    }
+    
 }

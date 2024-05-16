@@ -1,41 +1,52 @@
 ﻿@{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    Layout = null;
+    ViewData["Title"] = $"Facilitator";
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<!--Author Elias De Hondt-->
+<html class="h-100" lang="">
 <head>
-    <title>title</title>
+    <!--Meta + Title-->
+    <title>@ViewData["Title"]</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!--Meta + Title-->
+    <!--CSS-->
+    <link rel="stylesheet" href="~/dist/site.css"/>
+    <!--CSS-->
 </head>
-<body>
-<div class="text-center">
-    <partial name="Partials/_ConnectPartial"/>
-    <div>
-        <div>
-            <h1>Connection #<span id="connectionCode"></span></h1>
-            <button class="btn btn-secondary" id="btnCloseInstallation">Disconnect</button>
-        </div>
-        <div class="card" id="cardCurrentFlow">
-            <div class="card-header">Current flow</div>
-            <div class="card-body">
-                <h2 class="card-title">Flow <span id="currentFlow"></span></h2>
-                <p class="card-text">State: <span id="currentState"></span></p>
-            </div>
-            <div class="card-footer">
-                <button class="btn btn-secondary" id="btnPauseFlow">Pause flow</button>
-                <button class="btn btn-secondary" id="">Take notes</button>
-            </div>
+<body class="kiosk-background-colors-scheme facilitator-body overflow-hidden">
+<div class="facilitator-top-center">
+    <div class="facilitator-container-top-center">
+        <h1>Connection Kiosk: <span id="connectionCode"></span></h1>
+        <button class="facilitator-button-step-control" id="btnCloseInstallation">Disconnect</button>
+        <br/>
+        <br/>
+        <div class="facilitator-input-container">
+            <input class="facilitator-input-code" type="text" id="inputCode" placeholder="Connect to Phygital kiosk (code)">
+            <button class="facilitator-invite-btn" type="submit" id="btnEnterCode">Send</button>
         </div>
     </div>
-    <div>
-        <div>
-            <partial name="Partials/_FlowPartial"/>
+</div>
+<partial name="Modals/FlowTypeModal"/>
+<div class="facilitator-center-center" id="cardCurrentFlow">
+    <div class="facilitator-container-center-center">
+        <p>Current flow: <span id="currentFlow"></span></p>
+        <p>State: <span id="currentState"></span></p>
+        <div class="card-footer">
+            <button class="facilitator-button-step-control" id="btnPauseFlow">Pause flow</button>
+            <button class="facilitator-button-step-control" id="">Take notes</button>
         </div>
+    </div>
+</div>
+<div class="facilitator-bottom-center">
+    <div class="facilitator-container-bottom-center">
+        <partial name="Partials/_FlowPartial"/>
     </div>
 </div>
 </body>
 </html>
-
+<!--JS-->
 <script src="~/dist/facilitator.entry.js" defer></script>
-<link rel="stylesheet" href="~/dist/site.css"/>
+<!--JS-->

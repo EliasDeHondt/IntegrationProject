@@ -10,8 +10,6 @@ using MVC;
 
 var builder = WebApplication.CreateBuilder(args);
 
-CreateFavicon();
-
 var startup = new Startup(builder.Configuration);
 
 startup.ConfigureServices(builder.Services);
@@ -24,12 +22,3 @@ app.Run();
 
 // Statistic a = new Statistic();
 // a.testPacket();
-
-return;
-
-
-void CreateFavicon()
-{
-    byte[] bytes = Convert.FromBase64String(ImageUrls.Favicon);
-    File.WriteAllBytes("./wwwroot/favicon.ico", bytes);
-}

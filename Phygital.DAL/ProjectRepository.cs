@@ -28,7 +28,7 @@ public class ProjectRepository
     public Project ReadProject(long id)
     {
         return _ctx.Projects
-            .First(proj => proj.Id == id);
+            .Single(proj => proj.Id == id);
     }
 
     public IEnumerable<Project> ReadAllProjectsForSharedPlatformIncludingMainTheme(long platformId)
@@ -42,20 +42,19 @@ public class ProjectRepository
 
     public void CreateProjectOrganizer(ProjectOrganizer projectOrganizer)
     {
-        if (_ctx.ProjectOrganizers.Where(organizer =>
-                organizer.Project.Id == projectOrganizer.Project.Id &&
-                organizer.Facilitator.Id == projectOrganizer.Facilitator.Id).ToList().Count ==
+        if (_ctx.ProjectOrganizers.Count(organizer => organizer.Project.Id == projectOrganizer.Project.Id &&
+                                                      organizer.Facilitator.Id == projectOrganizer.Facilitator.Id) ==
             0) _ctx.ProjectOrganizers.Add(projectOrganizer);
     }
 
     public IEnumerable<Project> ReadPossibleProjectsForFacilitator(string email)
     {
-        var projects = _ctx.Projects
+        var project = _ctx.Projects
             .Include(p => p.MainTheme)
+            .Where(p => !_ctx.ProjectOrganizers.Any(po => po.Project.Id == p.Id && po.Facilitator.Email == email))
             .ToList();
-        var assignedProjects = ReadAssignedProjectsForFacilitator(email);
-
-        return projects.Except(assignedProjects).ToList();
+        
+        return project.ToList();
     }
 
     public IEnumerable<Project> ReadAssignedProjectsForFacilitator(string email)
@@ -68,11 +67,11 @@ public class ProjectRepository
             .ToList();
     }
 
-    public void RemoveProjectOrganizer(Facilitator user, Project project)
+    public void DeleteProjectOrganizer(Facilitator user, Project project)
     {
         var projectOrganizer =
-            _ctx.ProjectOrganizers.FirstOrDefault(po => po.Facilitator == user && po.Project == project);
-        _ctx.ProjectOrganizers.Remove(projectOrganizer!);
+            _ctx.ProjectOrganizers.Single(po => po.Facilitator == user && po.Project == project);
+        _ctx.ProjectOrganizers.Remove(projectOrganizer);
     }
 
     public void CreateProject(MainTheme mainTheme, SharedPlatform sharedPlatform, long id)
@@ -88,14 +87,14 @@ public class ProjectRepository
         _ctx.SaveChanges();
     }
 
-    public IEnumerable<Project> ProjectCount()
+    public IEnumerable<Project> ReadProjectCount()
     {
         return _ctx.Projects;
     }
 
     public Project ReadProjectWithId(long id)
     {
-        return _ctx.Projects.Find(id);
+        return _ctx.Projects.Find(id)!;
     }
 
     public Project ReadProjectIncludingSharedPlatformAndMainTheme(long id)
@@ -104,7 +103,7 @@ public class ProjectRepository
             .AsNoTracking()
             .Include(project => project.SharedPlatform)
             .Include(project => project.MainTheme)
-            .First(project => project.Id == id);
+            .Single(project => project.Id == id);
     }
 
     public void UpdateProject(long id, string title, string description)
@@ -119,6 +118,20 @@ public class ProjectRepository
         return _ctx.Projects
             .AsNoTracking()
             .Include(project => project.MainTheme)
-            .First(project => project.MainTheme.Id == id);
+            .Single(project => project.MainTheme.Id == id);
+    }
+
+    public IEnumerable<Flow> ReadFlowsForProjectById(long projectId)
+    {
+        return _ctx.Flows.Where(project => project.Theme.Id == projectId); //todo
+    }
+
+    public Flow CreateFlowForProject(FlowType type, long themeId)
+    {
+        var theme = _ctx.MainThemes.Find(themeId)!;
+        var flow = new Flow(type, theme);
+        _ctx.Flows.Add(flow);
+
+        return flow;
     }
 }

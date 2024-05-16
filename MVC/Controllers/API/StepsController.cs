@@ -10,6 +10,7 @@ using System.Text.Json.Serialization;
 using Business_Layer;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
+using Domain.ProjectLogics.Steps.Information;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 
@@ -30,11 +31,19 @@ public class StepsController : Controller
     public ActionResult GetNextStep(int stepNumber, long flowId)
     {
         StepBase stepBase = _manager.GetStepForFlowByNumber(flowId, stepNumber);
-        
+
         var stepViewModel = StepModelFactory.CreateStepViewModel<StepViewModel, StepBase>(stepBase);
-        
+
         return Ok(stepViewModel);
-        
     }
-    
+
+    [HttpGet("GetConditionalNextStep/{stepId:long}")]
+    public ActionResult GetConditionalNextStep(long stepId)
+    {
+        StepBase stepBase = _manager.GetStepById(stepId);
+
+        var stepViewModel = StepModelFactory.CreateStepViewModel<StepViewModel, StepBase>(stepBase);
+
+        return Ok(stepViewModel);
+    }
 }

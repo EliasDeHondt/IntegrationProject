@@ -29,10 +29,9 @@ butConfirmDeleteFlow.onclick = () => {
         .then(() => {
             GetFlows(0);
             deleteFlowModal.hide();
-    });
+        });
 }
 
 butCancelDeleteFlowModal.onclick = () => {
     deleteFlowModal.hide();
 }
-

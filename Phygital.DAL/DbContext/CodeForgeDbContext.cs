@@ -37,6 +37,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Text> Texts { get; set; } = null!;
     public DbSet<Image> Images { get; set; } = null!;
     public DbSet<Video> Videos { get; set; } = null!;
+    public DbSet<Hyperlink> Hyperlinks { get; set; } = null!;
     public DbSet<Participation> Participations { get; set; } = null!;
     public DbSet<Answer> Answers { get; set; } = null!;
     public DbSet<Choice> Choices { get; set; } = null!;
@@ -89,15 +90,23 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         builder.Entity<RangeQuestion>().HasBaseType<ChoiceQuestionBase>();
         
         builder.Entity<Note>(entity => entity.Property(e => e.Textfield).IsRequired().HasMaxLength(15000));
-        builder.Entity<Image>(entity => entity.Property(e => e.Base64).IsRequired().HasMaxLength(65000));
+        builder.Entity<Image>(entity => entity.Property(e => e.Base64).IsRequired().HasMaxLength(10485759));
         builder.Entity<Text>(entity => entity.Property(e => e.InformationText).IsRequired().HasMaxLength(600));
         builder.Entity<Video>(entity => entity.Property(e => e.FilePath).IsRequired().HasMaxLength(200));
         builder.Entity<OpenQuestion>(entity => entity.Property(e => e.TextField).IsRequired().HasMaxLength(600));
         builder.Entity<QuestionBase>(entity => entity.Property(e => e.Question).IsRequired().HasMaxLength(600));
-        builder.Entity<QuestionBase>(entity => entity.Property(e => e.Question).IsRequired().HasMaxLength(600));
-        builder.Entity<Choice>(entity => entity.Property(e => e.Text).IsRequired().HasMaxLength(50));
+        builder.Entity<Choice>(entity => entity.Property(e => e.Text).IsRequired().HasMaxLength(150));
         builder.Entity<ThemeBase>(entity => entity.Property(e => e.Subject).IsRequired().HasMaxLength(600));
-        builder.Entity<SharedPlatform>(entity => entity.Property(e => e.Logo).IsRequired().HasMaxLength(65000));
+        builder.Entity<SharedPlatform>(entity => entity.Property(e => e.Logo).IsRequired().HasMaxLength(10485759));
+        builder.Entity<SharedPlatform>(entity => entity.Property(e => e.PrivacyLink).IsRequired().HasMaxLength(150));
+        builder.Entity<SharedPlatform>(entity => entity.Property(e => e.OrganisationLink).IsRequired().HasMaxLength(150));
+        builder.Entity<SharedPlatform>(entity => entity.Property(e => e.OrganisationName).IsRequired().HasMaxLength(150));
+        builder.Entity<Project>(entity => entity.Property(e => e.Title).IsRequired().HasMaxLength(50));
+        builder.Entity<Project>(entity => entity.Property(e => e.Description).IsRequired().HasMaxLength(600));
+        builder.Entity<Project>(entity => entity.Property(e => e.Image).HasMaxLength(10485759));
+        builder.Entity<OpenAnswer>(entity => entity.Property(e => e.Answer).IsRequired().HasMaxLength(300));
+        builder.Entity<Hyperlink>(entity => entity.Property(e => e.URL).IsRequired().HasMaxLength(600));
+        builder.Entity<Respondent>(entity => entity.Property(e => e.Email).IsRequired().HasMaxLength(320));
         
         builder.Entity<ChoiceAnswer>()
             .HasMany(a => a.Answers)

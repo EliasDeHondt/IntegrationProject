@@ -10,7 +10,47 @@
   right: 0;
   border-radius: 10px;
 }
-
+.forSubtheme{
+  width: 200px;
+  height: 700px;
+}
+.flow-card {
+  background-color: map-get($themes, light, primary);
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  margin: .5em;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+.forProject {
+  width: 200px;
+  height: 300px;
+}
 .flow-card-delete-btn:hover {
   background-color: hsl(12, 100%, 45%);
+}
+
+.flow-card-view-btn {
+  position: absolute;
+  left: 0;
+  border-radius: 10px;
+}
+
+.flow-card-view-btn:hover {
+  background-color: map-get($themes, light, accent)
+}
+
+#viewFlow {
+  position: relative;
+  left: 0;
+  border-radius: 5px;
+  border: thin black solid;
+}
+
+#viewFlow:hover {
+  background-color: map-get($themes, light, secondary);
 }

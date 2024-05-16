@@ -1,37 +1,51 @@
 @{
-    Layout = "_Layout";
+    Layout = "_NavLayout";
     ViewData["Title"] = "Flow Editor";
 }
 
 <!DOCTYPE html>
 
-<html lang="">
+<html lang="" class="h-100 w-100 overflow-hidden">
 <head>
     <title>Flow Editor</title>
     <link rel="stylesheet" href="~/dist/site.css"/>
 </head>
-<body>
+<body class="row h-100 w-100">
+<div class="text-center col-lg-10">
+    <div class="row container-content-body">
+       <div class="container-sm editor-shared-outer-container" id="input-container">
+           <div class="editor-shared-inner-container" id="btn-area-1">
+               <button class="btn-primary bhover" id="saveFlow" style="border-radius: 5px; margin-right: 10px; padding-bottom: 135px; margin-top: 5px">Save Flow</button>
+           </div>
+           <div class="editor-shared-inner-container" id="btn-area-2" style="display: flex; flex-direction: row; align-items: flex-start;">
+               <button class="btn btn-primary bhover" id="viewFlow" style="width: 150px; height: 150px; margin-right: 850px; border-radius: 5px; padding-top: 50px; padding-bottom: 40px;">
+                   <i class="bi bi-eye-fill"></i>
+                   <p style="font-size: 20px">View Flow</p>
+               </button>
+               
+               <button class="btn-primary btn-add-element bhover" id="btn-add-choice" style="width: 150px; height: 150px; margin-right: 10px; border-radius: 5px; padding-top: 50px; padding-bottom: 40px;">Add choice</button>
+               <button class="btn-primary btn-add-element bhover" id="btn-add-text" style="width: 150px; height: 150px; margin-right: 10px; border-radius: 5px; padding-top: 50px; padding-bottom: 40px;">Add Text</button>
+               <button class="btn-primary btn-add-element bhover" id="btn-add-image" style="width: 150px; height: 150px; margin-right: 10px; border-radius: 5px; padding-top: 50px; padding-bottom: 40px;">Add Image</button>
+               <button class="btn-primary btn-add-element bhover" id="btn-add-video" style="width: 150px; height: 150px; border-radius: 5px; padding-top: 50px; padding-bottom: 40px;">Add Videos</button>
+               <button class="btn-primary btn-add-element bhover" id="btn-add-hyperlink" style="width: 150px; height: 150px; margin-left: 10px; border-radius: 5px; padding-top: 50px; padding-bottom: 40px;">Add Link</button>
+           </div>
 
-<div class="container-sm editor-shared-outer-container" id="input-container">
-    <div class="editor-shared-inner-container" id="btn-area-1">
-        <button class="btn-primary" id="saveFlow">Save Flow</button>
-    </div>
-    <div class="editor-shared-inner-container" id="btn-area-2">
-        
-    </div>
-</div>
+       </div>
 
-<div class="container-lg editor-shared-outer-container" id="step-view">
-    <div class="editor-shared-inner-container" id="step-view-container"> <!--Wordt automatisch gevuld in FlowEditor.ts!-->
-        <div id="partialInformationContainer"></div>
-        <div id="partialQuestionContainer"></div>
-    </div>
-</div>
 
-<div class="container-sm editor-shared-outer-container" id="step-container">
-    <div class="editor-shared-inner-container" id="steps-list"> <!--Wordt automatisch gevuld in FlowEditor.ts!-->
+        <div class="container-lg editor-shared-outer-container" id="step-view">
+            <div class="editor-shared-inner-container" id="step-view-container"> <!--Wordt automatisch gevuld in FlowEditor.ts!-->
+                <div id="partialInformationContainer"></div>
+                <div id="partialQuestionContainer"></div>
+            </div>
+        </div>
+
+        <div class="container-sm editor-shared-outer-container" id="step-container">
+            <div class="editor-shared-inner-container" id="steps-list"> <!--Wordt automatisch gevuld in FlowEditor.ts!-->
+            </div>
+            <button class="btn-primary" id="btn-add-step">Add Step</button>
+        </div>
     </div>
-    <button class="btn-primary" id="btn-add-step">Add Step</button>
 </div>
 
 </body>
@@ -43,3 +57,4 @@
 }
 
 <partial name="Modals/CreateStepModal"/>
+<partial name="Modals/ViewFlowModal"/>

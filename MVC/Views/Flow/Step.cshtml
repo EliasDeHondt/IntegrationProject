@@ -23,41 +23,49 @@
 <div class="modal" id="pausedFlowModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-body">
-                Flow paused by facilitator!
-            </div>
+            <div class="modal-body">Flow paused by facilitator!</div>
         </div>
     </div>
 </div>
 <div class="kiosk-top-left">
-    <div class="kiosk-container-top-left">
-        <h1><span id="flowtype">@Model.FlowType.ToString()</span> Flow <span id="flowId">@Model.Id</span> - Step <span id="stepNr"></span> / <span id="stepTotal">@Model.getStepCount()</span></h1>
-        <p>Theme <span id="theme">@Model.Theme.Id</span> - @Model.Theme.Subject</p>
+    <div id="topLeft" class="kiosk-container-top-left">
+        <h1 class="digital-element"><span id="flowtype" class="digital-element">@Model.FlowType.ToString()</span> Flow <span id="flowId" class="digital-element">@Model.Id</span> - Step <span id="stepNr" class="digital-element"></span> / <span id="stepTotal">@Model.getStepCount()</span></h1>
+        <div class="digital-element" id="themeDiv">Theme <span id="theme">@Model.Theme.Id</span> - @Model.Theme.Subject</div>
     </div>
 </div>
 <div class="kiosk-top-right">
     <img class="kiosk-logo-img" src="/favicon.ico" alt="Logo"/>
 </div>
-<div class="kiosk-center-center">
-    <div class="kiosk-container-center-center">
+<div id="kioskCenter" class="kiosk-center-center">
+    <div id="kioskContainerCenter" class="kiosk-container-center-center col">
         <div>
-            <div id="informationContainer"></div>
-            <div id="questionContainer"></div>
+            <div id="informationContainer" class="row"></div>
+            <div id="questionContainer" class="row"></div>
+            <div id="webcamDiv" class="visually-hidden row">
+                <div class="col">
+                        <video id="vidInput" class="m-auto" style="position: absolute; z-index: 0; width: 640px; height: 480px; left: 32.684%;"></video>
+                        <canvas id="canvasDetection" class="m-auto" style="position: absolute; z-index: 1; left: 32.684%;"></canvas>
+                        <canvas id="canvasChoices" class="m-auto" style="position: absolute; z-index: 2; left: 32.684%;"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <div class="kiosk-bottom-left">
-    <div class="kiosk-container-bottom-left">
+    <div class="kiosk-container-bottom-left digital-element">
         <button class="kiosk-button-step-control" id="btnNextStep">Next step</button>
         <button class="kiosk-button-step-control" id="btnRestartFlow">Restart flow</button>
     </div>
+    <div id="timer" class="kiosk-container-bottom-left visually-hidden">
+
+    </div>
 </div>
 <div class="kiosk-bottom-center">
-    <div class="kiosk-container-bottom-center">
+    <div class="kiosk-container-bottom-center digital-element">
         &copy; @DateTime.Now.Year - CodeForge - <a asp-area="" asp-controller="Home" asp-action="PrivacyPolicy">Privacy Policy</a> - <a asp-area="" asp-controller="Home" asp-action="LegalGuidelines">Legal Guidelines</a>
     </div>
 </div>
-<div class="kiosk-bottom-right">
+<div class="kiosk-bottom-right digital-element">
     <div class="kiosk-container-bottom-right">
         <div class="kiosk-input-container">
             <input class="kiosk-input-email" id="inputEmail" type="email" placeholder="Enter email for more info...">
@@ -69,6 +77,5 @@
 </body>
 </html>
 <!--JS-->
-<script src="/dist/step.entry.js" defer></script>
 <script src="/dist/flow.entry.js" defer></script>
 <!--JS-->

@@ -6,6 +6,8 @@
  ***************************************/
 
 using Business_Layer;
+using Domain.Accounts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MVC.Controllers;
@@ -19,6 +21,7 @@ public class SubThemeController : Controller
         _manager = manager;
     }
     
+    [Authorize(Roles = UserRoles.ProjectPermission)]
     public IActionResult SubTheme(long id)
     {
         var subTheme = _manager.GetSubThemeByIdWithMainThemeAndProject(id);

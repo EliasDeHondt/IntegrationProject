@@ -26,36 +26,35 @@ public class FlowManager
     //This function makes a GLOBAL Flow, not project specific!
     public Flow Add(FlowType type)
     {
-
         Flow newFlow = new Flow
         {
             FlowType = type
         };
 
-        _repository.AddFlow(newFlow);
+        _repository.CreateFlow(newFlow);
 
         return newFlow;
     }
-    
+
     public Flow GetFlowById(long id)
     {
         return _repository.ReadFlowById(id);
     }
 
     /** Returns all steps in the given flow.
-     * 
+     *
      * parameter: flowId -> The ID of the flow from which we are getting the steps.
-     */ 
-    public IEnumerable<StepBase> GetAllStepsInFlow(long flowId)
+     */
+    public IEnumerable<StepBase> GetAllStepsFromFlow(long flowId)
     {
-        return _repository.GetAllSteps(flowId);
+        return _repository.ReadAllStepsFromFlow(flowId);
     }
 
     public Flow GetFlowByIdWithTheme(long id)
     {
         return _repository.ReadFlowByIdIncludingTheme(id);
     }
-    
+
     public IEnumerable<Flow> GetAllFlows()
     {
         return _repository.ReadAllFlows();
@@ -70,10 +69,10 @@ public class FlowManager
     {
         return _repository.ReadAllFlowsWithTheme();
     }
-    
-    public void SetParticipationByFlow(long flowId,string email)
+
+    public void SetParticipationByFlow(long flowId, string email)
     {
-        _repository.AddParticipationByFlow(flowId,email);
+        _repository.CreateParticipationByFlow(flowId, email);
     }
 
     public void ChangeFlowState(Flow flow)
@@ -81,40 +80,52 @@ public class FlowManager
         _repository.UpdateFlowState(flow);
     }
 
-    public StepBase AddStep(long flowId, int stepNumber, string stepType)
+    public StepBase CreateStep(long flowId, int stepNumber, string stepType)
     {
         Flow flow = _repository.ReadFlowById(flowId);
-
-        //InformationStep stepI = null;
+        
         StepBase step = null;
         switch (stepType)
         {
-            case "Information": step = new InformationStep(stepNumber, new Text(),flow);
-                step.StepName = "Information"; break;
+            case "Information": step = new InformationStep(stepNumber, new List<InformationBase>(),flow);
+                break;
             case "Single Choice Question": 
                 SingleChoiceQuestion singleChoiceQuestion = new SingleChoiceQuestion(); 
                 step =  new QuestionStep(stepNumber,singleChoiceQuestion,flow);
-                step.StepName = "Single Choice Question"; break;
+                break;
             case "Multiple Choice Question":
                 MultipleChoiceQuestion multipleChoiceQuestion = new MultipleChoiceQuestion(); 
-                step =  new QuestionStep(stepNumber,multipleChoiceQuestion,flow); step.StepName = "Multiple Choice Question"; break;
+                step =  new QuestionStep(stepNumber,multipleChoiceQuestion,flow); 
+                break;
             case "Ranged Question":
                 RangeQuestion rangeQuestion = new RangeQuestion(); 
-                step =  new QuestionStep(stepNumber,rangeQuestion,flow); step.StepName = "Ranged Question"; break;
+                step =  new QuestionStep(stepNumber,rangeQuestion,flow);
+                break;
             case "Open Question": 
                 OpenQuestion openQuestion = new OpenQuestion(); 
-                step =  new QuestionStep(stepNumber,openQuestion,flow); step.StepName = "Open Question"; break;
+                step =  new QuestionStep(stepNumber,openQuestion,flow);
+                break;
         }
         
-        _repository.AddStepToFlow(flowId, step);
+        _repository.AddStepToFlow(flowId, step!);
 
-        return step;
+        return step!;
 
+    }
+
+    public void UpdateFlow(Flow flow)
+    {
+        _repository.UpdateSubTheme(flow);
     }
 
     public void DeleteFlowById(long flowId)
     {
         _repository.DeleteFlowById(flowId);
+    }
+
+    public IEnumerable<Flow> GetFlowsByProject(long id)
+    {
+        return _repository.ReadFlowsByProject(id);
     }
     
     

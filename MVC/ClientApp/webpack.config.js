@@ -19,7 +19,6 @@ module.exports = {
         facilitator: './src/js/Flow/Facilitator.ts',
         kiosk: './src/js/Kiosk/Kiosk.ts',
         flow: './src/js/Kiosk/Flow.ts',
-        flowCreator: './src/js/CreateFlow/FlowCreator.ts',
         deleteFlowModal: './src/js/CreateFlow/DeleteFlowModal.ts',
         deleteFlowAPI: './src/js/CreateFlow/API/DeleteFlowAPI.ts',
         flowEditor: './src/js/CreateFlow/FlowEditor.ts',
