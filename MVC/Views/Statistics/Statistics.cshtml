@@ -21,7 +21,7 @@
         canvas {
           width: 900px;
           /*height: 80px;*/
-         font-size: 30px;
+         /*font-size: 30px; werkt niet*/
         }
         /*#chart-container .chartjs-title {*/
         /*    font-size: 30px; !* Adjust the font size as desired *!*/
@@ -32,7 +32,7 @@
 <body class="row h-100 w-100">
 <div class="text-center col-lg-10">
     <div class="d-flex justify-content-center align-items-center">
-        <h1>STATISTICS</h1>
+        <h1>FLOWS STATISTICS</h1>
     </div>
 
     <div id="chart-container">
@@ -40,13 +40,32 @@
             <canvas id="barChart"></canvas>
             <canvas id="lineChart"></canvas>
         </div>
+        @* <div> *@
+        @*     <canvas id="doughnutChart"></canvas> *@
+        @* </div> *@
+        @* <div> *@
+        @*     <canvas id="radarChart"></canvas> *@
+        @* </div> *@
+    </div>
+    
+    <div class="d-flex justify-content-center align-items-center">
+        <h1>FLOW STATISTICS</h1>
+    </div>
+    <div class="kiosk-container-top-left">
+        <label class="d-flex flex-column">
+            Select a Flow
+            <select multiple id="selectFlow">
+            </select>
+        </label>
+    </div>
+    <div id="chart-container">
         <div>
-            <canvas id="doughnutChart"></canvas>
-        </div>
-        <div>
-            <canvas id="radarChart"></canvas>
+            <canvas id="barChart"></canvas>
+            <canvas id="lineChart"></canvas>
         </div>
     </div>
+     
+    
 </div>
 
 </body>

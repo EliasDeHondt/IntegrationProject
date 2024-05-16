@@ -122,6 +122,10 @@ public class FlowManager
     {
         return _repository.GetCountStepsPerFlow();
     }
+    public string[] GetCountParticipationsPerFlow()
+    {
+        return _repository.GetCountParticipationsPerFlow();
+    }
     public string[] GetNamesPerFlow()
     {
         return _repository.GetNamesPerFlow();

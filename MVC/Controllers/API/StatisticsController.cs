@@ -39,4 +39,11 @@ public class StatisticsController : Controller
 
         return Ok(flowCounts);
     }
+    [HttpGet("GetCountParticipationsPerFlow")]
+    public IActionResult GetCountParticipationsPerFlow()
+    {
+        var flowCounts = _manager.GetCountParticipationsPerFlow();
+
+        return Ok(flowCounts);
+    }
 }

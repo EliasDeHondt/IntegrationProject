@@ -158,6 +158,15 @@ public class FlowRepository
 
         return flow.Steps;
     }
+    public IEnumerable<Participation> GetAllParticipations(long flowId)
+    {
+        Flow flow = _context.Flows
+            .AsNoTracking()
+            .Include(flow => flow.Participations)
+            .First(flow => flow.Id == flowId);
+
+        return flow.Participations;
+    }
 
     public void AddStepToFlow(long flowId, StepBase step)
     {
@@ -177,6 +186,20 @@ public class FlowRepository
             stepsPerFlow.Add(v);
         }
         var a =  stepsPerFlow.Select(count => count.ToString()).ToArray();
+        return a;
+    }
+    public string[] GetCountParticipationsPerFlow()
+    {
+        var flows = ReadAllFlows();
+        var partPerFlow = new List<int>();
+
+        foreach (var flow in flows)
+        {
+            var partsCount = GetAllParticipations(flow.Id);
+            var v = partsCount.Count();
+            partPerFlow.Add(v);
+        }
+        var a =  partPerFlow.Select(count => count.ToString()).ToArray();
         return a;
     }
     public string[] GetNamesPerFlow()
