@@ -15,33 +15,57 @@ export function showNotes(flows: Flow[], notesContainer: HTMLDivElement) {
     notesContainer.innerHTML = "";
     if (flows.length > 0) {
         flows.forEach(flow => {
-            flow.steps.forEach(step => {
-                step.notes.forEach(note => {
-                    console.log(note);
-                    const noteDiv = document.createElement('div');
-                    noteDiv.classList.add("col");
+            const flowDiv = document.createElement('div');
+            flowDiv.classList.add("flow-note-container")
+            const flowTitle = document.createElement('h2');
+            flowTitle.classList.add("flow-note-title")
+            flowTitle.innerText = `Flow ${flow.id}`
 
-                    const noteCard = document.createElement('div');
-                    noteCard.classList.add("card")
+            flowDiv.appendChild(flowTitle)
 
-                    const noteCardBody = document.createElement('div');
+            const hasNotes = flow.steps.some(s => s.notes.length > 0);
 
-                    const title = document.createElement('h3');
-                    title.classList.add("card-title");
-                    title.innerText = `Flow ${flow.id} - Step ${step.stepNumber}`;
+            if (!hasNotes) {
+                const noteCard = document.createElement('div');
+                noteCard.classList.add("card", "note-card")
 
-                    const text = document.createElement('p');
-                    text.classList.add("card-text");
-                    text.innerHTML = `${note.textfield}`;
+                const noteCardBody = document.createElement('div');
+                noteCardBody.classList.add("note-card-body")
 
-                    noteCardBody.appendChild(title);
-                    noteCardBody.appendChild(text);
-                    noteCard.appendChild(noteCardBody);
-                    noteDiv.appendChild(noteCard);
+                const text = document.createElement('p');
+                text.classList.add("card-text", "note-card-text");
+                text.innerHTML = `There are no notes for this flow.`;
 
-                    notesContainer.appendChild(noteDiv);
-                })
-            })
+                noteCardBody.appendChild(text);
+                noteCard.appendChild(noteCardBody);
+                flowDiv.appendChild(noteCard);
+            } else {
+                flow.steps.forEach(step => {
+                        step.notes.forEach(note => {
+                            const noteCard = document.createElement('div');
+                            noteCard.classList.add("card", "note-card")
+
+                            const noteCardBody = document.createElement('div');
+                            noteCardBody.classList.add("note-card-body")
+
+                            const title = document.createElement('h3');
+                            title.classList.add("card-title", "note-card-title");
+                            title.innerText = `Step ${step.stepNumber}`;
+
+                            const text = document.createElement('p');
+                            text.classList.add("card-text", "note-card-text");
+                            text.innerHTML = `${note.textfield}`;
+
+                            noteCardBody.appendChild(title);
+                            noteCardBody.appendChild(text);
+                            noteCard.appendChild(noteCardBody);
+                            flowDiv.appendChild(noteCard);
+                        })
+                    }
+                )
+            }
+
+            notesContainer.appendChild(flowDiv);
         });
     }
 
