@@ -11,7 +11,7 @@ const doughnutCtx = document.getElementById('doughnutChart') as HTMLCanvasElemen
 const radarCtx = document.getElementById('radarChart') as HTMLCanvasElement;
 
 const selectFlow = document.getElementById("selectFlow") as HTMLSelectElement;
-var flows: Flow[] 
+var flowNames: string[] 
 function chartData(label: string, labels: string[], data: string[]) {
     //data for the chart
     return {
@@ -168,7 +168,12 @@ export async function GetCountParticipationsPerFlow(labels: string[]){
         .then(data => drawLineChart("Aantal Participations per Flow",chartData('Aantal Participations', labels, data)))
         .catch(error => console.error("Error:", error))
 }
-
+// function drawCharts(labels: string[],data: string[]){
+//     drawBarChart("Aantal Steps per Flow",chartData('Aantal Steps', labels, data))
+//     drawLineChart("Aantal Steps",chartData('Step types', labels, data))
+//     drawDoughnutChart("Aantal Steps",chartData('Step types', labels, data))
+//     drawRadarChart("Aantal Steps",chartData('Step types', labels, data))
+// }
 export async function GetNamesPerFlow(){
     console.log("Fetching flownames...")
     await fetch("/api/Statistics/GetNamesPerFlow", {
@@ -182,16 +187,13 @@ export async function GetNamesPerFlow(){
         .then(labels => {
             GetCountStepsPerFlow(labels)
             GetCountParticipationsPerFlow(labels)
-            flows = labels
+            //flowNames = labels
+            console.log(labels)
+            fillDropdownFlows(labels);
         } )
         .catch(error => console.error("Error:", error))
 }
-// function drawCharts(labels: string[],data: string[]){
-//     drawBarChart("Aantal Steps per Flow",chartData('Aantal Steps', labels, data))
-//     drawLineChart("Aantal Steps",chartData('Step types', labels, data))
-//     drawDoughnutChart("Aantal Steps",chartData('Step types', labels, data))
-//     drawRadarChart("Aantal Steps",chartData('Step types', labels, data))
-// }
+
 
 function getSelectedFlows(): number[] {
     let flowIds: number[] = [];
@@ -200,19 +202,19 @@ function getSelectedFlows(): number[] {
             flowIds.push(Number(selectFlow.options[i].value));
         }
     }
+    console.log("flowIds: ", flowIds)
     return flowIds
 }
-function fillDropdownFlows(data: Flow[]) {
+function fillDropdownFlows(data: string[]) {
+    selectFlow.innerHTML = "";
+
     for (let i = 0; i < data.length; i++) {
         let option = document.createElement("option");
-        option.value = data[i].id.toString();
-        option.text = flows.toString();
+        option.value = i.toString(); 
+        option.text = data[i]; 
         selectFlow.appendChild(option);
     }
 }
 
-getSelectedFlows()
-// GetNamesPerFlow().then(
-//     fillDropdownFlows(flows)
-// );
-// GetNamesPerFlow()
+// getSelectedFlows()
+GetNamesPerFlow()
