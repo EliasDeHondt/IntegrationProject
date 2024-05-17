@@ -1,9 +1,4 @@
-import {Modal} from "bootstrap";
 import Chart from 'chart.js/auto';
-import {initializeDeleteButtons} from "../CreateFlow/DeleteFlowModal";
-import {Project} from "../Types/ProjectObjects";
-import * as API from "../Dashboard/API/CreateUserModalAPI";
-import {Flow} from "../Flow/FlowObjects";
 
 const barCtx = document.getElementById('barChart') as HTMLCanvasElement;
 const lineCtx = document.getElementById('lineChart') as HTMLCanvasElement;
@@ -198,10 +193,28 @@ export async function GetNamesPerFlow(){
         } )
         .catch(error => console.error("Error:", error))
 }
-export async function GetAnswersPerQuestion(question: string){
-    //voor answers te krijgen
-    console.log("Fetching Answers...")
-    await fetch("/api/Statistics/GetAnswersPerQuestion", {
+// export async function GetAnswersPerQuestion(question: string){
+//     //voor answers te krijgen
+//     console.log("Fetching Answers...")
+//     await fetch("/api/Statistics/GetAnswersPerQuestion", {
+//         method: "GET",
+//         headers: {
+//             "Accept": "application/json",
+//             "Content-Type": "application/json"
+//         }
+//     })
+//         .then(response => response.json())
+//         .then(labels => {
+//             console.log(labels)
+//             fillDropdownFlows(labels,selectQuestion);
+//             showSelectedFlow();
+//             GetAnswerCountsForQuestions(labels,question)
+//         } )
+//         .catch(error => console.error("Error:", error))
+// }
+export async function GetQuestionNames(flowname: string){
+    console.log("Fetching question names...")
+    await fetch("/api/Statistics/GetQuestionNames/" + flowname, {
         method: "GET",
         headers: {
             "Accept": "application/json",
@@ -212,8 +225,8 @@ export async function GetAnswersPerQuestion(question: string){
         .then(labels => {
             console.log(labels)
             fillDropdownFlows(labels,selectQuestion);
-            showSelectedFlow();
-            GetAnswerCountsForQuestions(labels,question)
+            GetQuestionNames(showSelectedFlow());
+            GetAnswerCountsForQuestions(labels,showSelectedQuestion());
         } )
         .catch(error => console.error("Error:", error))
 }
@@ -221,7 +234,6 @@ export async function GetAnswersPerQuestion(question: string){
 //get data - flow
 export async function GetQuestionsFromFlow(flowname: string){
     console.log("Fetching count questions...")
-    //questionViewModel.questionType.toString()
     const labels: string[] = ["MultipleChoiceQuestion", "SingleChoiceQuestion","OpenQuestion","RangeQuestion"];
     await fetch("/api/Statistics/GetQuestionsFromFlow/" + flowname, {
         method: "GET",
@@ -236,7 +248,7 @@ export async function GetQuestionsFromFlow(flowname: string){
 }
 
 export async function GetAnswerCountsForQuestions(labels: string[],question: string){
-    //voor voor elk answer
+    //voor elk answer te tellen
     console.log("Fetching count answers...")
     
     await fetch("/api/Statistics/GetAnswerCountsForQuestions/" + question, {
@@ -271,20 +283,30 @@ function fillDropdownFlows(data: string[], select: HTMLSelectElement) {
         select.appendChild(option);
     }
     selectFlow.addEventListener('change', showSelectedFlow);
-    showSelectedFlow();
+    GetQuestionsFromFlow(showSelectedFlow());
 }
 
-function showSelectedFlow(){
+function showSelectedFlow() : string{
     const selectedIndex = selectFlow.selectedIndex;
     
     if (selectedIndex !== -1) {
         const selectedOption = selectFlow.options[selectedIndex];
-        const selectedFlowName = selectedOption.text;
-        GetQuestionsFromFlow(selectedFlowName);
-    }
+        return selectedOption.text; //gekozen flow
+    }return "";
 }
+function showSelectedQuestion() : string{
+    const selectedIndex = selectQuestion.selectedIndex;
+
+    if (selectedIndex !== -1) {
+        const selectedOption = selectFlow.options[selectedIndex];
+        return selectedOption.text; //gekozen question
+    }return "";
+}
+
+
+
+
 
 // getSelectedFlows()
 GetNamesPerFlow()
-
 //GetAnswersPerQuestion("What would help you make a choice between the different parties?")

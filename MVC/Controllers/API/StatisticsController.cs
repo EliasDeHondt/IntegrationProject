@@ -56,11 +56,19 @@ public class StatisticsController : Controller
         return Ok(flowCountQuestions);
     }
     
-    // [HttpGet("GetQuestionsFromFlow/{id}")]
-    // public IActionResult GetQuestionsFromFlow(long flowid)
+    // [HttpGet("GetAnswersPerQuestion/{id}")]
+    // public IActionResult GetAnswersPerQuestion(long flowid)
     // {
-    //     var flowQuestions = _manager.GetQuestionsFromFlow(flowid);
+    //     var flowQuestions = _manager.GetAnswersPerQuestion(flowid);
     //
     //     return Ok(flowQuestions);
     // }
+    [HttpGet("GetQuestionNames/{flowname}")]
+    public IActionResult GetQuestionNames(string flowname)
+    {
+        var flowCountQuestions = _manager.GetQuestionNames(flowname);
+        
+
+        return Ok(flowCountQuestions);
+    }
 }

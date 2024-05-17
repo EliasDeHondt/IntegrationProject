@@ -152,4 +152,11 @@ public class FlowManager
         var flow = flows.Where(flow => flow.Theme.Subject == flowName).Single();
         return _repository.ReadQuestionsFromFlow(flow.Id);
     }
+    
+    public string[] GetQuestionNames(string flowName)
+    {
+        var flows = _repository.ReadAllFlowsWithTheme();
+        var flow = flows.Where(flow => flow.Theme.Subject == flowName).Single();
+        return _repository.GetQuestionNames(flow.Id);
+    }
 }

@@ -247,10 +247,7 @@ public class FlowRepository
     {
         var flow = ReadFlowByName(flowName);
         var questionNamesPerFlow = new List<int>();
-        int questionS = 0;
-        int questionM = 0;
-        int questionR = 0;
-        int questionO = 0;
+        int questionS = 0; int questionM = 0; int questionR = 0; int questionO = 0;
 
         foreach (var q in ReadQuestionsFromFlow(flow.Id))
         {
@@ -266,10 +263,10 @@ public class FlowRepository
                     questionO++; break;
             }
         }
-        questionNamesPerFlow.Add(questionS);
         questionNamesPerFlow.Add(questionM);
-        questionNamesPerFlow.Add(questionR);
+        questionNamesPerFlow.Add(questionS);
         questionNamesPerFlow.Add(questionO);
+        questionNamesPerFlow.Add(questionR);
         
         return questionNamesPerFlow.Select(i => i.ToString()).ToArray();
     }
@@ -279,6 +276,19 @@ public class FlowRepository
         var a = _context.QuestionSteps
             .Include(qs => qs.QuestionBase).Where(qs => qs.Flow.Id == flowId)//.Select(step => step.QuestionBase)
             .ToList();
+        return a;
+    }
+    
+    public string[] GetQuestionNames(long flowId)
+    {
+        var names = new List<string>();
+
+        foreach (var qs in ReadQuestionsFromFlow(flowId))
+        {
+            var name = qs.QuestionBase.Question;
+            names.Add(name);
+        }
+        var a =  names.Select(count => count.ToString()).ToArray();
         return a;
     }
 }
