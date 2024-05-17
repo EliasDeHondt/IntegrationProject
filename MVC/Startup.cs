@@ -240,7 +240,15 @@ public class Startup
             EmailConfirmed = true,
             SharedPlatform = new SharedPlatform()
         };
-        
+
+        var webAppUserBib = new WebAppUser
+        {
+            Id = "BibId",
+            Email = "Bib@CodeForge.com",
+            UserName = "Bib",
+            EmailConfirmed = true
+        };
+            
         await roleManager.CreateAsync(new IdentityRole(UserRoles.Facilitator));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.PlatformAdmin));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.SystemAdmin));

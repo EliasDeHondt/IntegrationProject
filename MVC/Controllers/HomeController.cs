@@ -18,7 +18,7 @@ public class HomeController : Controller
     public IActionResult Index()
     {
         if (User.IsInRole(UserRoles.SystemAdmin)) return RedirectToAction("Dashboard", "SystemPlatform");
-        if (User.IsInRole(UserRoles.PlatformAdmin)) return RedirectToAction("Dashboard", "SharedPlatform");
+        if (User.IsInRole(UserRoles.PlatformAdmin)) return RedirectToAction("RedirectToDashboard", "SharedPlatform");
         if (User.IsInRole(UserRoles.Facilitator)) return RedirectToAction("Dashboard", "Facilitator");
        // return RedirectToPage("/Account/Login", new { area = "Identity"});
        return View();

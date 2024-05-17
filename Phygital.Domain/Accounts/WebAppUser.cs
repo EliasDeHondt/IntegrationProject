@@ -5,11 +5,15 @@
  *                                     *
  ***************************************/
 
+using Domain.WebApp;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Accounts;
 
-public abstract class User : IdentityUser
+public class WebAppUser : IdentityUser
 {
- 
+   public ICollection<Feed> Feeds { get; set; }
+   public ICollection<Idea> Ideas { get; set; }
+   public ICollection<Like> Likes { get; set; }
+   public ICollection<Reaction> Reactions { get; set; }
 }
