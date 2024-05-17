@@ -54,4 +54,12 @@ public class StatisticsController : Controller
 
         return Ok(flowCountQuestions);
     }
+    
+    [HttpGet("GetQuestionsFromFlow/{id}")]
+    public IActionResult GetQuestionsFromFlow(long flowid)
+    {
+        var flowQuestions = _manager.GetQuestionsFromFlow(flowid);
+
+        return Ok(flowQuestions);
+    }
 }

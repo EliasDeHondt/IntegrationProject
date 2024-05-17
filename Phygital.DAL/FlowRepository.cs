@@ -202,7 +202,7 @@ public class FlowRepository
 
         foreach (var flow in flows)
         {
-            var stepsCount = GetAllSteps(flow.Id);
+            var stepsCount = ReadAllSteps(flow.Id);
             var v = stepsCount.Count();
             stepsPerFlow.Add(v);
         }
@@ -258,10 +258,10 @@ public class FlowRepository
         return a;
     }
     
-    public List<QuestionStep> ReadQuestionsFromFlow(long flowId)
+    public IEnumerable<QuestionBase> ReadQuestionsFromFlow(long flowId)
     {
         return _context.QuestionSteps
-            .Include(qs => qs.QuestionBase).Where(a => a.Flow.Id == flowId)
+            .Include(qs => qs.QuestionBase).Where(a => a.Flow.Id == flowId).Select(step => step.QuestionBase)
             .ToList();
     }
 }
