@@ -138,11 +138,13 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     let btnHideProject = createButton("btnHideProject", "bi-eye");
     let btnDeleteProject = createButton("btnDeleteProject", "bi-folder-minus");
     let btnGraphProject = createButton("btnGraphProject", "bi-graph-up");
+    let btnNotesProject = createButton("btnNotesProject", "bi-chat-quote");
     let btnEnterProject = createButton("btnEnterProject", "bi-folder");
 
     btnHideProject.className = "border-0 p-0 position-absolute top-0 end-1 ms-2 mb-2\" style=\"background: none;";
     btnDeleteProject.className = "border-0 p-0 position-absolute top-0 end-0 me-2 mb-2\" style=\"background: none;";
     btnGraphProject.className = "border-0 p-0 position-absolute top-0 end-0 mt-5 me-2 mb-2\" style=\"background: none;";
+    btnNotesProject.className = "border-0 p-0 position-absolute top-0 end-1 mt-5 ms-2 mb-2\" style=\"background: none;";
     btnEnterProject.className = "border-0 p-0";
     btnEnterProject.style.background = "none;";
     btnEnterProject.style.fontSize = "10vh";
@@ -150,6 +152,7 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     btnHideProject.style.fontSize = "3vh";
     btnDeleteProject.style.fontSize = "3vh";
     btnGraphProject.style.fontSize = "3vh";
+    btnNotesProject.style.fontSize = "3vh";
     
 
     let cardBodyDiv = document.createElement("div");
@@ -170,6 +173,7 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     cardDiv.appendChild(btnHideProject);
     cardDiv.appendChild(btnDeleteProject);
     cardDiv.appendChild(btnGraphProject);
+    cardDiv.appendChild(btnNotesProject);
     cardDiv.appendChild(cardBodyDiv);
 
     colDiv.appendChild(cardDiv);
@@ -183,6 +187,9 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     });
     btnEnterProject.addEventListener("click", function() {
         window.location.href = "/Project/ProjectPage/" + projectId;
+    });
+    btnNotesProject.addEventListener("click", function() {
+        window.location.href = "/Project/Notes/" + projectId;
     });
     
     

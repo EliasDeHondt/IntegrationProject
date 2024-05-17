@@ -53,7 +53,7 @@ public class ProjectRepository
             .Include(p => p.MainTheme)
             .Where(p => !_ctx.ProjectOrganizers.Any(po => po.Project.Id == p.Id && po.Facilitator.Email == email))
             .ToList();
-        
+
         return project.ToList();
     }
 
@@ -133,5 +133,19 @@ public class ProjectRepository
         _ctx.Flows.Add(flow);
 
         return flow;
+    }
+
+    public IEnumerable<Flow> ReadNotesForProjectById(long id)
+    {
+        return _ctx.Projects
+            .Where(p => p.Id == id)
+            .Include(p => p.MainTheme)
+            .ThenInclude(t => t.Themes)
+            .ThenInclude(s => s.Flows)
+            .ThenInclude(f => f.Steps)
+            .ThenInclude(s => s.Notes)
+            .SelectMany(p => p.MainTheme.Themes)
+            .SelectMany(t => t.Flows)
+            .AsEnumerable();
     }
 }

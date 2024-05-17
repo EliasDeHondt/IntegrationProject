@@ -79,6 +79,12 @@
         <_ContentIncludedByDefault Remove="wwwroot\dist\subTheme.entry.js.map" />
         <_ContentIncludedByDefault Remove="wwwroot\dist\systemDashboard.entry.js" />
         <_ContentIncludedByDefault Remove="wwwroot\dist\systemDashboard.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\facilitator.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\facilitator.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\flow.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\flow.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\kiosk.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\kiosk.entry.js.map" />
     </ItemGroup>
 
     <ItemGroup>

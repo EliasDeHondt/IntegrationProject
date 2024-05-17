@@ -6,6 +6,7 @@
  ***************************************/
 
 using Data_Access_Layer;
+using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
@@ -99,8 +100,30 @@ public class StepManager
         return information;
     }
 
+    public Note AddNote(long flowId, int stepNr, string note)
+    {
+        var step = _repo.ReadStepForFlowByNumber(flowId, stepNr);
+
+        return _repo.CreateNote(step, note);
+    }
+
     public long GetStepId(long flowId, int stepNr)
     {
         return _repo.ReadStepId(flowId, stepNr);
+    }
+
+    public void ChangeInformation(InformationBase information)
+    {
+        _repo.UpdateInformation(information);
+    }
+
+    public void ChangeChoice(Choice choice)
+    {
+        _repo.UpdateChoice(choice);
+    }
+
+    public void ChangeQuestion(QuestionBase question)
+    {
+        _repo.UpdateQuestion(question);
     }
 }

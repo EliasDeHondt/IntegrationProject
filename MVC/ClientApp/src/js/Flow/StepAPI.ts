@@ -6,6 +6,12 @@ import {delay} from "../Util";
 import {Timer} from "../Util/Timer";
 import {Flow} from "./FlowObjects";
 import {Modal} from "bootstrap";
+import * as kiosk from "../Kiosk/Kiosk"
+import * as signalR from "@microsoft/signalr";
+
+const connection = new signalR.HubConnectionBuilder()
+    .withUrl("/hub")
+    .build();
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
@@ -82,7 +88,13 @@ async function SetRespondentEmail(flowId: number, inputEmail: string) {
 }
 
 //button submit email 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
+    await connection.start().then(() => {
+        connection.invoke("JoinConnection", kiosk.code).then(() => {
+            connection.invoke("SendCurrentStep", kiosk.code, currentStepNumber)
+        })
+    });
+
     const emailInput = document.getElementById("inputEmail");
 
     btnEmail.onclick = function () {
@@ -117,6 +129,7 @@ async function GetNextStep(stepNumber: number, flowId: number): Promise<Step> {
     })
         .then(response => response.json())
         .then(async (data): Promise<Step> => {
+            await connection.invoke("SendCurrentStep", kiosk.code, stepNumber);
             if (flowtype.toUpperCase() == "PHYSICAL") {
                 await showPhysicalStep(data);
             } else {
@@ -230,7 +243,7 @@ function createQuestion(data: Question){
     let rowDiv = document.createElement("div");
     rowDiv.classList.add("row");
     rowDiv.classList.add("m-auto");
-    rowDiv.classList.add("w-50");
+    rowDiv.classList.add("w-100");
     for (const element of data.choices) {
         let colDiv = document.createElement("div");
         colDiv.classList.add("col");

@@ -13,8 +13,12 @@ const btnCloseInstallation = document.getElementById("btnCloseInstallation") as 
 const connectionCode = document.getElementById("connectionCode") as HTMLSpanElement;
 const flowContainer = document.getElementById("carouselContainer") as HTMLDivElement;
 
+const textAreaNote = document.getElementById("inputNote") as HTMLTextAreaElement;
+const btnSaveNote = document.getElementById("btnSaveNote") as HTMLButtonElement;
+
 let currentFlow = document.getElementById("currentFlow") as HTMLHeadingElement;
 let currentState = document.getElementById("currentState") as HTMLSpanElement;
+let currentStep: number = 0;
 export let code = "";
 
 let projectId: number = 0;
@@ -73,6 +77,10 @@ connection.on("ReceiveProjectId", (id) => {
     projectId = id;
     GetFlowsForProject(projectId).then(flows => GenerateFlowCards(flows, flowContainer));
     setProjectId(projectId);
+})
+
+connection.on("ReceiveCurrentStep", (stepNr) => {
+    currentStep = stepNr;
 })
 
 
@@ -151,3 +159,21 @@ connection.on("ReceiveSelectedFlowIds", async (ids, flowType) => {
         currentState.innerText = "Active"
     }
 })
+
+async function AddNote(flowId: number, stepNr: number, note: string) {
+    await fetch(`/api/Steps/AddNote/${flowId}/${stepNr}/${note}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+}
+
+btnSaveNote.onclick = () => {
+    if (textAreaNote.value != null && currentStep > 0) {
+        AddNote(Number(currentFlow.innerText), currentStep, textAreaNote.value).then(() => {
+            textAreaNote.value = "";
+        })
+    }
+}
