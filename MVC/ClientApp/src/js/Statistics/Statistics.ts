@@ -188,13 +188,29 @@ export async function GetNamesPerFlow(){
             GetCountStepsPerFlow(labels)
             GetCountParticipationsPerFlow(labels)
             //flowNames = labels
-            //console.log(labels)
-            fillDropdownFlows(labels);
+            console.log(labels)
+            fillDropdownFlows(labels, selectFlow);
             showSelectedFlow();
         } )
         .catch(error => console.error("Error:", error))
 }
-
+export async function GetAnswersPerQuestion(){
+    console.log("Fetching Answers...")
+    await fetch("/api/Statistics/GetAnswersPerQuestion", {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(labels => {
+            fillDropdownFlows(labels,selectFlow);
+            showSelectedFlow();
+            GetAnswerCountsForQuestions(labels)
+        } )
+        .catch(error => console.error("Error:", error))
+}
 
 //get data - flow
 export async function GetQuestionsFromFlow(flowname: string){
@@ -209,7 +225,24 @@ export async function GetQuestionsFromFlow(flowname: string){
         }
     })
         .then(response => response.json())
-        .then(data => drawDoughnutChart("Aantal Questions voor de Flow: "+flowname,chartData('Aantal Questions', labels, data)))
+        .then(data => drawBarChart("Aantal Questions voor de Flow: "+flowname,chartData('Aantal Questions', labels, data)))
+        .catch(error => console.error("Error:", error))
+}
+
+export async function GetAnswerCountsForQuestions(labels: string[],question: string){
+    console.log("Fetching count questions...")
+    //questionViewModel.questionType.toString()
+    //const labels: string[] = ["MultipleChoiceQuestion", "SingleChoiceQuestion","OpenQuestion","RangeQuestion"];
+    
+    await fetch("/api/Statistics/GetAnswerCountsForQuestions/" + question, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => drawBarChart("Aantal antwoorden voor de vraag: "+question,chartData('Aantal Answers', labels, data)))
         .catch(error => console.error("Error:", error))
 }
 
@@ -223,24 +256,23 @@ function getSelectedFlows(): number[] {
     console.log("flowIds: ", flowIds)
     return flowIds
 }
-function fillDropdownFlows(data: string[]) {
-    selectFlow.innerHTML = "";
+function fillDropdownFlows(data: string[], select: HTMLSelectElement) {
+    select.innerHTML = "";
 
     for (let i = 0; i < data.length; i++) {
         let option = document.createElement("option");
         option.value = i.toString(); 
         option.text = data[i]; 
-        selectFlow.appendChild(option);
+        select.appendChild(option);
     }
 }
 
 function showSelectedFlow(){
     const selectedIndex = selectFlow.selectedIndex;
-    console.log(selectedIndex)
+    
     if (selectedIndex !== -1) {
         const selectedOption = selectFlow.options[selectedIndex];
         const selectedFlowName = selectedOption.text;
-        console.log("selectedFlowName",selectedFlowName)
         GetQuestionsFromFlow(selectedFlowName);
     }
 }
