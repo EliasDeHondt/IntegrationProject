@@ -2,7 +2,6 @@ import {Choice, Information, Question, Step} from "../Flow/Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
 import {Modal} from "bootstrap";
 import {Flow, Participation} from "../Flow/FlowObjects";
-import {op} from "@tensorflow/tfjs";
 
 
 const stepsList = document.getElementById('steps-list') as HTMLElement;
@@ -15,6 +14,7 @@ const btnAddImage = document.getElementById('btn-add-image') as HTMLButtonElemen
 const btnAddVideo = document.getElementById('btn-add-video') as HTMLButtonElement;
 const btnSaveFlow = document.getElementById("saveFlow") as HTMLButtonElement;
 const btnAddLink = document.getElementById("btn-add-hyperlink") as HTMLButtonElement;
+const btnStepVisibility = document.getElementById("btn-step-visibility") as HTMLButtonElement;
 
 let currentStepList: Step[] = [];
 
@@ -145,6 +145,7 @@ function toggleButtons() {
     btnAddVideo.disabled = true;
     btnAddChoice.disabled = true;
     btnAddLink.disabled = true;
+    btnStepVisibility.disabled = true;
 
     if (currentViewingStep == undefined) {
         return;
@@ -154,7 +155,7 @@ function toggleButtons() {
         btnAddText.disabled = false;
         btnAddImage.disabled = false;
         btnAddVideo.disabled = false;
-        btnAddLink.disabled = false;
+        btnAddLink.disabled = false
         if (currentViewingStep.informationViewModel.length >= 2) {
             btnAddText.disabled = true;
             btnAddImage.disabled = true;
@@ -167,8 +168,15 @@ function toggleButtons() {
         if (currentViewingStep.questionViewModel.choices.length >= 6)
             btnAddChoice.disabled = true;
     }
+    
+    if (currentViewingStep.informationViewModel || currentViewingStep.questionViewModel)
+        btnStepVisibility.disabled = false;
 
-
+    if (!currentViewingStep.visible) {
+        btnStepVisibility.innerText = 'Enable Step'
+    } else {
+        btnStepVisibility.innerText = 'Disable Step';
+    }
 }
 
 function UpdateStepList(steps: Step[]) {
@@ -202,6 +210,9 @@ function UpdateStepList(steps: Step[]) {
                 if (s.informationViewModel != undefined)
                     cardHeader.innerText += "\nInformation"
             })
+            
+            if (!step.visible)
+                stepCard.classList.add('step-card-hidden')
 
             stepCard.appendChild(cardHeader);
 
@@ -214,6 +225,20 @@ function UpdateStepList(steps: Step[]) {
         stepsList.appendChild(noFlowsMessage);
     }
 
+}
+
+function showStepVisibility(step: Step) {
+    let stepCards = document.querySelectorAll('.step-card') as NodeListOf<HTMLAnchorElement>;
+
+    stepCards.forEach(stepCard => {
+        if (stepCard.dataset.stepNumber == step.stepNumber.toString()) {
+            if (!step.visible) {
+                stepCard.classList.add('step-card-hidden')
+            } else {
+                stepCard.classList.remove('step-card-hidden')
+            }
+        }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -728,4 +753,20 @@ btnSaveViewFlowModal.onclick = () => {
 
 btnConfirmViewFlow.onclick = () => {
     clearModal();
+}
+
+btnStepVisibility.onclick = () => {
+    const index = currentStepList.findIndex(s => s.stepNumber === currentViewingStep.stepNumber);
+    
+    if (btnStepVisibility.innerText == 'Disable Step') {
+        currentViewingStep.visible = false;
+        currentStepList[index].visible = false;
+        toggleButtons();
+    } else if (btnStepVisibility.innerText == 'Enable Step') {
+        currentViewingStep.visible = true;
+        currentStepList[index].visible = true;
+        toggleButtons();
+    }
+    
+    showStepVisibility(currentViewingStep);
 }

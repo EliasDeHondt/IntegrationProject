@@ -21,6 +21,7 @@ export interface Question {
 }
 
 export interface Choice {
+    id: number;
     text: string;
     nextStepId?: number;
 }

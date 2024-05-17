@@ -34,6 +34,10 @@
   min-width: 300px;
 }
 
+.step-card-hidden {
+  background-color: #7b8297;
+}
+
 .step-card:hover {
   background-color: map-get($themes, light, secondary);
   border: thin solid black;
