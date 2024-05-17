@@ -3,9 +3,12 @@ using Business_Layer;
 using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
+using Domain.ProjectLogics.Steps.Information;
+using Domain.ProjectLogics.Steps.Questions;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.VisualBasic;
 using MVC.Models;
 
 namespace MVC.Controllers.API;
@@ -44,7 +47,7 @@ public class FlowsController : Controller
         if (Enum.TryParse(state, out FlowState flowState))
             flow.State = flowState;
         _manager.ChangeFlowState(flow);
-        
+
         return NoContent();
     }
 
@@ -66,18 +69,78 @@ public class FlowsController : Controller
     }
 
     [HttpPut("/{flowId}/Update")]
-    public IActionResult UpdateFlow(long flowId, [FromBody] FlowViewModel model)
+    public IActionResult UpdateFlow(long flowId, IEnumerable<StepViewModel> model)
     {
         var flow = _manager.GetFlowById(flowId);
-        
+
         _uow.BeginTransaction();
-        flow.Steps = model.Steps.ToList();
+
+        foreach (var stepViewModel in model)
+        {
+            var step = flow.Steps.FirstOrDefault(s => s.Id == stepViewModel.Id);
+
+            switch (stepViewModel)
+            {
+                case InformationStepViewModel infoStepViewModel when step is InformationStep infoStep:
+                    infoStep.InformationBases = infoStepViewModel.InformationViewModel.Select<InformationViewModel, InformationBase>(infoViewModel =>
+                    {
+                        var info = infoStep.InformationBases.FirstOrDefault(i => i.Id == infoViewModel.Id)!;
+
+                        switch (info)
+                        {
+                            case Text text:
+                                text.InformationText = infoViewModel.Information;
+                                _stepManager.ChangeInformation(text);
+                                return text;
+                            case Video video:
+                                video.FilePath = infoViewModel.Information;
+                                _stepManager.ChangeInformation(video);
+                                return video;
+                            case Image image:
+                                image.Base64 = infoViewModel.Information;
+                                _stepManager.ChangeInformation(image);
+                                return image;
+                            case Hyperlink link:
+                                link.URL = infoViewModel.Information;
+                                _stepManager.ChangeInformation(link);
+                                return link;
+                            default: return info;
+                        }
+                    }).ToList();
+                    _stepManager.ChangeStep(infoStep);
+                    break;
+                case QuestionStepViewModel questionStepViewModel when step is QuestionStep questionStep:
+                {
+                    var question = questionStep.QuestionBase;
+                    question.Question = questionStepViewModel.QuestionViewModel.Question;
+                    if (question is ChoiceQuestionBase choiceQuestion)
+                    {
+                        choiceQuestion.Choices = questionStepViewModel.QuestionViewModel.Choices.Select(choiceViewModel =>
+                        {
+                            var choice = choiceQuestion.Choices?.FirstOrDefault(c => c.Id == choiceViewModel.Id);
+
+                            choice.Text = choiceViewModel.Text;
+                            choice.NextStep = _stepManager.GetStepById(choiceViewModel.Id);
+                            _stepManager.ChangeChoice(choice);
+                            return choice;
+                        }).ToList();
+                    }
+
+                    _stepManager.ChangeQuestion(question);
+
+                    questionStep.QuestionBase = question;
+                    _stepManager.ChangeStep(questionStep);
+                    break;
+                }
+            }
+        }
+
         _manager.UpdateFlow(flow);
         _uow.Commit();
 
         return NoContent();
     }
-    
+
     [HttpGet]
     public ActionResult GetFlows()
     {
@@ -95,7 +158,7 @@ public class FlowsController : Controller
             ThemeId = flow.Theme.Id
         }));
     }
-    
+
     [HttpGet("{type}")]
     public ActionResult GetFlowsByType(string type)
     {
@@ -113,7 +176,7 @@ public class FlowsController : Controller
             ThemeId = flow.Theme.Id
         }));
     }
-    
+
     [HttpGet("{id:long}")]
     public ActionResult GetFlowById(long id)
     {
@@ -145,5 +208,4 @@ public class FlowsController : Controller
             ThemeId = flow.Theme.Id
         }));
     }
-    
 }

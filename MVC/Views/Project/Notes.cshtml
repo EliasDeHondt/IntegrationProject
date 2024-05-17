@@ -1,0 +1,25 @@
+﻿@model Domain.ProjectLogics.Project
+
+@{
+    Layout = "_NavLayout";
+    ViewData["Title"] = $"Project {Model.Id}";
+}
+
+<!DOCTYPE html>
+
+<html lang="" class="h-100 w-100 overflow-hidden">
+<head>
+    <link rel="stylesheet" href="~/dist/site.css"/>
+</head>
+<body class="row h-100 w-100">
+<div class="col-lg-10">
+    <div class="row container-content-body">
+        <div id="notesContainer"></div>
+    </div>
+</div>
+
+</body>
+</html>
+
+<script src="~/dist/site.entry.js" defer></script>
+<script src="~/dist/notes.entry.js" defer></script>

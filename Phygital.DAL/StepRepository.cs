@@ -1,4 +1,5 @@
 ﻿using Data_Access_Layer.DbContext;
+using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
@@ -144,6 +145,13 @@ public class StepRepository
         _ctx.InformationSteps.Find(step.Id)!.InformationBases.Add(information);
     }
 
+    public Note CreateNote(StepBase step, string note)
+    {
+        var newNote = new Note(note);
+        _ctx.Steps.Find(step.Id)!.Notes.Add(newNote);
+        return newNote;
+    }
+
     public long ReadStepId(long flowId, int stepNr)
     {
 
@@ -154,5 +162,20 @@ public class StepRepository
             .Where(step => step.StepNumber == stepNr)
             .Select(step => step.Id)
             .Single();
+    }
+
+    public void UpdateInformation(InformationBase information)
+    {
+        _ctx.Information.Update(information);
+    }
+
+    public void UpdateChoice(Choice choice)
+    {
+        _ctx.Choices.Update(choice);
+    }
+
+    public void UpdateQuestion(QuestionBase question)
+    {
+        _ctx.Questions.Update(question);
     }
 }

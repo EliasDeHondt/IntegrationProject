@@ -31,12 +31,17 @@
 </div>
 <partial name="Modals/FlowTypeModal"/>
 <div class="facilitator-center-center" id="cardCurrentFlow">
-    <div class="facilitator-container-center-center">
-        <p>Current flow: <span id="currentFlow"></span></p>
-        <p>State: <span id="currentState"></span></p>
-        <div class="card-footer">
-            <button class="facilitator-button-step-control" id="btnPauseFlow">Pause flow</button>
-            <button class="facilitator-button-step-control" id="">Take notes</button>
+    <div class="facilitator-container-center-center container">
+        <div class="row">
+            <div class="col">Current flow: <span id="currentFlow"></span></div>
+            <div class="col">State: <span id="currentState"></span></div>
+        </div>
+        <div class="row">
+            <textarea class="facilitator-input-note" type="text" id="inputNote" placeholder="Notes"></textarea>
+        </div>
+        <div class="row">
+            <div class="col"><button class="facilitator-button-step-control" id="btnPauseFlow">Pause flow</button></div>
+            <div class="col"><button class="facilitator-button-step-control" id="btnSaveNote">Save note</button></div>
         </div>
     </div>
 </div>

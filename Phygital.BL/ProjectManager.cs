@@ -103,4 +103,9 @@ public class ProjectManager
     {
         return _repo.CreateFlowForProject(type,themeId);
     }
+
+    public IEnumerable<Flow> GetNotesForProjectById(long id)
+    {
+        return _repo.ReadNotesForProjectById(id);
+    }
 }

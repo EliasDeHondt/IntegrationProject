@@ -346,6 +346,12 @@ namespace Data_Access_Layer.DbContext
             
             // Add conditional points
             choice18.NextStep = step7;
+            
+            // Add notes
+            step1.Notes.Add(new Note("The user is optimistic about the transformative potential of AI. They emphasize a balanced perspective, acknowledging both the benefits and challenges of AI integration into daily life."));
+            step4.Notes.Add(new Note("They recognize both the potential benefits and risks associated with these technologies."));
+            step4.Notes.Add(new Note("The user advocates for proactive measures to address ethical concerns and ensure responsible development and deployment of emerging technologies."));
+            step5.Notes.Add(new Note("The user views education as a crucial driver for fostering a culture of sustainability. They highlight a comprehensive approach, integrating sustainability into various aspects of education and community involvement."));
         }
 
         public static void GenerateKdgSteps(CodeForgeDbContext dbContext, Flow flowKdg)
