@@ -172,7 +172,9 @@ function toggleButtons() {
     if (currentViewingStep.informationViewModel || currentViewingStep.questionViewModel)
         btnStepVisibility.disabled = false;
 
-    if (!currentViewingStep.visible) {
+    const index = currentStepList.findIndex(s => s.stepNumber === currentViewingStep.stepNumber);
+
+    if (!currentStepList[index].visible) {
         btnStepVisibility.innerText = 'Enable Step'
     } else {
         btnStepVisibility.innerText = 'Disable Step';
@@ -761,12 +763,11 @@ btnStepVisibility.onclick = () => {
     if (btnStepVisibility.innerText == 'Disable Step') {
         currentViewingStep.visible = false;
         currentStepList[index].visible = false;
-        toggleButtons();
     } else if (btnStepVisibility.innerText == 'Enable Step') {
         currentViewingStep.visible = true;
         currentStepList[index].visible = true;
-        toggleButtons();
     }
     
-    showStepVisibility(currentViewingStep);
+    toggleButtons();
+    showStepVisibility(currentStepList[index]);
 }
