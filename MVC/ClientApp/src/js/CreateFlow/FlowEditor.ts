@@ -2,6 +2,7 @@ import {Choice, Information, Question, Step} from "../Flow/Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
 import {Modal} from "bootstrap";
 import {Flow, Participation} from "../Flow/FlowObjects";
+import {op} from "@tensorflow/tfjs";
 
 
 const stepsList = document.getElementById('steps-list') as HTMLElement;
@@ -349,7 +350,6 @@ async function GetStepData() {
                 case 'TEXTAREA':
                     const textAreaElement = element as HTMLTextAreaElement;
                     information = textAreaElement.value;
-                    console.log(textAreaElement.value)
                     informationType = 'Text';
                     break;
                 case 'IMG':
@@ -433,7 +433,8 @@ async function GetNewFlowData(flow: Flow): Promise<Flow> {
             stepNumber: step.stepNumber,
             informationViewModel: step.informationViewModel,
             questionViewModel: step.questionViewModel,
-            notes: step.notes
+            notes: step.notes,
+            visible: step.visible
         };
 
         if (step.questionViewModel && step.questionViewModel.questionType !== "OpenQuestion") {

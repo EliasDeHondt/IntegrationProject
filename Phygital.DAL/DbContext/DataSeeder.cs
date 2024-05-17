@@ -272,7 +272,7 @@ namespace Data_Access_Layer.DbContext
             dbContext.ChoiceQuestions.AddRange(singleChoiceQuestion);
             dbContext.Choices.AddRange(choice1, choice2, choice3, choice4, choice5, choice6);
 
-            QuestionStep step1 = new QuestionStep(1, singleChoiceQuestion, flow);
+            QuestionStep step1 = new QuestionStep(1, singleChoiceQuestion, flow, true);
             flow.Steps.Add(step1);
             dbContext.QuestionSteps.Add(step1);
             
@@ -289,7 +289,7 @@ namespace Data_Access_Layer.DbContext
             dbContext.ChoiceQuestions.AddRange(multipleChoiceQuestion1);
             dbContext.Choices.AddRange(choice7, choice8, choice9, choice10, choice11, choice12);
                     
-            QuestionStep step2 = new QuestionStep(2, multipleChoiceQuestion1, flow);
+            QuestionStep step2 = new QuestionStep(2, multipleChoiceQuestion1, flow, true);
             flow.Steps.Add(step2);
             dbContext.QuestionSteps.Add(step2);
                     
@@ -305,7 +305,7 @@ namespace Data_Access_Layer.DbContext
             dbContext.ChoiceQuestions.AddRange(multipleChoiceQuestion2);
             dbContext.Choices.AddRange(choice13, choice14, choice15, choice16, choice17, choice18);
                     
-            QuestionStep step3 = new QuestionStep(3, multipleChoiceQuestion2, flow);
+            QuestionStep step3 = new QuestionStep(3, multipleChoiceQuestion2, flow, false);
             flow.Steps.Add(step3);
             dbContext.QuestionSteps.Add(step3);
             
@@ -321,25 +321,25 @@ namespace Data_Access_Layer.DbContext
             dbContext.ChoiceQuestions.AddRange(rangeQuestion);
             dbContext.Choices.AddRange(choice19, choice20, choice21, choice22, choice23);
                     
-            QuestionStep step4 = new QuestionStep(4, rangeQuestion, flow);
+            QuestionStep step4 = new QuestionStep(4, rangeQuestion, flow, false);
             flow.Steps.Add(step4);
             dbContext.QuestionSteps.Add(step4);
             
             // Add open questions
             OpenQuestion openQuestions1 = new OpenQuestion("What role do you think education should play in fostering a culture of sustainability among future generations? Share your ideas.");
-            QuestionStep step5 = new QuestionStep(5, openQuestions1, flow);
+            QuestionStep step5 = new QuestionStep(5, openQuestions1, flow, true);
             flow.Steps.Add(step5);
             dbContext.OpenQuestions.Add(openQuestions1);
             dbContext.QuestionSteps.Add(step5);
             
             OpenQuestion openQuestions2 = new OpenQuestion("In what ways do you think technology can be harnessed to empower marginalized communities and promote social justice? Share your thoughts.");
-            QuestionStep step6 = new QuestionStep(6, openQuestions2, flow);
+            QuestionStep step6 = new QuestionStep(6, openQuestions2, flow, false);
             flow.Steps.Add(step6);
             dbContext.OpenQuestions.Add(openQuestions2);
             dbContext.QuestionSteps.Add(step6);
 
             OpenQuestion openQuestions3 = new OpenQuestion("How can we ensure that technological innovation is guided by ethical principles and values that prioritize the well-being of society and the environment? Provide your insights.");
-            QuestionStep step7 = new QuestionStep(7, openQuestions3, flow);
+            QuestionStep step7 = new QuestionStep(7, openQuestions3, flow, true);
             flow.Steps.Add(step7);
             dbContext.OpenQuestions.Add(openQuestions3);
             dbContext.QuestionSteps.Add(step7);
@@ -637,6 +637,7 @@ namespace Data_Access_Layer.DbContext
             ProjectOrganizer projectOrganizer1 = new ProjectOrganizer(project1, (Facilitator)dbContext.Users.Single(user => user.Email == "Tom@CodeForge.com"));
             ProjectOrganizer projectOrganizer2 = new ProjectOrganizer(project2, (Facilitator)dbContext.Users.Single(user => user.Email == "Tom@CodeForge.com"));
             ProjectOrganizer projectOrganizer3 = new ProjectOrganizer(project4, (Facilitator)dbContext.Users.Single(user => user.Email == "Fred@kdg.be"));      
+            ProjectOrganizer projectOrganizer4 = new ProjectOrganizer(project3, (Facilitator)dbContext.Users.Single(user => user.Email == "Tom@CodeForge.com"));
             
             //=======================
             // Add users to shared platform
@@ -658,6 +659,7 @@ namespace Data_Access_Layer.DbContext
             dbContext.ProjectOrganizers.Add(projectOrganizer1);
             dbContext.ProjectOrganizers.Add(projectOrganizer2);
             dbContext.ProjectOrganizers.Add(projectOrganizer3);
+            dbContext.ProjectOrganizers.Add(projectOrganizer4);
             sharedPlatform.Projects.Add(project1);
             sharedPlatform.Projects.Add(project2);
             sharedPlatform.Projects.Add(project3);

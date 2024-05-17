@@ -4,6 +4,7 @@ export interface Step {
     informationViewModel: Information[];
     questionViewModel: Question;
     notes: Note[];
+    visible: boolean;
 }
 
 export interface Information {
@@ -20,7 +21,6 @@ export interface Question {
 }
 
 export interface Choice {
-    id: number;
     text: string;
     nextStepId?: number;
 }

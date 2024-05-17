@@ -130,11 +130,16 @@ async function GetNextStep(stepNumber: number, flowId: number): Promise<Step> {
         .then(response => response.json())
         .then(async (data): Promise<Step> => {
             await connection.invoke("SendCurrentStep", kiosk.code, stepNumber);
-            if (flowtype.toUpperCase() == "PHYSICAL") {
-                await showPhysicalStep(data);
+            if (!data.visible) {
+                await GetNextStep(++currentStepNumber, flowId)
             } else {
-                await ShowStep(data);
+                if (flowtype.toUpperCase() == "PHYSICAL") {
+                    await showPhysicalStep(data);
+                } else {
+                    await ShowStep(data);
+                }
             }
+            
             return data;
         })
         .catch(error => {
