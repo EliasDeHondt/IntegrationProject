@@ -18,7 +18,7 @@ public class Project
     public string Title { get; set; }
     [MaxLength(600)]
     public string Description { get; set; }
-    [MaxLength(65000)]
+    [MaxLength(10485759)]
     public string? Image { get; set; }
     public MainTheme MainTheme { get; set; }
     public SharedPlatform SharedPlatform { get; set; }
