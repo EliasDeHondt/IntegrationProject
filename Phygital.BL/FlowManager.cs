@@ -146,7 +146,7 @@ public class FlowManager
         return _repository.GetQuestionCountsForFlow(flowName);
     }
     
-    public IEnumerable<QuestionBase> GetQuestionsFromFlow(string flowName)
+    public IEnumerable<QuestionStep> GetQuestionsFromFlow(string flowName)
     {
         var flows = _repository.ReadAllFlowsWithTheme();
         var flow = flows.Where(flow => flow.Theme.Subject == flowName).Single();

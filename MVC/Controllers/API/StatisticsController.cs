@@ -50,7 +50,7 @@ public class StatisticsController : Controller
     [HttpGet("GetQuestionsFromFlow/{flowname}")]
     public IActionResult GetQuestionsFromFlow(string flowname)
     {
-        var flowCountQuestions = _manager.GetQuestionsFromFlow(flowname);
+        var flowCountQuestions = _manager.GetQuestionCountsForFlow(flowname);
         var a = flowCountQuestions.Count();
 
         return Ok(flowCountQuestions);

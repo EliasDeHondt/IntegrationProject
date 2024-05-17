@@ -258,10 +258,10 @@ public class FlowRepository
         return a;
     }
     
-    public IEnumerable<QuestionBase> ReadQuestionsFromFlow(long flowId)
+    public IEnumerable<QuestionStep> ReadQuestionsFromFlow(long flowId)
     {
         var a = _context.QuestionSteps
-            .Include(qs => qs.QuestionBase).Where(a => a.Flow.Id == flowId).Select(step => step.QuestionBase)
+            .Include(qs => qs.QuestionBase).Where(qs => qs.Flow.Id == flowId)//.Select(step => step.QuestionBase)
             .ToList();
         return a;
     }

@@ -11,6 +11,7 @@ const doughnutCtx = document.getElementById('doughnutChart') as HTMLCanvasElemen
 const radarCtx = document.getElementById('radarChart') as HTMLCanvasElement;
 
 const selectFlow = document.getElementById("selectFlow") as HTMLSelectElement;
+const selectQuestion = document.getElementById("selectQuestion") as HTMLSelectElement;
 var flowNames: string[] 
 function chartData(label: string, labels: string[], data: string[]) {
     //data for the chart
@@ -111,8 +112,14 @@ function drawDoughnutChart(titel:string,chartData: { labels: string[]; datasets:
         }
     });
 }
+let radarChart: Chart<"radar", string[], string> | null = null;
 function drawRadarChart(titel:string,chartData: { labels: string[]; datasets: { label: string; data: string[]; backgroundColor: string; borderColor: string; borderWidth: number; }[]; }){
-    var radarChart = new Chart(radarCtx, {
+
+    if (radarChart) {
+        radarChart.destroy();
+    }
+    
+     radarChart = new Chart(radarCtx, {
         type: 'radar',
         data: chartData,
         options: {
@@ -187,14 +194,12 @@ export async function GetNamesPerFlow(){
         .then(labels => {
             GetCountStepsPerFlow(labels)
             GetCountParticipationsPerFlow(labels)
-            //flowNames = labels
-            console.log(labels)
             fillDropdownFlows(labels, selectFlow);
-            showSelectedFlow();
         } )
         .catch(error => console.error("Error:", error))
 }
-export async function GetAnswersPerQuestion(){
+export async function GetAnswersPerQuestion(question: string){
+    //voor answers te krijgen
     console.log("Fetching Answers...")
     await fetch("/api/Statistics/GetAnswersPerQuestion", {
         method: "GET",
@@ -205,9 +210,10 @@ export async function GetAnswersPerQuestion(){
     })
         .then(response => response.json())
         .then(labels => {
-            fillDropdownFlows(labels,selectFlow);
+            console.log(labels)
+            fillDropdownFlows(labels,selectQuestion);
             showSelectedFlow();
-            GetAnswerCountsForQuestions(labels)
+            GetAnswerCountsForQuestions(labels,question)
         } )
         .catch(error => console.error("Error:", error))
 }
@@ -225,14 +231,13 @@ export async function GetQuestionsFromFlow(flowname: string){
         }
     })
         .then(response => response.json())
-        .then(data => drawBarChart("Aantal Questions voor de Flow: "+flowname,chartData('Aantal Questions', labels, data)))
+        .then(data => drawRadarChart("Aantal Questions voor de Flow: "+flowname,chartData('Aantal Questions', labels, data)))
         .catch(error => console.error("Error:", error))
 }
 
 export async function GetAnswerCountsForQuestions(labels: string[],question: string){
-    console.log("Fetching count questions...")
-    //questionViewModel.questionType.toString()
-    //const labels: string[] = ["MultipleChoiceQuestion", "SingleChoiceQuestion","OpenQuestion","RangeQuestion"];
+    //voor voor elk answer
+    console.log("Fetching count answers...")
     
     await fetch("/api/Statistics/GetAnswerCountsForQuestions/" + question, {
         method: "GET",
@@ -242,7 +247,7 @@ export async function GetAnswerCountsForQuestions(labels: string[],question: str
         }
     })
         .then(response => response.json())
-        .then(data => drawBarChart("Aantal antwoorden voor de vraag: "+question,chartData('Aantal Answers', labels, data)))
+        .then(data => drawDoughnutChart("Aantal antwoorden voor de vraag: "+question,chartData('Aantal Answers', labels, data)))
         .catch(error => console.error("Error:", error))
 }
 
@@ -265,6 +270,8 @@ function fillDropdownFlows(data: string[], select: HTMLSelectElement) {
         option.text = data[i]; 
         select.appendChild(option);
     }
+    selectFlow.addEventListener('change', showSelectedFlow);
+    showSelectedFlow();
 }
 
 function showSelectedFlow(){
@@ -279,3 +286,5 @@ function showSelectedFlow(){
 
 // getSelectedFlows()
 GetNamesPerFlow()
+
+//GetAnswersPerQuestion("What would help you make a choice between the different parties?")
