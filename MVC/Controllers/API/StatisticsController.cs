@@ -51,7 +51,7 @@ public class StatisticsController : Controller
     public IActionResult GetQuestionsFromFlow(string flowname)
     {
         var flowCountQuestions = _manager.GetQuestionCountsForFlow(flowname);
-        var a = flowCountQuestions.Count();
+        
 
         return Ok(flowCountQuestions);
     }

@@ -247,15 +247,31 @@ public class FlowRepository
     {
         var flow = ReadFlowByName(flowName);
         var questionNamesPerFlow = new List<int>();
+        int questionS = 0;
+        int questionM = 0;
+        int questionR = 0;
+        int questionO = 0;
 
         foreach (var q in ReadQuestionsFromFlow(flow.Id))
         {
-            var qsCount = ReadQuestionsFromFlow(flow.Id);
-            var v = qsCount.Count();
-            questionNamesPerFlow.Add(v);
+            switch (q.QuestionBase)
+            {
+                case SingleChoiceQuestion:
+                    questionS++; break;
+                case MultipleChoiceQuestion:
+                    questionM++; break;
+                case OpenQuestion:
+                    questionR++; break;
+                case RangeQuestion:
+                    questionO++; break;
+            }
         }
-        var a =  questionNamesPerFlow.Select(count => count.ToString()).ToArray();
-        return a;
+        questionNamesPerFlow.Add(questionS);
+        questionNamesPerFlow.Add(questionM);
+        questionNamesPerFlow.Add(questionR);
+        questionNamesPerFlow.Add(questionO);
+        
+        return questionNamesPerFlow.Select(i => i.ToString()).ToArray();
     }
     
     public IEnumerable<QuestionStep> ReadQuestionsFromFlow(long flowId)
