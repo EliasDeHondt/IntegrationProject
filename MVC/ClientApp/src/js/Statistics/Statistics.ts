@@ -79,8 +79,14 @@ function drawLineChart(titel:string,chartData: { labels: string[]; datasets: { l
         }
     });
 }
+let doughnutChart: Chart<"doughnut", string[], string> | null = null;
 function drawDoughnutChart(titel:string,chartData: { labels: string[]; datasets: { label: string; data: string[]; backgroundColor: string; borderColor: string; borderWidth: number; }[]; }){
-    var doughnutChart = new Chart(doughnutCtx, {
+    // @ts-ignore
+    if (doughnutChart) {
+        doughnutChart.destroy();
+    }
+    
+    doughnutChart = new Chart(doughnutCtx, {
         type: 'doughnut',
         data: chartData,
         options: {
@@ -225,7 +231,8 @@ export async function GetQuestionNames(flowname: string){
         .then(labels => {
             console.log(labels)
             fillDropdownFlows(labels,selectQuestion);
-            GetQuestionNames(showSelectedFlow());
+            //GetQuestionNames(showSelectedFlow());
+            showSelectedFlow()
             GetAnswerCountsForQuestions(labels,showSelectedQuestion());
         } )
         .catch(error => console.error("Error:", error))
@@ -251,16 +258,18 @@ export async function GetAnswerCountsForQuestions(labels: string[],question: str
     //voor elk answer te tellen
     console.log("Fetching count answers...")
     
-    await fetch("/api/Statistics/GetAnswerCountsForQuestions/" + question, {
-        method: "GET",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
-    })
-        .then(response => response.json())
-        .then(data => drawDoughnutChart("Aantal antwoorden voor de vraag: "+question,chartData('Aantal Answers', labels, data)))
-        .catch(error => console.error("Error:", error))
+    // await fetch("/api/Statistics/GetAnswerCountsForQuestions/" + question, {
+    //     method: "GET",
+    //     headers: {
+    //         "Accept": "application/json",
+    //         "Content-Type": "application/json"
+    //     }
+    // })
+    //     .then(response => response.json())
+    //     .then(data => drawDoughnutChart("Aantal antwoorden voor de vraag: "+question,chartData('Aantal Answers', labels, data)))
+    //     .catch(error => console.error("Error:", error))
+    const data: string[] = ["4", "3","8","1"];
+    drawDoughnutChart("Aantal antwoorden voor de vraag: "+question,chartData('Aantal Answers', labels, data))
 }
 
 function getSelectedFlows(): number[] {
@@ -283,7 +292,7 @@ function fillDropdownFlows(data: string[], select: HTMLSelectElement) {
         select.appendChild(option);
     }
     selectFlow.addEventListener('change', showSelectedFlow);
-    GetQuestionsFromFlow(showSelectedFlow());
+    showSelectedFlow();
 }
 
 function showSelectedFlow() : string{
@@ -291,14 +300,17 @@ function showSelectedFlow() : string{
     
     if (selectedIndex !== -1) {
         const selectedOption = selectFlow.options[selectedIndex];
+        GetQuestionsFromFlow(selectedOption.text);
+        GetQuestionNames(selectedOption.text);
         return selectedOption.text; //gekozen flow
+        
     }return "";
 }
 function showSelectedQuestion() : string{
     const selectedIndex = selectQuestion.selectedIndex;
 
     if (selectedIndex !== -1) {
-        const selectedOption = selectFlow.options[selectedIndex];
+        const selectedOption = selectQuestion.options[selectedIndex];
         return selectedOption.text; //gekozen question
     }return "";
 }
