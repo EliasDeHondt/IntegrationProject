@@ -260,8 +260,9 @@ public class FlowRepository
     
     public IEnumerable<QuestionBase> ReadQuestionsFromFlow(long flowId)
     {
-        return _context.QuestionSteps
+        var a = _context.QuestionSteps
             .Include(qs => qs.QuestionBase).Where(a => a.Flow.Id == flowId).Select(step => step.QuestionBase)
             .ToList();
+        return a;
     }
 }

@@ -188,19 +188,20 @@ export async function GetNamesPerFlow(){
             GetCountStepsPerFlow(labels)
             GetCountParticipationsPerFlow(labels)
             //flowNames = labels
-            console.log(labels)
+            //console.log(labels)
             fillDropdownFlows(labels);
+            showSelectedFlow();
         } )
         .catch(error => console.error("Error:", error))
 }
 
 
 //get data - flow
-export async function GetQuestionCountsForFlow(flowname: string){
+export async function GetQuestionsFromFlow(flowname: string){
     console.log("Fetching count questions...")
     //questionViewModel.questionType.toString()
     const labels: string[] = ["MultipleChoiceQuestion", "SingleChoiceQuestion","OpenQuestion","RangeQuestion"];
-    await fetch("/api/Statistics/GetQuestionCountsForFlow/" + flowname, {
+    await fetch("/api/Statistics/GetQuestionsFromFlow/" + flowname, {
         method: "GET",
         headers: {
             "Accept": "application/json",
@@ -208,7 +209,7 @@ export async function GetQuestionCountsForFlow(flowname: string){
         }
     })
         .then(response => response.json())
-        .then(data => drawLineChart("Aantal Participations per Flow",chartData('Aantal Participations', labels, data)))
+        .then(data => drawDoughnutChart("Aantal Questions voor de Flow: "+flowname,chartData('Aantal Questions', labels, data)))
         .catch(error => console.error("Error:", error))
 }
 
@@ -234,7 +235,14 @@ function fillDropdownFlows(data: string[]) {
 }
 
 function showSelectedFlow(){
-    GetQuestionCountsForFlow(flowNames.toString())
+    const selectedIndex = selectFlow.selectedIndex;
+    console.log(selectedIndex)
+    if (selectedIndex !== -1) {
+        const selectedOption = selectFlow.options[selectedIndex];
+        const selectedFlowName = selectedOption.text;
+        console.log("selectedFlowName",selectedFlowName)
+        GetQuestionsFromFlow(selectedFlowName);
+    }
 }
 
 // getSelectedFlows()
