@@ -1,0 +1,28 @@
+﻿@import "variables";
+
+.flow-note-container {
+  margin: 16px auto;
+  border-radius: 8px;
+  background-color: map-get($themes, light, secondary);
+  width: 1200px;
+  height: auto;
+  padding: 16px;
+}
+
+.flow-note-title {
+  background-color: map-get($themes, light, accent);
+  padding: 16px;
+  border-radius: 8px;
+  color: #ffffff;
+  border: thin solid black;
+}
+
+.note-card {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  border: thin solid black;
+}
+
+.note-card-body {
+  padding: 16px;
+}
