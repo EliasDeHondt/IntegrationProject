@@ -658,7 +658,10 @@ butCloseCreateStep.onclick = () => {
     clearModal()
 }
 butConfirmCreateStep.onclick = () => {
-    let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
+    let newStepNumber = 1;
+    if(currentStepList[currentStepList.length - 1] != undefined){
+        newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
+    }
     if (infographic.checked) {
         AddStep(newStepNumber, "Information")
             .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))

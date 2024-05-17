@@ -252,6 +252,7 @@ public class Startup
         await roleManager.CreateAsync(new IdentityRole(UserRoles.Facilitator));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.PlatformAdmin));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.SystemAdmin));
+        await roleManager.CreateAsync(new IdentityRole(UserRoles.Respondent));
 
         await roleManager.CreateAsync(new IdentityRole(UserRoles.UserPermission));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.ProjectPermission));
@@ -264,6 +265,7 @@ public class Startup
         await userManager.CreateAsync(facilitatorFred, "Fred!123");
         await userManager.CreateAsync(sharedPlatformAdminThomas, "Thomas!123");
         await userManager.CreateAsync(sharedPlatformAdminKdg, "Kdg!123");
+        await userManager.CreateAsync(webAppUserBib, "Bib!123");
 
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.PlatformAdmin);
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.UserPermission);
@@ -284,6 +286,8 @@ public class Startup
         await userManager.AddToRoleAsync(facilitatorTom, UserRoles.Facilitator);
 
         await userManager.AddToRoleAsync(facilitatorFred, UserRoles.Facilitator);
+
+        await userManager.AddToRoleAsync(webAppUserBib, UserRoles.Respondent);
     }
 
     void SeedDatabase(UnitOfWork uow, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager,

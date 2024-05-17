@@ -8,17 +8,84 @@
     <title>Feed</title>
     <link rel="stylesheet" href="~/dist/site.css"/>
 </head>
-<body class="m-0">
-<div class="row row-cols-3 h-100">
-    <div class="col-3 bgPrimary">
+<body class="m-0 webapp-container">
+<div class="row row-cols-3 h-100 g-0">
+    <div class="col-2 bg-elias-kleurtje-1">
 
     </div>
-    <div class="col-6">
+    <div class="col-8">
+        <div class="card w-60 m-auto mt-4 rounded-5 bgPrimary">
+            <div class="card-body p-2">
+                <div class="row">
+                    <div class="col-2 m-auto">
+                        <i class="bi bi-person-circle webapp-icon"></i>
+                    </div>
+                    <div class="col-10">
+                        <div class="input-wrapper row">
+                            <textarea class="input-box" type="text" placeholder="Got any ideas?"></textarea>
+                            <span class="underline"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <button class="me-3 p-1 btn bg-none shadow-none border-0 webapp-btn">
+                                    <i class="bi bi-image-fill webapp-util-icon"></i>
+                                </button>
+                            </div>
+                            <div class="col text-end">
+                                <button class="me-3 p-1 btn bg-none shadow-none border-0 webapp-btn">
+                                    <i class="bi bi-send-fill webapp-util-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="webapp-card">
+            <div class="card-body p-2 ms-2 me-2">
+                <div class="row webapp-card-header">
+                    <div class="col-1 m-auto">
+                        <i class="bi bi-person-circle webapp-util-icon"></i>
+                    </div>
+                    <div class="col-11 m-auto">
+                        <span>Placeholder name</span>
+                    </div>
+                </div>
+                <div class="row webapp-card-content">
+                    <span>Placeholder content</span>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-2">
+                        <div class="comment-react ms-2">
+                            <button>
+                                <svg
+                                    width="5vh" height="5vh" viewBox="0 0 24 24" fill="none">
+                                    <path
+                                        d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z"
+                                        stroke="white"
+                                        fill="white">
+                                    </path>
+                                </svg>
+                            </button>
+                            <span id="amountLikes">14</span>
+                        </div>
+                    </div>
+                    <div class="col-10">
+                        <button id="btnReaction" class="p-1 btn bg-none shadow-none border-0">
+                            <i id="iconReaction" class="bi bi-chat-dots webapp-util-icon chat-dots"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
-    <div class="col-3 bgPrimary">
+    <div class="col-2 bg-elias-kleurtje-1">
 
     </div>
 </div>
 </body>
 </html>
+
+<script src="~/dist/webapp.entry.js" defer></script>
