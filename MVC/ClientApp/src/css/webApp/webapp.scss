@@ -219,7 +219,68 @@ $g: 0 120deg, #0000 0;
   -ms-overflow-style: none;
   scrollbar-width: none;
   
+  font-family: Arial, sans-serif;
+  
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+.webapp-nav-button {
+  @extend .row;
+  @extend .mt-3;
+  @extend .m-auto;
+  background: $eliasKleurtje2;
+  color: white;
+  font-family: Arial, sans-serif;
+  font-size: 2vh;
+  font-weight: 500;
+  border-radius: 0.9em;
+  border: none;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 0 1.6em -0.6em map-get($themes, light, secondary);
+  overflow: hidden;
+  position: relative;
+  height: 3.5em;
+  width: 75%;
+  padding: 0.35em 3.3em 0.35em 1.2em;
+  cursor: pointer;
+  
+  .icon{
+    background: white;
+    margin-left: 1em;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.2em;
+    width: 2.2em;
+    border-radius: 0.7em;
+    box-shadow: 0.1em 0.1em 0.6em 0.2em map-get($themes, light, secondary);
+    right: 0.3em;
+    transition: all 0.3s;
+    
+    svg{
+      width: 1.1em;
+      transition: transform 0.3s;
+      color: map-get($themes, light, secondary);
+    }
+    
+  }
+  
+  &:hover .icon {
+    width: calc(100% - 0.6em);
+    
+    svg{
+      transform: translateX(0.1em);
+    }
+    
+  }
+  
+  &:active .icon {
+    transform: scale(0.95);
+  }
+  
 }

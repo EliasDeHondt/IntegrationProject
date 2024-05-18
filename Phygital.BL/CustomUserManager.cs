@@ -1,5 +1,6 @@
 ﻿using Data_Access_Layer;
 using Domain.Accounts;
+using Domain.WebApp;
 
 namespace Business_Layer;
 
@@ -25,5 +26,10 @@ public class CustomUserManager
     public long GetRandomFeedIdForUser(string email)
     {
         return _repo.ReadRandomFeedIdFromUser(email);
+    }
+    
+    public IEnumerable<Feed> GetFeedForUserWithProject(string email)
+    {
+        return _repo.ReadFeedsFromUserIncludingProject(email);
     }
 }

@@ -1,4 +1,4 @@
-﻿import {Idea} from "../Types/WebApp/Types";
+﻿import {Feed, Idea} from "../Types/WebApp/Types";
 
 export function generateIdeaCard(idea: Idea): HTMLDivElement {
     let div = document.createElement("div");
@@ -33,10 +33,45 @@ export function generateIdeaCard(idea: Idea): HTMLDivElement {
                     </div>
                     <div class="col-10">
                         <button class="p-1 btn bg-none shadow-none border-0 btnReaction" data-id="${idea.id}">
-                            <i id="iconReaction" class="bi bi-chat-dots webapp-util-icon chat-dots"></i>
+                            <i class="bi bi-chat-dots webapp-util-icon chat-dots iconReaction"></i>
                         </button>
                     </div>
                 </div>
             </div>`
     return div;
+}
+
+export function generateNavButton(feed: Feed): HTMLButtonElement{
+    let btn = document.createElement("button");
+    btn.classList.add("webapp-nav-button");
+    btn.setAttribute("data-id", feed.id.toString());
+    btn.innerHTML = `
+            ${feed.title} Feed
+            <div class="icon">
+                <svg
+                    height="24"
+                    width="24"
+                    viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    <path
+                        d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                        fill="currentColor">
+                    </path>
+                </svg>
+            </div>`
+    return btn
+}
+
+export function addHoverEffect() {
+    let btn = document.getElementsByClassName("btnReaction") as HTMLCollectionOf<HTMLButtonElement>;
+    let icons = document.getElementsByClassName("iconReaction") as HTMLCollectionOf<SVGSVGElement>;
+    for (let i = 0; i < btn.length; i++) {
+        btn[i].onmouseover = () => {
+            icons[i].classList.replace("bi-chat-dots", "bi-chat-dots-fill");
+        }
+        btn[i].onmouseout = () => {
+            icons[i].classList.replace("bi-chat-dots-fill", "bi-chat-dots")
+        }
+
+    }
 }

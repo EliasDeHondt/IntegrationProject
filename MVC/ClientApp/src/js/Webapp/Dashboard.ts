@@ -1,20 +1,37 @@
-﻿import {GetRandomFeed} from "./WebAppAPI";
-import {generateIdeaCard} from "./IdeaUtil";
+﻿import {GetFeed, GetFeedIds, GetRandomFeed} from "./WebAppAPI";
+import {addHoverEffect, generateIdeaCard, generateNavButton} from "./Util";
+import {Feed} from "../Types/WebApp/Types";
 
-const btnReaction = document.getElementById("btnReaction") as HTMLButtonElement;
-const iconReaction = document.getElementById("iconReaction") as HTMLElement;
 const ideaContainer = document.getElementById("ideaContainer") as HTMLDivElement;
-
-btnReaction.onmouseover = () => {
-    iconReaction.classList.replace("bi-chat-dots", "bi-chat-dots-fill");
-}
-
-btnReaction.onmouseout = () => {
-    iconReaction.classList.replace("bi-chat-dots-fill", "bi-chat-dots");
-}
+const navContainer = document.getElementById("navContainer") as HTMLDivElement;
 
 GetRandomFeed().then(feed => {
-    feed.ideas.forEach(idea => {
-        ideaContainer.appendChild(generateIdeaCard(idea));
+    generateIdeas(feed);
+})
+
+GetFeedIds().then(feeds => {
+    feeds.forEach(feed => {
+        navContainer.appendChild(generateNavButton(feed));
+        addGetFeedButtons();
     })
 })
+
+function addGetFeedButtons(){
+    let btns = document.getElementsByClassName("webapp-nav-button") as HTMLCollectionOf<HTMLButtonElement>
+    for(let i = 0; i < btns.length; i++){
+        btns[i].onclick = () => {
+            let id = parseInt(btns[i].getAttribute("data-id")!);
+            GetFeed(id).then(feed => {
+                generateIdeas(feed);
+            })
+        }
+    }
+}
+
+function generateIdeas(feed: Feed){
+    ideaContainer.innerHTML = "";
+    feed.ideas.forEach(idea => {
+        ideaContainer.appendChild(generateIdeaCard(idea));
+        addHoverEffect();
+    })
+}

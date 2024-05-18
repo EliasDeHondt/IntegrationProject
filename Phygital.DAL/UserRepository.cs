@@ -1,6 +1,7 @@
 ﻿using Data_Access_Layer.DbContext;
 using Domain.Accounts;
 using Domain.WebApp;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data_Access_Layer;
 
@@ -35,5 +36,14 @@ public class UserRepository
         var rand = new Random();
         return user!.FeedIds.ElementAt(rand.Next(0, user.FeedIds.Count - 1)).Value;
     } 
+ 
+    public IEnumerable<Feed> ReadFeedsFromUserIncludingProject(string email)
+    {
+        var user = _ctx.Users.Single(u => u.Email == email) as WebAppUser;
+        _ctx.Entry(user!).Collection(u => u.FeedIds).Load();
+        var feedIds = user!.FeedIds.Select(fid => fid.Value);
+        return _ctx.Feeds.Include(feed => feed.Project)
+            .Where(feed => feedIds.Contains(feed.Id));
+    }
     
 }

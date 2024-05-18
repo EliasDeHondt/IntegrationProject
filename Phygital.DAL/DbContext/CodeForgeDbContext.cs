@@ -7,7 +7,6 @@
 
 using System.Diagnostics;
 using Domain.Accounts;
-using Domain.Converters;
 using Domain.FacilitatorFunctionality;
 using Domain.Platform;
 using Domain.ProjectLogics;
@@ -16,7 +15,6 @@ using Domain.ProjectLogics.Steps.Information;
 using Domain.ProjectLogics.Steps.Questions;
 using Domain.ProjectLogics.Steps.Questions.Answers;
 using Domain.WebApp;
-using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

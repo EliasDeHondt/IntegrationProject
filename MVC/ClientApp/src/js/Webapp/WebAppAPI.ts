@@ -25,3 +25,17 @@ export async function GetRandomFeed(): Promise<Feed> {
             return data
         })
 }
+
+export async function GetFeedIds(): Promise<Feed[]> {
+    return await fetch('/api/Feeds/ids', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
+}

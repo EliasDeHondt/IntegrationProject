@@ -20,7 +20,7 @@ public class FeedsController : Controller
         _userManager = userManager;
     }
     
-    [HttpGet]
+    [HttpGet("{id}")]
     public IActionResult GetFeed(long id)
     {
         var feed = _manager.GetFeedFromIdWithIdeas(id);
@@ -39,6 +39,17 @@ public class FeedsController : Controller
     {
         var randomId = _userManager.GetRandomFeedIdForUser(User.FindFirstValue(ClaimTypes.Email)!);
         return RedirectToAction("GetFeed", new { id = randomId});
+    }
+    
+    [HttpGet("ids")]
+    public IActionResult GetFeedIdsForUser()
+    {
+        var feeds = _userManager.GetFeedForUserWithProject(User.FindFirstValue(ClaimTypes.Email)!);
+        return Ok(feeds.Select(feed => new FeedModel
+        {
+            Title = feed.Project.Title,
+            Id = feed.Id
+        }));
     }
     
     private IEnumerable<IdeaModel> CreateIdeaModels(ICollection<Idea> ideas)

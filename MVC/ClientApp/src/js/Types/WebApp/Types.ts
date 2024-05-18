@@ -1,6 +1,7 @@
 ﻿export type Feed = {
     ideas: Idea[]
     title: string
+    id: number
 }
 
 export type Idea = {
