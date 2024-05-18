@@ -22,4 +22,8 @@ public class CustomUserManager
         return _repo.ReadSharedPlatformId(email);
     }
     
+    public long GetRandomFeedIdForUser(string email)
+    {
+        return _repo.ReadRandomFeedIdFromUser(email);
+    }
 }

@@ -7,6 +7,7 @@
 
 using System.Diagnostics;
 using Domain.Accounts;
+using Domain.Converters;
 using Domain.FacilitatorFunctionality;
 using Domain.Platform;
 using Domain.ProjectLogics;
@@ -53,7 +54,8 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Idea> Ideas { get; set; } = null!;
     public DbSet<Like> Likes { get; set; } = null!;
     public DbSet<Reaction> Reactions { get; set; } = null!;
-
+    public DbSet<LongValue> LongValues { get; set; } = null!;
+    
     public CodeForgeDbContext(DbContextOptions<CodeForgeDbContext> options) : base(options) {}
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -145,6 +147,10 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
             .WithMany(user => user.Likes)
             .HasForeignKey("FK_Like_WebAppUserId");
             
+        builder.Entity<Project>()
+            .HasOne(project => project.Feed)
+            .WithOne(feed => feed.Project)
+            .HasForeignKey<Feed>("FK_Feed_ProjectId").IsRequired();
         
         builder.Entity<Selection>().HasKey("FK_Selection_AnswerId", "FK_Selection_ChoiceId");
         builder.Entity<ProjectOrganizer>().HasKey("FK_ProjectOrganizer_ProjectId", "FK_ProjectOrganizer_FacilitatorId");

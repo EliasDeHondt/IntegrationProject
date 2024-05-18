@@ -213,3 +213,13 @@ $g: 0 120deg, #0000 0;
     font-family: "Arial", sans-serif;
   }
 }
+
+.webapp-middle-column {
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
