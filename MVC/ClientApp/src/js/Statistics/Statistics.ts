@@ -196,6 +196,15 @@ export async function GetNamesPerFlow(){
             GetCountStepsPerFlow(labels)
             GetCountParticipationsPerFlow(labels)
             fillDropdownFlows(labels, selectFlow);
+
+            GetQuestionsFromFlow(showSelectedFlow()); //eerste keer bij inladen
+            GetQuestionNames(showSelectedFlow()); //eerste keer bij inladen
+            
+            selectFlow.addEventListener('change', () => {
+                console.log("showSelectedFlow() ", showSelectedFlow());
+                GetQuestionsFromFlow(showSelectedFlow());
+                GetQuestionNames(showSelectedFlow());
+            });
         } )
         .catch(error => console.error("Error:", error))
 }
@@ -232,7 +241,7 @@ export async function GetQuestionNames(flowname: string){
             console.log(labels)
             fillDropdownFlows(labels,selectQuestion);
             //GetQuestionNames(showSelectedFlow());
-            showSelectedFlow()
+            //showSelectedFlow()
             GetAnswerCountsForQuestions(labels,showSelectedQuestion());
         } )
         .catch(error => console.error("Error:", error))
@@ -300,8 +309,8 @@ function showSelectedFlow() : string{
     
     if (selectedIndex !== -1) {
         const selectedOption = selectFlow.options[selectedIndex];
-        GetQuestionsFromFlow(selectedOption.text);
-        GetQuestionNames(selectedOption.text);
+        //GetQuestionsFromFlow(selectedOption.text);
+       // GetQuestionNames(selectedOption.text);
         return selectedOption.text; //gekozen flow
         
     }return "";
@@ -320,5 +329,13 @@ function showSelectedQuestion() : string{
 
 
 // getSelectedFlows()
+
+// document.addEventListener('DOMContentLoaded', (event) => {
+//     GetNamesPerFlow()
+//     console.log("showSelectedFlow() ", showSelectedFlow());
+//     GetQuestionsFromFlow(showSelectedFlow())
+// });
 GetNamesPerFlow()
+
+// console.log("showSelectedFlow()1 ", showSelectedFlow());
 //GetAnswersPerQuestion("What would help you make a choice between the different parties?")
