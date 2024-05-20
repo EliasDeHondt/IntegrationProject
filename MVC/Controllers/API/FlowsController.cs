@@ -71,71 +71,49 @@ public class FlowsController : Controller
     [HttpPut("/{flowId}/Update")]
     public IActionResult UpdateFlow(long flowId, IEnumerable<StepViewModel> model)
     {
-        var flow = _manager.GetFlowById(flowId);
-
         _uow.BeginTransaction();
 
-        foreach (var stepViewModel in model)
+        var flow = _manager.GetFlowWithSteps(flowId);
+
+        var steps = model.Select<StepViewModel, StepBase>(stepViewModel =>
         {
             var step = flow.Steps.FirstOrDefault(s => s.Id == stepViewModel.Id);
 
-            switch (stepViewModel)
+            switch (step)
             {
-                case InformationStepViewModel infoStepViewModel when step is InformationStep infoStep:
-                    infoStep.InformationBases = infoStepViewModel.InformationViewModel.Select<InformationViewModel, InformationBase>(infoViewModel =>
-                    {
-                        var info = infoStep.InformationBases.FirstOrDefault(i => i.Id == infoViewModel.Id)!;
-
-                        switch (info)
+                case InformationStep infoStep when stepViewModel is InformationStepViewModel infoStepViewModel:
+                    infoStep.InformationBases = infoStepViewModel.InformationViewModel
+                        .Select(infoViewModel =>
                         {
-                            case Text text:
-                                text.InformationText = infoViewModel.Information;
-                                _stepManager.ChangeInformation(text);
-                                return text;
-                            case Video video:
-                                video.FilePath = infoViewModel.Information;
-                                _stepManager.ChangeInformation(video);
-                                return video;
-                            case Image image:
-                                image.Base64 = infoViewModel.Information;
-                                _stepManager.ChangeInformation(image);
-                                return image;
-                            case Hyperlink link:
-                                link.URL = infoViewModel.Information;
-                                _stepManager.ChangeInformation(link);
-                                return link;
-                            default: return info;
-                        }
-                    }).ToList();
-                    _stepManager.ChangeStep(infoStep);
-                    break;
-                case QuestionStepViewModel questionStepViewModel when step is QuestionStep questionStep:
-                {
-                    var question = questionStep.QuestionBase;
+                            var info = _stepManager.GetInformationById(infoViewModel.Id);
+                            info = _stepManager.ChangeInformation(info, infoViewModel.Information);
+                            return info;
+                        }).ToList();
+                    return infoStep;
+                    
+                case QuestionStep questionStep when stepViewModel is QuestionStepViewModel questionStepViewModel:
+                    var question = _stepManager.GetQuestionById(questionStepViewModel.QuestionViewModel.Id);
                     question.Question = questionStepViewModel.QuestionViewModel.Question;
                     if (question is ChoiceQuestionBase choiceQuestion)
                     {
                         choiceQuestion.Choices = questionStepViewModel.QuestionViewModel.Choices.Select(choiceViewModel =>
                         {
-                            var choice = choiceQuestion.Choices?.FirstOrDefault(c => c.Id == choiceViewModel.Id);
-
+                            var choice = _stepManager.GetChoiceById(choiceViewModel.Id);
                             choice.Text = choiceViewModel.Text;
-                            choice.NextStep = _stepManager.GetStepById(choiceViewModel.Id);
-                            _stepManager.ChangeChoice(choice);
+                            choice.NextStep = _stepManager.GetStepById(choiceViewModel.NextStepId);
                             return choice;
                         }).ToList();
                     }
-
-                    _stepManager.ChangeQuestion(question);
-
                     questionStep.QuestionBase = question;
-                    _stepManager.ChangeStep(questionStep);
-                    break;
-                }
+                    return questionStep;
+                    
+                default:
+                    return step;
             }
-        }
+        }).ToList();
 
-        _manager.UpdateFlow(flow);
+        flow.Steps = steps;
+        
         _uow.Commit();
 
         return NoContent();

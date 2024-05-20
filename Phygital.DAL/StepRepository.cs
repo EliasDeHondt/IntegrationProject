@@ -71,8 +71,7 @@ public class StepRepository
     public StepBase ReadStepById(long? stepId)
     {
         StepBase tempStep = _ctx.Steps
-            .AsNoTracking()
-            .Include(s => s.Flow)
+            .Include(s => s.Visible)
             .Single(s => s.Id == stepId);
 
         return ReadExtendedStep(tempStep);
@@ -164,9 +163,90 @@ public class StepRepository
             .Single();
     }
 
-    public void UpdateInformation(InformationBase information)
+    public InformationBase ReadInformationById(long id)
     {
-        _ctx.Information.Update(information);
+        var tempInfo = _ctx.Information
+            .Single(i => i.Id == id);
+
+        switch (tempInfo)
+        {
+            case Text text:
+                return _ctx.Texts
+                    .Include(t => t.InformationText)
+                    .Single(t => t.Id == text.Id);
+            case Video video:
+                return _ctx.Videos
+                    .Include(v => v.FilePath)
+                    .Single(v => v.Id == video.Id);
+            case Image image:
+                return _ctx.Images
+                    .Include(i => i.Base64)
+                    .Single(i => i.Id == image.Id);
+            case Hyperlink link:
+                return _ctx.Hyperlinks
+                    .Include(l => l.URL)
+                    .Single(l => l.Id == link.Id);
+            default: return tempInfo;
+        }
+    }
+
+    public QuestionBase ReadQuestionById(long id)
+    {
+        var tempQuestion = _ctx.Questions
+            .Include(q => q.Question)
+            .Single(q => q.Id == id);
+
+        switch (tempQuestion)
+        {
+            case OpenQuestion open:
+                return _ctx.OpenQuestions
+                    .Include(o => o.Question)
+                    .Single(o => o.Id == open.Id);
+            case RangeQuestion range:
+                return _ctx.ChoiceQuestions
+                    .Include(r => r.Question)
+                    .Include(r => r.Choices)
+                    .Single(r => r.Id == range.Id);
+            case SingleChoiceQuestion singleChoice:
+                return _ctx.ChoiceQuestions
+                    .Include(s => s.Question)
+                    .Include(s => s.Choices)
+                    .Single(s => s.Id == singleChoice.Id);
+            case MultipleChoiceQuestion multipleChoice:
+                return _ctx.ChoiceQuestions
+                    .Include(m => m.Question)
+                    .Include(m => m.Choices)
+                    .Single(m => m.Id == multipleChoice.Id);
+            default: return tempQuestion;
+        }
+    }
+
+    public Choice ReadChoiceById(long id)
+    {
+        return _ctx.Choices
+            .Include(c => c.Text)
+            .Include(c => c.NextStep)
+            .Single(c => c.Id == id);
+    }
+
+    public InformationBase UpdateInformation(InformationBase information, string content)
+    {
+        switch (information)
+        {
+            case Text text:
+                text.InformationText = content;
+                return text;
+            case Video video:
+                video.FilePath = content;
+                return video;
+            case Image image:
+                image.Base64 = content;
+                return image;
+            case Hyperlink link:
+                link.URL = content;
+                return link;
+            default: return information;
+        }
     }
 
     public void UpdateChoice(Choice choice)

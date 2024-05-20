@@ -1,10 +1,16 @@
-import {Choice, Information, Question, Step} from "../Flow/Step/StepObjects";
+import {
+    Choice,
+    Information, InformationStep,
+    isInformationStep,
+    isQuestionStep,
+    Question,
+    QuestionStep,
+    Step
+} from "../Flow/Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
 import {Modal} from "bootstrap";
 import {Flow, Participation} from "../Flow/FlowObjects";
 
-
-const stepsList = document.getElementById('steps-list') as HTMLElement;
 const btnAddStep = document.getElementById('btn-add-step') as HTMLButtonElement;
 const btnViewFlow = document.getElementById('viewFlow') as HTMLButtonElement;
 
@@ -151,7 +157,7 @@ function toggleButtons() {
         return;
     }
 
-    if (currentViewingStep.informationViewModel != undefined) {
+    if (isInformationStep(currentViewingStep)) {
         btnAddText.disabled = false;
         btnAddImage.disabled = false;
         btnAddVideo.disabled = false;
@@ -163,13 +169,13 @@ function toggleButtons() {
             btnAddLink.disabled = true;
         }
     }
-    if (currentViewingStep.questionViewModel != undefined && currentViewingStep.questionViewModel.questionType != "OpenQuestion") {
+    if (isQuestionStep(currentViewingStep) && currentViewingStep.questionViewModel.questionType != "OpenQuestion") {
         btnAddChoice.disabled = false;
         if (currentViewingStep.questionViewModel.choices.length >= 6)
             btnAddChoice.disabled = true;
     }
-    
-    if (currentViewingStep.informationViewModel || currentViewingStep.questionViewModel)
+
+    if (isInformationStep(currentViewingStep) || isQuestionStep(currentViewingStep))
         btnStepVisibility.disabled = false;
 
     const index = currentStepList.findIndex(s => s.stepNumber === currentViewingStep.stepNumber);
@@ -207,12 +213,12 @@ function UpdateStepList(steps: Step[]) {
             cardHeader.classList.add("step-card-header");
             cardHeader.innerText = "Step " + step.stepNumber.toString();
             GetStepById(step.stepNumber, flowId).then(s => {
-                if (s.questionViewModel != undefined)
+                if (isQuestionStep(s))
                     cardHeader.innerText += "\n" + s.questionViewModel.questionType.toString();
-                if (s.informationViewModel != undefined)
+                if (isInformationStep(s))
                     cardHeader.innerText += "\nInformation"
             })
-            
+
             if (!step.visible)
                 stepCard.classList.add('step-card-hidden')
 
@@ -271,11 +277,14 @@ function checkURLValidity(url: string): boolean {
 }
 
 btnAddChoice.addEventListener('click', async () => {
-    currentViewingStep.questionViewModel.choices.length++
+    if (isQuestionStep(currentViewingStep)) {
+        currentViewingStep.questionViewModel.choices.length++
 
-    if (currentViewingStep.questionViewModel.choices.length >= 6) {
-        btnAddChoice.disabled = true;
+        if (currentViewingStep.questionViewModel.choices.length >= 6) {
+            btnAddChoice.disabled = true;
+        }
     }
+
     await AddChoice(currentViewingStep.stepNumber);
     let div = document.createElement("div");
     div.classList.add("text-start", "m-auto", "choice-container")
@@ -294,12 +303,15 @@ btnAddChoice.addEventListener('click', async () => {
     choiceContainer.appendChild(div);
 });
 btnAddText.addEventListener('click', async () => {
-    currentViewingStep.informationViewModel.length++
-    if (currentViewingStep.informationViewModel.length >= 2) {
-        btnAddText.disabled = true;
-        btnAddImage.disabled = true;
-        btnAddVideo.disabled = true;
+    if (isInformationStep(currentViewingStep)) {
+        currentViewingStep.informationViewModel.length++
+        if (currentViewingStep.informationViewModel.length >= 2) {
+            btnAddText.disabled = true;
+            btnAddImage.disabled = true;
+            btnAddVideo.disabled = true;
+        }
     }
+
     await AddInformation(currentViewingStep.stepNumber, "Text");
     let div = document.createElement("div");
     div.id = "text-container"
@@ -313,8 +325,8 @@ btnAddText.addEventListener('click', async () => {
 });
 
 btnAddLink.addEventListener('click', () => {
-
-    currentViewingStep.informationViewModel.length++
+    if (isInformationStep(currentViewingStep))
+        currentViewingStep.informationViewModel.length++
     toggleButtons();
 
     let div = document.createElement("div");
@@ -363,7 +375,7 @@ async function GetStepData() {
 
     const index = currentStepList.findIndex(step => step.stepNumber === currentViewingStep.stepNumber);
 
-    if (currentViewingStep.informationViewModel) {
+    if (isInformationStep(currentViewingStep)) {
         let informationArray: Information[] = currentViewingStep.informationViewModel;
         const contentElements = partialInformationContainer.children;
 
@@ -402,12 +414,14 @@ async function GetStepData() {
             };
         }
         if (index !== -1) {
-            currentStepList[index].informationViewModel = informationArray;
+            let currentInformationStep = currentStepList[index] as InformationStep;
+            currentInformationStep.informationViewModel = informationArray;
             currentViewingStep.informationViewModel = informationArray;
         }
     }
 
-    if (currentViewingStep.questionViewModel) {
+    if (isQuestionStep(currentViewingStep)) {
+        let question : Question = currentViewingStep.questionViewModel;
         let choicesArray: Choice[] = currentViewingStep.questionViewModel.choices;
 
         const questionContainer = partialQuestionContainer.children[0] as HTMLDivElement;
@@ -432,15 +446,16 @@ async function GetStepData() {
 
         let questionText = questionElement.value;
         let questionType = currentViewingStep.questionViewModel.questionType;
-        let question: Question = {
-            id: currentStepList[index].questionViewModel.id,
+        question = {
+            id: question.id,
             question: questionText,
             questionType: questionType,
             choices: choicesArray
         }
 
         if (index !== -1) {
-            currentStepList[index].questionViewModel = question;
+            let currentQuestionStep = currentStepList[index] as QuestionStep;
+            currentQuestionStep.questionViewModel = question;
             currentViewingStep.questionViewModel = question;
         }
     }
@@ -455,25 +470,37 @@ async function GetNewFlowData(flow: Flow): Promise<Flow> {
     }
 
     for (const step of currentStepList) {
-        let stepData: Step = {
-            id: step.id,
-            stepNumber: step.stepNumber,
-            informationViewModel: step.informationViewModel,
-            questionViewModel: step.questionViewModel,
-            notes: step.notes,
-            visible: step.visible
-        };
+        let stepData: QuestionStep | InformationStep;
 
-        if (step.questionViewModel && step.questionViewModel.questionType !== "OpenQuestion") {
+        if (isQuestionStep(step)) {
+
+        } else if (isInformationStep(step)) {
+            stepData = {
+                id: step.id,
+                stepNumber: step.stepNumber,
+                informationViewModel: step.informationViewModel,
+                notes: step.notes,
+                visible: step.visible
+            } as InformationStep;
+            flowData.steps.push(stepData);
+        }
+
+        if (isQuestionStep(step) && step.questionViewModel.questionType !== "OpenQuestion") {
             const choices: Choice[] = [];
             for (const choice of step.questionViewModel.choices) {
                 choices.push({id: choice.id, text: choice.text, nextStepId: choice.nextStepId});
             }
-            if (stepData.questionViewModel)
-                stepData.questionViewModel.choices = choices;
-        }
+            stepData = {
+                id: step.id,
+                stepNumber: step.stepNumber,
+                questionViewModel: step.questionViewModel,
+                notes: step.notes,
+                visible: step.visible
+            } as QuestionStep;
+            stepData.questionViewModel.choices = choices;
 
-        flowData.steps.push(stepData);
+            flowData.steps.push(stepData)
+        }
     }
 
     return flowData;
@@ -509,7 +536,7 @@ async function ShowStepInContainer(stepNr: number) {
     partialInformationContainer.innerHTML = "";
     partialQuestionContainer.innerHTML = "";
     toggleButtons();
-    if (data.informationViewModel != undefined) {
+    if (isInformationStep(data)) {
         for (const infoStep of data.informationViewModel) {
             switch (infoStep.informationType) {
                 case "Text": {
@@ -567,7 +594,7 @@ async function ShowStepInContainer(stepNr: number) {
         }
     }
 
-    if (data.questionViewModel != undefined) {
+    if (isQuestionStep(data)) {
         let questionContainer = document.createElement("div");
         questionContainer.id = "question-container"
         questionContainer.classList.add("text-start", "m-auto");
@@ -759,7 +786,7 @@ btnConfirmViewFlow.onclick = () => {
 
 btnStepVisibility.onclick = () => {
     const index = currentStepList.findIndex(s => s.stepNumber === currentViewingStep.stepNumber);
-    
+
     if (btnStepVisibility.innerText == 'Disable Step') {
         currentViewingStep.visible = false;
         currentStepList[index].visible = false;
@@ -767,7 +794,7 @@ btnStepVisibility.onclick = () => {
         currentViewingStep.visible = true;
         currentStepList[index].visible = true;
     }
-    
+
     toggleButtons();
     showStepVisibility(currentStepList[index]);
 }

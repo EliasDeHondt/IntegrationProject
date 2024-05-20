@@ -112,9 +112,24 @@ public class StepManager
         return _repo.ReadStepId(flowId, stepNr);
     }
 
-    public void ChangeInformation(InformationBase information)
+    public InformationBase GetInformationById(long id)
     {
-        _repo.UpdateInformation(information);
+        return _repo.ReadInformationById(id);
+    }
+
+    public QuestionBase GetQuestionById(long id)
+    {
+        return _repo.ReadQuestionById(id);
+    }
+
+    public Choice GetChoiceById(long id)
+    {
+        return _repo.ReadChoiceById(id);
+    }
+
+    public InformationBase ChangeInformation(InformationBase information, string content)
+    {
+        return _repo.UpdateInformation(information, content);
     }
 
     public void ChangeChoice(Choice choice)
