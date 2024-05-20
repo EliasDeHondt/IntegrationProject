@@ -10,7 +10,6 @@ import {
 import {downloadVideoFromBucket} from "../StorageAPI";
 import {Modal, Toast} from "bootstrap";
 import {Flow, Participation} from "../Flow/FlowObjects";
-import {op} from "@tensorflow/tfjs";
 
 const saveFlowToast = new Toast(document.getElementById("saveFlowToast")!);
 
@@ -29,8 +28,6 @@ const divQuestion = document.getElementById("partialQuestionContainer") as HTMLD
 
 let currentStep: Step;
 let currentStepList: Step[] = [];
-let currentViewingStep: Step;
-
 let flowId: number;
 
 async function GetStepsFromFlow(flowId: number): Promise<Step[]> {
@@ -255,7 +252,7 @@ async function updateStepList(steps: Step[]) {
                 cardHeader.innerText += "\n" + step.questionViewModel.questionType.toString();
             if (isInformationStep(step))
                 cardHeader.innerText += "\nInformation"
-            
+
             if (!step.visible)
                 stepCard.classList.add('step-card-hidden')
 
@@ -299,13 +296,13 @@ function initializeCardLinks() {
 async function readStepInContainer() {
     if (!currentStep)
         return;
-    
+
     let index = currentStepList.findIndex(s => s.stepNumber == currentStep.stepNumber);
 
     if (isInformationStep(currentStep)) {
         const elements = divInformation.children;
         let infoArray: Information[] = currentStep.informationViewModel;
-        
+
         for (let i = 0; i < elements.length; i++) {
             const element = elements[i] as HTMLElement;
 
@@ -343,7 +340,7 @@ async function readStepInContainer() {
         }
         currentStep.informationViewModel = infoArray;
     }
-    
+
     if (isQuestionStep(currentStep)) {
         const questionDiv = divQuestion.children[0] as HTMLDivElement;
         const choicesDiv = divQuestion.children[1] as HTMLDivElement;
@@ -353,7 +350,7 @@ async function readStepInContainer() {
         for (let i = 0; i < choicesDiv.children.length; i++) {
             const input = choicesDiv.children[i].children[0] as HTMLInputElement;
             const select = choicesDiv.children[i].children[1] as HTMLSelectElement;
-            
+
             let selectedOption = select.options[select.selectedIndex];
             if (selectedOption.value != "undefined") {
                 choicesArray[i] = {
@@ -365,21 +362,21 @@ async function readStepInContainer() {
                 choicesArray[i] = {id: choicesArray[i].id, text: input.value, nextStepId: undefined};
             }
         }
-        
+
         const questionText = questionDiv.children[0] as HTMLTextAreaElement;
-        
+
         question = {
             id: question.id,
             question: questionText.value,
             questionType: question.questionType,
             choices: choicesArray
         }
-        
+
         currentStep.questionViewModel = question;
     }
-    
+
     currentStepList[index] = currentStep;
-    
+
     console.log(currentStepList)
 }
 
@@ -387,7 +384,7 @@ async function showStepInContainer(step: Step) {
     currentStep = step;
     divInformation.innerHTML = "";
     divQuestion.innerHTML = "";
-    
+
     toggleButtons();
 
     if (isInformationStep(currentStep)) {
@@ -473,7 +470,7 @@ async function showStepInContainer(step: Step) {
                 break;
             default: break;
         }
-        
+
         divQuestion.appendChild(choiceContainer);
     }
 }
@@ -557,12 +554,8 @@ butCloseCreateStep.onclick = () => {
 }
 
 butConfirmCreateStep.onclick = () => {
-    let newStepNumber = 1;
-    if(currentStepList[currentStepList.length - 1] != undefined){
-        newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
-    }
-    // currentStepList.sort((a, b) => a.stepNumber - b.stepNumber);
-    // let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
+    currentStepList.sort((a, b) => a.stepNumber - b.stepNumber);
+    let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
     if (infographic.checked) {
         AddStep(newStepNumber, "Information")
             .then(() => GetStepsFromFlow(flowId)
