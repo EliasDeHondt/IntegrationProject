@@ -8,8 +8,10 @@ import {
     Step
 } from "../Flow/Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
-import {Modal} from "bootstrap";
+import {Modal, Toast} from "bootstrap";
 import {Flow, Participation} from "../Flow/FlowObjects";
+
+const saveFlowToast = new Toast(document.getElementById("saveFlowToast")!);
 
 const btnSaveFlow = document.getElementById("saveFlow") as HTMLButtonElement;
 const btnViewFlow = document.getElementById('viewFlow') as HTMLButtonElement;
@@ -152,7 +154,7 @@ btnAddLink.onclick = async () => {
     await showStepInContainer(currentStepList[index]);
 }
 
-btnSaveFlow.onclick = async () => {
+async function saveFlow(){
     await readStepInContainer();
     for (const step of currentStepList) {
         if (isQuestionStep(step))
@@ -160,6 +162,14 @@ btnSaveFlow.onclick = async () => {
         if (isInformationStep(step))
             await UpdateInformationStep(step);
     }
+    saveFlowToast.show();
+
+    let closeSaveFlowToast = document.getElementById("closeSaveFlowToast") as HTMLButtonElement
+    closeSaveFlowToast.onclick = () => saveFlowToast.hide()
+}
+
+btnSaveFlow.onclick = async () => {
+    saveFlow()
 }
 
 function toggleButtons() {
@@ -600,8 +610,7 @@ btnCancelViewFlowModal.onclick = () => {
 }
 
 btnSaveViewFlowModal.onclick = () => {
-    //TODO: after merge with Jana, add saveFlow
-    //saveFlow();
+    saveFlow();
 }
 
 btnConfirmViewFlow.onclick = () => {
