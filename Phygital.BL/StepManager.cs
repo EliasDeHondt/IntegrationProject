@@ -91,6 +91,9 @@ public class StepManager
                     case "Video":
                         information = new Video();
                         break;
+                    case "Hyperlink":
+                        information = new Hyperlink();
+                        break;
                 }
 
                 _repo.CreateInformation(informationStep, information);
@@ -127,9 +130,9 @@ public class StepManager
         return _repo.ReadChoiceById(id);
     }
 
-    public InformationBase ChangeInformation(InformationBase information, string content)
+    public void ChangeInformation(InformationBase information, string content)
     {
-        return _repo.UpdateInformation(information, content);
+        _repo.UpdateInformation(information, content);
     }
 
     public void ChangeChoice(Choice choice)

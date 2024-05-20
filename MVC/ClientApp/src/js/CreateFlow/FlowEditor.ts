@@ -11,39 +11,25 @@ import {downloadVideoFromBucket} from "../StorageAPI";
 import {Modal} from "bootstrap";
 import {Flow, Participation} from "../Flow/FlowObjects";
 
-const btnAddStep = document.getElementById('btn-add-step') as HTMLButtonElement;
+const btnSaveFlow = document.getElementById("saveFlow") as HTMLButtonElement;
 const btnViewFlow = document.getElementById('viewFlow') as HTMLButtonElement;
-
+const btnStepVisibility = document.getElementById("btn-step-visibility") as HTMLButtonElement;
 const btnAddChoice = document.getElementById('btn-add-choice') as HTMLButtonElement;
 const btnAddText = document.getElementById('btn-add-text') as HTMLButtonElement;
 const btnAddImage = document.getElementById('btn-add-image') as HTMLButtonElement;
 const btnAddVideo = document.getElementById('btn-add-video') as HTMLButtonElement;
-const btnSaveFlow = document.getElementById("saveFlow") as HTMLButtonElement;
 const btnAddLink = document.getElementById("btn-add-hyperlink") as HTMLButtonElement;
-const btnStepVisibility = document.getElementById("btn-step-visibility") as HTMLButtonElement;
+const btnAddStep = document.getElementById('btn-add-step') as HTMLButtonElement;
 
+const divInformation = document.getElementById("partialInformationContainer") as HTMLDivElement;
+const divQuestion = document.getElementById("partialQuestionContainer") as HTMLDivElement;
+
+let currentStep: Step;
 let currentStepList: Step[] = [];
-
-let currentViewingStep: Step;
-
 let flowId: number;
 
-async function GetSteps(flowId: number): Promise<Step[]> {
-    return await fetch(`/EditFlows/GetSteps/${flowId}`, {
-        method: "GET",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-            return data
-        })
-}
-
-async function GetStepById(stepNumber: number, flowId: number): Promise<Step> {
-    return await fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
+async function GetStepsFromFlow(flowId: number): Promise<Step[]> {
+    return await fetch(`/api/Steps/GetStepsFromFlow/${flowId}`, {
         method: "GET",
         headers: {
             "Accept": "application/json",
@@ -56,16 +42,32 @@ async function GetStepById(stepNumber: number, flowId: number): Promise<Step> {
         })
 }
 
-async function AddStep(stepNumber: number, stepType: string) {
-    await fetch("/EditFlows/CreateStep/" + flowId + "/" + stepNumber + "/" + stepType, {
-        method: "POST",
+async function GetStepByNumber(flowId: number, stepNr: number): Promise<Step> {
+    return await fetch(`/api/Steps/GetNextStep/${flowId}/${stepNr}`, {
+        method: "GET",
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json"
         }
     })
         .then(response => response.json())
-        .catch(error => console.error("Error:", error))
+        .then(data => {
+            return data;
+        })
+}
+
+async function GetStepId(stepNr: number): Promise<number> {
+    return await fetch(`/EditFlows/GetStepId/${flowId}/${stepNr}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
 }
 
 async function AddChoice(stepNr: number) {
@@ -92,20 +94,6 @@ async function AddInformation(stepNr: number, type: string) {
         .catch(error => console.error("Error:", error))
 }
 
-async function GetFlowById(flowId: number): Promise<Flow> {
-    return await fetch(`/api/Flows/${flowId}`, {
-        method: "GET",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-            return data;
-        })
-}
-
 async function UpdateFlow(steps: Step[]) {
     await fetch(`/api/Flows/${flowId}/Update`, {
         method: "PUT",
@@ -117,32 +105,56 @@ async function UpdateFlow(steps: Step[]) {
     })
 }
 
-async function GetConditionalNextStep(stepId: number): Promise<Step> {
-    return await fetch(`/api/Steps/GetConditionalNextStep/${stepId}`, {
-        method: "GET",
+async function UpdateStep(step: Step) {
+    await fetch(`/api/Steps/UpdateStep`, {
+        method: "PUT",
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json"
-        }
+        },
+        body: JSON.stringify(step)
     })
-        .then(response => response.json())
-        .then(data => {
-            return data
-        })
 }
 
-async function GetStepId(stepNr: number): Promise<number> {
-    return await fetch(`/EditFlows/GetStepId/${flowId}/${stepNr}`, {
-        method: "GET",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-            return data
-        })
+
+document.addEventListener("DOMContentLoaded", () => {
+    flowId = getFlowId();
+    GetStepsFromFlow(flowId)
+        .then(steps => updateStepList(steps))
+        .then(() => initializeCardLinks())
+        .then(() => toggleButtons());
+})
+
+btnAddChoice.onclick = async () => {
+    await AddChoice(currentStep.stepNumber)
+        .then(() => GetStepsFromFlow(flowId))
+        .then(() => updateStepList(currentStepList))
+        .then(() => initializeCardLinks());
+    let index = currentStepList.findIndex(s => s.stepNumber == currentStep.stepNumber);
+    await showStepInContainer(currentStepList[index]);
+}
+
+btnAddText.onclick = async () => {
+    await AddInformation(currentStep.stepNumber, 'Text')
+        .then(() => GetStepsFromFlow(flowId))
+        .then(() => updateStepList(currentStepList))
+        .then(() => initializeCardLinks());
+    let index = currentStepList.findIndex(s => s.stepNumber == currentStep.stepNumber);
+    await showStepInContainer(currentStepList[index]);
+}
+
+btnAddLink.onclick = async () => {
+    await AddInformation(currentStep.stepNumber, 'Hyperlink')
+        .then(() => GetStepsFromFlow(flowId))
+        .then(() => updateStepList(currentStepList))
+        .then(() => initializeCardLinks());
+    let index = currentStepList.findIndex(s => s.stepNumber == currentStep.stepNumber);
+    await showStepInContainer(currentStepList[index]);
+}
+
+btnSaveFlow.onclick = async () => {
+    await readStepInContainer();
+    currentStepList.forEach(step => UpdateStep(step))
 }
 
 function toggleButtons() {
@@ -153,86 +165,37 @@ function toggleButtons() {
     btnAddLink.disabled = true;
     btnStepVisibility.disabled = true;
 
-    if (currentViewingStep == undefined) {
+    if (!currentStep)
         return;
-    }
 
-    if (isInformationStep(currentViewingStep)) {
+    if (isInformationStep(currentStep)) {
         btnAddText.disabled = false;
         btnAddImage.disabled = false;
         btnAddVideo.disabled = false;
         btnAddLink.disabled = false
-        if (currentViewingStep.informationViewModel.length >= 2) {
+        if (currentStep.informationViewModel.length >= 2) {
             btnAddText.disabled = true;
             btnAddImage.disabled = true;
             btnAddVideo.disabled = true;
             btnAddLink.disabled = true;
         }
     }
-    if (isQuestionStep(currentViewingStep) && currentViewingStep.questionViewModel.questionType != "OpenQuestion") {
+    if (isQuestionStep(currentStep) && currentStep.questionViewModel.questionType != "OpenQuestion") {
         btnAddChoice.disabled = false;
-        if (currentViewingStep.questionViewModel.choices.length >= 6)
+        if (currentStep.questionViewModel.choices.length >= 6)
             btnAddChoice.disabled = true;
     }
 
-    if (isInformationStep(currentViewingStep) || isQuestionStep(currentViewingStep))
+    if (isInformationStep(currentStep) || isQuestionStep(currentStep))
         btnStepVisibility.disabled = false;
 
-    const index = currentStepList.findIndex(s => s.stepNumber === currentViewingStep.stepNumber);
+    const index = currentStepList.findIndex(s => s.stepNumber === currentStep.stepNumber);
 
     if (!currentStepList[index].visible) {
         btnStepVisibility.innerText = 'Enable Step'
     } else {
         btnStepVisibility.innerText = 'Disable Step';
     }
-}
-
-function UpdateStepList(steps: Step[]) {
-    currentStepList = [];
-    GetSteps(flowId).then(steps => steps.forEach(step => {
-        GetStepById(step.stepNumber, flowId)
-            .then(s => currentStepList.push(s));
-    }))
-    currentStepList.sort((a, b) => a.stepNumber - b.stepNumber);
-    steps.sort((a, b) => a.stepNumber - b.stepNumber);
-
-    console.log(currentStepList);
-
-    const stepsList = document.getElementById("steps-list") as HTMLDivElement;
-
-    stepsList.innerHTML = "";
-
-    if (steps.length > 0) {
-        steps.forEach(step => {
-            //Card container
-            const stepCard = document.createElement('a');
-            stepCard.classList.add("step-card", "btn", "justify-content-center", "align-items-center");
-            stepCard.dataset.stepNumber = step.stepNumber.toString();
-            //Card Header
-            const cardHeader = document.createElement('h2');
-            cardHeader.classList.add("step-card-header");
-            cardHeader.innerText = "Step " + step.stepNumber.toString();
-            GetStepById(step.stepNumber, flowId).then(s => {
-                if (isQuestionStep(s))
-                    cardHeader.innerText += "\n" + s.questionViewModel.questionType.toString();
-                if (isInformationStep(s))
-                    cardHeader.innerText += "\nInformation"
-            })
-
-            if (!step.visible)
-                stepCard.classList.add('step-card-hidden')
-
-            stepCard.appendChild(cardHeader);
-
-            stepsList.appendChild(stepCard);
-        })
-    } else {
-        const noFlowsMessage = document.createElement('p');
-        noFlowsMessage.classList.add('no-cards-message');
-        noFlowsMessage.textContent = 'There are currently no Steps in this flow!';
-        stepsList.appendChild(noFlowsMessage);
-    }
-
 }
 
 function showStepVisibility(step: Step) {
@@ -249,138 +212,84 @@ function showStepVisibility(step: Step) {
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const parts = document.URL.split('/');
-    const lastPart = parts[parts.length - 1];
-    const btnViewFlow = document.getElementById("viewFlow") as HTMLAnchorElement;
-    flowId = parseInt(lastPart, 10);
-
-    if (isNaN(flowId)) {
-        console.error("The ID provided in the URL is not a number.")
+async function updateStepList(steps: Step[]) {
+    for (const step of steps) {
+        await GetStepByNumber(flowId, step.stepNumber).then(s => currentStepList[s.stepNumber - 1] = s);
     }
 
-    // GetSteps(flowId).then(() => { 
-    //   initializeCardLinks();
-    //   btnViewFlow.setAttribute('href', "/Flow/Step/" + flowId);
-    // });
-    GetSteps(flowId)
-        .then(steps => UpdateStepList(steps))
-        .then(() => toggleButtons())
-        .then(() => initializeCardLinks())
-});
+    console.log(currentStepList);
 
-/* This function checks if the provided URL is valid */
-function checkURLValidity(url: string): boolean {
-    let urlRegex = /(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?\/[a-zA-Z0-9]{2,}|((https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?)|(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})?/g;
+    const stepsList = document.getElementById("steps-list") as HTMLDivElement;
 
-    return urlRegex.test(url);
+    stepsList.innerHTML = "";
+
+    if (currentStepList.length > 0) {
+        currentStepList.forEach(step => {
+            const stepCard = document.createElement('a');
+            stepCard.classList.add("step-card", "btn", "justify-content-center", "align-items-center");
+            stepCard.dataset.stepNumber = step.stepNumber.toString();
+
+            const cardHeader = document.createElement('h2');
+            cardHeader.classList.add("step-card-header");
+            cardHeader.innerText = "Step " + step.stepNumber.toString();
+
+            if (isQuestionStep(step))
+                cardHeader.innerText += "\n" + step.questionViewModel.questionType.toString();
+            if (isInformationStep(step))
+                cardHeader.innerText += "\nInformation"
+            
+            if (!step.visible)
+                stepCard.classList.add('step-card-hidden')
+
+            stepCard.appendChild(cardHeader);
+            stepsList.appendChild(stepCard);
+        })
+    } else {
+        const noFlowsMessage = document.createElement('p');
+        noFlowsMessage.classList.add('no-cards-message');
+        noFlowsMessage.textContent = 'There are currently no Steps in this flow!';
+        stepsList.appendChild(noFlowsMessage);
+    }
 }
 
-btnAddChoice.addEventListener('click', async () => {
-    if (isQuestionStep(currentViewingStep)) {
-        currentViewingStep.questionViewModel.choices.length++
+function getFlowId(): number {
+    let href = window.location.href;
+    let regex = RegExp(/\/EditFlow\/FlowEditor\/(\d+)/).exec(href);
 
-        if (currentViewingStep.questionViewModel.choices.length >= 6) {
-            btnAddChoice.disabled = true;
-        }
-    }
+    if (regex)
+        return parseInt(regex[1], 10);
 
-    await AddChoice(currentViewingStep.stepNumber);
-    let div = document.createElement("div");
-    div.classList.add("text-start", "m-auto", "choice-container")
+    return 0;
+}
 
-    const textArea = document.createElement("input");
-    textArea.classList.add("choice-textarea")
+function initializeCardLinks() {
+    let stepCards = document.querySelectorAll('.step-card') as NodeListOf<HTMLAnchorElement>;
 
-    const select = document.createElement("select");
-    select.classList.add("choice-select");
-    fillConditionalPoints(select, undefined);
+    stepCards.forEach(stepCard => {
+        stepCard.addEventListener('click', async () => {
+            await readStepInContainer();
+            const stepNumber = stepCard.dataset.stepNumber;
 
-    let choiceContainer = document.getElementById("choices-container") as HTMLDivElement;
+            if (stepNumber) {
+                let index = currentStepList.findIndex(s => s.stepNumber == parseInt(stepNumber));
+                await showStepInContainer(currentStepList[index])
+            }
+        });
+    });
+}
 
-    div.append(textArea);
-    div.append(select);
-    choiceContainer.appendChild(div);
-});
-btnAddText.addEventListener('click', async () => {
-    if (isInformationStep(currentViewingStep)) {
-        currentViewingStep.informationViewModel.length++
-        if (currentViewingStep.informationViewModel.length >= 2) {
-            btnAddText.disabled = true;
-            btnAddImage.disabled = true;
-            btnAddVideo.disabled = true;
-        }
-    }
-
-    await AddInformation(currentViewingStep.stepNumber, "Text");
-    let div = document.createElement("div");
-    div.id = "text-container"
-    div.classList.add("text-start", "m-auto")
-
-    const textArea = document.createElement("textarea");
-    textArea.id = "text-textarea"
-
-    div.append(textArea);
-    partialInformationContainer.appendChild(div);
-});
-
-btnAddLink.addEventListener('click', () => {
-    if (isInformationStep(currentViewingStep))
-        currentViewingStep.informationViewModel.length++
-    toggleButtons();
-
-    let div = document.createElement("div");
-    div.id = "text-container";
-    div.classList.add("text-start", "m-auto");
-
-    const textArea = document.createElement("textarea");
-    textArea.classList.add("input-hyperlink-iframe");
-    textArea.addEventListener('change', async () => {
-        let isWorkingURL = checkURLValidity(textArea.value)
-        if (isWorkingURL) {
-            textArea.dataset.allowed = String(1);
-            textArea.classList.add("hyperlink-allowed");
-        } else {
-            textArea.dataset.allowed = String(0);
-            textArea.classList.add("hyperlink-disallowed");
-        }
-    })
-
-    div.append(textArea);
-    partialInformationContainer.appendChild(div);
-})
-
-btnAddImage.addEventListener('click', () => {
-    //TODO: add image logica
-});
-
-btnAddVideo.addEventListener('click', () => {
-    //TODO: add video logica
-});
-btnSaveFlow.addEventListener('click', async () => {
-    await GetStepData();
-    GetFlowById(flowId)
-        .then(flow => GetNewFlowData(flow))
-        .then(flow => {
-            console.log(flow.steps);
-            UpdateFlow(flow.steps);
-        })
-});
-
-async function GetStepData() {
-    if (!currentViewingStep) {
+async function readStepInContainer() {
+    if (!currentStep)
         return;
-    }
+    
+    let index = currentStepList.findIndex(s => s.stepNumber == currentStep.stepNumber);
 
-
-    const index = currentStepList.findIndex(step => step.stepNumber === currentViewingStep.stepNumber);
-
-    if (isInformationStep(currentViewingStep)) {
-        let informationArray: Information[] = currentViewingStep.informationViewModel;
-        const contentElements = partialInformationContainer.children;
-
-        for (let i = 0; i < contentElements.length - 1; i++) {
-            const element = contentElements[i] as HTMLElement;
+    if (isInformationStep(currentStep)) {
+        const elements = divInformation.children;
+        let infoArray: Information[] = currentStep.informationViewModel;
+        
+        for (let i = 0; i < elements.length; i++) {
+            const element = elements[i] as HTMLElement;
 
             let information: string = "";
             let informationType: string = "";
@@ -388,8 +297,13 @@ async function GetStepData() {
             switch (element.tagName) {
                 case 'TEXTAREA':
                     const textAreaElement = element as HTMLTextAreaElement;
-                    information = textAreaElement.value;
-                    informationType = 'Text';
+                    if (element.classList.contains('input-hyperlink-iframe')) {
+                        information = textAreaElement.value;
+                        informationType = 'Hyperlink'
+                    } else {
+                        information = textAreaElement.value;
+                        informationType = 'Text';
+                    }
                     break;
                 case 'IMG':
                     const imageElement = element as HTMLImageElement;
@@ -401,163 +315,84 @@ async function GetStepData() {
                     information = videoElement.src;
                     informationType = 'Video';
                     break;
-                case 'IFRAME':
-                    const linkTextAreaElement = element as HTMLTextAreaElement;
-                    information = linkTextAreaElement.value;
-                    informationType = 'Hyperlink'
-                    break;
             }
-            informationArray[i] = {
-                id: informationArray[i].id,
+
+            infoArray[i] = {
+                id: infoArray[i].id,
                 information: information,
                 informationType: informationType
-            };
+            }
         }
-        if (index !== -1) {
-            let currentInformationStep = currentStepList[index] as InformationStep;
-            currentInformationStep.informationViewModel = informationArray;
-            currentViewingStep.informationViewModel = informationArray;
-        }
+        currentStep.informationViewModel = infoArray;
     }
+    
+    if (isQuestionStep(currentStep)) {
+        const questionDiv = divQuestion.children[0] as HTMLDivElement;
+        const choicesDiv = divQuestion.children[1] as HTMLDivElement;
+        let choicesArray: Choice[] = currentStep.questionViewModel.choices;
+        let question: Question = currentStep.questionViewModel;
 
-    if (isQuestionStep(currentViewingStep)) {
-        let question : Question = currentViewingStep.questionViewModel;
-        let choicesArray: Choice[] = currentViewingStep.questionViewModel.choices;
-
-        const questionContainer = partialQuestionContainer.children[0] as HTMLDivElement;
-        const choicesContainer = partialQuestionContainer.children[1] as HTMLDivElement;
-
-        for (let i = 0; i < choicesContainer.children.length - 1; i++) {
-            const element = choicesContainer.children[i].children[0] as HTMLInputElement;
-            const select = choicesContainer.children[i].children[1] as HTMLSelectElement;
-            let nextStepId: number = 0;
+        for (let i = 0; i < choicesDiv.children.length; i++) {
+            const input = choicesDiv.children[i].children[0] as HTMLInputElement;
+            const select = choicesDiv.children[i].children[1] as HTMLSelectElement;
+            
             let selectedOption = select.options[select.selectedIndex];
             if (selectedOption.value != "undefined") {
                 choicesArray[i] = {
                     id: choicesArray[i].id,
-                    text: element.value,
+                    text: input.value,
                     nextStepId: parseInt(selectedOption.value)
                 };
             } else {
-                choicesArray[i] = {id: choicesArray[i].id, text: element.value, nextStepId: undefined};
+                choicesArray[i] = {id: choicesArray[i].id, text: input.value, nextStepId: undefined};
             }
         }
-        const questionElement = questionContainer.children[0] as HTMLTextAreaElement;
-
-        let questionText = questionElement.value;
-        let questionType = currentViewingStep.questionViewModel.questionType;
+        
+        const questionText = questionDiv.children[0] as HTMLTextAreaElement;
+        
         question = {
             id: question.id,
-            question: questionText,
-            questionType: questionType,
+            question: questionText.value,
+            questionType: question.questionType,
             choices: choicesArray
         }
-
-        if (index !== -1) {
-            let currentQuestionStep = currentStepList[index] as QuestionStep;
-            currentQuestionStep.questionViewModel = question;
-            currentViewingStep.questionViewModel = question;
-        }
+        
+        currentStep.questionViewModel = question;
     }
+    
+    currentStepList[index] = currentStep;
+    
+    console.log(currentStepList)
 }
 
-async function GetNewFlowData(flow: Flow): Promise<Flow> {
-    let flowData: Flow = {
-        id: flow.id,
-        flowType: flow.flowType,
-        steps: [] as Step[],
-        participations: [] as Participation[]
-    }
-
-    for (const step of currentStepList) {
-        let stepData: QuestionStep | InformationStep;
-
-        if (isQuestionStep(step)) {
-
-        } else if (isInformationStep(step)) {
-            stepData = {
-                id: step.id,
-                stepNumber: step.stepNumber,
-                informationViewModel: step.informationViewModel,
-                notes: step.notes,
-                visible: step.visible
-            } as InformationStep;
-            flowData.steps.push(stepData);
-        }
-
-        if (isQuestionStep(step) && step.questionViewModel.questionType !== "OpenQuestion") {
-            const choices: Choice[] = [];
-            for (const choice of step.questionViewModel.choices) {
-                choices.push({id: choice.id, text: choice.text, nextStepId: choice.nextStepId});
-            }
-            stepData = {
-                id: step.id,
-                stepNumber: step.stepNumber,
-                questionViewModel: step.questionViewModel,
-                notes: step.notes,
-                visible: step.visible
-            } as QuestionStep;
-            stepData.questionViewModel.choices = choices;
-
-            flowData.steps.push(stepData)
-        }
-    }
-
-    return flowData;
-}
-
-function initializeCardLinks() {
-    let stepCards = document.querySelectorAll('.step-card') as NodeListOf<HTMLAnchorElement>;
-
-    stepCards.forEach(stepCard => {
-        stepCard.addEventListener('click', async () => {
-            await GetStepData();
-            const stepNumber = stepCard.dataset.stepNumber;
-
-            if (stepNumber) {
-                GetStepById(parseInt(stepNumber), flowId).then(s => {
-                    ShowStepInContainer(s.stepNumber);
-                    currentViewingStep = s;
-                    toggleButtons();
-                });
-            } else {
-                console.error('Step ID not defined in dataset');
-            }
-        });
-    });
-}
-
-const partialInformationContainer = document.getElementById("partialInformationContainer") as HTMLDivElement;
-const partialQuestionContainer = document.getElementById("partialQuestionContainer") as HTMLDivElement;
-
-async function ShowStepInContainer(stepNr: number) {
-    let stepIndex = currentStepList.findIndex(s => s.stepNumber == stepNr);
-    let data = currentStepList[stepIndex];
-    partialInformationContainer.innerHTML = "";
-    partialQuestionContainer.innerHTML = "";
+async function showStepInContainer(step: Step) {
+    currentStep = step;
+    divInformation.innerHTML = "";
+    divQuestion.innerHTML = "";
+    
     toggleButtons();
-    if (isInformationStep(data)) {
-        for (const infoStep of data.informationViewModel) {
-            switch (infoStep.informationType) {
-                case "Text": {
-                    let textArea = document.createElement("textarea");
-                    textArea.id = "text-textarea"
-                    textArea.value = infoStep.information;
 
-                    partialInformationContainer.appendChild(textArea);
-                }
-                    break;
-                case "Image": {
-                    let img = document.createElement("img");
-                    img.src = "data:image/png;base64," + infoStep.information;
-                    img.classList.add("col-m-12");
-                    img.style.width = '600px'; //schalen image
-                    img.style.height = '600px';
-                    partialInformationContainer.appendChild(img);
+    if (isInformationStep(currentStep)) {
+        for (const info of currentStep.informationViewModel) {
+            switch (info.informationType) {
+                case 'Text': {
+                    let text = document.createElement("textarea")
+                    text.id = 'text-textarea'
+                    text.value = info.information;
+                    divInformation.appendChild(text);
                     break;
                 }
-                case "Video": {
-                    let path = await downloadVideoFromBucket(infoStep.information);
+                case 'Image': {
+                    let image = document.createElement("img")
+                    image.src = "data:image/png;base64," + info.information;
+                    image.classList.add("col-m-12");
+                    image.style.width = '600px';
+                    image.style.height = '600px';
+                    divInformation.appendChild(image);
+                    break;
+                }
+                case 'Video': {
+                    let path = await downloadVideoFromBucket(info.information);
                     let video = document.createElement("video");
                     if (typeof path === "string") {
                         path = path.substring(1, path.length - 1);
@@ -567,13 +402,12 @@ async function ShowStepInContainer(stepNr: number) {
                     video.loop = true;
                     video.controls = false;
                     video.classList.add("h-100", "w-100");
-                    partialInformationContainer.appendChild(video);
+                    divInformation.appendChild(video);
                     break;
                 }
-                case "Hyperlink": {
-                    let url = infoStep.information;
+                case 'Hyperlink': {
                     let iframe = document.createElement("textarea");
-                    iframe.value = url;
+                    iframe.value = info.information;
                     iframe.classList.add("input-hyperlink-iframe");
                     iframe.addEventListener('change', async () => {
                         let isWorkingURL = checkURLValidity(iframe.value)
@@ -587,113 +421,92 @@ async function ShowStepInContainer(stepNr: number) {
                             iframe.classList.add("hyperlink-disallowed");
                         }
                     })
-                    partialInformationContainer.appendChild(iframe);
+                    divInformation.appendChild(iframe);
                     break;
                 }
             }
         }
     }
 
-    if (isQuestionStep(data)) {
+    if (isQuestionStep(currentStep)) {
         let questionContainer = document.createElement("div");
         questionContainer.id = "question-container"
         questionContainer.classList.add("text-start", "m-auto");
 
         const textArea = document.createElement("textarea");
         textArea.id = "question-textarea"
-        textArea.value = data.questionViewModel.question;
+        textArea.value = currentStep.questionViewModel.question;
 
         questionContainer.append(textArea);
-        partialQuestionContainer.appendChild(questionContainer);
+        divQuestion.appendChild(questionContainer);
 
         let choiceContainer = document.createElement('div');
         choiceContainer.id = "choices-container";
-        switch (data.questionViewModel.questionType) {
-            case "SingleChoiceQuestion":
-                for (const element of data.questionViewModel.choices) {
-                    let div = document.createElement("div");
-                    div.classList.add("text-start", "m-auto", "choice-container")
 
-                    const textArea = document.createElement("input");
-                    textArea.classList.add("choice-textarea")
-                    textArea.value = element.text;
-
-                    const select = document.createElement("select");
-                    select.classList.add("choice-select");
-                    fillConditionalPoints(select, element.nextStepId);
-
-                    div.append(textArea);
-                    div.append(select);
-                    choiceContainer.appendChild(div);
-                }
+        switch (currentStep.questionViewModel.questionType) {
+            case 'SingleChoiceQuestion':
+                await showQuestionChoices(currentStep.questionViewModel.choices, choiceContainer)
                 break;
-            case "MultipleChoiceQuestion":
-                for (const element of data.questionViewModel.choices) {
-                    let div = document.createElement("div");
-                    div.classList.add("text-start", "m-auto", "choice-container")
-
-                    const textArea = document.createElement("input");
-                    textArea.classList.add("choice-textarea")
-                    textArea.value = element.text;
-
-                    const select = document.createElement("select");
-                    select.classList.add("choice-select");
-                    fillConditionalPoints(select, element.nextStepId);
-
-                    div.append(textArea);
-                    div.append(select);
-                    choiceContainer.appendChild(div);
-                }
+            case 'MultipleChoiceQuestion':
+                await showQuestionChoices(currentStep.questionViewModel.choices, choiceContainer)
                 break;
-            case "RangeQuestion":
-                for (const element of data.questionViewModel.choices) {
-                    let div = document.createElement("div");
-                    div.classList.add("text-start", "m-auto", "choice-container")
-
-                    const textArea = document.createElement("input");
-                    textArea.classList.add("choice-textarea")
-                    textArea.value = element.text;
-
-                    const select = document.createElement("select");
-                    select.classList.add("choice-select");
-                    fillConditionalPoints(select, element.nextStepId);
-
-                    div.append(textArea);
-                    div.append(select);
-                    choiceContainer.appendChild(div);
-                }
+            case 'RangeQuestion':
+                await showQuestionChoices(currentStep.questionViewModel.choices, choiceContainer)
                 break;
-            case "OpenQuestion": {
-                let div = document.createElement("div");
-                div.classList.add("m-auto");
-
-                partialQuestionContainer.appendChild(div);
-                break;
-            }
-            default:
-                break;
+            default: break;
         }
-        partialQuestionContainer.appendChild(choiceContainer);
+        
+        divQuestion.appendChild(choiceContainer);
     }
 }
 
-function fillConditionalPoints(select: HTMLSelectElement, nextStepId?: number) {
+async function showQuestionChoices(choices: Choice[], choiceContainer: HTMLDivElement) {
+    for (const element of choices) {
+        let div = document.createElement("div");
+        div.classList.add("text-start", "m-auto", "choice-container")
+
+        const textArea = document.createElement("input");
+        textArea.classList.add("choice-textarea")
+        textArea.value = element.text;
+
+        const select = document.createElement("select");
+        select.classList.add("choice-select");
+        await fillConditionalPoints(select, element.nextStepId);
+
+        div.append(textArea);
+        div.append(select);
+        choiceContainer.appendChild(div);
+    }
+}
+
+async function fillConditionalPoints(select: HTMLSelectElement, nextStepId?: number) {
     let option = document.createElement("option");
     option.value = "undefined";
     option.innerText = "Next step"
     option.selected = true;
     select.appendChild(option);
-    GetSteps(flowId).then(async steps => {
-        steps.sort((a, b) => a.stepNumber - b.stepNumber);
-        for (const step of steps) {
-            let option = document.createElement("option");
-            await GetStepId(step.stepNumber).then(id => option.value = id.toString());
-            option.innerText = `Step ${step.stepNumber}`
-            select.appendChild(option);
-            if (parseInt(option.value) == nextStepId)
-                option.selected = true;
+
+    for (const step of currentStepList) {
+        let option = document.createElement("option");
+        await GetStepId(step.stepNumber).then(id => option.value = id.toString());
+        option.innerText = `Step ${step.stepNumber}`
+        select.appendChild(option);
+        if (parseInt(option.value) == nextStepId)
+            option.selected = true;
+    }
+}
+
+
+async function AddStep(stepNumber: number, stepType: string) {
+    await fetch("/EditFlows/CreateStep/" + flowId + "/" + stepNumber + "/" + stepType, {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
         }
     })
+        .then(response => response.json())
+        .catch(error => console.error("Error:", error))
 }
 
 const CreateStepModal = new Modal(document.getElementById('CreateStepModal')!, {
@@ -724,28 +537,34 @@ butCancelCreateStep.onclick = () => {
 butCloseCreateStep.onclick = () => {
     clearModal()
 }
+
 butConfirmCreateStep.onclick = () => {
     currentStepList.sort((a, b) => a.stepNumber - b.stepNumber);
     let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
     if (infographic.checked) {
         AddStep(newStepNumber, "Information")
-            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
+            .then(() => GetStepsFromFlow(flowId)
+                .then(steps => updateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (singleQ.checked) {
         AddStep(newStepNumber, "Single Choice Question")
-            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
+            .then(() => GetStepsFromFlow(flowId)
+                .then(steps => updateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (multipleQ.checked) {
         AddStep(newStepNumber, "Multiple Choice Question")
-            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
+            .then(() => GetStepsFromFlow(flowId)
+                .then(steps => updateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (rangeQ.checked) {
         AddStep(newStepNumber, "Ranged Question")
-            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
+            .then(() => GetStepsFromFlow(flowId)
+                .then(steps => updateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (openQ.checked) {
         AddStep(newStepNumber, "Open Question")
-            .then(() => GetSteps(flowId).then(steps => UpdateStepList(steps)))
+            .then(() => GetStepsFromFlow(flowId)
+                .then(steps => updateStepList(steps)))
             .then(() => initializeCardLinks());
     }
     clearModal()
@@ -785,16 +604,22 @@ btnConfirmViewFlow.onclick = () => {
 }
 
 btnStepVisibility.onclick = () => {
-    const index = currentStepList.findIndex(s => s.stepNumber === currentViewingStep.stepNumber);
+    const index = currentStepList.findIndex(s => s.stepNumber === currentStep.stepNumber);
 
     if (btnStepVisibility.innerText == 'Disable Step') {
-        currentViewingStep.visible = false;
+        currentStep.visible = false;
         currentStepList[index].visible = false;
     } else if (btnStepVisibility.innerText == 'Enable Step') {
-        currentViewingStep.visible = true;
+        currentStep.visible = true;
         currentStepList[index].visible = true;
     }
 
     toggleButtons();
     showStepVisibility(currentStepList[index]);
+}
+
+function checkURLValidity(url: string): boolean {
+    let urlRegex = /(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?\/[a-zA-Z0-9]{2,}|((https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?)|(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})?/g;
+
+    return urlRegex.test(url);
 }

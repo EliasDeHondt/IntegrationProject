@@ -71,7 +71,6 @@ public class StepRepository
     public StepBase ReadStepById(long? stepId)
     {
         StepBase tempStep = _ctx.Steps
-            .Include(s => s.Visible)
             .Single(s => s.Id == stepId);
 
         return ReadExtendedStep(tempStep);
@@ -79,20 +78,14 @@ public class StepRepository
 
     public IEnumerable<StepBase> ReadAllStepsForFlow(long flowId)
     {
-        IEnumerable<StepBase> tempSteps = _ctx.Flows
+        var tempSteps = _ctx.Flows
             .AsNoTracking()
             .Include(flow => flow.Steps)
-            .Single(flow => flow.Id == flowId)
-            .Steps;
+            .Where(flow => flow.Id == flowId)
+            .SelectMany(flow => flow.Steps)
+            .ToList();
 
-        List<StepBase> steps = new List<StepBase>();
-
-        foreach (var step in tempSteps)
-        {
-            steps.Add(ReadExtendedStep(step));
-        }
-
-        return steps;
+        return tempSteps.Select(ReadExtendedStep);
     }
 
     public Flow ReadFlowByNumber(long flowId)
@@ -153,7 +146,6 @@ public class StepRepository
 
     public long ReadStepId(long flowId, int stepNr)
     {
-
         return _ctx.Flows
             .AsNoTracking()
             .Where(flow => flow.Id == flowId)
@@ -229,23 +221,30 @@ public class StepRepository
             .Single(c => c.Id == id);
     }
 
-    public InformationBase UpdateInformation(InformationBase information, string content)
+    public void UpdateInformation(InformationBase information, string content)
     {
         switch (information)
         {
             case Text text:
-                text.InformationText = content;
-                return text;
+                _ctx.Texts
+                    .Include(t => t.InformationText)
+                    .Single(t => t.Id == text.Id).InformationText = content;
+                break;
             case Video video:
-                video.FilePath = content;
-                return video;
+                _ctx.Videos
+                    .Include(v => v.FilePath)
+                    .Single(v => v.Id == video.Id).FilePath = content;
+                break;
             case Image image:
-                image.Base64 = content;
-                return image;
+                _ctx.Images
+                    .Include(i => i.Base64)
+                    .Single(i => i.Id == image.Id).Base64 = content;
+                break;
             case Hyperlink link:
-                link.URL = content;
-                return link;
-            default: return information;
+                _ctx.Hyperlinks
+                    .Include(l => l.URL)
+                    .Single(l => l.Id == link.Id).URL = content;
+                break;
         }
     }
 

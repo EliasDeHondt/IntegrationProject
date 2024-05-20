@@ -68,57 +68,6 @@ public class FlowsController : Controller
         });
     }
 
-    [HttpPut("/{flowId}/Update")]
-    public IActionResult UpdateFlow(long flowId, IEnumerable<StepViewModel> model)
-    {
-        _uow.BeginTransaction();
-
-        var flow = _manager.GetFlowWithSteps(flowId);
-
-        var steps = model.Select<StepViewModel, StepBase>(stepViewModel =>
-        {
-            var step = flow.Steps.FirstOrDefault(s => s.Id == stepViewModel.Id);
-
-            switch (step)
-            {
-                case InformationStep infoStep when stepViewModel is InformationStepViewModel infoStepViewModel:
-                    infoStep.InformationBases = infoStepViewModel.InformationViewModel
-                        .Select(infoViewModel =>
-                        {
-                            var info = _stepManager.GetInformationById(infoViewModel.Id);
-                            info = _stepManager.ChangeInformation(info, infoViewModel.Information);
-                            return info;
-                        }).ToList();
-                    return infoStep;
-                    
-                case QuestionStep questionStep when stepViewModel is QuestionStepViewModel questionStepViewModel:
-                    var question = _stepManager.GetQuestionById(questionStepViewModel.QuestionViewModel.Id);
-                    question.Question = questionStepViewModel.QuestionViewModel.Question;
-                    if (question is ChoiceQuestionBase choiceQuestion)
-                    {
-                        choiceQuestion.Choices = questionStepViewModel.QuestionViewModel.Choices.Select(choiceViewModel =>
-                        {
-                            var choice = _stepManager.GetChoiceById(choiceViewModel.Id);
-                            choice.Text = choiceViewModel.Text;
-                            choice.NextStep = _stepManager.GetStepById(choiceViewModel.NextStepId);
-                            return choice;
-                        }).ToList();
-                    }
-                    questionStep.QuestionBase = question;
-                    return questionStep;
-                    
-                default:
-                    return step;
-            }
-        }).ToList();
-
-        flow.Steps = steps;
-        
-        _uow.Commit();
-
-        return NoContent();
-    }
-
     [HttpGet]
     public ActionResult GetFlows()
     {

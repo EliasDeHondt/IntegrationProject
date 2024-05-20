@@ -38,9 +38,9 @@ export interface Note {
 }
 
 export function isInformationStep(step: Step): step is InformationStep {
-    return (step as InformationStep).informationViewModel != undefined;
+    return step && 'informationViewModel' in step;
 }
 
 export function isQuestionStep(step: Step): step is QuestionStep {
-    return (step as QuestionStep).questionViewModel != undefined;
+    return step && 'questionViewModel' in step;
 }
