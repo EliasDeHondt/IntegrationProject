@@ -1,4 +1,4 @@
-﻿import {Feed} from "../Types/WebApp/Types";
+﻿import {Feed, Idea} from "../Types/WebApp/Types";
 
 export async function GetFeed(Id: number): Promise<Feed> {
     return await fetch(`/api/Feeds/${Id}`, {
@@ -33,6 +33,21 @@ export async function GetFeedIds(): Promise<Feed[]> {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
+}
+
+export async function CreateIdea(idea: Idea, feedId: number): Promise<Idea> {
+    return await fetch(`/api/Ideas/createIdea/${feedId}`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(idea)
     })
         .then(response => response.json())
         .then(data => {

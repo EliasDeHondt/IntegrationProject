@@ -23,4 +23,9 @@ public class FeedRepository
             .Include(feed => feed.Project)
             .Single(feed => feed.Id == id);
     }
+
+    public Feed ReadFeed(long id)
+    {
+        return _ctx.Feeds.Single(feed => feed.Id == id);
+    }
 }
