@@ -353,12 +353,12 @@ export async function GetNamesPerFlow(){
 
             GetQuestionsFromFlow(showSelectedFlow()); //eerste keer bij inladen
             GetQuestionNames(showSelectedFlow()); //eerste keer bij inladen
-            GetRespondentsFromFlow(showSelectedFlow());
+            GetParticipatoinNames(showSelectedFlow());
             
             selectFlow.addEventListener('change', () => {
                 GetQuestionsFromFlow(showSelectedFlow());
                 GetQuestionNames(showSelectedFlow());
-                GetRespondentsFromFlow(showSelectedFlow());
+                GetParticipatoinNames(showSelectedFlow());
             });
         } )
         .catch(error => console.error("Error:", error))
@@ -398,6 +398,21 @@ export async function GetChoicesNames(question: string){
         } )
         .catch(error => console.error("Error:", error))
 }
+export async function GetParticipatoinNames(flowname: string){
+    await fetch("/api/Statistics/GetParticipatoinNames/" + flowname, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(labels => {
+            console.log(labels)
+            GetRespondentsFromFlow(labels,flowname);
+        } )
+        .catch(error => console.error("Error:", error))
+}
 
 //get data - flow
 export async function GetQuestionsFromFlow(flowname: string){
@@ -414,8 +429,9 @@ export async function GetQuestionsFromFlow(flowname: string){
         .then(data => drawRadarChart("Aantal Questions voor de Flow: "+flowname,chartData('Aantal Questions', labels, data)))
         .catch(error => console.error("Error:", error))
 }
-export async function GetRespondentsFromFlow(flowname: string){
-    const labels: string[] = ["participation 1", "participation 2"];
+export async function GetRespondentsFromFlow(labels: string[],flowname: string){
+    console.log("labels RESP: ",labels)
+    // const labels: string[] = ["participation 1", "participation 2"];
     await fetch("/api/Statistics/GetRespondentsFromFlow/" + flowname, {
         method: "GET",
         headers: {

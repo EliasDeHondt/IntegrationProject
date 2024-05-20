@@ -94,9 +94,17 @@ public class StatisticsController : Controller
     [HttpGet("GetRespondentsFromFlow/{flowname}")]
     public IActionResult GetRespondentsFromFlow(string flowname)
     {
-        var flowCountQuestions = _manager.GetRespondentCountsFromFlow(flowname);
+        var respondentCountQuestions = _manager.GetRespondentCountsFromFlow(flowname);
         
 
-        return Ok(flowCountQuestions);
+        return Ok(respondentCountQuestions);
+    }
+    [HttpGet("GetParticipatoinNames/{flowname}")]
+    public IActionResult GetParticipationNames(string flowname)
+    {
+        var participations = _manager.GetParticipationNames(flowname);
+        
+
+        return Ok(participations);
     }
 }

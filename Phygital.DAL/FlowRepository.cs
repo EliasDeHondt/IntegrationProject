@@ -306,6 +306,20 @@ public class FlowRepository
     {
         var names = new List<string>();
 
+        int counter = 1;
+        foreach (var participation in GetAllParticipations(flowId))
+        {
+            var name = "participation " + counter;
+            names.Add(name);
+            counter++;
+        }
+        
+        return names.Select(count => count.ToString()).ToArray();
+    }
+    public string[] GetParticipationNames(long flowId)
+    {
+        var names = new List<string>();
+
         foreach (var qs in ReadQuestionsFromFlow(flowId))
         {
             var name = qs.QuestionBase.Question;
