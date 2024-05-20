@@ -302,7 +302,7 @@ public class FlowRepository
         return a;
     }
     
-    public string[] GetQuestionNames(long flowId)
+    public string[] GetParticipationNames(long flowId)
     {
         var names = new List<string>();
 
@@ -316,7 +316,7 @@ public class FlowRepository
         
         return names.Select(count => count.ToString()).ToArray();
     }
-    public string[] GetParticipationNames(long flowId)
+    public string[] GetQuestionNames(long flowId)
     {
         var names = new List<string>();
 

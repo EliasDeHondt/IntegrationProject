@@ -383,7 +383,6 @@ export async function GetQuestionNames(flowname: string){
         .catch(error => console.error("Error:", error))
 }
 export async function GetChoicesNames(question: string){
-    console.log("Fetching question names...")
     await fetch("/api/Statistics/GetChoicesNames/" + question, {
         method: "GET",
         headers: {
@@ -393,7 +392,6 @@ export async function GetChoicesNames(question: string){
     })
         .then(response => response.json())
         .then(labels => {
-            console.log(labels)
             GetAnswerCountsForQuestions(labels,"If you were to prepare the budget for your city or municipality, where would you mainly focus on in the coming years? Choose one.");
         } )
         .catch(error => console.error("Error:", error))
@@ -408,7 +406,6 @@ export async function GetParticipatoinNames(flowname: string){
     })
         .then(response => response.json())
         .then(labels => {
-            console.log(labels)
             GetRespondentsFromFlow(labels,flowname);
         } )
         .catch(error => console.error("Error:", error))
