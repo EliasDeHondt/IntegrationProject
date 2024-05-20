@@ -12,11 +12,21 @@ using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
 using Domain.ProjectLogics.Steps.Questions;
+using Domain.ProjectLogics.Steps.Questions.Answers;
 
 namespace Data_Access_Layer.DbContext
 {
     public static class DataSeeder
     {
+        private static void GenerateSingleAnswers(CodeForgeDbContext dbContext, SingleChoiceQuestion singleChoiceQuestion, Choice choice)
+        {
+            ChoiceAnswer answer = new ChoiceAnswer(singleChoiceQuestion);
+            Selection selection =  new Selection(choice,answer);
+            answer.Answers.Add(selection);
+            dbContext.Answers.Add(answer);
+            dbContext.Selections.Add(selection);
+        }
+
         private static void GenerateSingleQuestions(CodeForgeDbContext dbContext, Flow flow, int caseIndex, int stepIndexFlow)
         {
             switch (caseIndex)
@@ -33,7 +43,19 @@ namespace Data_Access_Layer.DbContext
 
                     dbContext.ChoiceQuestions.AddRange(singleQuestions1);
                     dbContext.Choices.AddRange(choice1, choice2, choice3, choice4, choice5, choice6);
-
+                    
+                    //Answer data
+                    GenerateSingleAnswers(dbContext, singleQuestions1, choice1);
+                    GenerateSingleAnswers(dbContext, singleQuestions1, choice2);
+                    GenerateSingleAnswers(dbContext, singleQuestions1, choice2);
+                    GenerateSingleAnswers(dbContext, singleQuestions1, choice3);
+                    GenerateSingleAnswers(dbContext, singleQuestions1, choice4);
+                    GenerateSingleAnswers(dbContext, singleQuestions1, choice4);
+                    GenerateSingleAnswers(dbContext, singleQuestions1, choice4);
+                    GenerateSingleAnswers(dbContext, singleQuestions1, choice5);
+                    GenerateSingleAnswers(dbContext, singleQuestions1, choice6);
+                    GenerateSingleAnswers(dbContext, singleQuestions1, choice6);
+                    
                     // Add to step
                     QuestionStep step1 = new QuestionStep(stepIndexFlow, singleQuestions1, flow);
                     flow.Steps.Add(step1);

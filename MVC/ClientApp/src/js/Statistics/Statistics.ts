@@ -55,6 +55,20 @@ function drawBarChart(titel:string,chartData: { labels: string[]; datasets: { la
                     font: {
                         size: 24
                     }
+                },legend: {
+                    labels: {
+                        font: {
+                            size: 22
+                        }
+                    }
+                },
+                tooltip: {
+                    titleFont: {
+                        size: 22
+                    },
+                    bodyFont: {
+                        size: 22
+                    }
                 }
                 
             }
@@ -82,6 +96,20 @@ function drawLineChart(titel:string,chartData: { labels: string[]; datasets: { l
                     text: titel,
                     font: {
                         size: 24
+                    }
+                },legend: {
+                    labels: {
+                        font: {
+                            size: 22
+                        }
+                    }
+                },
+                tooltip: {
+                    titleFont: {
+                        size: 22
+                    },
+                    bodyFont: {
+                        size: 22
                     }
                 }
 
@@ -136,8 +164,11 @@ function drawDoughnutChart(titel:string,labels: string[], label: string, data: s
                     }
                 },
                 tooltip: {
+                    titleFont: {
+                        size: 22
+                    },
                     bodyFont: {
-                        size: 34 
+                        size: 22
                     }
                 }
 
@@ -188,6 +219,14 @@ function drawRadarChart(titel:string,chartData: { labels: string[]; datasets: { 
                         font: {
                             size: 24 
                         }
+                    }
+                },
+                tooltip: {
+                    titleFont: {
+                        size: 22
+                    },
+                    bodyFont: {
+                        size: 22
                     }
                 }
 
@@ -287,7 +326,8 @@ export async function GetQuestionNames(flowname: string){
         .then(labels => {
             console.log(labels)
             fillDropdownFlows(labels,selectQuestion);
-            GetAnswerCountsForQuestions(labels,showSelectedQuestion());
+            //GetAnswerCountsForQuestions(labels,showSelectedQuestion());
+            GetAnswerCountsForQuestions(labels,"If you were to prepare the budget for your city or municipality, where would you mainly focus on in the coming years? Choose one.");
         } )
         .catch(error => console.error("Error:", error))
 }
@@ -312,18 +352,21 @@ export async function GetAnswerCountsForQuestions(labels: string[],question: str
     //voor elk answer te tellen
     console.log("Fetching count answers...")
     
-    // await fetch("/api/Statistics/GetAnswerCountsForQuestions/" + question, {
-    //     method: "GET",
-    //     headers: {
-    //         "Accept": "application/json",
-    //         "Content-Type": "application/json"
-    //     }
-    // })
-    //     .then(response => response.json())
-    //     .then(data => drawDoughnutChart("Aantal antwoorden voor de vraag: "+question,chartData('Aantal Answers', labels, data)))
-    //     .catch(error => console.error("Error:", error))
-    const data: string[] = ["4", "3","8","1"];
-    drawDoughnutChart("Aantal antwoorden voor de vraag: "+question, labels,'Aantal Answers', data)
+    await fetch("/api/Statistics/GetAnswerCountsForQuestions/" + question, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("data QA",data)
+            drawDoughnutChart("Aantal antwoorden voor de vraag: "+question, labels,'Aantal Answers', data)
+        })
+        .catch(error => console.error("Error:", error))
+    // const data: string[] = ["4", "3","8","1"];
+    // drawDoughnutChart("Aantal antwoorden voor de vraag: "+question, labels,'Aantal Answers', data)
 }
 
 function getSelectedFlows(): number[] {

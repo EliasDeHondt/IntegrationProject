@@ -17,11 +17,13 @@ namespace MVC.Controllers.API;
 public class StatisticsController : Controller
 {
     private readonly FlowManager _manager;
+    private readonly QuestionManager _Qmanager;
     private readonly UnitOfWork _uow;
 
-    public StatisticsController(FlowManager manager, UnitOfWork uow)
+    public StatisticsController(FlowManager manager,QuestionManager qmanager, UnitOfWork uow)
     {
         _manager = manager;
+        _Qmanager = qmanager;
         _uow = uow;
     }
 
@@ -70,5 +72,14 @@ public class StatisticsController : Controller
         
 
         return Ok(flowCountQuestions);
+    }
+    
+    [HttpGet("GetAnswerCountsForQuestions/{question}")]
+    public IActionResult GetAnswerCountsForQuestions(string question)
+    {
+        var answerCountQuestions = _Qmanager.GetAnswerCountsForQuestions("If you were to prepare the budget for your city or municipality, where would you mainly focus on in the coming years? Choose one.");
+        
+    
+        return Ok(answerCountQuestions);
     }
 }
