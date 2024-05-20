@@ -115,6 +115,9 @@ public class Startup
         services.AddScoped<FeedRepository>();
         services.AddScoped<FeedManager>();
         
+        services.AddScoped<IdeaRepository>();
+        services.AddScoped<IdeaManager>();
+        
         services.AddScoped<UnitOfWork, UnitOfWork>();
         services.AddSingleton(googleCloudOptions);
         services.AddSingleton(emailOptions);

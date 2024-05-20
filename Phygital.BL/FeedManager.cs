@@ -17,5 +17,10 @@ public class FeedManager
     {
         return _repo.ReadFeedFromIdIncludingIdeas(id);
     }
+
+    public Feed GetFeed(long id)
+    {
+        return _repo.ReadFeed(id);
+    }
     
 }

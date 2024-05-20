@@ -13,8 +13,9 @@ public class FeedsController : Controller
 
     private readonly FeedManager _manager;
     private readonly CustomUserManager _userManager;
-    
-    public FeedsController(FeedManager feedManager, CustomUserManager userManager)
+    private readonly static Random Rng = new();
+
+    public FeedsController(FeedManager feedManager, CustomUserManager userManager, UnitOfWork uow)
     {
         _manager = feedManager;
         _userManager = userManager;
@@ -25,9 +26,14 @@ public class FeedsController : Controller
     {
         var feed = _manager.GetFeedFromIdWithIdeas(id);
 
+        var ideas = CreateIdeaModels(feed.Ideas);
+
+        var shuffledIdeas = ideas.OrderBy(_ => Rng.Next()).ToList();
+        
         var feedModel = new FeedModel
         {
-            Ideas = CreateIdeaModels(feed.Ideas),
+            Id = feed.Id,
+            Ideas = shuffledIdeas,
             Title = feed.Project.Title
         };
 
@@ -52,7 +58,7 @@ public class FeedsController : Controller
         }));
     }
     
-    private IEnumerable<IdeaModel> CreateIdeaModels(ICollection<Idea> ideas)
+    private List<IdeaModel> CreateIdeaModels(ICollection<Idea> ideas)
     {
         return ideas.Select(idea => new IdeaModel
         {
@@ -71,7 +77,7 @@ public class FeedsController : Controller
                 }
             }),
             Text = idea.Text
-        });
+        }).ToList();
     }
     
     
