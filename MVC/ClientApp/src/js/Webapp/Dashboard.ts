@@ -4,9 +4,11 @@ import {Feed} from "../Types/WebApp/Types";
 
 const ideaContainer = document.getElementById("ideaContainer") as HTMLDivElement;
 const navContainer = document.getElementById("navContainer") as HTMLDivElement;
+const titleHeader = document.getElementById("headerTitle") as HTMLHeadingElement;
 
 GetRandomFeed().then(feed => {
     generateIdeas(feed);
+    titleHeader.innerHTML = feed.title
 })
 
 GetFeedIds().then(feeds => {
@@ -23,6 +25,7 @@ function addGetFeedButtons(){
             let id = parseInt(btns[i].getAttribute("data-id")!);
             GetFeed(id).then(feed => {
                 generateIdeas(feed);
+                titleHeader.innerHTML = feed.title
             })
         }
     }
