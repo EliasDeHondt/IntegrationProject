@@ -71,8 +71,6 @@ public class StepRepository
     public StepBase ReadStepById(long? stepId)
     {
         StepBase tempStep = _ctx.Steps
-            .AsNoTracking()
-            .Include(s => s.Flow)
             .Single(s => s.Id == stepId);
 
         return ReadExtendedStep(tempStep);
@@ -80,20 +78,14 @@ public class StepRepository
 
     public IEnumerable<StepBase> ReadAllStepsForFlow(long flowId)
     {
-        IEnumerable<StepBase> tempSteps = _ctx.Flows
+        var tempSteps = _ctx.Flows
             .AsNoTracking()
             .Include(flow => flow.Steps)
-            .Single(flow => flow.Id == flowId)
-            .Steps;
+            .Where(flow => flow.Id == flowId)
+            .SelectMany(flow => flow.Steps)
+            .ToList();
 
-        List<StepBase> steps = new List<StepBase>();
-
-        foreach (var step in tempSteps)
-        {
-            steps.Add(ReadExtendedStep(step));
-        }
-
-        return steps;
+        return tempSteps.Select(ReadExtendedStep);
     }
 
     public Flow ReadFlowByNumber(long flowId)
@@ -154,7 +146,6 @@ public class StepRepository
 
     public long ReadStepId(long flowId, int stepNr)
     {
-
         return _ctx.Flows
             .AsNoTracking()
             .Where(flow => flow.Id == flowId)
@@ -164,14 +155,91 @@ public class StepRepository
             .Single();
     }
 
-    public void UpdateInformation(InformationBase information)
+    public InformationBase ReadInformationById(long id)
     {
-        _ctx.Information.Update(information);
+        var tempInfo = _ctx.Information
+            .Single(i => i.Id == id);
+
+        switch (tempInfo)
+        {
+            case Text text:
+                return _ctx.Texts
+                    .Single(t => t.Id == text.Id);
+            case Video video:
+                return _ctx.Videos
+                    .Single(v => v.Id == video.Id);
+            case Image image:
+                return _ctx.Images
+                    .Single(i => i.Id == image.Id);
+            case Hyperlink link:
+                return _ctx.Hyperlinks
+                    .Single(l => l.Id == link.Id);
+            default: return tempInfo;
+        }
     }
 
-    public void UpdateChoice(Choice choice)
+    public QuestionBase ReadQuestionById(long id)
     {
-        _ctx.Choices.Update(choice);
+        var tempQuestion = _ctx.Questions
+            .Single(q => q.Id == id);
+
+        switch (tempQuestion)
+        {
+            case OpenQuestion open:
+                return _ctx.OpenQuestions
+                    .Single(o => o.Id == open.Id);
+            case RangeQuestion range:
+                return _ctx.ChoiceQuestions
+                    .Include(r => r.Choices)
+                    .Single(r => r.Id == range.Id);
+            case SingleChoiceQuestion singleChoice:
+                return _ctx.ChoiceQuestions
+                    .Include(s => s.Choices)
+                    .Single(s => s.Id == singleChoice.Id);
+            case MultipleChoiceQuestion multipleChoice:
+                return _ctx.ChoiceQuestions
+                    .Include(m => m.Choices)
+                    .Single(m => m.Id == multipleChoice.Id);
+            default: return tempQuestion;
+        }
+    }
+
+    public Choice ReadChoiceById(long id)
+    {
+        return _ctx.Choices
+            .Include(c => c.NextStep)
+            .Single(c => c.Id == id);
+    }
+
+    public void UpdateInformation(InformationBase information, string content)
+    {
+        switch (information)
+        {
+            case Text text:
+                _ctx.Texts
+                    .Single(t => t.Id == text.Id).InformationText = content;
+                break;
+            case Video video:
+                _ctx.Videos
+                    .Single(v => v.Id == video.Id).FilePath = content;
+                break;
+            case Image image:
+                _ctx.Images
+                    .Single(i => i.Id == image.Id).Base64 = content;
+                break;
+            case Hyperlink link:
+                _ctx.Hyperlinks
+                    .Single(l => l.Id == link.Id).URL = content;
+                break;
+        }
+    }
+
+    public void UpdateChoice(Choice choice, string text, long? nextStepId)
+    {
+        var newChoice = _ctx.Choices.Single(c => c.Id == choice.Id);
+        newChoice.Text = text;
+        if (nextStepId != null)
+            newChoice.NextStep = _ctx.Steps.Single(s => s.Id == nextStepId);
     }
 
     public void UpdateQuestion(QuestionBase question)

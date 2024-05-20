@@ -17,6 +17,11 @@ public class QuestionStep : StepBase
     public QuestionStep(int stepNumber, QuestionBase questionBase, Flow flow , long id = 0) : base(stepNumber, flow, id)
     {
         QuestionBase = questionBase;
+    }    
+    
+    public QuestionStep(int stepNumber, QuestionBase questionBase, Flow flow , bool visible, long id = 0) : base(stepNumber, flow, visible, id)
+    {
+        QuestionBase = questionBase;
     }
 
     public QuestionStep()

@@ -18,12 +18,24 @@ public abstract class StepBase
     public ICollection<Note> Notes { get; set; }
     public Flow Flow { get; set; }
     
+    public bool Visible { get; set; }
+    
     protected StepBase(int stepNumber, Flow flow, long id = 0)
     {
         StepNumber = stepNumber;
         Flow = flow;
         Id = id;
         Notes = new List<Note>();
+        Visible = true;
+    }    
+    
+    protected StepBase(int stepNumber, Flow flow, bool visible, long id = 0)
+    {
+        StepNumber = stepNumber;
+        Flow = flow;
+        Id = id;
+        Notes = new List<Note>();
+        Visible = visible;
     }
 
     protected StepBase()
@@ -32,5 +44,6 @@ public abstract class StepBase
         Flow = new Flow();
         Id = default; 
         Notes = new List<Note>();
+        Visible = true;
     }
 }

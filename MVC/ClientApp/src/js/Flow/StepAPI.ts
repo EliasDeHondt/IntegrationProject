@@ -1,4 +1,4 @@
-import {Information, Question, Step} from "./Step/StepObjects";
+import {Information, isInformationStep, isQuestionStep, Question, Step} from "./Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
 import * as phyAPI from "../Webcam/WebCamDetection";
 import {detectionCanvas, drawChoiceBoundaries, getResult} from "../Webcam/WebCamDetection";
@@ -130,11 +130,16 @@ async function GetNextStep(stepNumber: number, flowId: number): Promise<Step> {
         .then(response => response.json())
         .then(async (data): Promise<Step> => {
             await connection.invoke("SendCurrentStep", kiosk.code, stepNumber);
-            if (flowtype.toUpperCase() == "PHYSICAL") {
-                await showPhysicalStep(data);
+            if (!data.visible) {
+                await GetNextStep(++currentStepNumber, flowId)
             } else {
-                await ShowStep(data);
+                if (flowtype.toUpperCase() == "PHYSICAL") {
+                    await showPhysicalStep(data);
+                } else {
+                    await ShowStep(data);
+                }
             }
+            
             return data;
         })
         .catch(error => {
@@ -159,14 +164,16 @@ async function GetConditionalNextStep(stepId: number): Promise<Step> {
 }
 
 
-async function showPhysicalStep(data: Step){
+async function showPhysicalStep(data: Step) {
     informationContainer.innerHTML = "";
     questionContainer.innerHTML = "";
-    if(data.informationViewModel != undefined && data.questionViewModel != undefined) nextStep(false).then(() => {
+    if (isInformationStep(data) && isQuestionStep(data)) nextStep(false).then(() => {
         return
     });
-    await showInformationStep(data.informationViewModel);
-    showPhysicalQuestionStep(data.questionViewModel);
+    if (isInformationStep(data))
+        await showInformationStep(data.informationViewModel);
+    if (isQuestionStep(data))
+        showPhysicalQuestionStep(data.questionViewModel);
 }
 
 async function showInformationStep(data: Information[]){
@@ -386,8 +393,10 @@ async function ShowStep(data: Step) {
     (document.getElementById("stepNr") as HTMLSpanElement).innerText = currentStepNumber.toString();
     informationContainer.innerHTML = "";
     questionContainer.innerHTML = "";
-    await showInformationStep(data.informationViewModel);
-    showQuestionStep(data.questionViewModel);
+    if (isInformationStep(data))
+        await showInformationStep(data.informationViewModel);
+    if (isQuestionStep(data))
+        showPhysicalQuestionStep(data.questionViewModel);
 }
 
 async function saveAnswerToDatabase(answers: string[], openAnswer: string, flowId: number, stepNumber: number): Promise<void> {

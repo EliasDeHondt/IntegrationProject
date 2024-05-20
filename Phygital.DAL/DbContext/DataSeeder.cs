@@ -273,9 +273,9 @@ public static class DataSeeder
         dbContext.ChoiceQuestions.AddRange(singleChoiceQuestion);
         dbContext.Choices.AddRange(choice1, choice2, choice3, choice4, choice5, choice6);
 
-        QuestionStep step1 = new QuestionStep(1, singleChoiceQuestion, flow);
-        flow.Steps.Add(step1);
-        dbContext.QuestionSteps.Add(step1);
+            QuestionStep step1 = new QuestionStep(1, singleChoiceQuestion, flow, true);
+            flow.Steps.Add(step1);
+            dbContext.QuestionSteps.Add(step1);
             
         // Add multiple choice questions
         MultipleChoiceQuestion multipleChoiceQuestion1 = new MultipleChoiceQuestion("How do you think technology can best contribute to environmental sustainability and combating climate change? (Select all that apply)");
@@ -290,9 +290,9 @@ public static class DataSeeder
         dbContext.ChoiceQuestions.AddRange(multipleChoiceQuestion1);
         dbContext.Choices.AddRange(choice7, choice8, choice9, choice10, choice11, choice12);
                     
-        QuestionStep step2 = new QuestionStep(2, multipleChoiceQuestion1, flow);
-        flow.Steps.Add(step2);
-        dbContext.QuestionSteps.Add(step2);
+            QuestionStep step2 = new QuestionStep(2, multipleChoiceQuestion1, flow, true);
+            flow.Steps.Add(step2);
+            dbContext.QuestionSteps.Add(step2);
                     
         MultipleChoiceQuestion multipleChoiceQuestion2 = new MultipleChoiceQuestion("What measures do you think are necessary to ensure the ethical development and use of emerging technologies? (Select all that apply)");
                     
@@ -306,9 +306,9 @@ public static class DataSeeder
         dbContext.ChoiceQuestions.AddRange(multipleChoiceQuestion2);
         dbContext.Choices.AddRange(choice13, choice14, choice15, choice16, choice17, choice18);
                     
-        QuestionStep step3 = new QuestionStep(3, multipleChoiceQuestion2, flow);
-        flow.Steps.Add(step3);
-        dbContext.QuestionSteps.Add(step3);
+            QuestionStep step3 = new QuestionStep(3, multipleChoiceQuestion2, flow, false);
+            flow.Steps.Add(step3);
+            dbContext.QuestionSteps.Add(step3);
             
             // Add range question
             RangeQuestion rangeQuestion = new RangeQuestion("How concerned are you about the ethical implications of emerging technologies such as artificial intelligence and biotechnology?");
@@ -322,28 +322,28 @@ public static class DataSeeder
         dbContext.ChoiceQuestions.AddRange(rangeQuestion);
         dbContext.Choices.AddRange(choice19, choice20, choice21, choice22, choice23);
                     
-        QuestionStep step4 = new QuestionStep(4, rangeQuestion, flow);
-        flow.Steps.Add(step4);
-        dbContext.QuestionSteps.Add(step4);
+            QuestionStep step4 = new QuestionStep(4, rangeQuestion, flow, false);
+            flow.Steps.Add(step4);
+            dbContext.QuestionSteps.Add(step4);
             
-        // Add open questions
-        OpenQuestion openQuestions1 = new OpenQuestion("What role do you think education should play in fostering a culture of sustainability among future generations? Share your ideas.");
-        QuestionStep step5 = new QuestionStep(5, openQuestions1, flow);
-        flow.Steps.Add(step5);
-        dbContext.OpenQuestions.Add(openQuestions1);
-        dbContext.QuestionSteps.Add(step5);
+            // Add open questions
+            OpenQuestion openQuestions1 = new OpenQuestion("What role do you think education should play in fostering a culture of sustainability among future generations? Share your ideas.");
+            QuestionStep step5 = new QuestionStep(5, openQuestions1, flow, true);
+            flow.Steps.Add(step5);
+            dbContext.OpenQuestions.Add(openQuestions1);
+            dbContext.QuestionSteps.Add(step5);
             
-        OpenQuestion openQuestions2 = new OpenQuestion("In what ways do you think technology can be harnessed to empower marginalized communities and promote social justice? Share your thoughts.");
-        QuestionStep step6 = new QuestionStep(6, openQuestions2, flow);
-        flow.Steps.Add(step6);
-        dbContext.OpenQuestions.Add(openQuestions2);
-        dbContext.QuestionSteps.Add(step6);
+            OpenQuestion openQuestions2 = new OpenQuestion("In what ways do you think technology can be harnessed to empower marginalized communities and promote social justice? Share your thoughts.");
+            QuestionStep step6 = new QuestionStep(6, openQuestions2, flow, false);
+            flow.Steps.Add(step6);
+            dbContext.OpenQuestions.Add(openQuestions2);
+            dbContext.QuestionSteps.Add(step6);
 
-        OpenQuestion openQuestions3 = new OpenQuestion("How can we ensure that technological innovation is guided by ethical principles and values that prioritize the well-being of society and the environment? Provide your insights.");
-        QuestionStep step7 = new QuestionStep(7, openQuestions3, flow);
-        flow.Steps.Add(step7);
-        dbContext.OpenQuestions.Add(openQuestions3);
-        dbContext.QuestionSteps.Add(step7);
+            OpenQuestion openQuestions3 = new OpenQuestion("How can we ensure that technological innovation is guided by ethical principles and values that prioritize the well-being of society and the environment? Provide your insights.");
+            QuestionStep step7 = new QuestionStep(7, openQuestions3, flow, true);
+            flow.Steps.Add(step7);
+            dbContext.OpenQuestions.Add(openQuestions3);
+            dbContext.QuestionSteps.Add(step7);
             
         // Add conditional points
         choice18.NextStep = step7;
@@ -641,14 +641,15 @@ public static class DataSeeder
         Idea idea = new Idea("This is a test idea", author, project1.Feed);
         Idea idea1 = new Idea("This is another test idea", author, project1.Feed);
         Idea idea2 = new Idea("This is yet another test idea", author, project2.Feed);
-        Idea idea3 = new Idea("Man I got so many ideas.", author, project1.Feed);
-            
+        Idea idea3 = new Idea("Man I got so many ideas.", author, project1.Feed);    
+        
         //=======================
         // Add Project Organizers
         //=======================
         ProjectOrganizer projectOrganizer1 = new ProjectOrganizer(project1, (Facilitator)dbContext.Users.Single(user => user.Email == "Tom@CodeForge.com"));
         ProjectOrganizer projectOrganizer2 = new ProjectOrganizer(project2, (Facilitator)dbContext.Users.Single(user => user.Email == "Tom@CodeForge.com"));
         ProjectOrganizer projectOrganizer3 = new ProjectOrganizer(project4, (Facilitator)dbContext.Users.Single(user => user.Email == "Fred@kdg.be"));      
+        ProjectOrganizer projectOrganizer4 = new ProjectOrganizer(project3, (Facilitator)dbContext.Users.Single(user => user.Email == "Tom@CodeForge.com"));
             
         //=======================
         // Add users to shared platform
@@ -670,6 +671,7 @@ public static class DataSeeder
         dbContext.ProjectOrganizers.Add(projectOrganizer1);
         dbContext.ProjectOrganizers.Add(projectOrganizer2);
         dbContext.ProjectOrganizers.Add(projectOrganizer3);
+        dbContext.ProjectOrganizers.Add(projectOrganizer4);
         sharedPlatform.Projects.Add(project1);
         sharedPlatform.Projects.Add(project2);
         sharedPlatform.Projects.Add(project3);

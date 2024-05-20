@@ -11,6 +11,7 @@ using Business_Layer;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
+using Domain.ProjectLogics.Steps.Questions;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 
@@ -55,9 +56,71 @@ public class StepsController : Controller
         _uow.BeginTransaction();
 
         var newNote = _manager.AddNote(flowId, stepNr, note);
-        
+
         _uow.Commit();
 
         return Created("AddNote", newNote);
+    }
+
+    [HttpGet("GetStepsFromFlow/{flowId:long}")]
+    public ActionResult GetStepsFromFlow(long flowId)
+    {
+        var steps = _manager.GetAllStepsForFlow(flowId);
+
+        var stepViewModels = steps.Select(StepModelFactory.CreateStepViewModel<StepViewModel, StepBase>).ToList();
+
+        return Ok(stepViewModels);
+    }
+
+    [HttpPut("UpdateInformationStep")]
+    public ActionResult UpdateInformationStep(InformationStepViewModel model)
+    {
+        _uow.BeginTransaction();
+
+        var step = _manager.GetStepById(model.Id);
+
+        if (step is InformationStep infoStep)
+        {
+            infoStep.InformationBases = model.InformationViewModel
+                .Select(infoViewModel =>
+                {
+                    var info = _manager.GetInformationById(infoViewModel.Id);
+                    _manager.ChangeInformation(info, infoViewModel.Information);
+                    return info;
+                }).ToList();
+        }
+
+        _uow.Commit();
+
+        return NoContent();
+    }
+
+    [HttpPut("UpdateQuestionStep")]
+    public ActionResult UpdateQuestionStep(QuestionStepViewModel model)
+    {
+        _uow.BeginTransaction();
+
+        var step = _manager.GetStepById(model.Id);
+
+        if (step is QuestionStep questionStep)
+        {
+            var question = questionStep.QuestionBase;
+            question.Question = model.QuestionViewModel.Question;
+            if (question is ChoiceQuestionBase choiceQuestion)
+            {
+                if (model.QuestionViewModel.Choices != null)
+                    choiceQuestion.Choices = model.QuestionViewModel.Choices.Select<ChoiceViewModel, Choice>(
+                        choiceViewModel =>
+                        {
+                            var choice = _manager.GetChoiceById(choiceViewModel.Id);
+                            _manager.ChangeChoice(choice, choiceViewModel.Text, choiceViewModel.NextStepId);
+                            return choice;
+                        }).ToList();
+            }
+        }
+
+        _uow.Commit();
+
+        return NoContent();
     }
 }

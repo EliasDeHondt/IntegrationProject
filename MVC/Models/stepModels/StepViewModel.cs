@@ -9,4 +9,6 @@ public class StepViewModel
     public int StepNumber { get; set; }
     [Key]
     public long Id { get; set; }
+
+    public bool Visible { get; set; }
 }

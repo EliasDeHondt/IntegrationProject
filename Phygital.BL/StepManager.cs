@@ -91,6 +91,9 @@ public class StepManager
                     case "Video":
                         information = new Video();
                         break;
+                    case "Hyperlink":
+                        information = new Hyperlink();
+                        break;
                 }
 
                 _repo.CreateInformation(informationStep, information);
@@ -112,14 +115,29 @@ public class StepManager
         return _repo.ReadStepId(flowId, stepNr);
     }
 
-    public void ChangeInformation(InformationBase information)
+    public InformationBase GetInformationById(long id)
     {
-        _repo.UpdateInformation(information);
+        return _repo.ReadInformationById(id);
     }
 
-    public void ChangeChoice(Choice choice)
+    public QuestionBase GetQuestionById(long id)
     {
-        _repo.UpdateChoice(choice);
+        return _repo.ReadQuestionById(id);
+    }
+
+    public Choice GetChoiceById(long id)
+    {
+        return _repo.ReadChoiceById(id);
+    }
+
+    public void ChangeInformation(InformationBase information, string content)
+    {
+        _repo.UpdateInformation(information, content);
+    }
+
+    public void ChangeChoice(Choice choice, string text, long? nextStepId)
+    {
+        _repo.UpdateChoice(choice, text, nextStepId);
     }
 
     public void ChangeQuestion(QuestionBase question)
