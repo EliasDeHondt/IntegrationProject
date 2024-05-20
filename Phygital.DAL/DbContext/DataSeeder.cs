@@ -585,6 +585,19 @@ namespace Data_Access_Layer.DbContext
             GenerateMultipleChoiceQuestions(dbContext, flow1, 1, 2);
             GenerateRangeQuestions(dbContext, flow1, 1, 3);
             GenerateOpenQuestions(dbContext, flow1, 1, 4);
+            
+            //=======================
+            // Add participation respondents to flow 1 (Linear Flow)
+            //=======================
+            Participation participation2 = new Participation();
+            Respondent respondent1 = new Respondent("Tim@mail.com",participation2);
+            Respondent respondent2 = new Respondent("Tum@mail.com",participation2);
+            Respondent respondent3 = new Respondent("Tam@mail.com",participation1);
+            participation2.Respondents.Add(respondent1);
+            participation2.Respondents.Add(respondent2);
+            participation2.Respondents.Add(respondent3);
+            flow4.Participations.Add(participation1);
+            flow4.Participations.Add(participation2);
 
             //=======================
             // Add steps to flow 2 (Circular Flow)
