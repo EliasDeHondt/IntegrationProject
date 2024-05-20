@@ -10,6 +10,7 @@ import {
 import {downloadVideoFromBucket} from "../StorageAPI";
 import {Modal, Toast} from "bootstrap";
 import {Flow, Participation} from "../Flow/FlowObjects";
+import {op} from "@tensorflow/tfjs";
 
 const saveFlowToast = new Toast(document.getElementById("saveFlowToast")!);
 
@@ -28,6 +29,8 @@ const divQuestion = document.getElementById("partialQuestionContainer") as HTMLD
 
 let currentStep: Step;
 let currentStepList: Step[] = [];
+let currentViewingStep: Step;
+
 let flowId: number;
 
 async function GetStepsFromFlow(flowId: number): Promise<Step[]> {
@@ -554,8 +557,12 @@ butCloseCreateStep.onclick = () => {
 }
 
 butConfirmCreateStep.onclick = () => {
-    currentStepList.sort((a, b) => a.stepNumber - b.stepNumber);
-    let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
+    let newStepNumber = 1;
+    if(currentStepList[currentStepList.length - 1] != undefined){
+        newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
+    }
+    // currentStepList.sort((a, b) => a.stepNumber - b.stepNumber);
+    // let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
     if (infographic.checked) {
         AddStep(newStepNumber, "Information")
             .then(() => GetStepsFromFlow(flowId)

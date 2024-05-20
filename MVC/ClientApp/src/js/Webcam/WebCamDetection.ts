@@ -72,14 +72,11 @@ export function getResult(): number[]{
     return answers;
 }
 
-
-
-
 export function drawChoiceBoundaries(choices: number, width: number, height: number){
     choiceBoxes.length = 0;
     ctxChoice.reset();
     let lineDiff: number = width/choices;
-    const rectWidth: number = 10;
+    const rectWidth: number = 5;
     ctxChoice.fillStyle = 'green';
     for(let i: number = 0; i < choices; i++){
         choiceBoxes[i] = new ChoiceBox(lineDiff * i, lineDiff * (i+1));

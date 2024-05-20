@@ -1,7 +1,10 @@
 {
-  "name": "CodeForgePhygital",
+  "name": "codeforgephygital",
   "description": "Phygital MVC project",
-  "repository": "https://gitlab.com/kdg-ti/integratieproject-1/202324/23_codeforge/development",
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/kdg-ti/integratieproject-1/202324/23_codeforge/development.git"
+  },
   "license": "MIT",
   "version": "0.0.1",
   "dependencies": {
@@ -37,5 +40,12 @@
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch"
-  }
+  },
+  "bugs": {
+    "url": "https://gitlab.com/kdg-ti/integratieproject-1/202324/23_codeforge/development/issues"
+  },
+  "homepage": "https://gitlab.com/kdg-ti/integratieproject-1/202324/23_codeforge/development#readme",
+  "main": "webpack.config.js",
+  "keywords": [],
+  "author": ""
 }

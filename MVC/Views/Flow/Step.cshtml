@@ -17,6 +17,34 @@
     <!--Meta + Title-->
     <!--CSS-->
     <link rel="stylesheet" href="~/dist/site.css"/>
+    <style>
+        .kiosk-video {
+            position: absolute;
+            z-index: 0;
+            left: 2.5%;
+            width: 95%;
+            height: 600px;
+            object-fit: cover;
+        }
+
+        .kiosk-canvas-detection {
+            position: absolute;
+            z-index: 1;
+            left: 2.5%;
+            width: 95%;
+            height: 600px;
+            object-fit: cover;
+        }
+
+        .kiosk-canvas-choices {
+            position: absolute;
+            z-index: 2;
+            left: 2.5%;
+            width: 95%;
+            height: 600px;
+            object-fit: cover;
+        }
+    </style>
     <!--CSS-->
 </head>
 <body class="kiosk-background-colors-scheme kiosk-body overflow-hidden">
@@ -43,9 +71,9 @@
             <div id="questionContainer" class="row"></div>
             <div id="webcamDiv" class="visually-hidden row">
                 <div class="col">
-                        <video id="vidInput" class="m-auto" style="position: absolute; z-index: 0; width: 640px; height: 480px; left: 32.684%;"></video>
-                        <canvas id="canvasDetection" class="m-auto" style="position: absolute; z-index: 1; left: 32.684%;"></canvas>
-                        <canvas id="canvasChoices" class="m-auto" style="position: absolute; z-index: 2; left: 32.684%;"></canvas>
+                    <video id="vidInput" class="kiosk-video"></video>
+                    <canvas id="canvasDetection" class="kiosk-canvas-detection"></canvas>
+                    <canvas id="canvasChoices" class="kiosk-canvas-choices"></canvas>
                 </div>
             </div>
         </div>
