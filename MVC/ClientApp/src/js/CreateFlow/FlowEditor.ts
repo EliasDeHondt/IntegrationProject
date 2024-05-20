@@ -94,19 +94,19 @@ async function AddInformation(stepNr: number, type: string) {
         .catch(error => console.error("Error:", error))
 }
 
-async function UpdateFlow(steps: Step[]) {
-    await fetch(`/api/Flows/${flowId}/Update`, {
+async function UpdateInformationStep(step: Step) {
+    await fetch(`/api/Steps/UpdateInformationStep`, {
         method: "PUT",
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(steps)
+        body: JSON.stringify(step)
     })
 }
 
-async function UpdateStep(step: Step) {
-    await fetch(`/api/Steps/UpdateStep`, {
+async function UpdateQuestionStep(step: Step) {
+    await fetch(`/api/Steps/UpdateQuestionStep`, {
         method: "PUT",
         headers: {
             "Accept": "application/json",
@@ -154,7 +154,12 @@ btnAddLink.onclick = async () => {
 
 btnSaveFlow.onclick = async () => {
     await readStepInContainer();
-    currentStepList.forEach(step => UpdateStep(step))
+    for (const step of currentStepList) {
+        if (isQuestionStep(step))
+            await UpdateQuestionStep(step);
+        if (isInformationStep(step))
+            await UpdateInformationStep(step);
+    }
 }
 
 function toggleButtons() {

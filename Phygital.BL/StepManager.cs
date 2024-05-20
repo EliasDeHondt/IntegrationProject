@@ -135,9 +135,9 @@ public class StepManager
         _repo.UpdateInformation(information, content);
     }
 
-    public void ChangeChoice(Choice choice)
+    public void ChangeChoice(Choice choice, string text, long? nextStepId)
     {
-        _repo.UpdateChoice(choice);
+        _repo.UpdateChoice(choice, text, nextStepId);
     }
 
     public void ChangeQuestion(QuestionBase question)

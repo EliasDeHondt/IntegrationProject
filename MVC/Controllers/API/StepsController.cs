@@ -72,41 +72,51 @@ public class StepsController : Controller
         return Ok(stepViewModels);
     }
 
-    [HttpPut("UpdateStep")]
-    public ActionResult UpdateStep(StepViewModel model)
+    [HttpPut("UpdateInformationStep")]
+    public ActionResult UpdateInformationStep(InformationStepViewModel model)
     {
         _uow.BeginTransaction();
 
         var step = _manager.GetStepById(model.Id);
 
-        switch (step)
+        if (step is InformationStep infoStep)
         {
-            case InformationStep infoStep when model is InformationStepViewModel infoStepViewModel:
-                infoStep.InformationBases = infoStepViewModel.InformationViewModel
-                    .Select(infoViewModel =>
-                    {
-                        var info = _manager.GetInformationById(infoViewModel.Id);
-                        _manager.ChangeInformation(info, infoViewModel.Information);
-                        return info;
-                    }).ToList();
-                break;
-
-            case QuestionStep questionStep when model is QuestionStepViewModel questionStepViewModel:
-                var question = _manager.GetQuestionById(questionStepViewModel.QuestionViewModel.Id);
-                question.Question = questionStepViewModel.QuestionViewModel.Question;
-                if (question is ChoiceQuestionBase choiceQuestion)
+            infoStep.InformationBases = model.InformationViewModel
+                .Select(infoViewModel =>
                 {
-                    choiceQuestion.Choices = questionStepViewModel.QuestionViewModel.Choices.Select(choiceViewModel =>
-                    {
-                        var choice = _manager.GetChoiceById(choiceViewModel.Id);
-                        choice.Text = choiceViewModel.Text;
-                        choice.NextStep = _manager.GetStepById(choiceViewModel.NextStepId);
-                        return choice;
-                    }).ToList();
-                }
+                    var info = _manager.GetInformationById(infoViewModel.Id);
+                    _manager.ChangeInformation(info, infoViewModel.Information);
+                    return info;
+                }).ToList();
+        }
 
-                questionStep.QuestionBase = question;
-                break;
+        _uow.Commit();
+
+        return NoContent();
+    }
+
+    [HttpPut("UpdateQuestionStep")]
+    public ActionResult UpdateQuestionStep(QuestionStepViewModel model)
+    {
+        _uow.BeginTransaction();
+
+        var step = _manager.GetStepById(model.Id);
+
+        if (step is QuestionStep questionStep)
+        {
+            var question = questionStep.QuestionBase;
+            question.Question = model.QuestionViewModel.Question;
+            if (question is ChoiceQuestionBase choiceQuestion)
+            {
+                if (model.QuestionViewModel.Choices != null)
+                    choiceQuestion.Choices = model.QuestionViewModel.Choices.Select<ChoiceViewModel, Choice>(
+                        choiceViewModel =>
+                        {
+                            var choice = _manager.GetChoiceById(choiceViewModel.Id);
+                            _manager.ChangeChoice(choice, choiceViewModel.Text, choiceViewModel.NextStepId);
+                            return choice;
+                        }).ToList();
+            }
         }
 
         _uow.Commit();
