@@ -34,6 +34,14 @@ public class QuestionRepository
             .ToList();
     }
     
+    public string[] GetChoicesNames(string question)
+    {
+        var a =   _ctx.ChoiceQuestions
+            .Include(q => q.Choices)
+            .ToList();
+        return a.Select(i => i.ToString()).ToArray();;
+    }
+    
     public ChoiceQuestionBase ReadQuestionByName(string question)
     {
         // var b = _ctx.Answers
