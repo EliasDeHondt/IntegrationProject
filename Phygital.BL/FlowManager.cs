@@ -145,6 +145,10 @@ public class FlowManager
     {
         return _repository.GetQuestionCountsForFlow(flowName);
     }
+    public string[] GetRespondentCountsFromFlow(string flowName)
+    {
+        return _repository.GetRespondentCountsFromFlow(flowName);
+    }
     
     public IEnumerable<QuestionStep> GetQuestionsFromFlow(string flowName)
     {

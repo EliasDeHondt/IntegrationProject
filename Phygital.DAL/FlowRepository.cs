@@ -223,6 +223,29 @@ public class FlowRepository
         var a =  partPerFlow.Select(count => count.ToString()).ToArray();
         return a;
     }
+    public string[] GetRespondentCountsFromFlow(string flowName)
+    {
+        // var flow = ReadFlowByName(flowName);
+        var flow = _context.Flows
+            .Include(f => f.Participations)
+            .ThenInclude(p => p.Respondents)
+            .First(flow => flow.Theme.Subject == flowName).Participations.ToList();
+        var respCountsPerPart = new List<int>();
+        
+        foreach (var participation in flow)
+        {
+            int newResp = 0;
+            foreach (var respondent in participation.Respondents)
+            {
+                // if (respondent.Participation == participation)
+                // {
+                    newResp++;
+                // }
+            }
+            respCountsPerPart.Add(newResp);
+        }
+        return respCountsPerPart.Select(i => i.ToString()).ToArray();
+    }
     public string[] GetNamesPerFlow()
     {
         var flows = ReadAllFlows();

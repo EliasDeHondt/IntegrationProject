@@ -90,4 +90,13 @@ public class StatisticsController : Controller
     
         return Ok(answerCountQuestions);
     }
+    
+    [HttpGet("GetRespondentsFromFlow/{flowname}")]
+    public IActionResult GetRespondentsFromFlow(string flowname)
+    {
+        var flowCountQuestions = _manager.GetRespondentCountsFromFlow(flowname);
+        
+
+        return Ok(flowCountQuestions);
+    }
 }

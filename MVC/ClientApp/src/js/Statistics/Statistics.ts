@@ -235,7 +235,7 @@ function drawRadarChart(titel:string,chartData: { labels: string[]; datasets: { 
     });
 }
 let pieChart: Chart<"pie", string[], string> | null = null;
-function drawPieChart(titel:string,chartData: { labels: string[]; datasets: { label: string; data: string[]; backgroundColor: string; borderColor: string; borderWidth: number; }[]; }){
+function drawPieChart(titel:string,labels: string[], label: string, data: string[]){
 
     if (pieChart) {
         pieChart.destroy();
@@ -243,7 +243,17 @@ function drawPieChart(titel:string,chartData: { labels: string[]; datasets: { la
 
     pieChart = new Chart(pieCtx, {
         type: 'pie',
-        data: chartData,
+        data: {
+            labels: labels,
+            datasets: [{
+                label: label,
+                data: data,
+                backgroundColor: colors,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }],
+
+        },
         options: {
             scales: {
                 y: {
@@ -406,7 +416,7 @@ export async function GetQuestionsFromFlow(flowname: string){
 }
 export async function GetRespondentsFromFlow(flowname: string){
     const labels: string[] = ["participation 1", "participation 2"];
-    await fetch("/api/Statistics/GetQuestionsFromFlow/" + flowname, {
+    await fetch("/api/Statistics/GetRespondentsFromFlow/" + flowname, {
         method: "GET",
         headers: {
             "Accept": "application/json",
@@ -414,7 +424,7 @@ export async function GetRespondentsFromFlow(flowname: string){
         }
     })
         .then(response => response.json())
-        .then(data => drawPieChart("Aantal Respondents voor de Flow: "+flowname+" verdeeld over de participations",chartData('Aantal Respondents', labels, data)))
+        .then(data => drawPieChart("Aantal Respondents voor de Flow \""+flowname+"\" verdeeld over de participations",labels,'Aantal Respondents', data))
         .catch(error => console.error("Error:", error))
 }
 
