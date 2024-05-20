@@ -36,10 +36,23 @@ public class QuestionRepository
     
     public string[] GetChoicesNames(string question)
     {
-        var a =   _ctx.ChoiceQuestions
-            .Include(q => q.Choices)
-            .ToList();
-        return a.Select(i => i.ToString()).ToArray();;
+        var b = _ctx.ChoiceQuestions
+            .Include(q => q.Choices);
+        var c = b.Include(c => c.Choices);
+        var d = c.First().Question;
+        // var a = _ctx.ChoiceQuestions
+        //     .Include(q => q.Choices)
+        //     .Where(q => q.Question.Trim().Equals(question.Trim())).ToList();
+
+        foreach (var questionA in c)
+        {
+            if (questionA.Question == question)
+            {
+                var choices = questionA.Choices;
+                return choices.Select(i => i.Text.ToString()).ToArray();;
+            }
+        }
+        return null;
     }
     
     public ChoiceQuestionBase ReadQuestionByName(string question)
@@ -70,7 +83,6 @@ public class QuestionRepository
                 return questionA;
             }
         }
-
         return null;
         // var b = a.Single(q => q.Question == question);
         // return b;

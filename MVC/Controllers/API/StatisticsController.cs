@@ -76,7 +76,7 @@ public class StatisticsController : Controller
     [HttpGet("GetChoicesNames/{question}")]
     public IActionResult GetChoicesNames(string question)
     {
-        var flowCountQuestions = _Qmanager.GetChoicesNames(question);
+        var flowCountQuestions = _Qmanager.GetChoicesNames("If you were to prepare the budget for your city or municipality, where would you mainly focus on in the coming years? Choose one.");
         
 
         return Ok(flowCountQuestions);
