@@ -4,6 +4,7 @@ const barCtx = document.getElementById('barChart') as HTMLCanvasElement;
 const lineCtx = document.getElementById('lineChart') as HTMLCanvasElement;
 const doughnutCtx = document.getElementById('doughnutChart') as HTMLCanvasElement;
 const radarCtx = document.getElementById('radarChart') as HTMLCanvasElement;
+const pieCtx = document.getElementById('pieChart') as HTMLCanvasElement;
 
 const selectFlow = document.getElementById("selectFlow") as HTMLSelectElement;
 const selectQuestion = document.getElementById("selectQuestion") as HTMLSelectElement;
@@ -177,7 +178,6 @@ function drawDoughnutChart(titel:string,labels: string[], label: string, data: s
     });
 }
 let radarChart: Chart<"radar", string[], string> | null = null;
-
 function drawRadarChart(titel:string,chartData: { labels: string[]; datasets: { label: string; data: string[]; backgroundColor: string; borderColor: string; borderWidth: number; }[]; }){
 
     if (radarChart) {
@@ -218,6 +218,63 @@ function drawRadarChart(titel:string,chartData: { labels: string[]; datasets: { 
                     labels: {
                         font: {
                             size: 24 
+                        }
+                    }
+                },
+                tooltip: {
+                    titleFont: {
+                        size: 22
+                    },
+                    bodyFont: {
+                        size: 22
+                    }
+                }
+
+            }
+        }
+    });
+}
+let pieChart: Chart<"pie", string[], string> | null = null;
+function drawPieChart(titel:string,chartData: { labels: string[]; datasets: { label: string; data: string[]; backgroundColor: string; borderColor: string; borderWidth: number; }[]; }){
+
+    if (pieChart) {
+        pieChart.destroy();
+    }
+
+    pieChart = new Chart(pieCtx, {
+        type: 'pie',
+        data: chartData,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        font: {
+                            size: 22
+                        }
+                    }
+                },
+                // x: {
+                //     beginAtZero: true,
+                //     ticks: {
+                //         font: {
+                //             size: 22
+                //         }
+                //     }
+                // }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: titel,
+                    font: {
+                        size: 24
+                    }
+                },
+                legend: {
+                    labels: {
+                        font: {
+                            size: 24
                         }
                     }
                 },
@@ -286,33 +343,16 @@ export async function GetNamesPerFlow(){
 
             GetQuestionsFromFlow(showSelectedFlow()); //eerste keer bij inladen
             GetQuestionNames(showSelectedFlow()); //eerste keer bij inladen
+            GetRespondentsFromFlow(showSelectedFlow());
             
             selectFlow.addEventListener('change', () => {
                 GetQuestionsFromFlow(showSelectedFlow());
                 GetQuestionNames(showSelectedFlow());
+                GetRespondentsFromFlow(showSelectedFlow());
             });
         } )
         .catch(error => console.error("Error:", error))
 }
-// export async function GetAnswersPerQuestion(question: string){
-//     //voor answers te krijgen
-//     console.log("Fetching Answers...")
-//     await fetch("/api/Statistics/GetAnswersPerQuestion", {
-//         method: "GET",
-//         headers: {
-//             "Accept": "application/json",
-//             "Content-Type": "application/json"
-//         }
-//     })
-//         .then(response => response.json())
-//         .then(labels => {
-//             console.log(labels)
-//             fillDropdownFlows(labels,selectQuestion);
-//             showSelectedFlow();
-//             GetAnswerCountsForQuestions(labels,question)
-//         } )
-//         .catch(error => console.error("Error:", error))
-// }
 export async function GetQuestionNames(flowname: string){
     console.log("Fetching question names...")
     await fetch("/api/Statistics/GetQuestionNames/" + flowname, {
@@ -364,6 +404,20 @@ export async function GetQuestionsFromFlow(flowname: string){
         .then(data => drawRadarChart("Aantal Questions voor de Flow: "+flowname,chartData('Aantal Questions', labels, data)))
         .catch(error => console.error("Error:", error))
 }
+export async function GetRespondentsFromFlow(flowname: string){
+    const labels: string[] = ["participation 1", "participation 2"];
+    await fetch("/api/Statistics/GetQuestionsFromFlow/" + flowname, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => drawPieChart("Aantal Respondents voor de Flow: "+flowname+" verdeeld over de participations",chartData('Aantal Respondents', labels, data)))
+        .catch(error => console.error("Error:", error))
+}
+
 
 export async function GetAnswerCountsForQuestions(labels: string[],question: string){
     //voor elk answer te tellen
