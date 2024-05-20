@@ -21,10 +21,12 @@ namespace MVC.Controllers.API;
 public class StepsController : Controller
 {
     private readonly StepManager _manager;
+    private readonly UnitOfWork _uow;
 
-    public StepsController(StepManager manager)
+    public StepsController(StepManager manager, UnitOfWork uow)
     {
         _manager = manager;
+        _uow = uow;
     }
 
     [HttpGet("GetNextStep/{flowId:int}/{stepNumber:long}")]
@@ -45,5 +47,17 @@ public class StepsController : Controller
         var stepViewModel = StepModelFactory.CreateStepViewModel<StepViewModel, StepBase>(stepBase);
 
         return Ok(stepViewModel);
+    }
+
+    [HttpPost("AddNote/{flowId}/{stepNr}/{note}")]
+    public ActionResult AddNote(long flowId, int stepNr, string note)
+    {
+        _uow.BeginTransaction();
+
+        var newNote = _manager.AddNote(flowId, stepNr, note);
+        
+        _uow.Commit();
+
+        return Created("AddNote", newNote);
     }
 }

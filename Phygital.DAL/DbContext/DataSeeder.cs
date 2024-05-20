@@ -310,8 +310,8 @@ public static class DataSeeder
         flow.Steps.Add(step3);
         dbContext.QuestionSteps.Add(step3);
             
-        // Add range question
-        RangeQuestion rangeQuestion = new RangeQuestion("How concerned are you about the ethical implications of emerging technologies such as artificial intelligence and biotechnology?");
+            // Add range question
+            RangeQuestion rangeQuestion = new RangeQuestion("How concerned are you about the ethical implications of emerging technologies such as artificial intelligence and biotechnology?");
                     
         Choice choice19 = new Choice("Not concerned at all", rangeQuestion);
         Choice choice20 = new Choice("Not so concerned", rangeQuestion);
@@ -347,6 +347,12 @@ public static class DataSeeder
             
         // Add conditional points
         choice18.NextStep = step7;
+        
+        // Add notes
+        step1.Notes.Add(new Note("The user is optimistic about the transformative potential of AI. They emphasize a balanced perspective, acknowledging both the benefits and challenges of AI integration into daily life."));
+        step4.Notes.Add(new Note("They recognize both the potential benefits and risks associated with these technologies."));
+        step4.Notes.Add(new Note("The user advocates for proactive measures to address ethical concerns and ensure responsible development and deployment of emerging technologies."));
+        step5.Notes.Add(new Note("The user views education as a crucial driver for fostering a culture of sustainability. They highlight a comprehensive approach, integrating sustainability into various aspects of education and community involvement."));
     }
 
     public static void GenerateKdgSteps(CodeForgeDbContext dbContext, Flow flowKdg)
@@ -456,12 +462,12 @@ public static class DataSeeder
             case 2:
                 MultipleChoiceQuestion multipleQuestions2 = new MultipleChoiceQuestion("Welke eigenschappen acht jij essentieel voor een effectieve studentenraadsvertegenwoordiger?");
 
-                Choice choice7 = new Choice("Leiderschap", multipleQuestions2);
-                Choice choice8 = new Choice("Communicatievaardigheden", multipleQuestions2);
-                Choice choice9 = new Choice("Samenwerking", multipleQuestions2);
-                Choice choice10 = new Choice("Probleemoplossend vermogen", multipleQuestions2);
-                Choice choice11 = new Choice("Toewijding aan het welzijn van de studenten", multipleQuestions2);
-                Choice choice12 = new Choice("Initiatief tonen en vastberadenheid", multipleQuestions2);
+                    Choice choice7 = new Choice("Leiderschap", multipleQuestions2);
+                    Choice choice8 = new Choice("Communicatievaardigheden", multipleQuestions2);
+                    Choice choice9 = new Choice("Samenwerking", multipleQuestions2);
+                    Choice choice10 = new Choice("Probleemoplossend vermogen", multipleQuestions2);
+                    Choice choice11 = new Choice("Toewijding aan het welzijn van de studenten", multipleQuestions2);
+                    Choice choice12 = new Choice("Initiatief tonen en vastberadenheid", multipleQuestions2);
 
 
                 dbContext.ChoiceQuestions.AddRange(multipleQuestions2);

@@ -188,7 +188,7 @@ public class Startup
         {
             Id = "HenkId",
             Email = "Henk@CodeForge.com",
-            UserName = "Henk",
+            UserName = "Bab",
             EmailConfirmed = true,
             SharedPlatform = new SharedPlatform()
         };
@@ -197,7 +197,7 @@ public class Startup
         {
             Id = "CodeForgeId",
             Email = "CodeForge.noreply@gmail.com",
-            UserName = "CodeForge",
+            UserName = "Bib",
             EmailConfirmed = true,
             SharedPlatform = new SharedPlatform()
         };

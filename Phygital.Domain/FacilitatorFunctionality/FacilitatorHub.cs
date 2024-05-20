@@ -10,14 +10,14 @@ public class FacilitatorHub : Hub
         await Groups.AddToGroupAsync(Context.ConnectionId, code);
         await Clients.OthersInGroup(code).SendAsync("UserJoinedConnection");
     }
-        
+
 
     public async Task LeaveConnection(string user, string code)
     {
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, code);
         await Clients.Group(code).SendAsync("UserLeftConnection", $"{user} disconnected from connection #{code}!");
     }
-    
+
     public async Task SendFlowUpdate(string code, string id, string state) =>
         await Clients.OthersInGroup(code).SendAsync("ReceiveFlowUpdate", id, state);
 
@@ -35,5 +35,7 @@ public class FacilitatorHub : Hub
 
     public async Task OngoingFlow(string code, bool isOngoing) =>
         await Clients.OthersInGroup(code).SendAsync("ReceiveOngoingFlow", isOngoing);
-    
+
+    public async Task SendCurrentStep(string code, int stepNr) =>
+        await Clients.OthersInGroup(code).SendAsync("ReceiveCurrentStep", stepNr);
 }
