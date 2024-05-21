@@ -10,6 +10,7 @@ import {
 import {downloadVideoFromBucket} from "../StorageAPI";
 import {Modal, Toast} from "bootstrap";
 import {Flow, Participation} from "../Flow/FlowObjects";
+import {readFileAsBase64} from "../Util";
 
 const saveFlowToast = new Toast(document.getElementById("saveFlowToast")!);
 
@@ -152,6 +153,19 @@ btnAddLink.onclick = async () => {
         .then(() => initializeCardLinks());
     let index = currentStepList.findIndex(s => s.stepNumber == currentStep.stepNumber);
     await showStepInContainer(currentStepList[index]);
+}
+
+btnAddImage.onclick = async () => {
+    await AddInformation(currentStep.stepNumber, 'Image')
+        .then(() => GetStepsFromFlow(flowId))
+        .then(() => updateStepList(currentStepList))
+        .then(() => initializeCardLinks());
+    let index = currentStepList.findIndex(s => s.stepNumber == currentStep.stepNumber);
+    await showStepInContainer(currentStepList[index]);
+}
+
+btnAddVideo.onclick = async () => {
+    
 }
 
 async function saveFlow(){
@@ -300,9 +314,17 @@ async function readStepInContainer() {
     let index = currentStepList.findIndex(s => s.stepNumber == currentStep.stepNumber);
 
     if (isInformationStep(currentStep)) {
-        const elements = divInformation.children;
+        let elements = divInformation.children;
         let infoArray: Information[] = currentStep.informationViewModel;
-
+        const elementsArray = Array.from(elements) as HTMLElement[];
+        elementsArray.forEach(element => {
+            if (element.tagName.toLowerCase() === 'input') {
+                if (element.parentNode) {
+                    element.parentNode.removeChild(element);
+                }
+            }
+        });
+        elements = divInformation.children;
         for (let i = 0; i < elements.length; i++) {
             const element = elements[i] as HTMLElement;
 
@@ -404,6 +426,14 @@ async function showStepInContainer(step: Step) {
                     image.style.width = '600px';
                     image.style.height = '600px';
                     divInformation.appendChild(image);
+                    let input = document.createElement("input");
+                    input.type = "file";
+                    input.accept = "image/*";
+                    input.multiple = false;
+                    input.onchange = async () => {
+                        image.src = "data:image/png;base64," + await readFileAsBase64(input.files![0]);
+                    }
+                    divInformation.appendChild(input);
                     break;
                 }
                 case 'Video': {
@@ -555,7 +585,7 @@ butCloseCreateStep.onclick = () => {
 
 butConfirmCreateStep.onclick = () => {
     currentStepList.sort((a, b) => a.stepNumber - b.stepNumber);
-    let newStepNumber = currentStepList[currentStepList.length - 1].stepNumber + 1
+    let newStepNumber = currentStepList.length == 0 ? 1 : currentStepList[currentStepList.length - 1].stepNumber + 1
     if (infographic.checked) {
         AddStep(newStepNumber, "Information")
             .then(() => GetStepsFromFlow(flowId)
