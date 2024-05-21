@@ -36,32 +36,28 @@ public class QuestionRepository
     
     public string[] GetChoicesNames(long questionId)
     {
-        var b = _ctx.ChoiceQuestions
-            .Include(q => q.Choices);
-        var c = b.Include(c => c.Choices);
-        var d = c.First().Question;
+        
         // var a = _ctx.ChoiceQuestions
         //     .Include(q => q.Choices)
         //     .Where(q => q.Question.Trim().Equals(question.Trim())).ToList();
-
+        if (ReadQuestionByName(questionId) is OpenQuestion) //open question
+        {
+            string[] help = { "0", "0", "0" };
+            return null;
+        }
+        var b = _ctx.ChoiceQuestions
+            .Include(q => q.Choices);
+        var c = b.Include(c => c.Choices);
         foreach (var questionA in c)
         {
             if (questionA.Id == questionId)
             {
-                if (questionA is OpenQuestion)
-                {
-                    return Enumerable.Repeat("0", 4).ToArray();
-                }
-                else
-                {
-                    var choices = questionA.Choices;
-                    return choices.Select(i => i.Text.ToString()).ToArray();
-                    
-                }
-                
+                var choices = questionA.Choices;
+                return choices.Select(i => i.Text.ToString()).ToArray();
             }
         }
-        return null;
+        return null!;
+        
     }
     
     public ChoiceQuestionBase ReadQuestionByName(long question)
@@ -102,6 +98,10 @@ public class QuestionRepository
         var q = ReadQuestionByName(question); //enkel voor ChoiceQuestions, geen open quesions!
         var answerCountsPerQuestion = new List<int>();
 
+        if (q is OpenQuestion)
+        {
+            return null;
+        }
         foreach (var choice in q.Choices)
         {
             int newChoice = 0;
