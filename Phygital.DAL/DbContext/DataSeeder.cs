@@ -614,7 +614,7 @@ public static class DataSeeder
         // Add Information Steps
         //=======================
         Image imageInfo = new Image(ImageUrls.Elections);
-        Video videoInfo = new Video("?"); // TODO: Google Bucket URL
+        Video videoInfo = new Video("video.mp4");
         Hyperlink hyperlinkInfo = new Hyperlink("https://levuur.be/");
             
         flow1.Steps.Add(new InformationStep(5, new List<InformationBase> {imageInfo}, flow1));
