@@ -222,17 +222,10 @@ export function initDataStatistics(labels: string[]) {
 }
 export function initQuestionNames(labels: string[]) {
     fillDropdownFlows(labels,selectQuestion)
-    GetChoicesNames("If you were to prepare the budget for your city or municipality, where would you mainly focus on in the coming years? Choose one.") //todo niet vergeten!!
+    GetChoicesNames(showSelectedQuestion()) //todo niet vergeten!!
 }
 export function initChoicesNames(labels: string[]) {
-    GetAnswerCountsForQuestions(labels,"If you were to prepare the budget for your city or municipality, where would you mainly focus on in the coming years? Choose one.");
+    GetAnswerCountsForQuestions(labels,showSelectedQuestion());
 }
 
-// getSelectedFlows()
-
-// document.addEventListener('DOMContentLoaded', (event) => {
-//     GetNamesPerFlow()
-//     console.log("showSelectedFlow() ", showSelectedFlow());
-//     GetQuestionsFromFlow(showSelectedFlow())
-// });
 GetNamesPerFlow()

@@ -58,13 +58,6 @@ public class StatisticsController : Controller
         return Ok(flowCountQuestions);
     }
     
-    // [HttpGet("GetAnswersPerQuestion/{id}")]
-    // public IActionResult GetAnswersPerQuestion(long flowid)
-    // {
-    //     var flowQuestions = _manager.GetAnswersPerQuestion(flowid);
-    //
-    //     return Ok(flowQuestions);
-    // }
     [HttpGet("GetQuestionNames/{flowname}")]
     public IActionResult GetQuestionNames(string flowname)
     {
@@ -76,7 +69,7 @@ public class StatisticsController : Controller
     [HttpGet("GetChoicesNames/{question}")]
     public IActionResult GetChoicesNames(string question)
     {
-        var flowCountQuestions = _Qmanager.GetChoicesNames("If you were to prepare the budget for your city or municipality, where would you mainly focus on in the coming years? Choose one.");
+        var flowCountQuestions = _Qmanager.GetChoicesNames(question);
         
 
         return Ok(flowCountQuestions);
@@ -85,7 +78,7 @@ public class StatisticsController : Controller
     [HttpGet("GetAnswerCountsForQuestions/{question}")]
     public IActionResult GetAnswerCountsForQuestions(string question)
     {
-        var answerCountQuestions = _Qmanager.GetAnswerCountsForQuestions("If you were to prepare the budget for your city or municipality, where would you mainly focus on in the coming years? Choose one.");
+        var answerCountQuestions = _Qmanager.GetAnswerCountsForQuestions(question);
         
     
         return Ok(answerCountQuestions);

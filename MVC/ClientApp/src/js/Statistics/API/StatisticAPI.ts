@@ -1,4 +1,3 @@
-//get data - flows
 import {
     drawBarChart, drawDoughnutChart,
     drawLineChart,
@@ -6,8 +5,9 @@ import {
     drawRadarChart,
     initChoicesNames, initDataStatistics, initQuestionNames,
 } from "../Statistics";
+
+//get data - flows
 export async function GetCountStepsPerFlow(labels: string[]){
-    console.log("Fetching count steps...")
     await fetch("/api/Statistics/GetCountStepsPerFlow", {
         method: "GET",
         headers: {
@@ -21,7 +21,6 @@ export async function GetCountStepsPerFlow(labels: string[]){
 }
 
 export async function GetCountParticipationsPerFlow(labels: string[]){
-    console.log("Fetching count participations...")
     await fetch("/api/Statistics/GetCountParticipationsPerFlow", {
         method: "GET",
         headers: {
@@ -63,6 +62,7 @@ export async function GetQuestionNames(flowname: string){
         .catch(error => console.error("Error:", error))
 }
 export async function GetChoicesNames(question: string){
+    console.log("question: GetChoicesNames",question)
     await fetch("/api/Statistics/GetChoicesNames/" + question, {
         method: "GET",
         headers: {
@@ -118,6 +118,7 @@ export async function GetRespondentsFromFlow(labels: string[],flowname: string){
         .catch(error => console.error("Error:", error))
 }
 export async function GetAnswerCountsForQuestions(labels: string[],question: string){
+    console.log("question: GetAnswerCountsForQuestions",question)
     //voor elk answer te tellen
     await fetch("/api/Statistics/GetAnswerCountsForQuestions/" + question, {
         method: "GET",
