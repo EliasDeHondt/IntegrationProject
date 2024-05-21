@@ -214,9 +214,15 @@ export function showSelectedQuestion() : string{
 
     if (selectedIndex !== -1) {
         const selectedOption = selectQuestion.options[selectedIndex];
-        console.log("selectedOption.id",selectedOption.text)
-        console.log("selectedOption.v",selectedOption.value)
         return selectedOption.value.toString(); //gekozen question
+    }return "0";
+}
+export function showSelectedQuestionText() : string{
+    const selectedIndex = selectQuestion.selectedIndex;
+
+    if (selectedIndex !== -1) {
+        const selectedOption = selectQuestion.options[selectedIndex];
+        return selectedOption.text //gekozen question
     }return "0";
 }
 
@@ -239,10 +245,10 @@ export function initDataStatistics(labels: string[]) {
 }
 export function initQuestionNames(labels: Question[]) {
     fillDropdownQuestions(labels,selectQuestion)
-    GetChoicesNames(showSelectedQuestion()) //todo niet vergeten!!
+    GetChoicesNames(showSelectedQuestion())
 }
 export function initChoicesNames(labels: string[]) {
-    GetAnswerCountsForQuestions(labels,showSelectedQuestion());
+    GetAnswerCountsForQuestions(labels,showSelectedQuestion(),showSelectedQuestionText());
 }
 
 GetNamesPerFlow()

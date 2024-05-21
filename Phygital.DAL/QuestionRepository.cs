@@ -55,7 +55,7 @@ public class QuestionRepository
         return null;
     }
     
-    public ChoiceQuestionBase ReadQuestionByName(string question)
+    public ChoiceQuestionBase ReadQuestionByName(long question)
     {
         // var b = _ctx.Answers
         //     .Include(a => ((ChoiceAnswer)a).QuestionBase)
@@ -78,7 +78,7 @@ public class QuestionRepository
 
         foreach (var questionA in a)
         {
-            if (questionA.Question == question)
+            if (questionA.Id == question)
             {
                 return questionA;
             }
@@ -88,7 +88,7 @@ public class QuestionRepository
         // return b;
     }
     
-    public string[] GetAnswerCountsForQuestions(string question)
+    public string[] GetAnswerCountsForQuestions(long question)
     {
         var q = ReadQuestionByName(question); //enkel voor ChoiceQuestions, geen open quesions!
         var answerCountsPerQuestion = new List<int>();

@@ -76,7 +76,9 @@ export async function GetQuestionNames(flowname: string): Promise<void> {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
+        
         const labels: Question[] = await response.json();
+        console.log("labels Question",labels)
         initQuestionNames(labels);
     } catch (error) {
         console.error("Error:", error);
@@ -139,7 +141,7 @@ export async function GetRespondentsFromFlow(labels: string[],flowname: string){
         .then(data => drawPieChart("Aantal Respondents voor de Flow \""+flowname+"\" verdeeld over de participations",labels,'Aantal Respondents', data))
         .catch(error => console.error("Error:", error))
 }
-export async function GetAnswerCountsForQuestions(labels: string[],question: string){
+export async function GetAnswerCountsForQuestions(labels: string[],question: string,questionText: string){
     console.log("question: GetAnswerCountsForQuestions",question)
     //voor elk answer te tellen
     await fetch("/api/Statistics/GetAnswerCountsForQuestions/" + question, {
@@ -152,7 +154,7 @@ export async function GetAnswerCountsForQuestions(labels: string[],question: str
         .then(response => response.json())
         .then(data => {
             console.log("data QA",data)
-            drawDoughnutChart("Aantal antwoorden voor de vraag: "+question, labels,'Aantal Answers', data)
+            drawDoughnutChart("Aantal antwoorden voor de vraag: "+questionText, labels,'Aantal Answers', data)
         })
         .catch(error => console.error("Error:", error))
 }

@@ -89,7 +89,7 @@ public class StatisticsController : Controller
     }
     
     [HttpGet("GetAnswerCountsForQuestions/{question}")]
-    public IActionResult GetAnswerCountsForQuestions(string question)
+    public IActionResult GetAnswerCountsForQuestions(long question)
     {
         var answerCountQuestions = _Qmanager.GetAnswerCountsForQuestions(question);
         

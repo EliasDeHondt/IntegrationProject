@@ -26,7 +26,7 @@ public class QuestionManager
     {
         return _repo.GetChoicesNames(question);
     }
-    public string[] GetAnswerCountsForQuestions(string question)
+    public string[] GetAnswerCountsForQuestions(long question)
     {
         return _repo.GetAnswerCountsForQuestions(question);
     }
