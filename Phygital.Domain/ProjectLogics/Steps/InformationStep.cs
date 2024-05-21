@@ -19,6 +19,11 @@ public class InformationStep : StepBase
     public InformationStep(int stepNumber, ICollection<InformationBase> informationBases, Flow flow, long id = 0) : base(stepNumber, flow, id)
     {
         InformationBases = informationBases;
+    }    
+    
+    public InformationStep(int stepNumber, ICollection<InformationBase> informationBases, Flow flow, bool visible, long id = 0) : base(stepNumber, flow, visible, id)
+    {
+        InformationBases = informationBases;
     }
 
     public InformationStep()

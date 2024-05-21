@@ -1,4 +1,4 @@
-import {Information, Question, Step} from "./Step/StepObjects";
+import {Information, isInformationStep, isQuestionStep, Question, Step} from "./Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
 import * as phyAPI from "../Webcam/WebCamDetection";
 import {detectionCanvas, drawChoiceBoundaries, getResult} from "../Webcam/WebCamDetection";
@@ -6,6 +6,12 @@ import {delay} from "../Util";
 import {Timer} from "../Util/Timer";
 import {Flow} from "./FlowObjects";
 import {Modal} from "bootstrap";
+import * as kiosk from "../Kiosk/Kiosk"
+import * as signalR from "@microsoft/signalr";
+
+const connection = new signalR.HubConnectionBuilder()
+    .withUrl("/hub")
+    .build();
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
@@ -82,7 +88,13 @@ async function SetRespondentEmail(flowId: number, inputEmail: string) {
 }
 
 //button submit email 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
+    await connection.start().then(() => {
+        connection.invoke("JoinConnection", kiosk.code).then(() => {
+            connection.invoke("SendCurrentStep", kiosk.code, currentStepNumber)
+        })
+    });
+
     const emailInput = document.getElementById("inputEmail");
 
     btnEmail.onclick = function () {
@@ -117,11 +129,17 @@ async function GetNextStep(stepNumber: number, flowId: number): Promise<Step> {
     })
         .then(response => response.json())
         .then(async (data): Promise<Step> => {
-            if (flowtype.toUpperCase() == "PHYSICAL") {
-                await showPhysicalStep(data);
+            await connection.invoke("SendCurrentStep", kiosk.code, stepNumber);
+            if (!data.visible) {
+                await GetNextStep(++currentStepNumber, flowId)
             } else {
-                await ShowStep(data);
+                if (flowtype.toUpperCase() == "PHYSICAL") {
+                    await showPhysicalStep(data);
+                } else {
+                    await ShowStep(data);
+                }
             }
+            
             return data;
         })
         .catch(error => {
@@ -146,14 +164,16 @@ async function GetConditionalNextStep(stepId: number): Promise<Step> {
 }
 
 
-async function showPhysicalStep(data: Step){
+async function showPhysicalStep(data: Step) {
     informationContainer.innerHTML = "";
     questionContainer.innerHTML = "";
-    if(data.informationViewModel != undefined && data.questionViewModel != undefined) nextStep(false).then(() => {
+    if (isInformationStep(data) && isQuestionStep(data)) nextStep(false).then(() => {
         return
     });
-    await showInformationStep(data.informationViewModel);
-    showPhysicalQuestionStep(data.questionViewModel);
+    if (isInformationStep(data))
+        await showInformationStep(data.informationViewModel);
+    if (isQuestionStep(data))
+        showPhysicalQuestionStep(data.questionViewModel);
 }
 
 async function showInformationStep(data: Information[]){
@@ -230,7 +250,7 @@ function createQuestion(data: Question){
     let rowDiv = document.createElement("div");
     rowDiv.classList.add("row");
     rowDiv.classList.add("m-auto");
-    rowDiv.classList.add("w-50");
+    rowDiv.classList.add("w-100");
     for (const element of data.choices) {
         let colDiv = document.createElement("div");
         colDiv.classList.add("col");
@@ -373,8 +393,10 @@ async function ShowStep(data: Step) {
     (document.getElementById("stepNr") as HTMLSpanElement).innerText = currentStepNumber.toString();
     informationContainer.innerHTML = "";
     questionContainer.innerHTML = "";
-    await showInformationStep(data.informationViewModel);
-    showQuestionStep(data.questionViewModel);
+    if (isInformationStep(data))
+        await showInformationStep(data.informationViewModel);
+    if (isQuestionStep(data))
+        showPhysicalQuestionStep(data.questionViewModel);
 }
 
 async function saveAnswerToDatabase(answers: string[], openAnswer: string, flowId: number, stepNumber: number): Promise<void> {

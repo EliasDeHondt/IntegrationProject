@@ -129,4 +129,10 @@ public class FlowManager
     {
         return _repository.ReadFlowsByProject(id);
     }
+    
+    public Flow GetFlowWithSteps(long flowId)
+    {
+        return _repository.ReadFlowWithSteps(flowId);
+    }
+
 }

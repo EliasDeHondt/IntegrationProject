@@ -23,7 +23,10 @@ module.exports = {
         deleteFlowAPI: './src/js/CreateFlow/API/DeleteFlowAPI.ts',
         flowEditor: './src/js/CreateFlow/FlowEditor.ts',
         navigation: './src/js/Layout/Navigation.ts',
-        systemDashboard: "./src/js/SystemDashboard/Dashboard.ts"
+        systemDashboard: "./src/js/SystemDashboard/Dashboard.ts",
+        webapp: "./src/js/Webapp/Dashboard.ts",
+        systemDashboard: "./src/js/SystemDashboard/Dashboard.ts",
+        notes: "./src/js/Project/Notes.ts"
     },
     output: {
         filename: '[name].entry.js',

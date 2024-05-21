@@ -35,7 +35,8 @@ public static class StepModelFactory
         {
             Id = step.Id,
             InformationViewModel = CreateInformationViewModel(step.InformationBase),
-            StepNumber = step.StepNumber
+            StepNumber = step.StepNumber,
+            Visible = step.Visible
         };
     }
 
@@ -53,7 +54,8 @@ public static class StepModelFactory
         {
             Id = step.Id,
             InformationViewModel = informationViewModels,
-            StepNumber = step.StepNumber
+            StepNumber = step.StepNumber,
+            Visible = step.Visible
         };
     }
 
@@ -73,7 +75,8 @@ public static class StepModelFactory
         {
             Id = step.Id,
             QuestionViewModel = CreateQuestionViewModel(step.QuestionBase),
-            StepNumber = step.StepNumber
+            StepNumber = step.StepNumber,
+            Visible = step.Visible
         };
     }
 

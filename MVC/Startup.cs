@@ -112,6 +112,12 @@ public class Startup
 
         services.AddScoped<EmailManager>();
 
+        services.AddScoped<FeedRepository>();
+        services.AddScoped<FeedManager>();
+        
+        services.AddScoped<IdeaRepository>();
+        services.AddScoped<IdeaManager>();
+        
         services.AddScoped<UnitOfWork, UnitOfWork>();
         services.AddSingleton(googleCloudOptions);
         services.AddSingleton(emailOptions);
@@ -155,8 +161,9 @@ public class Startup
             }
             case "Production":
             {
-                if (dbContext.CreateDatabase(true))//dbContext.IsEmpty()
+                if (!dbContext.IsEmpty()) // TODO: Check if this is correct
                 {
+                    dbContext.CreateDatabase(true);
                     SeedDatabase(uow, userManager, roleManager, dbContext);
                 }
 
@@ -184,7 +191,7 @@ public class Startup
         {
             Id = "HenkId",
             Email = "Henk@CodeForge.com",
-            UserName = "Henk",
+            UserName = "Bab",
             EmailConfirmed = true,
             SharedPlatform = new SharedPlatform()
         };
@@ -193,7 +200,7 @@ public class Startup
         {
             Id = "CodeForgeId",
             Email = "CodeForge.noreply@gmail.com",
-            UserName = "CodeForge",
+            UserName = "Bub",
             EmailConfirmed = true,
             SharedPlatform = new SharedPlatform()
         };
@@ -214,9 +221,44 @@ public class Startup
             EmailConfirmed = true
         };
         
+        var facilitatorFred = new Facilitator
+        {
+            Id = "FredId",
+            Email = "Fred@kdg.be",
+            UserName = "Fred",
+            EmailConfirmed = true
+        };
+        
+        var sharedPlatformAdminThomas = new SpAdmin
+        {
+            Id = "ThomasId",
+            Email = "Thomas@kdg.be",
+            UserName = "Thomas",
+            EmailConfirmed = true,
+            SharedPlatform = new SharedPlatform()
+        };
+        
+        var sharedPlatformAdminKdg = new SpAdmin
+        {
+            Id = "KdgId",
+            Email = "kdg.noreply@kdg.be",
+            UserName = "Kdg",
+            EmailConfirmed = true,
+            SharedPlatform = new SharedPlatform()
+        };
+
+        var webAppUserBib = new WebAppUser
+        {
+            Id = "BibId",
+            Email = "Bib@CodeForge.com",
+            UserName = "Bib",
+            EmailConfirmed = true
+        };
+            
         await roleManager.CreateAsync(new IdentityRole(UserRoles.Facilitator));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.PlatformAdmin));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.SystemAdmin));
+        await roleManager.CreateAsync(new IdentityRole(UserRoles.Respondent));
 
         await roleManager.CreateAsync(new IdentityRole(UserRoles.UserPermission));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.ProjectPermission));
@@ -226,17 +268,32 @@ public class Startup
         await userManager.CreateAsync(sharedPlatformAdminCodeForge, "Codeforge!123");
         await userManager.CreateAsync(systemAdminBob, "Bob!123");
         await userManager.CreateAsync(facilitatorTom, "Tom!123");
+        await userManager.CreateAsync(facilitatorFred, "Fred!123");
+        await userManager.CreateAsync(sharedPlatformAdminThomas, "Thomas!123");
+        await userManager.CreateAsync(sharedPlatformAdminKdg, "Kdg!123");
+        await userManager.CreateAsync(webAppUserBib, "Bib!123");
 
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.PlatformAdmin);
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.UserPermission);
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.ProjectPermission);
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.StatisticPermission);
+        
+        await userManager.AddToRoleAsync(sharedPlatformAdminThomas, UserRoles.PlatformAdmin);
+        await userManager.AddToRoleAsync(sharedPlatformAdminThomas, UserRoles.UserPermission);
+        await userManager.AddToRoleAsync(sharedPlatformAdminThomas, UserRoles.ProjectPermission);
+        await userManager.AddToRoleAsync(sharedPlatformAdminThomas, UserRoles.StatisticPermission);
 
         await userManager.AddToRoleAsync(sharedPlatformAdminCodeForge, UserRoles.PlatformAdmin);
+        
+        await userManager.AddToRoleAsync(sharedPlatformAdminKdg, UserRoles.PlatformAdmin);
         
         await userManager.AddToRoleAsync(systemAdminBob, UserRoles.SystemAdmin);
 
         await userManager.AddToRoleAsync(facilitatorTom, UserRoles.Facilitator);
+
+        await userManager.AddToRoleAsync(facilitatorFred, UserRoles.Facilitator);
+
+        await userManager.AddToRoleAsync(webAppUserBib, UserRoles.Respondent);
     }
 
     void SeedDatabase(UnitOfWork uow, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager,

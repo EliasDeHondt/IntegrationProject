@@ -34,6 +34,10 @@
   min-width: 300px;
 }
 
+.step-card-hidden {
+  background-color: #2c77a0;
+}
+
 .step-card:hover {
   background-color: map-get($themes, light, secondary);
   border: thin solid black;
@@ -72,7 +76,8 @@
 }
 
 .btn-add-element:disabled {
-  background-color: #7b8297;
+  background-color: #2c77a0;
+  border: thin black solid;
 }
 
 .question-container {
