@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Business_Layer;
 using Domain.Accounts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models.userModels;
@@ -208,6 +209,19 @@ public class UsersController : Controller
         var user = _userManager.FindByEmailAsync(email).Result!;
         _userManager.DeleteAsync(user);
         return NoContent();
+    }
+
+    [HttpGet("GetLoggedInUser")]
+    [Authorize]
+    public async Task<IActionResult> GetLoggedInUser()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        UserViewModel model = new UserViewModel
+        {
+            Email = user.Email,
+            UserName = user.UserName
+        };
+        return Ok(model);
     }
     
 }

@@ -1,7 +1,9 @@
 ﻿import {Feed, Idea} from "../Types/WebApp/Types";
+import {CreateLike, DeleteLike, GetLoggedInUser} from "./WebAppAPI";
 
-export function generateIdeaCard(idea: Idea): HTMLDivElement {
+export function generateIdeaCard(idea: Idea, email: string): HTMLDivElement {
     let div = document.createElement("div");
+    let liked: boolean = idea.likes.some(like => like.liker.email === email);
     div.classList.add("webapp-card")
     div.innerHTML = `<div class="card-body p-2 ms-2 me-2">
                 <div class="row webapp-card-header">
@@ -18,7 +20,7 @@ export function generateIdeaCard(idea: Idea): HTMLDivElement {
                 <div class="row mt-2">
                     <div class="col-2">
                         <div class="comment-react ms-2">
-                            <button>
+                            <button class="btnLikes" data-id="${idea.id}" data-liked="${liked}">
                                 <svg
                                     width="5vh" height="5vh" viewBox="0 0 24 24" fill="none">
                                     <path
@@ -28,7 +30,7 @@ export function generateIdeaCard(idea: Idea): HTMLDivElement {
                                     </path>
                                 </svg>
                             </button>
-                            <span id="amountLikes">${idea.likes.length}</span>
+                            <span class="spanLikes">${idea.likes.length}</span>
                         </div>
                     </div>
                     <div class="col-10">
@@ -41,7 +43,7 @@ export function generateIdeaCard(idea: Idea): HTMLDivElement {
     return div;
 }
 
-export function generateNavButton(feed: Feed): HTMLButtonElement{
+export function generateNavButton(feed: Feed): HTMLButtonElement {
     let btn = document.createElement("button");
     btn.classList.add("webapp-nav-button");
     btn.setAttribute("data-id", feed.id.toString());
@@ -74,4 +76,60 @@ export function addHoverEffect() {
         }
 
     }
+}
+
+export function addLikeFunctionality() {
+    let btns = document.getElementsByClassName("btnLikes") as HTMLCollectionOf<HTMLButtonElement>;
+    let counts = document.getElementsByClassName("spanLikes") as HTMLCollectionOf<HTMLSpanElement>;
+    for (let i = 0; i < btns.length; i++) {
+        let btn = btns[i];
+        let count = counts[i];
+        if(btn.getAttribute("data-liked") == "true"){
+            let icon = btn.firstElementChild!.firstElementChild! as SVGSVGElement;
+            icon.style.fill = "#f5356e";
+            btn.onmouseover = () => {
+                icon.style.fill = "white";
+            }
+            btn.onmouseout = () => {
+                icon.style.fill = "#f5356e";
+            }
+        }
+        btn.onclick = () => {
+            if (btn.getAttribute("data-liked") == "false") {
+                addLike(btn, count);
+            } else {
+                removeLike(btn, count);
+            }
+        }
+    }
+}
+function addLike(btn: HTMLButtonElement, count: HTMLSpanElement){
+    CreateLike(parseInt(btn.getAttribute("data-id")!))
+        .then(() => {
+            let icon = btn.firstElementChild!.firstElementChild! as SVGSVGElement;
+            icon.style.fill = "#f5356e";
+            btn.onmouseover = () => {
+                icon.style.fill = "white";
+            }
+            btn.onmouseout = () => {
+                icon.style.fill = "#f5356e";
+            }
+            btn.setAttribute("data-liked", "true");
+            count.innerHTML = String(parseInt(count.innerHTML) + 1)
+        });
+}
+function removeLike(btn: HTMLButtonElement, count: HTMLSpanElement){
+    DeleteLike(parseInt(btn.getAttribute("data-id")!))
+        .then(() => {
+            let icon = btn.firstElementChild!.firstElementChild! as SVGSVGElement;
+            icon.style.fill = "white";
+            btn.onmouseover = () => {
+                icon.style.fill = "#f5356e";
+            }
+            btn.onmouseout = () => {
+                icon.style.fill = "white";
+            }
+            btn.setAttribute("data-liked", "false");
+            count.innerHTML = String(parseInt(count.innerHTML) - 1)
+        });
 }
