@@ -67,12 +67,11 @@ public class StatisticsController : Controller
         return Ok(flowCountQuestions);
     }
     [HttpGet("GetChoicesNames/{question}")]
-    public IActionResult GetChoicesNames(string question)
+    public IActionResult GetChoicesNames(long question)
     {
-        var flowCountQuestions = _Qmanager.GetChoicesNames(question);
+        var choicesNames = _Qmanager.GetChoicesNames(question);
         
-
-        return Ok(flowCountQuestions);
+        return Ok(choicesNames);
     }
     
     [HttpGet("GetAnswerCountsForQuestions/{question}")]

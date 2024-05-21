@@ -22,7 +22,7 @@ public class QuestionManager
         return _repo.ReadChoicesForQuestion(questionId);
     }
 
-    public string[] GetChoicesNames(string question)
+    public string[] GetChoicesNames(long question)
     {
         return _repo.GetChoicesNames(question);
     }

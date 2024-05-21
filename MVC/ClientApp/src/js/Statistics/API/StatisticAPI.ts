@@ -62,6 +62,7 @@ export async function GetQuestionNames(flowname: string){
         .catch(error => console.error("Error:", error))
 }
 export async function GetChoicesNames(question: string){
+    //question = "If you were to prepare the budget for your city or municipality, where would you mainly focus on in the coming years? Choose one.";
     console.log("question: GetChoicesNames",question)
     await fetch("/api/Statistics/GetChoicesNames/" + question, {
         method: "GET",

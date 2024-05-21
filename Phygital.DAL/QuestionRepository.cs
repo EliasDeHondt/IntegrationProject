@@ -34,7 +34,7 @@ public class QuestionRepository
             .ToList();
     }
     
-    public string[] GetChoicesNames(string question)
+    public string[] GetChoicesNames(long questionId)
     {
         var b = _ctx.ChoiceQuestions
             .Include(q => q.Choices);
@@ -46,7 +46,7 @@ public class QuestionRepository
 
         foreach (var questionA in c)
         {
-            if (questionA.Question == question)
+            if (questionA.Id == questionId)
             {
                 var choices = questionA.Choices;
                 return choices.Select(i => i.Text.ToString()).ToArray();;

@@ -199,8 +199,10 @@ export function showSelectedQuestion() : string{
 
     if (selectedIndex !== -1) {
         const selectedOption = selectQuestion.options[selectedIndex];
-        return selectedOption.text; //gekozen question
-    }return "";
+        console.log("selectedOption.id",selectedOption.id)
+        console.log("selectedOption.v",selectedIndex)
+        return selectedIndex.toString(); //gekozen question
+    }return "0";
 }
 
 
