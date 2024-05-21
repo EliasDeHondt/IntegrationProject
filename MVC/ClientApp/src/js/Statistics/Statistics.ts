@@ -7,6 +7,7 @@ import {
     GetNamesPerFlow, GetParticipatoinNames, GetQuestionNames,
     GetQuestionsFromFlow
 } from "./API/StatisticAPI";
+import {Question} from "../Types/ProjectObjects";
 
 const barCtx = document.getElementById('barChart') as HTMLCanvasElement;
 const lineCtx = document.getElementById('lineChart') as HTMLCanvasElement;
@@ -184,6 +185,20 @@ export function fillDropdownFlows(data: string[], select: HTMLSelectElement) {
     selectFlow.addEventListener('change', showSelectedFlow);
     showSelectedFlow();
 }
+export function fillDropdownQuestions(data: Question[], select: HTMLSelectElement) {
+    select.innerHTML = "";
+
+    for (let i = 0; i < data.length; i++) {
+        let option = document.createElement("option");
+        console.log("data[i].text",data[i].id.toString())
+        console.log("data[i].text",data[i].question)
+        option.value = data[i].id.toString();
+        option.text = data[i].question;
+        select.appendChild(option);
+    }
+    selectFlow.addEventListener('change', showSelectedFlow);
+    showSelectedFlow();
+}
 
 export  function showSelectedFlow() : string{
     const selectedIndex = selectFlow.selectedIndex;
@@ -199,9 +214,9 @@ export function showSelectedQuestion() : string{
 
     if (selectedIndex !== -1) {
         const selectedOption = selectQuestion.options[selectedIndex];
-        console.log("selectedOption.id",selectedOption.id)
-        console.log("selectedOption.v",selectedIndex)
-        return selectedIndex.toString(); //gekozen question
+        console.log("selectedOption.id",selectedOption.text)
+        console.log("selectedOption.v",selectedOption.value)
+        return selectedOption.value.toString(); //gekozen question
     }return "0";
 }
 
@@ -222,8 +237,8 @@ export function initDataStatistics(labels: string[]) {
         GetParticipatoinNames(showSelectedFlow());
     });
 }
-export function initQuestionNames(labels: string[]) {
-    fillDropdownFlows(labels,selectQuestion)
+export function initQuestionNames(labels: Question[]) {
+    fillDropdownQuestions(labels,selectQuestion)
     GetChoicesNames(showSelectedQuestion()) //todo niet vergeten!!
 }
 export function initChoicesNames(labels: string[]) {

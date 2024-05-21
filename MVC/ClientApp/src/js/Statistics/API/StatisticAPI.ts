@@ -5,6 +5,7 @@ import {
     drawRadarChart,
     initChoicesNames, initDataStatistics, initQuestionNames,
 } from "../Statistics";
+import {Question} from "../../Types/ProjectObjects";
 
 //get data - flows
 export async function GetCountStepsPerFlow(labels: string[]){
@@ -47,19 +48,39 @@ export async function GetNamesPerFlow(){
         } )
         .catch(error => console.error("Error:", error))
 }
-export async function GetQuestionNames(flowname: string){
-    await fetch("/api/Statistics/GetQuestionNames/" + flowname, {
-        method: "GET",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
+// export async function GetQuestionNames(flowname: string){
+//     await fetch("/api/Statistics/GetQuestionNames/" + flowname, {
+//         method: "GET",
+//         headers: {
+//             "Accept": "application/json",
+//             "Content-Type": "application/json"
+//         }
+//     })
+//         .then(response => response.json())
+//         .then(labels => {
+//             initQuestionNames(labels)
+//         } )
+//         .catch(error => console.error("Error:", error))
+// }
+export async function GetQuestionNames(flowname: string): Promise<void> {
+    try {
+        const response = await fetch("/api/Statistics/GetQuestionNames/" + flowname, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-    })
-        .then(response => response.json())
-        .then(labels => {
-            initQuestionNames(labels)
-        } )
-        .catch(error => console.error("Error:", error))
+
+        const labels: Question[] = await response.json();
+        initQuestionNames(labels);
+    } catch (error) {
+        console.error("Error:", error);
+    }
 }
 export async function GetChoicesNames(question: string){
     //question = "If you were to prepare the budget for your city or municipality, where would you mainly focus on in the coming years? Choose one.";

@@ -26,5 +26,5 @@ export type SubTheme = {
 
 export type Question = {
     id: number;
-    text: string;
+    question: string;
 }

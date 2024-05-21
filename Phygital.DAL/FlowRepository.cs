@@ -328,4 +328,15 @@ public class FlowRepository
         var a =  names.Select(count => count.ToString()).ToArray();
         return a;
     }
+    public IEnumerable<QuestionBase> GetQuestions(long flowId)
+    {
+        var names = new List<QuestionBase>();
+
+        foreach (var qs in ReadQuestionsFromFlow(flowId))
+        {
+            var name = qs.QuestionBase;
+            names.Add(name);
+        }
+        return names;
+    }
 }

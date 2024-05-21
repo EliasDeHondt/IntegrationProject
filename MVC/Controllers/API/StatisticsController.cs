@@ -61,10 +61,24 @@ public class StatisticsController : Controller
     [HttpGet("GetQuestionNames/{flowname}")]
     public IActionResult GetQuestionNames(string flowname)
     {
-        var flowCountQuestions = _manager.GetQuestionNames(flowname);
-        
+        // var flowCountQuestions = _manager.GetQuestionNames(flowname);
+        // return Ok(flowCountQuestions);
+        try
+        {
+            var questions =  _manager.GetQuestionNames(flowname);
 
-        return Ok(flowCountQuestions);
+            var result = questions.Select(q => new QuestionViewModel
+            {
+                Id = q.Id,
+                Question = q.Question
+            }).ToList();
+            
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, "Internal server error");
+        }
     }
     [HttpGet("GetChoicesNames/{question}")]
     public IActionResult GetChoicesNames(long question)
