@@ -48,8 +48,17 @@ public class QuestionRepository
         {
             if (questionA.Id == questionId)
             {
-                var choices = questionA.Choices;
-                return choices.Select(i => i.Text.ToString()).ToArray();;
+                if (questionA is OpenQuestion)
+                {
+                    return Enumerable.Repeat("0", 4).ToArray();
+                }
+                else
+                {
+                    var choices = questionA.Choices;
+                    return choices.Select(i => i.Text.ToString()).ToArray();
+                    
+                }
+                
             }
         }
         return null;
