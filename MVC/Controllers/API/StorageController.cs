@@ -41,10 +41,12 @@ public class StorageController : Controller
     }
 
     [HttpPost("UploadVideo")]
-    public async Task<IActionResult> UploadVideo(FileUpload file)
+    public async Task<IActionResult> UploadVideo(IFormFile file)
     {
         var client = await StorageClient.CreateAsync();
-        var obj = await client.UploadObjectAsync(_options.BucketName, file.Name, file.Type, new MemoryStream(file.File));
+        using var memoryStream = new MemoryStream();
+        await file.CopyToAsync(memoryStream);
+        var obj = await client.UploadObjectAsync(_options.BucketName, file.FileName, file.ContentType, memoryStream);
         return Ok(obj.Name);
     }
     

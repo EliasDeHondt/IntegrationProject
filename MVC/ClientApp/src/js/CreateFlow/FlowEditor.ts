@@ -7,7 +7,7 @@ import {
     QuestionStep,
     Step
 } from "../Flow/Step/StepObjects";
-import {downloadVideoFromBucket} from "../StorageAPI";
+import {downloadVideoFromBucket, uploadVideoToBucket} from "../StorageAPI";
 import {Modal, Toast} from "bootstrap";
 import {Flow, Participation} from "../Flow/FlowObjects";
 import {readFileAsBase64} from "../Util";
@@ -165,7 +165,12 @@ btnAddImage.onclick = async () => {
 }
 
 btnAddVideo.onclick = async () => {
-    
+    await AddInformation(currentStep.stepNumber, 'Video')
+        .then(() => GetStepsFromFlow(flowId))
+        .then(() => updateStepList(currentStepList))
+        .then(() => initializeCardLinks());
+    let index = currentStepList.findIndex(s => s.stepNumber == currentStep.stepNumber);
+    await showStepInContainer(currentStepList[index]);
 }
 
 async function saveFlow(){
@@ -349,7 +354,7 @@ async function readStepInContainer() {
                     break;
                 case 'VIDEO':
                     const videoElement = element as HTMLVideoElement;
-                    information = videoElement.src;
+                    information = videoElement.getAttribute("data-name")!;
                     informationType = 'Video';
                     break;
             }
@@ -446,8 +451,25 @@ async function showStepInContainer(step: Step) {
                     video.autoplay = true;
                     video.loop = true;
                     video.controls = false;
-                    video.classList.add("h-100", "w-100");
+                    video.classList.add("h-75", "w-75");
+                    let input = document.createElement("input");
+                    input.type = "file";
+                    input.accept = "video/*";
+                    input.multiple = false;
+                    input.onchange = async () => {
+                        uploadVideoToBucket(input.files![0])
+                            .then(name => {
+                                video.setAttribute("data-name", name);
+                                downloadVideoFromBucket(name).then(path => {
+                                    if (typeof path === "string") {
+                                        path = path.substring(1, path.length - 1);
+                                        video.src = path;
+                                    }
+                                });
+                            })
+                    }
                     divInformation.appendChild(video);
+                    divInformation.appendChild(input);
                     break;
                 }
                 case 'Hyperlink': {
