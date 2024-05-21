@@ -41,7 +41,7 @@ export function generateIdeaCard(idea: Idea): HTMLDivElement {
     return div;
 }
 
-export function generateNavButton(feed: Feed): HTMLButtonElement{
+export function generateNavButton(feed: Feed): HTMLButtonElement {
     let btn = document.createElement("button");
     btn.classList.add("webapp-nav-button");
     btn.setAttribute("data-id", feed.id.toString());
@@ -73,5 +73,12 @@ export function addHoverEffect() {
             icons[i].classList.replace("bi-chat-dots-fill", "bi-chat-dots")
         }
 
+    }
+}
+
+export function addReactionBtnFunctionality(btn: HTMLButtonElement) {
+    btn.onclick = () => {
+        let id = parseInt(btn.getAttribute("data-id")!);
+        
     }
 }
