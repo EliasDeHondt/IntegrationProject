@@ -241,7 +241,7 @@ async function updateStepList(steps: Step[]) {
     if (currentStepList.length > 0) {
         currentStepList.forEach(step => {
             const stepCard = document.createElement('a');
-            stepCard.classList.add("step-card", "btn", "justify-content-center", "align-items-center");
+            stepCard.classList.add("step-card", "justify-content-center", "align-items-center");
             stepCard.dataset.stepNumber = step.stepNumber.toString();
 
             const cardHeader = document.createElement('h2');
