@@ -37,6 +37,37 @@ public class IdeasController : Controller
         return CreatedAtAction(nameof(PostIdea), CreateIdeaModel(idea));
     }
 
+    [HttpPost("likeIdea/{ideaId}")]
+    public async Task<IActionResult> LikeIdea(long ideaId)
+    {
+        _uow.BeginTransaction();
+        var user = await _userManager.GetUserAsync(User) as WebAppUser;
+        var idea = _manager.GetIdea(ideaId);
+        var like = _manager.LikeIdea(idea, user!);
+        _uow.Commit();
+
+        return CreatedAtAction(nameof(LikeIdea), new LikeModel
+        {
+            liker = new AuthorModel
+            {
+                Email = like.WebAppUser.Email!,
+                Name = like.WebAppUser.UserName!
+            }
+        });
+    }
+
+    [HttpDelete("unlikeIdea/{ideaId}")]
+    public async Task<IActionResult> UnlikeIdea(long ideaId)
+    {
+        _uow.BeginTransaction();
+        var user = await _userManager.GetUserAsync(User) as WebAppUser;
+        var idea = _manager.GetIdea(ideaId);
+        _manager.UnlikeIdea(idea, user!);
+        _uow.Commit();
+        
+        return NoContent();
+    }
+    
     private static IdeaModel CreateIdeaModel(Idea idea)
     {
         return new IdeaModel

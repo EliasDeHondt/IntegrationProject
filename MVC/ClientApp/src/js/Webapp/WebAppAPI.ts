@@ -1,4 +1,5 @@
-﻿import {Feed, Idea} from "../Types/WebApp/Types";
+﻿import {Feed, Idea, Like} from "../Types/WebApp/Types";
+import {User} from "../Types/UserTypes";
 
 export async function GetFeed(Id: number): Promise<Feed> {
     return await fetch(`/api/Feeds/${Id}`, {
@@ -48,6 +49,44 @@ export async function CreateIdea(idea: Idea, feedId: number): Promise<Idea> {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(idea)
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
+}
+
+export async function CreateLike(ideaId: number): Promise<Like>{
+    return await fetch(`/api/Ideas/likeIdea/${ideaId}`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
+}
+
+export async function DeleteLike(ideaId: number): Promise<void>{
+    await fetch(`/api/Ideas/unlikeIdea/${ideaId}`, {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+export async function GetLoggedInUser(): Promise<User>{
+    return await fetch('/api/Users/GetLoggedInUser', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
     })
         .then(response => response.json())
         .then(data => {
