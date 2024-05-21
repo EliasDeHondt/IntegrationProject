@@ -396,7 +396,7 @@ async function ShowStep(data: Step) {
     if (isInformationStep(data))
         await showInformationStep(data.informationViewModel);
     if (isQuestionStep(data))
-        showPhysicalQuestionStep(data.questionViewModel);
+        showQuestionStep(data.questionViewModel);
 }
 
 async function saveAnswerToDatabase(answers: string[], openAnswer: string, flowId: number, stepNumber: number): Promise<void> {
