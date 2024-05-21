@@ -27,4 +27,11 @@ public class ProjectController: Controller
         var project = _manager.GetProject(id);
         return View(project);
     }
+    
+    [HttpGet("/Project/Styling/{projectId}")]
+    public IActionResult Styling(string projectId)
+    {
+        ViewData["ProjectId"] = projectId;
+        return View();
+    }
 }

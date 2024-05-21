@@ -32,6 +32,8 @@ const butCancelCreateprojFlow = document.getElementById('butCancelCreateprojFlow
 const butCloseCreateprojFlow = document.getElementById('butCloseCreateprojFlow') as HTMLButtonElement;
 const butConfirmCreateprojFlow = document.getElementById('butConfirmCreateprojFlow') as HTMLButtonElement;
 
+const btnOpenStyling = document.getElementById('btn-open-styling') as HTMLAnchorElement;
+
 let deleteButtons: NodeListOf<HTMLButtonElement>;
 let id: number;
 const butConfirmDeleteFlow = document.getElementById("btnConfirmDeleteFlow") as HTMLButtonElement
@@ -140,7 +142,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             SetProject(project.id, inputTitle.value, inputText.value);
         }
     }
-
+    
+    btnOpenStyling.href = "/Project/Styling/" + projectId;
     
 });
-

@@ -377,3 +377,45 @@ button.accept-policy {
 }
 
 
+
+#btn-open-styling {
+  height: 100%;
+  width: 10em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: map-get($themes, light, primary);
+  overflow: hidden;
+  position: relative;
+  transition: background .4s ease-in-out, transform .4s ease-in-out;
+}
+
+#btn-open-styling::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, map-get($themes, light, accent) 0%, map-get($themes, light, secondary) 40%, map-get($themes, light, primary) 90%, map-get($themes, light, primary) 100%);
+  opacity: 0;
+  transition: opacity .4s ease-in-out;
+  z-index: 0;
+}
+
+#btn-open-styling:hover {
+  transform: scale(1.10);
+}
+
+#btn-open-styling:hover::before {
+  opacity: 1;
+}
+
+#btn-open-styling p {
+  position: relative;
+  z-index: 1;
+  font-weight: bolder;
+  font-size: x-large;
+  margin: 0;
+}
+

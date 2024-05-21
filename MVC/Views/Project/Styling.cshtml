@@ -1,0 +1,212 @@
+@model Domain.ProjectLogics.Project
+
+@{
+Layout = "_NavLayout";
+ViewData["Title"] = $"Project Styling";
+}
+
+<!DOCTYPE html>
+<html lang="" class="h-100 w-100 overflow-hidden">
+<head>
+    <link rel="stylesheet" href="~/dist/site.css"/>
+</head>
+<body id="body-container" class="row h-100 w-100">
+<div id="container-content-body" class="col">
+    <h2 id="title">Customize Project Styling</h2>
+
+    <form id="stylingForm" asp-controller="Project" asp-action="SaveCustomColors" method="post">
+        <input type="hidden" id="projectIdInput" name="ProjectId" value="" />
+
+        <div id="card-container">
+            <!-- Light Theme Card -->
+            <div id="card-light-theme" class="card">
+                <input type="radio" id="themeLight" name="theme" value="light" checked>
+                <label for="themeLight" id="label-light-theme">
+                    <h3 id="title-light-theme">Light Theme</h3>
+                    <div id="primary-light" class="color-sample">Primary</div>
+                    <div id="secondary-light" class="color-sample">Secondary</div>
+                    <div id="background-light" class="color-sample">Background</div>
+                    <div id="accent-light" class="color-sample">Accent</div>
+                </label>
+            </div>
+
+            <!-- Dark Theme Card -->
+            <div id="card-dark-theme" class="card">
+                <input type="radio" id="themeDark" name="theme" value="dark">
+                <label for="themeDark" id="label-dark-theme">
+                    <h3 id="title-dark-theme">Dark Theme</h3>
+                    <div id="primary-dark" class="color-sample">Primary</div>
+                    <div id="secondary-dark" class="color-sample">Secondary</div>
+                    <div id="background-dark" class="color-sample">Background</div>
+                    <div id="accent-dark" class="color-sample">Accent</div>
+                </label>
+            </div>
+
+            <!-- Custom Theme Card -->
+            <div id="card-custom-theme" class="card">
+                <input type="radio" id="themeCustom" name="theme" value="custom">
+                <label for="themeCustom" id="label-custom-theme">
+                    <h3 id="title-custom-theme">Custom Theme</h3>
+                    <div>
+                        <label for="customPrimaryColor">Primary Color:</label>
+                        <input type="color" id="customPrimaryColor" name="CustomPrimaryColor" value="#000000">
+                    </div>
+                    <div>
+                        <label for="customSecondaryColor">Secondary Color:</label>
+                        <input type="color" id="customSecondaryColor" name="CustomSecondaryColor" value="#ffffff">
+                    </div>
+                    <div>
+                        <label for="customBackgroundColor">Background Color:</label>
+                        <input type="color" id="customBackgroundColor" name="CustomBackgroundColor" value="#ffffff">
+                    </div>
+                    <div>
+                        <label for="customAccentColor">Accent Color:</label>
+                        <input type="color" id="customAccentColor" name="CustomAccentColor" value="#ff0000">
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <button id="save-button" type="submit">Save</button>
+    </form>
+</div>
+
+<style>
+    #container-content-body {
+        padding: 2rem;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #card-container {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    #stylingForm {
+        width: 100%;
+    }
+
+    .card {
+        border: 1px solid #ccc;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        width: calc(33% - 2rem); /* Adjust width to occupy more space */
+        height: 600px; /* Increased height for thickness */
+        text-align: center;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, background-color 0.3s;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+    .color-sample {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin: 0.5rem auto;
+        border: thin black solid;
+    }
+
+    #card-light-theme {
+        background-color: hsl(201, 57%, 54%);
+    }
+    #primary-light {
+        background-color: hsl(201, 57%, 54%);
+    }
+    #secondary-light {
+        background-color: hsl(16, 82%, 51%);
+    }
+    #background-light {
+        background-color: hsl(48, 61%, 89%);
+    }
+    #accent-light {
+        background-color: hsl(31, 100%, 48%);
+    }
+
+    #label-light-theme .color-sample {
+        color: #000; /* Change text color for better contrast */
+    }
+
+    #card-dark-theme {
+        background-color: hsl(16, 82%, 51%);
+    }
+    #primary-dark {
+        background-color: hsl(201, 57%, 46%);
+    }
+    #secondary-dark {
+        background-color: hsl(16, 82%, 49%);
+    }
+    #background-dark {
+        background-color: hsl(48, 61%, 11%);
+    }
+    #accent-dark {
+        background-color: hsl(31, 100%, 48%);
+    }
+
+    #label {
+        display: block;
+        cursor: pointer;
+        height: 100%;
+    }
+
+    input[type="radio"] {
+        display: none;
+    }
+
+    input[type="radio"]:checked + #label-light-theme,
+    input[type="radio"]:checked + #label-dark-theme,
+    input[type="radio"]:checked + #label-custom-theme {
+        border: 2px solid #007bff;
+    }
+
+    #label-custom-theme {
+        display: block;
+        text-align: left;
+    }
+
+    #label-custom-theme input[type="color"] {
+        display: block;
+        margin: 0.5rem auto;
+    }
+
+    #save-button {
+        margin-top: 2rem;
+        padding: 0.5rem 2rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 0.5rem;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    #save-button:hover {
+        background-color: #0056b3;
+    }
+</style>
+</body>
+</html>
+
+<script src="~/dist/site.entry.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const projectIdInput = document.getElementById("projectIdInput");
+        const url = window.location.href;
+        const projectId = url.substring(url.lastIndexOf('/') + 1);
+        projectIdInput.value = projectId;
+    });
+</script>
