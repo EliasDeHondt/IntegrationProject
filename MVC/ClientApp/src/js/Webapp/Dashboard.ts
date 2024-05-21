@@ -14,6 +14,7 @@ btnPlaceIdea.onclick = async () => {
     PostIdea(feedId).then(idea => {
         ideaContainer.prepend(generateIdeaCard(idea, user.email));
         addHoverEffect();
+        addLikeFunctionality();
     })
 }
 

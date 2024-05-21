@@ -33,7 +33,6 @@ public class IdeasController : Controller
         var feed = _feedManager.GetFeed(feedId);
         var idea = _manager.AddIdea(model.Text, user!, feed);
         _uow.Commit();
-        
         return CreatedAtAction(nameof(PostIdea), CreateIdeaModel(idea));
     }
 
