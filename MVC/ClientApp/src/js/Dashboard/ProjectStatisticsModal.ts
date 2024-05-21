@@ -26,6 +26,9 @@ function generateData(id: number, description: string) {
     if (description == "")
         pDescription.innerText = `Description: <no project description available>`
     
+    const hr = document.createElement('hr');
+    hr.classList.add("border-top-2", "border-accent")
+    
     const pTotalSubThemes = document.createElement('p');
     API.getProjectSubThemesCount(id).then((count) => pTotalSubThemes.innerText = `Total amount of sub-themes: ${count.toString()}`);
     const pTotalFlows = document.createElement('p');
@@ -34,6 +37,7 @@ function generateData(id: number, description: string) {
     API.getProjectRespondentsCount(id).then((count) => pTotalRespondents.innerText = `Total amount of respondents: ${count.toString()}`);
 
     divStats.appendChild(pDescription)
+    divStats.appendChild(hr)
     divStats.appendChild(pTotalSubThemes)
     divStats.appendChild(pTotalFlows)
     divStats.appendChild(pTotalRespondents)
