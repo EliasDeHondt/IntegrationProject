@@ -246,6 +246,9 @@ export function initDataStatistics(labels: string[]) {
 export function initQuestionNames(labels: Question[]) {
     fillDropdownQuestions(labels,selectQuestion)
     GetChoicesNames(showSelectedQuestion())
+    selectQuestion.addEventListener('change', () => {
+        GetChoicesNames(showSelectedQuestion())
+    });
 }
 export function initChoicesNames(labels: string[]) {
     GetAnswerCountsForQuestions(labels,showSelectedQuestion(),showSelectedQuestionText());
