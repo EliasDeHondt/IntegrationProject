@@ -108,4 +108,19 @@ public class ProjectManager
     {
         return _repo.ReadNotesForProjectById(id);
     }
+
+    public int GetRespondentCountFromProject(long id)
+    {
+        return _repo.ReadRespondentCountFromProject(id);
+    }
+
+    public int GetFlowCountFromProject(long id)
+    {
+        return _repo.ReadFlowCountFromProject(id);
+    }
+
+    public int GetSubThemeCountFromProject(long id)
+    {
+        return _repo.ReadSubThemeCountFromProject(id);
+    }
 }

@@ -191,8 +191,9 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     btnNotesProject.addEventListener("click", function() {
         window.location.href = "/Project/Notes/" + projectId;
     });
-    
-    statisticsModal.initializeStatisticsButtons();
+    btnGraphProject.addEventListener("click", function() {
+        statisticsModal.showModal(projectId, project.name, project.description);
+    });
     
     return colDiv;
 }

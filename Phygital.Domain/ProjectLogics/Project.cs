@@ -37,6 +37,17 @@ public class Project
         Feed = new Feed(this);
     }
     
+    public Project(string title, MainTheme mainTheme, SharedPlatform sharedPlatform, string description, long id = 0)
+    {
+        Title = title;
+        MainTheme = mainTheme;
+        Id = id;
+        SharedPlatform = sharedPlatform;
+        Organizers = new List<ProjectOrganizer>();
+        Description = description;
+        Feed = new Feed(this);
+    }
+    
     public Project()
     {
         Id = default;
