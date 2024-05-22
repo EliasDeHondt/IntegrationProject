@@ -20,5 +20,10 @@ public class IdeaManager
         _repo.CreateIdea(idea);
         return idea;
     }
+    
+    public Idea GetIdea(long id)
+    {
+        return _repo.GetIdea(id);
+    }
 
 }

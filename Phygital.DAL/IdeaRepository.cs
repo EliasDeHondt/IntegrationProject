@@ -16,4 +16,9 @@ public class IdeaRepository
     {
         _ctx.Ideas.Add(idea);
     }
+
+    public Idea GetIdea(long id)
+    {
+        return _ctx.Ideas.Find(id)!;
+    }
 }

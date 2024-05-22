@@ -1,5 +1,5 @@
 ﻿import {GetFeed, GetFeedIds, GetRandomFeed} from "./WebAppAPI";
-import {addHoverEffect, generateIdeaCard, generateNavButton} from "./Util";
+import {addReactionFunctionality, generateIdeaCard, generateNavButton} from "./Util";
 import {Feed} from "../Types/WebApp/Types";
 import {PostIdea} from "./SubmitIdea";
 
@@ -7,13 +7,18 @@ const ideaContainer = document.getElementById("ideaContainer") as HTMLDivElement
 const navContainer = document.getElementById("navContainer") as HTMLDivElement;
 const titleHeader = document.getElementById("headerTitle") as HTMLHeadingElement;
 const btnPlaceIdea = document.getElementById("btnPlaceIdea") as HTMLButtonElement;
+const textArea = document.getElementById("textIdea") as HTMLTextAreaElement;
 let feedId: number;
 
 btnPlaceIdea.onclick = () => {
-    PostIdea(feedId).then( idea => {
-        ideaContainer.prepend(generateIdeaCard(idea));
-        addHoverEffect();
-    })
+    let text = textArea.value;
+    if(text.trim() != "") {
+        PostIdea(feedId, text).then( idea => {
+            ideaContainer.prepend(generateIdeaCard(idea));
+            addReactionFunctionality();
+        })
+        textArea.value = "";
+    }
 }
 
 GetRandomFeed().then(feed => {
@@ -47,6 +52,6 @@ function generateIdeas(feed: Feed){
     ideaContainer.innerHTML = "";
     feed.ideas.forEach(idea => {
         ideaContainer.appendChild(generateIdeaCard(idea));
-        addHoverEffect();
+        addReactionFunctionality();
     })
 }

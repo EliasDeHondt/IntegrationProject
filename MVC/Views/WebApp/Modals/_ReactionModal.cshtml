@@ -1,25 +1,81 @@
-﻿<div id="modalReplies" class="modal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
+﻿<div id="modalReplies" class="modal overflow-hidden" tabindex="-1">
+    <div class="modal-dialog h-100">
+        <div class="modal-content h-75">
+            <div class="modal-header webapp-reaction-header">
                 <h5 class="modal-title">Replies</h5>
-                <button id="btnCloseReplyModal" type="button" class="close" aria-label="close">
-                    <span aria-hidden="true">&times;</span>
+                <button id="btnCloseReplyModal" type="button" class="btn-close" aria-label="close">
                 </button>
             </div>
-            <div class="modal-body">
-                <div id="replyContainer"></div>
+            <div class="modal-body webapp-reaction-body">
+                <div id="replyContainer" class="col">
+
+                    <div class="row h-25 reply-container">
+                        <div class="col h-100">
+                            <div class="row ms-2 reply-header">
+                                Test name1
+                            </div>
+                            <div class="row reply-body">
+                                Test content1
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row h-25 reply-container">
+                        <div class="col h-100">
+                            <div class="row reply-header">
+                                Test name2
+                            </div>
+                            <div class="row reply-body">
+                                Test content2
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row h-25 reply-container">
+                        <div class="col h-100">
+                            <div class="row reply-header">
+                                Test name3
+                            </div>
+                            <div class="row reply-body">
+                                Test content3
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row h-25 reply-container">
+                        <div class="col h-100">
+                            <div class="row reply-header">
+                                Test name4
+                            </div>
+                            <div class="row reply-body">
+                                Test content4
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row h-25 reply-container">
+                        <div class="col h-100">
+                            <div class="row reply-header">
+                                Test name5
+                            </div>
+                            <div class="row reply-body">
+                                Test content5
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-            <div class="modal-footer">
-                <div class="row">
-                    <div class="col-8">
+            <div class="modal-footer webapp-reaction-footer">
+                <div class="row w-100">
+                    <div class="col-10">
                         <div class="input-wrapper row">
                             <textarea id="textReply" class="input-box" type="text" placeholder="Type a reply..."></textarea>
                             <span class="underline"></span>
                         </div>
                     </div>
-                    <div class="col-4 text-end">
-                        <button id="btnPostReply" class="me-3 p-1 btn bg-none shadow-none border-0 webapp-btn">
+                    <div class="col-2 m-auto">
+                        <button id="btnPostReply" class="ms-2 p-1 btn bg-none shadow-none border-0 webapp-btn">
                             <i class="bi bi-send-fill webapp-util-icon"></i>
                         </button>
                     </div>
@@ -28,4 +84,3 @@
         </div>
     </div>
 </div>
-

@@ -8,7 +8,7 @@ $c3: $eliasKleurtje3;
 
 $g: 0 120deg, #0000 0;
 
-.bg-elias-kleurtje-1{
+.bg-elias-kleurtje-1 {
   background: $c1;
 }
 
@@ -59,7 +59,7 @@ $g: 0 120deg, #0000 0;
 }
 
 .webapp-util-icon {
-  color:white;
+  color: white;
   font-size: 3.5vh;
 }
 
@@ -103,11 +103,11 @@ $g: 0 120deg, #0000 0;
   transform: scaleX(1);
 }
 
-.w-60{
+.w-60 {
   width: 60%;
 }
 
-.bg-none{
+.bg-none {
   background: none;
 }
 
@@ -116,40 +116,40 @@ $g: 0 120deg, #0000 0;
   transform: translateY(0.2em);
 }
 
-.webapp-btn:hover{
-  .webapp-util-icon{
+.webapp-btn:hover {
+  .webapp-util-icon {
     color: map-get($themes, light, accent);
   }
 }
 
-.webapp-card{
+.webapp-card {
   @extend .card;
   @extend .w-60;
   @extend .m-auto;
   @extend .mt-4;
   @extend .rounded-5;
   @extend .bgPrimary;
-  
+
   font-family: "Arial", sans-serif;
-  
-  .webapp-card-content{
+
+  .webapp-card-content {
     @extend .border-bottom;
     height: 40vh;
   }
-  
-  .webapp-util-icon{
+
+  .webapp-util-icon {
     font-size: 5vh;
   }
-  
-  .webapp-card-header{
+
+  .webapp-card-header {
     @extend .border-bottom;
     height: 7.5vh;
   }
-  
+
   span {
-    color:white;
+    color: white;
   }
-  
+
 }
 
 .chat-dots:hover {
@@ -163,8 +163,8 @@ $g: 0 120deg, #0000 0;
   padding: 5px;
   border-radius: 5px;
   width: 5vh;
-  
-  button{
+
+  button {
     width: 5vh;
     height: 5vh;
     position: relative;
@@ -176,8 +176,8 @@ $g: 0 120deg, #0000 0;
     outline: none;
     color: white;
   }
-  
-  button:after{
+
+  button:after {
     content: "";
     position: absolute;
     background-color: #f5356e;
@@ -185,21 +185,21 @@ $g: 0 120deg, #0000 0;
     z-index: 0;
     transform: scale(0);
   }
-  
+
   button svg {
     position: relative;
     z-index: 9;
   }
-  
+
   button:hover svg {
     fill: #f5356e;
   }
-  
+
   button:hover svg path {
     stroke: #f5356e;
     fill: #f5356e;
   }
-  
+
   span {
     height: 5vh;
     display: flex;
@@ -219,9 +219,9 @@ $g: 0 120deg, #0000 0;
   overflow-y: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  
+
   font-family: Arial, sans-serif;
-  
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -248,8 +248,8 @@ $g: 0 120deg, #0000 0;
   width: 75%;
   padding: 0.35em 3.3em 0.35em 1.2em;
   cursor: pointer;
-  
-  .icon{
+
+  .icon {
     background: white;
     margin-left: 1em;
     position: absolute;
@@ -262,30 +262,101 @@ $g: 0 120deg, #0000 0;
     box-shadow: 0.1em 0.1em 0.6em 0.2em map-get($themes, light, secondary);
     right: 0.3em;
     transition: all 0.3s;
-    
-    svg{
+
+    svg {
       width: 1.1em;
       transition: transform 0.3s;
       color: map-get($themes, light, secondary);
     }
-    
+
   }
-  
+
   &:hover .icon {
     width: calc(100% - 0.6em);
-    
-    svg{
+
+    svg {
       transform: translateX(0.1em);
     }
-    
+
   }
-  
+
   &:active .icon {
     transform: scale(0.95);
   }
-  
+
 }
 
-.webapp-title{
+.webapp-title {
   text-shadow: 0 0 0.1em black, 0 0 0.1em black, 0 0 0.1em black, 0 0 0.1em black;
+}
+
+.webapp-reaction-header {
+  height: 10%;
+  background-color: map-get($themes, light, primary);
+
+  h5 {
+    font-family: "Arial", sans-serif;
+    font-size: 3vh;
+    font-weight: 500;
+    color: white;
+  }
+
+}
+
+.webapp-reaction-body {
+  height: 70%;
+  background-color: map-get($themes, light, primary);
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.webapp-reaction-footer {
+  height: 15%;
+  background-color: map-get($themes, light, primary);
+
+  .input-wrapper {
+    height: 85%;
+    margin: 0;
+
+    .input-box {
+      height: 100%;
+      font-size: 1.75vh;
+      font-weight: 800;
+    }
+  }
+}
+
+
+.reply-container {
+
+  border-bottom: white 0.15em solid;
+  color: white;
+  font-family: Arial, sans-serif;
+
+  .reply-header {
+    height: 30%;
+    position: relative;
+
+    &::after {
+      content: '';
+      display: block;
+      margin: 0 auto;
+      width: 95%;
+      border-bottom: 0.1em solid white;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+  }
+
+  .reply-body {
+    height: 70%;
+  }
+
 }
