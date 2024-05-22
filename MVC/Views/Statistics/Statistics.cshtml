@@ -44,64 +44,70 @@
 <body class="row h-100 w-100">
 <div class="text-center col-lg-10">
     <div class="row container-content-body">
-    <div class="d-flex justify-content-center align-items-center" style="padding-top: 40px">
-        <h2>FLOWS STATISTICS</h2>
-    </div>
-    
-    <div class="chart-container d-flex flex-row align-items-center">
-        <div class="left-graph">
-            <canvas id="barChart"></canvas>
-            <div class="nav-item bgAccent bhover"> <button id="exportCSV" class="btn btn-link text-dark w-100 text-decoration-none">Export to CSV</button></div>
+       
+        
+        <div class="d-flex justify-content-center align-items-center" style="padding-top: 40px; position: relative;">
+            <h2 style="position: absolute; left: 50%; transform: translateX(-50%);">FLOWS STATISTICS</h2>
+            <div class="nav-item bgAccent bhover" style="position: absolute; right: 10%;"> 
+                <button id="exportCSV" class="btn btn-link text-dark text-decoration-none">Download CSV</button>
+            </div>
         </div>
-        <div class="right-graph">
-            <canvas id="lineChart"></canvas>
-        </div>
-    </div>
-    <div class="d-flex justify-content-center align-items-center" style="padding: 20px 0;">
-        <hr>
-    </div>
 
-    <div class="d-flex justify-content-center align-items-center">
-        <h2>FLOW STATISTICS</h2>
-    </div>
-    <div class="container-selectFlow">
-        <div class="kiosk-container-top-left">
-            <label class="d-flex flex-column">
-                <p style="color: aliceblue">Select a Flow to get its specific statistics.</p>
-                <select id="selectFlow">
-                </select>
-            </label>
-        </div>
-    </div>
-    <div class="chart-container d-flex flex-row align-items-center">
-        <div class="left-graph">
-            <canvas  id="radarChart"></canvas>
-            @* <canvas id="lineChart"></canvas> *@
-        </div>
-        <div class="right-graph"><canvas id="pieChart"></canvas></div>
-    </div>
-    <div class="d-flex justify-content-center align-items-center" style="padding: 20px 0;">
-        <hr>
-    </div>
 
-    <div class="d-flex justify-content-center align-items-center">
-        <h2>QUESTION STATISTICS</h2>
-    </div>
-    <div class="container-selectFlow">
-        <div class="kiosk-container-top-left">
-            <label class="d-flex flex-column">
-                <p style="color: aliceblue">Select a Question to get its specific statistics.<br>(dependent on your chosen flow above)</p>
-                <select id="selectQuestion">
-                </select>
-            </label>
+
+        <div class="chart-container d-flex flex-row align-items-center">
+            <div class="left-graph">
+                <canvas id="barChart"></canvas>
+            </div>
+            <div class="right-graph">
+                <canvas id="lineChart"></canvas>
+            </div>
         </div>
-    </div>
-    <div class="chart-container d-flex flex-row align-items-center">
-        <div class="center-graph">
-            <canvas id="doughnutChart"></canvas>
+        <div class="d-flex justify-content-center align-items-center" style="padding: 20px 0;">
+            <hr>
         </div>
-    </div>
-    
+
+        <div class="d-flex justify-content-center align-items-center">
+            <h2>FLOW STATISTICS</h2>
+        </div>
+        <div class="container-selectFlow">
+            <div class="kiosk-container-top-left">
+                <label class="d-flex flex-column">
+                    <p style="color: aliceblue">Select a Flow to get its specific statistics.</p>
+                    <select id="selectFlow">
+                    </select>
+                </label>
+            </div>
+        </div>
+        <div class="chart-container d-flex flex-row align-items-center">
+            <div class="left-graph">
+                <canvas id="radarChart"></canvas>
+                @* <canvas id="lineChart"></canvas> *@
+            </div>
+            <div class="right-graph"><canvas id="pieChart"></canvas></div>
+        </div>
+        <div class="d-flex justify-content-center align-items-center" style="padding: 20px 0;">
+            <hr>
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center">
+            <h2>QUESTION STATISTICS</h2>
+        </div>
+        <div class="container-selectFlow">
+            <div class="kiosk-container-top-left">
+                <label class="d-flex flex-column">
+                    <p style="color: aliceblue">Select a Question to get its specific statistics.<br>(dependent on your chosen flow above)</p>
+                    <select id="selectQuestion">
+                    </select>
+                </label>
+            </div>
+        </div>
+        <div class="chart-container d-flex flex-row align-items-center">
+            <div class="center-graph">
+                <canvas id="doughnutChart"></canvas>
+            </div>
+        </div>
+
     </div>
 </div>
 </body>

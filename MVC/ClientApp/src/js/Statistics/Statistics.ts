@@ -8,6 +8,7 @@ import {
     GetQuestionsFromFlow
 } from "./API/StatisticAPI";
 import {Question} from "../Types/ProjectObjects";
+import {chartDataToCSV, downloadCSV} from "./ExportStatistics";
 
 const barCtx = document.getElementById('barChart') as HTMLCanvasElement;
 const lineCtx = document.getElementById('lineChart') as HTMLCanvasElement;
@@ -255,3 +256,11 @@ export function initChoicesNames(labels: string[]) {
 }
 
 GetNamesPerFlow()
+
+
+const exportCSV = document.getElementById('exportCSV') as HTMLCanvasElement;
+// @ts-ignore
+document.getElementById('exportCSV').addEventListener('click', function() {
+    const csv = chartDataToCSV(radarChart);
+    downloadCSV(csv, 'chart-data.csv');
+});
