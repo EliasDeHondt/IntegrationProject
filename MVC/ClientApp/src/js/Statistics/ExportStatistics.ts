@@ -1,7 +1,7 @@
 import { Chart } from "chart.js";
 
 
-export function chartDataToCSV(chart: Chart<"radar", string[], string> | null) {
+export function chartDataToCSV(chart: Chart<"doughnut", string[], string> | null) {
     if(chart != null){
         const labels = chart.data.labels;
         const datasets = chart.data.datasets;

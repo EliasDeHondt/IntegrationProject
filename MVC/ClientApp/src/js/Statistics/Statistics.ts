@@ -226,7 +226,14 @@ export function showSelectedQuestionText() : string{
         return selectedOption.text //gekozen question
     }return "0";
 }
+export function showSelectedQuestionNumber() : string{
+    const selectedIndex = selectQuestion.selectedIndex;
 
+    if (selectedIndex !== -1) {
+        const selectedOption = selectQuestion.options[selectedIndex];
+        return selectedOption.value //gekozen question
+    }return "0";
+}
 
 export function initDataStatistics(labels: string[]) {
     GetCountStepsPerFlow(labels)
@@ -258,9 +265,19 @@ export function initChoicesNames(labels: string[]) {
 GetNamesPerFlow()
 
 
-const exportCSV = document.getElementById('exportCSV') as HTMLCanvasElement;
-// @ts-ignore
-document.getElementById('exportCSV').addEventListener('click', function() {
-    const csv = chartDataToCSV(radarChart);
-    downloadCSV(csv, 'chart-data.csv');
+const exportCSVFlows = document.getElementById('exportCSVFlows') as HTMLButtonElement;
+const exportCSVFlow = document.getElementById('exportCSVFlow') as HTMLButtonElement;
+const exportCSVQuestion = document.getElementById('exportCSVQuestion') as HTMLButtonElement;
+// exportCSVFlows.addEventListener('click', function() {
+//     const csv = chartDataToCSV(radarChart);
+//     downloadCSV(csv, 'chart-data.csv');
+// });
+// exportCSVFlow.addEventListener('click', function() {
+//     const csv = chartDataToCSV(radarChart);
+//     downloadCSV(csv, 'chart-data.csv');
+// });
+exportCSVQuestion.addEventListener('click', function() {
+    const csv = chartDataToCSV(doughnutChart);
+    var filename = 'doughnutChart_question_' + showSelectedQuestionNumber() + '.csv'
+    downloadCSV(csv, filename);
 });
