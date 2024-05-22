@@ -6,4 +6,5 @@ public class IdeaModel
     public IEnumerable<LikeModel> likes { get; set; }
     public string Text { get; set; }
     public AuthorModel author { get; set; }
+    public string? image { get; set; }
 }

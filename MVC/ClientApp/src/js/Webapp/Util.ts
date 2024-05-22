@@ -2,6 +2,16 @@
 import {CreateLike, DeleteLike, GetLoggedInUser} from "./WebAppAPI";
 
 export function generateIdeaCard(idea: Idea, email: string): HTMLDivElement {
+    let image: HTMLImageElement | null;
+    if(idea.image){
+        image = generateImage(idea.image);
+    } else {
+        image = null
+    }
+    
+    let imagediv = document.createElement("div");
+    if(image) imagediv.appendChild(image);
+    
     let div = document.createElement("div");
     let liked: boolean = idea.likes.some(like => like.liker.email === email);
     div.classList.add("webapp-card")
@@ -15,7 +25,8 @@ export function generateIdeaCard(idea: Idea, email: string): HTMLDivElement {
                     </div>
                 </div>
                 <div class="row webapp-card-content">
-                    <span>${idea.text}</span>
+                    <span class="webapp-card-text">${idea.text}</span>
+                    ${image ? imagediv.innerHTML : ""}
                 </div>
                 <div class="row mt-2">
                     <div class="col-2">

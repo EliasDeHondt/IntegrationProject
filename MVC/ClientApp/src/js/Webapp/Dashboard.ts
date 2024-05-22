@@ -20,6 +20,10 @@ btnPlaceIdea.onclick = async () => {
         ideaContainer.prepend(generateIdeaCard(idea, user.email));
         addHoverEffect();
         addLikeFunctionality();
+        fileInput.value = "";
+        imageContainer.innerHTML = "";
+        btnRemoveImage.classList.add("visually-hidden");
+        webappImage.classList.add("visually-hidden");
     })
 }
 

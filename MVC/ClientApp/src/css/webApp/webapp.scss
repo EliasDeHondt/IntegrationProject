@@ -136,7 +136,7 @@ $g: 0 120deg, #0000 0;
   height: 45vh;
   width: 45vh;
   display: block;
-  margin: auto;
+  margin: auto auto 1vh;
 }
 
 .webapp-idea-image{
@@ -155,7 +155,12 @@ $g: 0 120deg, #0000 0;
   
   .webapp-card-content{
     @extend .border-bottom;
-    height: 40vh;
+    margin-top: 1vh;
+    
+    .webapp-card-text{
+      margin-bottom: 1vh;
+    }
+    
   }
   
   .webapp-util-icon{
