@@ -39,21 +39,31 @@
             justify-content: center;
             align-items: center;
         }
+        
+        h2{
+            position: absolute; 
+            left: 50%; 
+            transform: translateX(-50%);
+        }
+        .csv{
+            position: absolute; 
+            right: 10%;
+        }
+        /*.title-container{*/
+        
+        /*}*/
     </style>
 </head>
 <body class="row h-100 w-100">
 <div class="text-center col-lg-10">
     <div class="row container-content-body">
-       
         
-        <div class="d-flex justify-content-center align-items-center" style="padding-top: 40px; position: relative;">
-            <h2 style="position: absolute; left: 50%; transform: translateX(-50%);">FLOWS STATISTICS</h2>
-            <div class="nav-item bgAccent bhover" style="position: absolute; right: 10%;"> 
+        <div class="title-container d-flex justify-content-center align-items-center" style="padding-top: 40px; position: relative;">
+            <h2>FLOWS STATISTICS</h2>
+            <div class="csv nav-item bgAccent bhover"> 
                 <button id="exportCSV" class="btn btn-link text-dark text-decoration-none">Download CSV</button>
             </div>
         </div>
-
-
 
         <div class="chart-container d-flex flex-row align-items-center">
             <div class="left-graph">
@@ -66,10 +76,14 @@
         <div class="d-flex justify-content-center align-items-center" style="padding: 20px 0;">
             <hr>
         </div>
-
+        
         <div class="d-flex justify-content-center align-items-center">
             <h2>FLOW STATISTICS</h2>
+            <div class="csv nav-item bgAccent bhover"> 
+                <button id="exportCSVFlow" class="btn btn-link text-dark text-decoration-none">Download CSV</button>
+            </div>
         </div>
+        
         <div class="container-selectFlow">
             <div class="kiosk-container-top-left">
                 <label class="d-flex flex-column">
@@ -89,10 +103,15 @@
         <div class="d-flex justify-content-center align-items-center" style="padding: 20px 0;">
             <hr>
         </div>
-
+        
         <div class="d-flex justify-content-center align-items-center">
             <h2>QUESTION STATISTICS</h2>
+            <div class="csv nav-item bgAccent bhover"> 
+                <button id="exportCSVQuestion" class="btn btn-link text-dark text-decoration-none">Download CSV</button>
+            </div>
         </div>
+        
+        
         <div class="container-selectFlow">
             <div class="kiosk-container-top-left">
                 <label class="d-flex flex-column">
