@@ -14,54 +14,62 @@ ViewData["Title"] = $"Project Styling";
 <div id="container-content-body" class="col">
     <h2 id="title">Customize Project Styling</h2>
 
-    <form id="stylingForm" asp-controller="Project" asp-action="SaveCustomColors" method="post">
+    <form id="stylingForm" method="post" action="/Project/SaveCustomColors">
         <input type="hidden" id="projectIdInput" name="ProjectId" value="" />
 
         <div id="card-container">
             <!-- Light Theme Card -->
             <div id="card-light-theme" class="card">
-                <input type="radio" id="themeLight" name="theme" value="light" checked>
+                <input type="radio" id="themeLight" name="ThemeName" value="Light" checked>
                 <label for="themeLight" id="label-light-theme">
                     <h3 id="title-light-theme">Light Theme</h3>
                     <div id="primary-light" class="color-sample">Primary</div>
                     <div id="secondary-light" class="color-sample">Secondary</div>
                     <div id="background-light" class="color-sample">Background</div>
                     <div id="accent-light" class="color-sample">Accent</div>
+                    <input type="hidden" name="CustomPrimaryColor" value="#479ecd" />
+                    <input type="hidden" name="CustomSecondaryColor" value="#e9521c" />
+                    <input type="hidden" name="CustomBackgroundColor" value="#f4edd2" />
+                    <input type="hidden" name="CustomAccentColor" value="#f57e00" />
                 </label>
             </div>
 
             <!-- Dark Theme Card -->
             <div id="card-dark-theme" class="card">
-                <input type="radio" id="themeDark" name="theme" value="dark">
+                <input type="radio" id="themeDark" name="ThemeName" value="Dark">
                 <label for="themeDark" id="label-dark-theme">
                     <h3 id="title-dark-theme">Dark Theme</h3>
                     <div id="primary-dark" class="color-sample">Primary</div>
                     <div id="secondary-dark" class="color-sample">Secondary</div>
                     <div id="background-dark" class="color-sample">Background</div>
                     <div id="accent-dark" class="color-sample">Accent</div>
+                    <input type="hidden" name="CustomPrimaryColor" value="#479ecd" />
+                    <input type="hidden" name="CustomSecondaryColor" value="#e9521c" />
+                    <input type="hidden" name="CustomBackgroundColor" value="#2d260b" />
+                    <input type="hidden" name="CustomAccentColor" value="#f57e00" />
                 </label>
             </div>
 
             <!-- Custom Theme Card -->
             <div id="card-custom-theme" class="card">
-                <input type="radio" id="themeCustom" name="theme" value="custom">
+                <input type="radio" id="themeCustom" name="ThemeName" value="Custom">
                 <label for="themeCustom" id="label-custom-theme">
                     <h3 id="title-custom-theme">Custom Theme</h3>
                     <div>
                         <label for="customPrimaryColor">Primary Color:</label>
-                        <input type="color" id="customPrimaryColor" name="CustomPrimaryColor" value="#000000">
+                        <input type="color" id="customPrimaryColor" name="CustomPrimaryColor" value="#479ecd">
                     </div>
                     <div>
                         <label for="customSecondaryColor">Secondary Color:</label>
-                        <input type="color" id="customSecondaryColor" name="CustomSecondaryColor" value="#ffffff">
+                        <input type="color" id="customSecondaryColor" name="CustomSecondaryColor" value="#e9521c">
                     </div>
                     <div>
                         <label for="customBackgroundColor">Background Color:</label>
-                        <input type="color" id="customBackgroundColor" name="CustomBackgroundColor" value="#ffffff">
+                        <input type="color" id="customBackgroundColor" name="CustomBackgroundColor" value="#f4edd2">
                     </div>
                     <div>
                         <label for="customAccentColor">Accent Color:</label>
-                        <input type="color" id="customAccentColor" name="CustomAccentColor" value="#ff0000">
+                        <input type="color" id="customAccentColor" name="CustomAccentColor" value="#f57e00">
                     </div>
                 </label>
             </div>
@@ -142,6 +150,7 @@ ViewData["Title"] = $"Project Styling";
 
     #card-dark-theme {
         background-color: hsl(16, 82%, 51%);
+        color: white;
     }
     #primary-dark {
         background-color: hsl(201, 57%, 46%);
@@ -208,5 +217,81 @@ ViewData["Title"] = $"Project Styling";
         const url = window.location.href;
         const projectId = url.substring(url.lastIndexOf('/') + 1);
         projectIdInput.value = projectId;
+        
+        fetch(`/Project/GetStylingTemplate/${projectId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data) {
+                            // Populate the form with the fetched data
+                            console.log(data);
+                            document.querySelector(`input[name="ThemeName"][value="${data.themeName}"]`).checked = true;
+                            document.getElementById('CustomPrimaryColor').value = data.customPrimaryColor;
+                            document.getElementById('CustomSecondaryColor').value = data.customSecondaryColor;
+                            document.getElementById('CustomAccentColor').value = data.customAccentColor;
+                            document.getElementById('CustomBackgroundColor').value = data.customBackgroundColor;
+                        }
+                    })
+                    .catch(error => console.error('Error fetching styling template:', error));
+            
+
+        const form = document.getElementById("stylingForm");
+        const themeRadios = document.querySelectorAll('input[name="ThemeName"]');
+        const themeInputs = {
+            Light: document.querySelectorAll('#card-light-theme input[type="hidden"]'),
+            Dark: document.querySelectorAll('#card-dark-theme input[type="hidden"]'),
+            Custom: document.querySelectorAll('#card-custom-theme input[type="color"]')
+        };
+
+        form.addEventListener('submit', function() {
+            for (const theme in themeInputs) {
+                themeInputs[theme].forEach(input => input.disabled = true);
+            }
+
+            const selectedTheme = document.querySelector('input[name="ThemeName"]:checked').value;
+            themeInputs[selectedTheme].forEach(input => input.disabled = false);
+        });
+
+        themeRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                const selectedTheme = document.querySelector('input[name="ThemeName"]:checked').value;
+                for (const theme in themeInputs) {
+                    themeInputs[theme].forEach(input => input.disabled = true);
+                }
+                themeInputs[selectedTheme].forEach(input => input.disabled = false);
+            });
+        });
+        
+        document.getElementById('stylingForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+        
+                var form = event.target;
+                var formData = new FormData(form);
+        
+                fetch(form.action, {
+                    method: form.method,
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return null;
+                })
+                .then(data => {
+                    if (data) {
+                        if (data.success) {
+                            console.log("Settings saved correctly!");
+                        } else {
+                            alert('There was an error saving the settings.');
+                        }
+                    } else {
+                        //TODO: Add toast?
+                        console.log("Settings saved correctly! No content returned.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
     });
 </script>

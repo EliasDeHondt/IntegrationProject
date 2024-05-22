@@ -23,12 +23,14 @@ public class Project
     public MainTheme MainTheme { get; set; }
     public SharedPlatform SharedPlatform { get; set; }
     public ICollection<ProjectOrganizer> Organizers { get; set; }
+    public StylingTemplate StylingTemplate { get; set; }
 
     public Project(MainTheme mainTheme, SharedPlatform sharedPlatform, ICollection<ProjectOrganizer> organizers, long id = 0): this(mainTheme.Subject,mainTheme, sharedPlatform, id)
     {
         Organizers = organizers;
         Description = "";
         Title = mainTheme.Subject;
+        StylingTemplate = new StylingTemplate(id);
     }
 
     public Project(string title,MainTheme mainTheme, SharedPlatform sharedPlatform, long id = 0)
@@ -39,6 +41,7 @@ public class Project
         SharedPlatform = sharedPlatform;
         Organizers = new List<ProjectOrganizer>();
         Description = "";
+        StylingTemplate = new StylingTemplate(id);
     }
     
     public Project()
@@ -49,6 +52,7 @@ public class Project
         Organizers = new List<ProjectOrganizer>();
         Description = "";
         Title = "";
+        StylingTemplate = new StylingTemplate(Id);
     }
 
     public Project(string title, string description, SharedPlatform sharedPlatform) 
@@ -61,5 +65,6 @@ public class Project
         Title = title;
         Description = description;
         SharedPlatform = sharedPlatform;
+        StylingTemplate = new StylingTemplate(Id);
     }
 }

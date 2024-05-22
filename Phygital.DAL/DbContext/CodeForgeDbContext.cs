@@ -48,6 +48,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     public DbSet<ProjectOrganizer> ProjectOrganizers { get; set; } = null!;
     public DbSet<InformationBase> Information { get; set; } = null!;
     public DbSet<QuestionBase> Questions { get; set; } = null!;
+    public DbSet<StylingTemplate> StylingTemplates { get; set; } = null!;
 
     public CodeForgeDbContext(DbContextOptions<CodeForgeDbContext> options) : base(options) {}
 

@@ -108,4 +108,14 @@ public class ProjectManager
     {
         return _repo.ReadNotesForProjectById(id);
     }
+
+    public bool UpdateStylingSettings(StylingTemplate template)
+    {
+        return _repo.UpdateProjectStyling(template);
+    }
+
+    public StylingTemplate? ReadStylingTemplate(long projectId)
+    {
+        return _repo.ReadStylingTemplate(projectId);
+    }
 }

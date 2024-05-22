@@ -630,6 +630,13 @@ namespace Data_Access_Layer.DbContext
             Project project2 = new Project(mainTheme2.Subject, mainTheme2, sharedPlatform);
             Project project3 = new Project(mainTheme3.Subject, mainTheme3, sharedPlatform);
             Project project4 = new Project(mainTheme4.Subject, mainTheme4, sharedPlatform1);
+            
+            dbContext.StylingTemplates.AddRange(
+                project1.StylingTemplate,
+                project2.StylingTemplate,
+                project3.StylingTemplate,
+                project4.StylingTemplate
+                );
 
             //=======================
             // Add Project Organizers

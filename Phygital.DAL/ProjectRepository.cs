@@ -148,4 +148,29 @@ public class ProjectRepository
             .SelectMany(t => t.Flows)
             .AsEnumerable();
     }
+
+    public bool UpdateProjectStyling(StylingTemplate template)
+    {
+        StylingTemplate? stylingTemplate = _ctx.StylingTemplates.Find(template.ProjectId);
+
+        if (stylingTemplate == null)
+        {
+            return false;
+        }
+
+        stylingTemplate.ThemeName = template.ThemeName;
+        stylingTemplate.CustomPrimaryColor = template.CustomPrimaryColor;
+        stylingTemplate.CustomSecondaryColor = template.CustomSecondaryColor;
+        stylingTemplate.CustomBackgroundColor = template.CustomBackgroundColor;
+        stylingTemplate.CustomAccentColor = template.CustomAccentColor;
+
+        _ctx.StylingTemplates.Update(stylingTemplate);
+
+        return true;
+    }
+
+    public StylingTemplate? ReadStylingTemplate(long projectId)
+    {
+        return _ctx.StylingTemplates.Find(projectId);
+    }
 }
