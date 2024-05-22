@@ -334,8 +334,11 @@ public class FlowRepository
 
         foreach (var qs in ReadQuestionsFromFlow(flowId))
         {
-            var name = qs.QuestionBase;
-            names.Add(name);
+            if (qs.QuestionBase.GetType() != typeof(OpenQuestion))
+            {
+                var name = qs.QuestionBase;
+                names.Add(name);
+            }
         }
         return names;
     }
