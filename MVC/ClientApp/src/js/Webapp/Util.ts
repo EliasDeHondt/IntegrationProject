@@ -64,6 +64,13 @@ export function generateNavButton(feed: Feed): HTMLButtonElement {
     return btn
 }
 
+export function generateImage(image: string): HTMLImageElement {
+    let img = document.createElement("img");
+    img.classList.add("webapp-image");
+    img.src = "data:image/png;base64," + image;
+    return img;
+}
+
 export function addHoverEffect() {
     let btn = document.getElementsByClassName("btnReaction") as HTMLCollectionOf<HTMLButtonElement>;
     let icons = document.getElementsByClassName("iconReaction") as HTMLCollectionOf<SVGSVGElement>;
