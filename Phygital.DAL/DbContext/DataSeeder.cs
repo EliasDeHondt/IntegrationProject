@@ -628,7 +628,7 @@ public static class DataSeeder
         SharedPlatform sharedPlatform1 = new SharedPlatform("Karel de Grote", ImageUrls.kdg);
         SharedPlatform sharedPlatform2 = new SharedPlatform("Tree company", ImageUrls.tree);
             
-        Project project1 = new Project(mainTheme1.Subject, mainTheme1, sharedPlatform);
+        Project project1 = new Project(mainTheme1.Subject, mainTheme1, sharedPlatform, "Local elections let community members choose local officials like mayors and city council members. These elections impact local policies, public services, and community development. Voting in local elections helps shape the leadership and direction of the community, addressing everyday issues like education, safety, and infrastructure.");
         Project project2 = new Project(mainTheme2.Subject, mainTheme2, sharedPlatform);
         Project project3 = new Project(mainTheme3.Subject, mainTheme3, sharedPlatform);
         Project project4 = new Project(mainTheme4.Subject, mainTheme4, sharedPlatform1);

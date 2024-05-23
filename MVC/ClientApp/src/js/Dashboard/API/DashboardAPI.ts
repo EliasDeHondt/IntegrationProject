@@ -2,7 +2,7 @@
 import * as editModal from "../EditUserModal";
 import {Project} from "../../Types/ProjectObjects";
 import * as deleteModal from "../DeleteUserModal";
-
+import * as statisticsModal from "../ProjectStatisticsModal";
 
 
 // Users
@@ -191,7 +191,9 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     btnNotesProject.addEventListener("click", function() {
         window.location.href = "/Project/Notes/" + projectId;
     });
-    
+    btnGraphProject.addEventListener("click", function() {
+        statisticsModal.showModal(projectId, project.name, project.description);
+    });
     
     return colDiv;
 }
