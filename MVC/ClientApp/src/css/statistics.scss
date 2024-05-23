@@ -5,14 +5,48 @@
  *                                     *
  ***************************************/
 
-//#chart-container {
-//  /*width: 800px; */
-//  /*height: 800px;*/
-//  margin: 0 auto;
-//  display: flex;
-//  flex-wrap: wrap;
-//}
-//canvas {
-//  width: 750px;
-//  height: 600px;
-//}
+.chart-container {
+  display: flex;
+  padding-left: 20px;
+  justify-content: center;
+}
+canvas {
+  width: 900px;
+  padding: 40px;
+}
+.container-selectFlow {
+  padding-left: 130px !important;
+}
+canvas#doughnutChart {
+  width: 1300px !important;
+}
+hr{
+  width: 60%; border: 3px solid rgba(243, 124, 0, 1); border-radius: 5px;
+}
+.left-graph{
+  padding-left: 100px;
+}
+.right-graph{
+  padding-right: 100px;
+}
+.center-graph{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h2{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.csv{
+  position: absolute;
+  right: 10%;
+  border-radius: 5px;
+  border: 1px solid black;
+}
+.title-container{
+  padding-top: 40px;
+  position: relative;
+}

@@ -377,3 +377,89 @@ button.accept-policy {
 }
 
 
+/*NavBar*/
+#navbar {
+  padding-right: 2%;
+  padding-left: 2%;
+  margin-right: 0;
+  margin-left: 0;
+  padding-bottom: 100px;
+  border-radius: 10px;
+}
+
+#maincontent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+#tohideAN {
+  background: white;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  border-radius: 5px;
+}
+#tohideD, #tohideS, #tohideLO {
+  padding-bottom: 10px;
+  padding-top: 20px;
+}
+#tohideS {
+  padding-top: 10px;
+}
+#tohideLO {
+  padding: 10px 0;
+  margin-top: auto;
+  border-radius: 5px;
+  border: 1px solid black;
+  transition: opacity 0.3s;
+}
+#logoutForm .d-block {
+  display: block;
+  width: 100%;
+}
+#logout {
+  font-size: 20px;
+}
+#language, #collapseButton {
+  padding-top: 20px;
+}
+.bhover {
+  transition: opacity 0.3s;
+}
+.text-dark {
+  color: #000;
+}
+.w-100 {
+  width: 100%;
+}
+
+.nav-item {
+  text-align: center;
+}
+.nav-link {
+  display: block;
+  padding: 20px 0;
+  border-radius: 5px;
+  border: 1px solid black;
+  transition: opacity 0.3s;
+}
+
+button, .btn-link {
+  display: block;
+  padding: 20px 0;
+  border-radius: 5px;
+  border: 1px solid black;
+  transition: opacity 0.3s;
+}
+button {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.form-inline {
+  display: inline-block;
+}
+#icon {
+  font-size: 20px;
+}
+

@@ -273,18 +273,29 @@ GetNamesPerFlow()
 const exportCSVFlows = document.getElementById('exportCSVFlows') as HTMLButtonElement;
 const exportCSVFlow = document.getElementById('exportCSVFlow') as HTMLButtonElement;
 const exportCSVQuestion = document.getElementById('exportCSVQuestion') as HTMLButtonElement;
-exportCSVFlows.addEventListener('click', function() {
-    const csv = chartDatasToCSV("Flows",barChart,lineChart);
-    var filename ='flowsCharts.csv'
+const exportAllCSV = document.getElementById('exportAllCSV') as HTMLButtonElement;
+function exportFlowsCSV() {
+    const csv = chartDatasToCSV("Flows", barChart, lineChart);
+    const filename = 'flowsCharts.csv';
     downloadCSV(csv, filename);
-});
-exportCSVFlow.addEventListener('click', function() {
-    const csv = chartDatasToCSV("Question Type",radarChart,pieChart);
-    var filename = 'flowCharts_' + showSelectedFlow() + '.csv'
-    downloadCSV(csv, filename)
-});
-exportCSVQuestion.addEventListener('click', function() {
-    const csv = chartDataToCSV("Choices",doughnutChart);
-    var filename = 'doughnutChart_question_' + showSelectedQuestionNumber() + '.csv'
+}
+function exportFlowCSV() {
+    const csv = chartDatasToCSV("Question Type", radarChart, pieChart);
+    const filename = 'flowCharts_' + showSelectedFlow() + '.csv';
     downloadCSV(csv, filename);
+}
+function exportQuestionCSV() {
+    const csv = chartDataToCSV("Choices", doughnutChart);
+    const filename = 'doughnutChart_question_' + showSelectedQuestionNumber() + '.csv';
+    downloadCSV(csv, filename);
+}
+
+exportCSVFlows.addEventListener('click', exportFlowsCSV);
+exportCSVFlow.addEventListener('click', exportFlowCSV);
+exportCSVQuestion.addEventListener('click', exportQuestionCSV);
+
+exportAllCSV.addEventListener('click', function() {
+    exportFlowsCSV();
+    exportFlowCSV();
+    exportQuestionCSV();
 });
