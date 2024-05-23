@@ -1,6 +1,11 @@
 ﻿import {GetFeed, GetFeedIds, GetLoggedInUser, GetRandomFeed} from "./WebAppAPI";
-import {addHoverEffect, addLikeFunctionality, generateIdeaCard, generateImage, generateNavButton} from "./Util";
-import {addReactionFunctionality, addLikeFunctionality, generateIdeaCard, generateNavButton} from "./Util";
+import {
+    addLikeFunctionality,
+    addReactionFunctionality,
+    generateIdeaCard,
+    generateImage,
+    generateNavButton
+} from "./Util";
 import {Feed} from "../Types/WebApp/Types";
 import {PostIdea} from "./Ideas";
 import {readFileAsBase64} from "../Util";
@@ -19,9 +24,8 @@ let feedId: number;
 btnPlaceIdea.onclick = async () => {
     let text = textArea.value
     let user = await GetLoggedInUser();
-    PostIdea(feedId).then(idea => {
+    PostIdea(feedId,text).then(idea => {
         ideaContainer.prepend(generateIdeaCard(idea, user.email));
-        addHoverEffect();
         addReactionFunctionality();
         addLikeFunctionality();
         fileInput.value = "";
@@ -84,7 +88,6 @@ async function generateIdeas(feed: Feed){
     ideaContainer.innerHTML = "";
     feed.ideas.forEach(idea => {
         ideaContainer.appendChild(generateIdeaCard(idea, user.email));
-        addHoverEffect();
         addReactionFunctionality();
         addLikeFunctionality();
     })
