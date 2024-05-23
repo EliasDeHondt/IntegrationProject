@@ -117,6 +117,9 @@ public class Startup
         
         services.AddScoped<IdeaRepository>();
         services.AddScoped<IdeaManager>();
+
+        services.AddScoped<ReactionRepository>();
+        services.AddScoped<ReactionManager>();
         
         services.AddScoped<UnitOfWork, UnitOfWork>();
         services.AddSingleton(googleCloudOptions);

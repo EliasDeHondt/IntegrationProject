@@ -1,5 +1,6 @@
 ﻿import {GetFeed, GetFeedIds, GetLoggedInUser, GetRandomFeed} from "./WebAppAPI";
 import {addHoverEffect, addLikeFunctionality, generateIdeaCard, generateImage, generateNavButton} from "./Util";
+import {addReactionFunctionality, addLikeFunctionality, generateIdeaCard, generateNavButton} from "./Util";
 import {Feed} from "../Types/WebApp/Types";
 import {PostIdea} from "./Ideas";
 import {readFileAsBase64} from "../Util";
@@ -12,13 +13,16 @@ const fileInput = document.getElementById("file-input") as HTMLInputElement;
 const imageContainer = document.getElementById("imageContainer") as HTMLDivElement;
 const webappImage = document.getElementById("webapp-idea-image") as HTMLDivElement;
 const btnRemoveImage = document.getElementById("btnRemoveImage") as HTMLButtonElement;
+const textArea = document.getElementById("textIdea") as HTMLTextAreaElement;
 let feedId: number;
 
 btnPlaceIdea.onclick = async () => {
+    let text = textArea.value
     let user = await GetLoggedInUser();
     PostIdea(feedId).then(idea => {
         ideaContainer.prepend(generateIdeaCard(idea, user.email));
         addHoverEffect();
+        addReactionFunctionality();
         addLikeFunctionality();
         fileInput.value = "";
         imageContainer.innerHTML = "";
@@ -81,6 +85,7 @@ async function generateIdeas(feed: Feed){
     feed.ideas.forEach(idea => {
         ideaContainer.appendChild(generateIdeaCard(idea, user.email));
         addHoverEffect();
+        addReactionFunctionality();
         addLikeFunctionality();
     })
 }

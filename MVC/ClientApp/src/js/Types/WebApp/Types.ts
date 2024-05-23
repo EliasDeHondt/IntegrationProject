@@ -20,3 +20,8 @@ export type Author = {
 export type Like = {
     liker: Author
 }
+
+export type Reaction = {
+    author: Author,
+    text: string
+}
