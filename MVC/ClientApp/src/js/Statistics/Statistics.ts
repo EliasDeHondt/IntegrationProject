@@ -8,7 +8,7 @@ import {
     GetQuestionsFromFlow
 } from "./API/StatisticAPI";
 import {Question} from "../Types/ProjectObjects";
-import {chartDataToCSV, downloadCSV} from "./ExportStatistics";
+import {chartDatasToCSV, chartDataToCSV, downloadCSV} from "./ExportStatistics";
 
 const barCtx = document.getElementById('barChart') as HTMLCanvasElement;
 const lineCtx = document.getElementById('lineChart') as HTMLCanvasElement;
@@ -94,8 +94,9 @@ function chartScales(){
 }
 
 //draw
+let barChart: Chart<"bar", string[], string> | null = null;
 export function drawBarChart(titel:string,labels: string[], label: string, data: string[]){
-    const barChart = new Chart(barCtx, {
+    barChart = new Chart(barCtx, {
         type: 'bar',
         data: chartData(label,labels,data),
         options: {
@@ -104,9 +105,9 @@ export function drawBarChart(titel:string,labels: string[], label: string, data:
         }
     });
 }
-
+let lineChart: Chart<"line", string[], string> | null = null;
 export function drawLineChart(titel:string,labels: string[], label: string, data: string[]){
-    var lineChart = new Chart(lineCtx, {
+    lineChart = new Chart(lineCtx, {
         type: 'line',
         data: chartData(label,labels,data),
         options: {
@@ -268,16 +269,18 @@ GetNamesPerFlow()
 const exportCSVFlows = document.getElementById('exportCSVFlows') as HTMLButtonElement;
 const exportCSVFlow = document.getElementById('exportCSVFlow') as HTMLButtonElement;
 const exportCSVQuestion = document.getElementById('exportCSVQuestion') as HTMLButtonElement;
-// exportCSVFlows.addEventListener('click', function() {
-//     const csv = chartDataToCSV(radarChart);
-//     downloadCSV(csv, 'chart-data.csv');
-// });
-// exportCSVFlow.addEventListener('click', function() {
-//     const csv = chartDataToCSV(radarChart);
-//     downloadCSV(csv, 'chart-data.csv');
-// });
+exportCSVFlows.addEventListener('click', function() {
+    const csv = chartDatasToCSV("Flows",barChart,lineChart);
+    var filename ='flowsCharts.csv'
+    downloadCSV(csv, filename);
+});
+exportCSVFlow.addEventListener('click', function() {
+    const csv = chartDatasToCSV("Question Type",radarChart,pieChart);
+    var filename = 'flowCharts_' + showSelectedFlow() + '.csv'
+    downloadCSV(csv, filename)
+});
 exportCSVQuestion.addEventListener('click', function() {
-    const csv = chartDataToCSV(doughnutChart);
+    const csv = chartDataToCSV("Choices",doughnutChart);
     var filename = 'doughnutChart_question_' + showSelectedQuestionNumber() + '.csv'
     downloadCSV(csv, filename);
 });
