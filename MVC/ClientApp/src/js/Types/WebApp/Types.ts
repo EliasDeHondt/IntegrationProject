@@ -9,6 +9,7 @@ export type Idea = {
     author: Author
     likes: Like[]
     text: string
+    image: string | null
 }
 
 export type Author = {

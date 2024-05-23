@@ -1,5 +1,6 @@
 ﻿using Data_Access_Layer;
 using Domain.Accounts;
+using Domain.ProjectLogics.Steps.Information;
 using Domain.WebApp;
 
 namespace Business_Layer;
@@ -14,9 +15,14 @@ public class IdeaManager
         _repo = repo;
     }
 
-    public Idea AddIdea(string text, WebAppUser author, Feed feed)
+    public Idea AddIdea(string text, WebAppUser author, Feed feed, string? imageBase64)
     {
-        Idea idea = new Idea(text, author, feed);
+        Image? image = null;
+        if (imageBase64 is not null)
+        {
+            image = new Image(imageBase64);
+        }
+        Idea idea = new Idea(text, author, feed, image);
         _repo.CreateIdea(idea);
         return idea;
     }

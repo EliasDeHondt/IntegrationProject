@@ -638,10 +638,10 @@ public static class DataSeeder
         //=======================
         var author = (WebAppUser)dbContext.Users.Single(u => u.Email == "Bib@CodeForge.com");
             
-        Idea idea = new Idea("This is a test idea", author, project1.Feed);
-        Idea idea1 = new Idea("This is another test idea", author, project1.Feed);
-        Idea idea2 = new Idea("This is yet another test idea", author, project2.Feed);
-        Idea idea3 = new Idea("Man I got so many ideas.", author, project1.Feed);    
+        Idea idea = new Idea("This is a test idea", author, project1.Feed, null);
+        Idea idea1 = new Idea("This is another test idea", author, project1.Feed, null);
+        Idea idea2 = new Idea("This is yet another test idea", author, project2.Feed, null);
+        Idea idea3 = new Idea("Man I got so many ideas.", author, project1.Feed, null);    
         
         //=======================
         // Add Project Organizers

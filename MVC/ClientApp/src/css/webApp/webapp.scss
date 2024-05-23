@@ -111,15 +111,32 @@ $g: 0 120deg, #0000 0;
   background: none;
 }
 
-.webapp-btn:active {
-  outline: none !important;
-  transform: translateY(0.2em);
+.webapp-btn{
+  &:active{
+    outline: none !important;
+    transform: translateY(0.2em);
+  }
+
+  &:hover{
+    .webapp-util-icon{
+      color: map-get($themes, light, accent);
+    }
+  }
 }
 
-.webapp-btn:hover {
-  .webapp-util-icon {
-    color: map-get($themes, light, accent);
-  }
+#file-input{
+  display: none;
+}
+
+.webapp-image{
+  height: 45vh;
+  width: 45vh;
+  display: block;
+  margin: auto auto 1vh;
+}
+
+.webapp-idea-image{
+  width: 90%
 }
 
 .webapp-card {
@@ -134,7 +151,12 @@ $g: 0 120deg, #0000 0;
 
   .webapp-card-content {
     @extend .border-bottom;
-    height: 40vh;
+    margin-top: 1vh;
+    
+    .webapp-card-text{
+      margin-bottom: 1vh;
+    }
+    
   }
 
   .webapp-util-icon {
