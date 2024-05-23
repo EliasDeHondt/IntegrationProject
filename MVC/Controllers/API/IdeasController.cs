@@ -31,16 +31,47 @@ public class IdeasController : Controller
         _uow.BeginTransaction();
         var user = await _userManager.GetUserAsync(User) as WebAppUser;
         var feed = _feedManager.GetFeed(feedId);
-        var idea = _manager.AddIdea(model.Text, user!, feed);
+        var idea = _manager.AddIdea(model.Text, user!, feed, model.image);
         _uow.Commit();
-        
         return CreatedAtAction(nameof(PostIdea), CreateIdeaModel(idea));
     }
 
+    [HttpPost("likeIdea/{ideaId}")]
+    public async Task<IActionResult> LikeIdea(long ideaId)
+    {
+        _uow.BeginTransaction();
+        var user = await _userManager.GetUserAsync(User) as WebAppUser;
+        var idea = _manager.GetIdea(ideaId);
+        var like = _manager.LikeIdea(idea, user!);
+        _uow.Commit();
+
+        return CreatedAtAction(nameof(LikeIdea), new LikeModel
+        {
+            liker = new AuthorModel
+            {
+                Email = like.WebAppUser.Email!,
+                Name = like.WebAppUser.UserName!
+            }
+        });
+    }
+
+    [HttpDelete("unlikeIdea/{ideaId}")]
+    public async Task<IActionResult> UnlikeIdea(long ideaId)
+    {
+        _uow.BeginTransaction();
+        var user = await _userManager.GetUserAsync(User) as WebAppUser;
+        var idea = _manager.GetIdea(ideaId);
+        _manager.UnlikeIdea(idea, user!);
+        _uow.Commit();
+        
+        return NoContent();
+    }
+    
     private static IdeaModel CreateIdeaModel(Idea idea)
     {
         return new IdeaModel
         {
+            image = idea.Image?.Base64,
             Id = idea.Id,
             Text = idea.Text,
             author = new AuthorModel

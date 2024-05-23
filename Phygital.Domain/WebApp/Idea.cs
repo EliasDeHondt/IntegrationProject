@@ -7,6 +7,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using Domain.Accounts;
+using Domain.ProjectLogics.Steps.Information;
 
 namespace Domain.WebApp;
 
@@ -19,8 +20,9 @@ public class Idea
     public ICollection<Like> Likes { get; set;  }
     public WebAppUser Author { get; set; }
     public Feed Feed { get; set; }
+    public Image? Image { get; set; }
 
-    public Idea(string text, WebAppUser author, Feed feed, long id = default)
+    public Idea(string text, WebAppUser author, Feed feed, Image? image, long id = default)
     {
         Id = id;
         Text = text;
@@ -28,7 +30,7 @@ public class Idea
         Likes = new List<Like>();
         Feed = feed;
         Author = author;
-        
+        Image = image;
     }
     
     public Idea()

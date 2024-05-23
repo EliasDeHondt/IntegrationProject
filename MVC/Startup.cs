@@ -27,7 +27,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        string bucketName = Environment.GetEnvironmentVariable("BUCKET_NAME_VIDEO") ?? "codeforge-video-bucket";
+        string bucketName = Environment.GetEnvironmentVariable("BUCKET_NAME_VIDEO") ?? "codeforge-video-bucket-20240514045342";
 
         Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../service-account-key.json");
 
@@ -117,6 +117,9 @@ public class Startup
         
         services.AddScoped<IdeaRepository>();
         services.AddScoped<IdeaManager>();
+
+        services.AddScoped<ReactionRepository>();
+        services.AddScoped<ReactionManager>();
         
         services.AddScoped<UnitOfWork, UnitOfWork>();
         services.AddSingleton(googleCloudOptions);
@@ -161,7 +164,7 @@ public class Startup
             }
             case "Production":
             {
-                if (dbContext.IsEmpty())
+                if (!dbContext.IsEmpty()) // TODO: Check if this is correct
                 {
                     dbContext.CreateDatabase(true);
                     SeedDatabase(uow, userManager, roleManager, dbContext);

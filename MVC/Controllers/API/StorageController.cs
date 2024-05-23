@@ -9,6 +9,7 @@ using Google;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Mvc;
+using MVC.Models;
 
 namespace MVC.Controllers.API;
 
@@ -38,4 +39,15 @@ public class StorageController : Controller
         }
         catch (GoogleApiException e) when (e.HttpStatusCode == System.Net.HttpStatusCode.NotFound) { return BadRequest(); }
     }
+
+    [HttpPost("UploadVideo")]
+    public async Task<IActionResult> UploadVideo(IFormFile file)
+    {
+        var client = await StorageClient.CreateAsync();
+        using var memoryStream = new MemoryStream();
+        await file.CopyToAsync(memoryStream);
+        var obj = await client.UploadObjectAsync(_options.BucketName, file.FileName, file.ContentType, memoryStream);
+        return Ok(obj.Name);
+    }
+    
 }
