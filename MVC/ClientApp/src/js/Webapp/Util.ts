@@ -1,5 +1,5 @@
 import {Feed, Idea, Reaction} from "../Types/WebApp/Types";
-import {CreateLike, DeleteLike, GetLoggedInUser} from "./WebAppAPI";
+import {CreateLike, DeleteLike} from "./WebAppAPI";
 import {OpenModal} from "./ReactionModal";
 
 export function generateIdeaCard(idea: Idea, email: string): HTMLDivElement {
