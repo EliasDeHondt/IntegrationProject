@@ -73,9 +73,9 @@ export async function GetQuestionNames(flowname: string): Promise<void> {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            const labels: Question[] = [{ id: 0, question: "No questions available." }];
+            initQuestionNames(labels);
         }
-
         
         const labels: Question[] = await response.json();
         console.log("labels Question",labels)

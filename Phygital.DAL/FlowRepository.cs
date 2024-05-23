@@ -340,6 +340,11 @@ public class FlowRepository
                 names.Add(name);
             }
         }
+
+        // if (names.Capacity == 0)
+        // {
+        //     names.Add(new SingleChoiceQuestion("No questions available."));
+        // }
         return names;
     }
 }

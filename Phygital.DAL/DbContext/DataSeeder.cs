@@ -574,9 +574,10 @@ namespace Data_Access_Layer.DbContext
             
             // Create Main Themes & Sub Themes (4)
             MainTheme mainTheme4 = new MainTheme("Studenten Verkiezingen");
-            SubTheme subTheme5 = new SubTheme("Verkiezingen Campus Groenplaats", mainTheme4);
+            SubTheme subTheme5 = new SubTheme("Circulair - Verkiezingen Campus Groenplaats", mainTheme4);
+            SubTheme subTheme6 = new SubTheme("Linear - Verkiezingen Campus Groenplaats", mainTheme4);
             Flow flow5 = new Flow(FlowType.Circular, subTheme5);
-            Flow flow6 = new Flow(FlowType.Linear, subTheme5);
+            Flow flow6 = new Flow(FlowType.Linear, subTheme6);
 
             //=======================
             // Add steps to flow 1 (Linear Flow)

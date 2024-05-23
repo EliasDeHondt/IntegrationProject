@@ -190,6 +190,10 @@ export function fillDropdownFlows(data: string[], select: HTMLSelectElement) {
 export function fillDropdownQuestions(data: Question[], select: HTMLSelectElement) {
     select.innerHTML = "";
 
+    if(data.length == 0){
+        let option = document.createElement("option");
+        option.value ="No questions available.";
+    }
     for (let i = 0; i < data.length; i++) {
         let option = document.createElement("option");
         console.log("data[i].text",data[i].id.toString())
