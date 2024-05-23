@@ -21,4 +21,19 @@ public class IdeaManager
         return idea;
     }
 
+    public Idea GetIdea(long ideaId)
+    {
+        return _repo.ReadIdea(ideaId);
+    }
+
+    public Like LikeIdea(Idea idea, WebAppUser user)
+    {
+        Like like = new Like(idea, user);
+        return _repo.CreateLike(like);
+    }
+
+    public void UnlikeIdea(Idea idea, WebAppUser user)
+    {
+        _repo.DeleteLike(idea, user);
+    }
 }
