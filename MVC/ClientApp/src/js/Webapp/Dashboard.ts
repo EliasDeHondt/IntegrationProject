@@ -2,6 +2,7 @@
 import {addHoverEffect, addLikeFunctionality, generateIdeaCard, generateNavButton} from "./Util";
 import {Feed} from "../Types/WebApp/Types";
 import {PostIdea} from "./Ideas";
+import {IsValidIdea} from "./Moderation";
 
 const ideaContainer = document.getElementById("ideaContainer") as HTMLDivElement;
 const navContainer = document.getElementById("navContainer") as HTMLDivElement;
@@ -12,6 +13,7 @@ let feedId: number;
 btnPlaceIdea.onclick = async () => {
     let user = await GetLoggedInUser();
     PostIdea(feedId).then(idea => {
+        IsValidIdea(idea.text)
         ideaContainer.prepend(generateIdeaCard(idea, user.email));
         addHoverEffect();
         addLikeFunctionality();

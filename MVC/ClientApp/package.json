@@ -9,6 +9,7 @@
   "version": "0.0.1",
   "dependencies": {
     "@fontsource/trirong": "^5.0.19",
+    "@microsoft/signalr": "^8.0.0",
     "@popperjs/core": "^2.11.2",
     "@tensorflow-models/coco-ssd": "^2.2.3",
     "@tensorflow/tfjs": "^4.17.0",
@@ -18,8 +19,7 @@
     "embla-carousel": "^8.0.2",
     "jquery": "^3.6.0",
     "jquery-validation": "^1.19.3",
-    "jquery-validation-unobtrusive": "^3.2.12",
-    "@microsoft/signalr": "^8.0.0"
+    "jquery-validation-unobtrusive": "^3.2.12"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.5",

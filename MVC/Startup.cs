@@ -34,6 +34,7 @@ public class Startup
         //REMOVE AFTER TESTING
         Environment.SetEnvironmentVariable("ASPNETCORE_EMAIL", "codeforge.noreply@gmail.com");
         Environment.SetEnvironmentVariable("ASPNETCORE_EMAIL_PASSWORD", "evqb lztz oqvu kgwc");
+        Environment.SetEnvironmentVariable("GROQ_API_KEY", "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");
 
 
         var googleCloudOptions = new CloudStorageOptions
