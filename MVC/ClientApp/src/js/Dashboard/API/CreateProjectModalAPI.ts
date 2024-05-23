@@ -1,4 +1,6 @@
-﻿export async function createProject(name: string, description: string, platform: string, logo?: File) {
+﻿import {readFileAsBase64} from "../../Util";
+
+export async function createProject(name: string, description: string, platform: string, logo?: File) {
     let bodyData: { // Indexsignatuur ala Elias ;)
         title: string;
         description: string;
@@ -21,16 +23,5 @@
             "Content-Type": "application/json"
         },
         body: JSON.stringify(bodyData)
-    });
-}
-
-async function readFileAsBase64(file: File): Promise<string | null> {
-    return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            const base64String = reader.result?.toString().split(',')[1];
-            resolve(base64String || null);
-        };
     });
 }

@@ -27,7 +27,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        string bucketName = Environment.GetEnvironmentVariable("BUCKET_NAME_VIDEO") ?? "codeforge-video-bucket";
+        string bucketName = Environment.GetEnvironmentVariable("BUCKET_NAME_VIDEO") ?? "codeforge-video-bucket-20240514045342";
 
         Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../service-account-key.json");
 
