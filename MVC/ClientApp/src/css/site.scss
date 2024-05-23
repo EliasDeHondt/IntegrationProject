@@ -154,10 +154,6 @@ button.accept-policy {
 #navbar {
   transition: width 0.5s;
 }
-//#maincontent.collapsed { //todo werkt niet
-//  width: 200px;
-//  transition: width 2s !important; 
-//}
 #navbar.collapsed {
   width: 200px;
 }
@@ -400,7 +396,7 @@ button.accept-policy {
   padding-top: 20px;
   border-radius: 5px;
 }
-#tohideD, #tohideS, #tohideLO {
+#tohideD, #tohideS, #tohideLO, #tohideC {
   padding-bottom: 10px;
   padding-top: 20px;
 }
@@ -420,6 +416,8 @@ button.accept-policy {
 }
 #logout {
   font-size: 20px;
+  background: none;
+  padding: 0;
 }
 #language, #collapseButton {
   padding-top: 20px;
