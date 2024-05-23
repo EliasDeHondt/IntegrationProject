@@ -1,4 +1,4 @@
-﻿import {Feed, Idea, Like} from "../Types/WebApp/Types";
+import {Feed, Idea, Like, Reaction} from "../Types/WebApp/Types";
 import {User} from "../Types/UserTypes";
 
 export async function GetFeed(Id: number): Promise<Feed> {
@@ -87,6 +87,38 @@ export async function GetLoggedInUser(): Promise<User>{
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
+}
+
+export async function GetReactions(ideaId: number): Promise<Reaction[]> {
+    return await fetch(`/api/Reactions/${ideaId}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data;
+        })
+}
+
+export async function PostReaction(ideaId: number, text: string): Promise<Reaction> {
+    return await fetch(`/api/Reactions`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            ideaId: ideaId,
+            text: text
+        })
     })
         .then(response => response.json())
         .then(data => {
