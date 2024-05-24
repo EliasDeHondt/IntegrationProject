@@ -3,11 +3,15 @@ import {Idea} from "../Types/WebApp/Types";
 import {readFileAsBase64} from "../Util";
 
 export async function PostIdea(feedId: number, text: string): Promise<Idea>{
-    const textArea = document.getElementById("textIdea") as HTMLTextAreaElement;
     const fileInput = document.getElementById("file-input") as HTMLInputElement;
 
-    let image = fileInput.files![0];
-    let base64 = await readFileAsBase64(image);
+    let base64: string | null;
+    if(fileInput.files![0] != null){
+        let image = fileInput.files![0];
+        base64 = await readFileAsBase64(image);
+    } else {
+        base64 = null;
+    }
     
     let idea: Idea = {
         id: 0,
