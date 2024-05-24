@@ -1,0 +1,91 @@
+
+/*NavBar*/
+#navbar {
+  padding-right: 2%;
+  padding-left: 2%;
+  margin-right: 0;
+  margin-left: 0;
+  padding-bottom: 100px;
+  border-radius: 10px;
+}
+
+#maincontent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+#tohideAN {
+  background: white;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  border-radius: 5px;
+}
+#tohideD, #tohideS, #tohideLO, #tohideC {
+  padding-bottom: 10px;
+  padding-top: 20px;
+}
+#tohideS {
+  padding-top: 10px;
+}
+#tohideLO {
+  padding: 10px 0;
+  margin-top: auto;
+  border-radius: 5px;
+  border: 1px solid black;
+  transition: opacity 0.3s;
+}
+#logoutForm .d-block {
+  display: block;
+  width: 100%;
+}
+#logout {
+  font-size: 20px;
+  background: none;
+  padding: 0;
+}
+#language, #collapseButton {
+  padding-top: 20px;
+}
+.nav-bhover {
+  transition: opacity 0.3s;
+}
+.nav-text-dark {
+  color: #000;
+}
+.w-100 {
+  width: 100%;
+}
+
+.nav-nav-item {
+  text-align: center;
+}
+.nav-nav-link {
+  display: block;
+  padding: 20px 0;
+  border-radius: 5px;
+  border: 1px solid black;
+  transition: opacity 0.3s;
+}
+
+.nav-button, .nav-btn-link {
+  display: block;
+  padding: 20px 0;
+  border-radius: 5px;
+  border: 1px solid black;
+  transition: opacity 0.3s;
+}
+.nav-button {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.nav-form-inline {
+  display: inline-block;
+}
+#nav-icon {
+  font-size: 20px;
+}
+.nav-btn:focus, .nav-btn:active:focus, .nav-btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
