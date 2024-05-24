@@ -6,7 +6,6 @@ import {delay} from "../Util";
 import {Timer} from "../Util/Timer";
 import {Modal} from "bootstrap";
 import * as kiosk from "../Kiosk/Kiosk"
-import {HubConnectionState} from "@microsoft/signalr";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
@@ -506,6 +505,11 @@ function startTimers() {
 
 
 btnRestartFlow.onclick = async () => {
+    await restartFlow()
+};
+
+export async function restartFlow() {
     currentStepNumber = 0;
     await GetNextStep(++currentStepNumber, flowId);
-};
+    time = 30;
+}

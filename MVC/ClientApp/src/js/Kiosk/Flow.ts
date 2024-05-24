@@ -1,7 +1,7 @@
 ﻿import * as kiosk from "./Kiosk";
 import * as signalR from "@microsoft/signalr";
 import {Modal} from "bootstrap";
-import {clockTimer, stepTimer} from "../Flow/StepAPI";
+import * as stepAPI from "../Flow/StepAPI";
 
 const connection = new signalR.HubConnectionBuilder()
     .withUrl("/hub")
@@ -27,15 +27,19 @@ connection.on("ReceiveFlowUpdate", async (id, state) => {
     currStateOfFlow = state;
     if (currStateOfFlow.toLowerCase() == "paused") {
         modal.show()
-        stepTimer.pause();
-        clockTimer.pause();
+        stepAPI.stepTimer.pause();
+        stepAPI.clockTimer.pause();
     } else {
         modal.hide()
-        stepTimer.resume();
-        clockTimer.resume();
+        stepAPI.stepTimer.resume();
+        stepAPI.clockTimer.resume();
     }
 })
 
 connection.on("FlowActivated", (id) => {
     window.location.href = `/Flow/Step/${id}`
+})
+
+connection.on("CurrentFlowRestarted", async () => {
+    await stepAPI.restartFlow()
 })
