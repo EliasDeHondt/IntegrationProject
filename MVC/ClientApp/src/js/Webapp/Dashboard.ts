@@ -35,10 +35,10 @@ btnCloseInvalidIdea.onclick = () => {
 let feedId: number;
 
 btnPlaceIdea.onclick = async () => {
-    let text = textArea.value
+    let text = textArea.value.trim()
     let user = await GetLoggedInUser();
     const fileInput = document.getElementById("file-input") as HTMLInputElement;
-    if (fileInput.files![0] != null || text.trim() != "") {
+    if (fileInput.files![0] != null || text != "") {
         IsValidIdea(text).then(res => {
             if (res) {
                 PostIdea(feedId, text).then(idea => {
