@@ -137,7 +137,7 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     // Buttons
     let btnHideProject = createButton("btnHideProject", "bi-eye");
     let btnDeleteProject = createButton("btnDeleteProject", "bi-folder-minus");
-    let btnGraphProject = createButton("btnGraphProject", "bi-graph-up");
+    let btnGraphProject = createButton("btnGraphProject", "bi-info-circle");
     let btnNotesProject = createButton("btnNotesProject", "bi-chat-quote");
     let btnEnterProject = createButton("btnEnterProject", "bi-folder");
 
