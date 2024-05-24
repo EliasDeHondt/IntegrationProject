@@ -19,8 +19,8 @@ const imageContainer = document.getElementById("imageContainer") as HTMLDivEleme
 const webappImage = document.getElementById("webapp-idea-image") as HTMLDivElement;
 const btnRemoveImage = document.getElementById("btnRemoveImage") as HTMLButtonElement;
 const textArea = document.getElementById("textIdea") as HTMLTextAreaElement;
+const feedNumber = document.getElementById("feedNumber") as HTMLDivElement;
 let feedId: number;
-
 btnPlaceIdea.onclick = async () => {
     let text = textArea.value
     let user = await GetLoggedInUser();
@@ -56,11 +56,21 @@ fileInput.onchange = async () => {
     }
 }
 
-GetRandomFeed().then(feed => {
-    generateIdeas(feed);
-    titleHeader.innerHTML = feed.title
-    feedId = feed.id
-})
+if(feedNumber.textContent){
+    feedId = parseInt(feedNumber.textContent);
+    if(feedId > 0){
+        GetFeed(feedId).then(feed => {
+            generateIdeas(feed);
+            titleHeader.innerHTML = feed.title
+        })
+    } else {
+        GetRandomFeed().then(feed => {
+            generateIdeas(feed);
+            titleHeader.innerHTML = feed.title
+            feedId = feed.id
+        })
+    }
+}
 
 GetFeedIds().then(feeds => {
     feeds.forEach(feed => {

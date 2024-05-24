@@ -50,7 +50,13 @@ public class FeedsController : Controller
     [HttpGet("ids")]
     public IActionResult GetFeedIdsForUser()
     {
-        var feeds = _userManager.GetFeedForUserWithProject(User.FindFirstValue(ClaimTypes.Email)!);
+        var email = User.FindFirstValue(ClaimTypes.Email);
+        IEnumerable<Feed> feeds = new List<Feed>();
+        if (email != null)
+        {
+            feeds = _userManager.GetFeedForUserWithProject(email);
+        }
+        
         return Ok(feeds.Select(feed => new FeedModel
         {
             Title = feed.Project.Title,

@@ -1,4 +1,6 @@
-﻿@{
+﻿@model long
+
+@{
     ViewBag.Title = "title";
     Layout = null;
 }
@@ -7,8 +9,10 @@
 <head>
     <title>Feed</title>
     <link rel="stylesheet" href="~/dist/site.css"/>
+    <script src="~/dist/webapp.entry.js" defer></script>
 </head>
 <body class="m-0 webapp-container">
+<div class="visually-hidden" id="feedNumber">@Model</div>
 <div class="row row-cols-3 h-100 g-0">
     <div id="navContainer" class="col-2 bg-elias-kleurtje-1">
     </div>
@@ -65,4 +69,3 @@
 </html>
 
 <partial name="./Modals/_ReactionModal"/>
-<script src="~/dist/webapp.entry.js" defer></script>
