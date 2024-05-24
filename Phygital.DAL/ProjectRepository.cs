@@ -53,7 +53,7 @@ public class ProjectRepository
             .Include(p => p.MainTheme)
             .Where(p => !_ctx.ProjectOrganizers.Any(po => po.Project.Id == p.Id && po.Facilitator.Email == email))
             .ToList();
-        
+
         return project.ToList();
     }
 
@@ -133,5 +133,81 @@ public class ProjectRepository
         _ctx.Flows.Add(flow);
 
         return flow;
+    }
+
+    public IEnumerable<Flow> ReadNotesForProjectById(long id)
+    {
+        return _ctx.Projects
+            .Where(p => p.Id == id)
+            .Include(p => p.MainTheme)
+            .ThenInclude(t => t.Themes)
+            .ThenInclude(s => s.Flows)
+            .ThenInclude(f => f.Steps)
+            .ThenInclude(s => s.Notes)
+            .SelectMany(p => p.MainTheme.Themes)
+            .SelectMany(t => t.Flows)
+            .AsEnumerable();
+    }
+
+    public int ReadRespondentCountFromProject(long id)
+    {
+        var totalRespondentsCount = _ctx.Projects
+            .Include(p => p.MainTheme)
+            .ThenInclude(t => t.Flows)
+            .ThenInclude(f => f.Participations)
+            .ThenInclude(p => p.Respondents)
+            .Include(p => p.MainTheme)
+            .ThenInclude(t => t.Themes)
+            .ThenInclude(t => t.Flows)
+            .ThenInclude(f => f.Participations)
+            .ThenInclude(p => p.Respondents)
+            .Where(p => p.Id == id)
+            .Select(p => new
+            {
+                MainThemeRespondents = p.MainTheme.Flows
+                    .SelectMany(f => f.Participations)
+                    .SelectMany(pt => pt.Respondents).Count(),
+                SubThemesRespondents = p.MainTheme.Themes
+                    .SelectMany(t => t.Flows)
+                    .SelectMany(f => f.Participations)
+                    .SelectMany(pt => pt.Respondents).Count()
+            })
+            .Select(x => x.MainThemeRespondents + x.SubThemesRespondents)
+            .Single();
+
+        return totalRespondentsCount;
+
+    }
+
+    public int ReadFlowCountFromProject(long id)
+    {
+        var totalFlowsCount = _ctx.Projects
+            .Include(p => p.MainTheme)
+            .ThenInclude(t => t.Flows)
+            .Include(p => p.MainTheme)
+            .ThenInclude(t => t.Themes)
+            .ThenInclude(t => t.Flows)
+            .Where(p => p.Id == id)
+            .Select(p => new
+            {
+                MainThemeFlows = p.MainTheme.Flows.Count,
+                SubThemesFlows = p.MainTheme.Themes.Count
+            })
+            .Select(x => x.MainThemeFlows + x.SubThemesFlows)
+            .Single();
+
+        return totalFlowsCount;
+    }
+
+    public int ReadSubThemeCountFromProject(long id)
+    {
+        var totalSubThemeCount = _ctx.Projects
+            .Include(p => p.MainTheme)
+            .ThenInclude(t => t.Themes)
+            .Where(p => p.Id == id)
+            .Select(p => p.MainTheme.Themes.Count)
+            .Single();
+
+        return totalSubThemeCount;
     }
 }

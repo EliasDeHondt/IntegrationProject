@@ -26,7 +26,8 @@ public class FlowRepository
     public Flow ReadFlowById(long id)
     {
         return _context.Flows
-            .AsNoTracking()
+            .AsTracking()
+            .Include(f => f.Steps)
             .Single(flow => flow.Id == id);
     }
 
@@ -347,4 +348,16 @@ public class FlowRepository
         // }
         return names;
     }
+    
+    public Flow ReadFlowWithSteps(long flowId)
+    {
+        return _context.Flows
+            .Include(f => f.Steps)
+            .ThenInclude(s => (s as InformationStep).InformationBases)
+            .Include(f => f.Steps)
+            .ThenInclude(s => (s as QuestionStep).QuestionBase)
+            .ThenInclude(qb => (qb as ChoiceQuestionBase).Choices)
+            .Single(f => f.Id == flowId);
+    }
+
 }

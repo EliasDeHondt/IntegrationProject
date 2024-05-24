@@ -3,9 +3,12 @@ using Business_Layer;
 using Domain.FacilitatorFunctionality;
 using Domain.ProjectLogics;
 using Domain.ProjectLogics.Steps;
+using Domain.ProjectLogics.Steps.Information;
+using Domain.ProjectLogics.Steps.Questions;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.VisualBasic;
 using MVC.Models;
 
 namespace MVC.Controllers.API;
@@ -44,7 +47,7 @@ public class FlowsController : Controller
         if (Enum.TryParse(state, out FlowState flowState))
             flow.State = flowState;
         _manager.ChangeFlowState(flow);
-        
+
         return NoContent();
     }
 
@@ -65,19 +68,6 @@ public class FlowsController : Controller
         });
     }
 
-    [HttpPut("/{flowId}/Update")]
-    public IActionResult UpdateFlow(long flowId, [FromBody] FlowViewModel model)
-    {
-        var flow = _manager.GetFlowById(flowId);
-        
-        _uow.BeginTransaction();
-        flow.Steps = model.Steps.ToList();
-        _manager.UpdateFlow(flow);
-        _uow.Commit();
-
-        return NoContent();
-    }
-    
     [HttpGet]
     public ActionResult GetFlows()
     {
@@ -95,7 +85,7 @@ public class FlowsController : Controller
             ThemeId = flow.Theme.Id
         }));
     }
-    
+
     [HttpGet("{type}")]
     public ActionResult GetFlowsByType(string type)
     {
@@ -113,7 +103,7 @@ public class FlowsController : Controller
             ThemeId = flow.Theme.Id
         }));
     }
-    
+
     [HttpGet("{id:long}")]
     public ActionResult GetFlowById(long id)
     {
@@ -145,5 +135,4 @@ public class FlowsController : Controller
             ThemeId = flow.Theme.Id
         }));
     }
-    
 }

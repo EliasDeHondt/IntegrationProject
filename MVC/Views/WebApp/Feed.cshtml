@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "title";
+    Layout = null;
+}
+
+<html lang="">
+<head>
+    <title>Feed</title>
+    <link rel="stylesheet" href="~/dist/site.css"/>
+</head>
+<body class="m-0 webapp-container">
+<div class="row row-cols-3 h-100 g-0">
+    <div id="navContainer" class="col-2 bg-elias-kleurtje-1">
+    </div>
+    <div class="col-8 webapp-middle-column h-100">
+        <div class="text-center text-white mt-3">
+            <h1 id="headerTitle" class="webapp-title"></h1>
+        </div>
+        <div class="card w-60 m-auto mt-4 rounded-5 bgPrimary">
+            <div class="card-body p-2">
+                <div class="row">
+                    <div class="col-2 ms-auto me-auto">
+                        <i class="bi bi-person-circle webapp-icon"></i>
+                    </div>
+                    <div class="col-10">
+                        <div class="input-wrapper row">
+                            <textarea id="textIdea" class="input-box" type="text" placeholder="Got any ideas?"></textarea>
+                            <span class="underline"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label for="file-input">
+                                    <div class="p-1 btn bg-none shadow-none border-0 webapp-btn">
+                                        <i class="bi bi-image-fill webapp-util-icon"></i>
+                                    </div>
+                                </label>
+                                <input id="file-input" type="file" accept="image/*"/>
+                                <button id="btnRemoveImage" class="p-1 btn bg-none shadow-none border-0 webapp-btn visually-hidden">
+                                    <i class="bi bi-x-circle-fill webapp-util-icon"></i>
+                                </button>
+                            </div>
+                            <div class="col text-end">
+                                <button id="btnPlaceIdea" class="me-3 p-1 btn bg-none shadow-none border-0 webapp-btn">
+                                    <i class="bi bi-send-fill webapp-util-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="webapp-idea-image" class="row webapp-idea-image visually-hidden">
+                            <div id="imageContainer" class="mt-3 mb-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="ideaContainer">
+
+        </div>
+    </div>
+    <div class="col-2 bg-elias-kleurtje-1">
+
+    </div>
+</div>
+</body>
+</html>
+
+<partial name="./Modals/_ReactionModal"/>
+<script src="~/dist/webapp.entry.js" defer></script>

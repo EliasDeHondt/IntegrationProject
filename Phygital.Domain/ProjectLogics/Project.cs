@@ -8,6 +8,7 @@
 using System.ComponentModel.DataAnnotations;
 using Domain.FacilitatorFunctionality;
 using Domain.Platform;
+using Domain.WebApp;
 
 namespace Domain.ProjectLogics;
 
@@ -23,15 +24,9 @@ public class Project
     public MainTheme MainTheme { get; set; }
     public SharedPlatform SharedPlatform { get; set; }
     public ICollection<ProjectOrganizer> Organizers { get; set; }
-
-    public Project(MainTheme mainTheme, SharedPlatform sharedPlatform, ICollection<ProjectOrganizer> organizers, long id = 0): this(mainTheme.Subject,mainTheme, sharedPlatform, id)
-    {
-        Organizers = organizers;
-        Description = "";
-        Title = mainTheme.Subject;
-    }
-
-    public Project(string title,MainTheme mainTheme, SharedPlatform sharedPlatform, long id = 0)
+    public Feed Feed { get; set; }
+    
+    public Project(string title, MainTheme mainTheme, SharedPlatform sharedPlatform, long id = 0)
     {
         Title = title;
         MainTheme = mainTheme;
@@ -39,6 +34,18 @@ public class Project
         SharedPlatform = sharedPlatform;
         Organizers = new List<ProjectOrganizer>();
         Description = "";
+        Feed = new Feed(this);
+    }
+    
+    public Project(string title, MainTheme mainTheme, SharedPlatform sharedPlatform, string description, long id = 0)
+    {
+        Title = title;
+        MainTheme = mainTheme;
+        Id = id;
+        SharedPlatform = sharedPlatform;
+        Organizers = new List<ProjectOrganizer>();
+        Description = description;
+        Feed = new Feed(this);
     }
     
     public Project()
@@ -49,17 +56,6 @@ public class Project
         Organizers = new List<ProjectOrganizer>();
         Description = "";
         Title = "";
-    }
-
-    public Project(string title, string description, SharedPlatform sharedPlatform) 
-    {
-        Id = default;
-        MainTheme = new MainTheme();
-        SharedPlatform = new SharedPlatform();
-        Organizers = new List<ProjectOrganizer>();
-        
-        Title = title;
-        Description = description;
-        SharedPlatform = sharedPlatform;
+        Feed = new Feed(this);
     }
 }

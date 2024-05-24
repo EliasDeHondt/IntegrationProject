@@ -24,6 +24,8 @@ module.exports = {
         flowEditor: './src/js/CreateFlow/FlowEditor.ts',
         navigation: './src/js/Layout/Navigation.ts',
         systemDashboard: "./src/js/SystemDashboard/Dashboard.ts",
+        webapp: "./src/js/Webapp/Dashboard.ts",
+        notes: "./src/js/Project/Notes.ts",
         statistics: "./src/js/Statistics/Statistics.ts"
     },
     output: {

@@ -18,12 +18,14 @@ public class StatisticsController : Controller
 {
     private readonly FlowManager _manager;
     private readonly QuestionManager _Qmanager;
+    private readonly ProjectManager _projectManager;
     private readonly UnitOfWork _uow;
 
-    public StatisticsController(FlowManager manager,QuestionManager qmanager, UnitOfWork uow)
+    public StatisticsController(FlowManager manager,QuestionManager qmanager, ProjectManager projectManager, UnitOfWork uow)
     {
         _manager = manager;
         _Qmanager = qmanager;
+        _projectManager = projectManager;
         _uow = uow;
     }
 
@@ -51,13 +53,18 @@ public class StatisticsController : Controller
     
     [HttpGet("GetQuestionsFromFlow/{flowname}")]
     public IActionResult GetQuestionsFromFlow(string flowname)
+    
+    [HttpGet("GetRespondentCountFromProject/{projectId:long}")]
+    public IActionResult GetRespondentCountFromProject(long projectId)
     {
         var flowCountQuestions = _manager.GetQuestionCountsForFlow(flowname);
+        var count = _projectManager.GetRespondentCountFromProject(projectId);
         
 
         return Ok(flowCountQuestions);
+        return Ok(count);
     }
-    
+
     [HttpGet("GetQuestionNames/{flowname}")]
     public IActionResult GetQuestionNames(string flowname)
     {
@@ -65,20 +72,28 @@ public class StatisticsController : Controller
         // return Ok(flowCountQuestions);
         try
         {
-            var questions =  _manager.GetQuestionNames(flowname);
+            var questions = _manager.GetQuestionNames(flowname);
 
             var result = questions.Select(q => new QuestionViewModel
             {
                 Id = q.Id,
                 Question = q.Question
             }).ToList();
-            
+
             return Ok(result);
         }
         catch (Exception ex)
         {
             return StatusCode(500);
         }
+    }
+
+    [HttpGet("GetFlowCountFromProject/{projectId:long}")]
+    public IActionResult GetFlowCountFromProject(long projectId)
+    {
+        var count = _projectManager.GetFlowCountFromProject(projectId);
+        
+        return Ok(count);
     }
     [HttpGet("GetChoicesNames/{question}")]
     public IActionResult GetChoicesNames(long question)
@@ -95,6 +110,14 @@ public class StatisticsController : Controller
         
     
         return Ok(answerCountQuestions);
+    }
+    
+    [HttpGet("GetSubThemeCountFromProject/{projectId:long}")]
+    public IActionResult GetSubThemeCountFromProject(long projectId)
+    {
+        var count = _projectManager.GetSubThemeCountFromProject(projectId);
+        
+        return Ok(count);
     }
     
     [HttpGet("GetRespondentsFromFlow/{flowname}")]

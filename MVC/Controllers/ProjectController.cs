@@ -20,4 +20,11 @@ public class ProjectController: Controller
         var project = isMainThemeId ? _manager.GetProjectThroughMainTheme(id) : _manager.GetProject(id);
         return View(project);
     }
+    
+    [Authorize(Roles = UserRoles.ProjectPermission)]
+    public IActionResult Notes(long id)
+    {
+        var project = _manager.GetProject(id);
+        return View(project);
+    }
 }

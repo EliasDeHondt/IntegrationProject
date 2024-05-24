@@ -11,7 +11,19 @@ namespace Domain.WebApp;
 
 public class Like
 {
-    public long LikeId { get; set; }
     public Idea Idea { get; set; }
-    public User User { get; set; }
+    public WebAppUser WebAppUser { get; set; }
+
+    public Like(Idea idea, WebAppUser webAppUser)
+    {
+        Idea = idea;
+        WebAppUser = webAppUser;
+    }
+    
+    public Like()
+    {
+        Idea = new Idea();
+        WebAppUser = new WebAppUser();
+    }
+    
 }

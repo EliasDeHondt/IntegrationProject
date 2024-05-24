@@ -3,7 +3,7 @@ import {GenerateCards, GetFlowById} from "./FlowAPI";
 import {Flow} from "../Flow/FlowObjects"
 import {getFlowType} from "../Flow/ChooseFlow";
 
-const connection = new signalR.HubConnectionBuilder()
+export const connection = new signalR.HubConnectionBuilder()
     .withUrl("/hub")
     .build();
 
