@@ -141,4 +141,12 @@ public class ProjectsController : Controller
             ThemeId = flow.Theme.Id
         }));
     }
+    
+    // [HttpPost("GetNotesForProject/{projectId:long}")]
+    // public IActionResult ToggleProjectClosed()
+    // {
+    //
+    //     yourClassInstance.ProjectClosed = !yourClassInstance.ProjectClosed;
+    //     return Ok(new { success = true, projectClosed = yourClassInstance.ProjectClosed });
+    // }
 }
