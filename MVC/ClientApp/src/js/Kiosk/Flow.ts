@@ -36,6 +36,6 @@ connection.on("ReceiveFlowUpdate", async (id, state) => {
     }
 })
 
-connection.on("FlowActivated", (flowType, id) => {
-    window.location.href = `/Flow/Step/${flowType}/${id}`
+connection.on("FlowActivated", (id) => {
+    window.location.href = `/Flow/Step/${id}`
 })
