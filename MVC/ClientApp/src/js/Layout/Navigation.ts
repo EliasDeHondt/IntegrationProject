@@ -38,7 +38,8 @@ export function setupNavigation() {
             navigationBar.style.width = '80px';
 
             arrowbutton.style.marginLeft = '0';
-            arrowbutton.style.marginBottom = '0';
+
+            arrowbutton.style.marginTop = '2520%';
         } else {
             languageButton.style.display = 'block';
             accountname.style.display = 'block';
@@ -52,8 +53,9 @@ export function setupNavigation() {
 
             navigationBar.style.width = '200px';
 
-            arrowbutton.style.marginLeft = '270%';
+            arrowbutton.style.marginLeft = '330%';
             arrowbutton.style.marginBottom = '10%';
+            arrowbutton.style.marginTop = '0';
         }
     });
 }

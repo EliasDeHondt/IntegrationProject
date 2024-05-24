@@ -9,7 +9,6 @@
     <!--Meta + Title-->
     <!--CSS-->
     <link rel="stylesheet" href="~/dist/site.css"/>
-    <link rel="stylesheet" href="~/temp.css"/>
     <!--CSS-->
 </head>
 <body>
@@ -23,7 +22,7 @@
         
         <!--Name of the user-->
         <li class="navbar-nameuser" id="tohideAN" >
-            @if (User.Identity.Name != null) { <a>Hi, @User.Identity.Name !</a> } else { <a>Hi, User!</a> }
+            <a>Hi, @(User.Identity!.Name ?? "User")!</a>
         </li>
         <!--Name of the user-->
         
@@ -75,13 +74,19 @@
         <!--Buttons to navigate-->
 
         <div class="d-flex">
-            <div class="nav-nav-item" id="language">
-                <button class="navbar-menu-item-language-button">NED</button>
+            <div id="language" class="navbar-language-dropdown">
+                <button class="navbar-menu-item-language-button">NL</button>
+                <div class="navbar-language-dropdown-content">
+                    <a href="#">NL</a>
+                    <a href="#">EN</a>
+                    <a href="#">FR</a>
+                    <a href="#">DE</a>
+                </div>
             </div>
 
-            <div class="nav-nav-item" id="collapseButton">
+            <div id="collapseButton">
                 <button class="navbar-menu-item-arrow-button" id="arrow-button">
-                    <i id="nav-icon" class="bi bi-caret-left-fill" ></i>
+                    <i id="nav-icon" class="bi bi-caret-left-fill"></i>
                 </button>
             </div>
         </div>
