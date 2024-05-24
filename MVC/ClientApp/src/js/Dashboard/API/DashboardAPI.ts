@@ -3,7 +3,8 @@ import * as editModal from "../EditUserModal";
 import {Project} from "../../Types/ProjectObjects";
 import * as deleteModal from "../DeleteUserModal";
 import * as statisticsModal from "../ProjectStatisticsModal";
-
+import {Toast} from "bootstrap";
+const projectClosedToast = new Toast(document.getElementById("projectClosedToast")!);
 
 // Users
 export async function getUsersForPlatform(platformId: string): Promise<User[]>{
@@ -135,11 +136,11 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     cardDiv.style.position = "relative";
 
     // Buttons
-    let btnHideProject = createButton("btnHideProject", "bi-eye");
-    let btnDeleteProject = createButton("btnDeleteProject", "bi-folder-minus");
-    let btnGraphProject = createButton("btnGraphProject", "bi-graph-up");
-    let btnNotesProject = createButton("btnNotesProject", "bi-chat-quote");
-    let btnEnterProject = createButton("btnEnterProject", "bi-folder");
+    let btnHideProject = createButton("btnHideProject", "bi-eye") as HTMLButtonElement;
+    let btnDeleteProject = createButton("btnDeleteProject", "bi-folder-minus") as HTMLButtonElement;
+    let btnGraphProject = createButton("btnGraphProject", "bi-graph-up") as HTMLButtonElement;
+    let btnNotesProject = createButton("btnNotesProject", "bi-chat-quote") as HTMLButtonElement;
+    let btnEnterProject = createButton("btnEnterProject", "bi-folder") as HTMLButtonElement;
 
     btnHideProject.className = "border-0 p-0 position-absolute top-0 end-1 ms-2 mb-2\" style=\"background: none;";
     btnDeleteProject.className = "border-0 p-0 position-absolute top-0 end-0 me-2 mb-2\" style=\"background: none;";
@@ -176,14 +177,18 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     cardDiv.appendChild(btnNotesProject);
     cardDiv.appendChild(cardBodyDiv);
 
-    colDiv.appendChild(cardDiv);
-    
-    //Dynamic clicks
     btnHideProject.addEventListener("click", function() {
         // @ts-ignore
         btnHideProject.firstChild.classList.toggle("bi-eye-slash");
         // @ts-ignore
         btnHideProject.firstChild.classList.toggle("bi-eye");
+        // @ts-ignore
+        
+        if(btnHideProject.firstChild.classList.contains("bi-eye-slash")){
+            closeProject(cardBodyDiv);
+        }else{
+            openProject(cardBodyDiv);
+        }
     });
     btnEnterProject.addEventListener("click", function() {
         window.location.href = "/Project/ProjectPage/" + projectId;
@@ -194,10 +199,22 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     btnGraphProject.addEventListener("click", function() {
         statisticsModal.showModal(projectId, project.name, project.description);
     });
-    
+
+    colDiv.appendChild(cardDiv);
     return colDiv;
 }
-
+function closeProject(cardBodyDiv: HTMLDivElement) {
+    cardBodyDiv.classList.remove("bgAccent")
+    cardBodyDiv.classList.add("bgAccentDark")
+    
+    projectClosedToast.show()
+    let closeProjectClosedToast = document.getElementById("closeProjectClosedToast") as HTMLButtonElement
+    closeProjectClosedToast.onclick = () => projectClosedToast.hide()
+}
+function openProject(cardBodyDiv: HTMLDivElement) {
+    cardBodyDiv.classList.remove("bgAccentDark")
+    cardBodyDiv.classList.add("bgAccent")
+}
 function createButton(id: string, iconClass: string): HTMLButtonElement {
     const button = document.createElement("button");
     button.id = id;
