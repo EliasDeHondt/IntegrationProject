@@ -42,14 +42,20 @@
 }
 
 .navbar-menu .navbar-menu-item {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   padding: 10% 10% 10% 10%; /* Top Right Bottom Left */
   border-radius: 10px;
   transition: 0.5s;
 }
 
-.navbar-menu .navbar-menu-item a {
+.navbar-menu .navbar-menu-item i {
+  color: #ffffff;
+  font-style: normal;
+  text-decoration: none;
+}
+
+.navbar-menu .navbar-menu-item i a {
   color: #ffffff;
   text-decoration: none;
 }
@@ -61,8 +67,6 @@
 
 .navbar-menu-item-logout {
   background: #e3a05e;
-  font-size: 16px;
-  font-weight: 500;
   margin: 10%;
   padding: 10% 10% 10% 10%;
   border-radius: 10px;

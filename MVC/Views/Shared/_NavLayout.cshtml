@@ -30,10 +30,10 @@
         @if (User.IsInRole(UserRoles.SystemAdmin)) // If the user is a SystemAdmin
         {
             <li class="navbar-menu-item" id="tohideD">
-                <a asp-action="Dashboard" asp-controller="SystemPlatform" aria-current="page">Dashboard</a>
+                <i class="bi bi-table"><a asp-action="Dashboard" asp-controller="SystemPlatform" aria-current="page"> Dashboard</a></i>
             </li>
             <li class="navbar-menu-item" id="tohideS">
-                <a asp-controller="Statistics" asp-action="Statistics" aria-current="page">Statistics</a>
+                <i class="bi bi-pie-chart-fill"><a asp-controller="Statistics" asp-action="Statistics" aria-current="page"> Statistics</a></i>
             </li>
             @if (ViewContext.HttpContext.Request.Path.StartsWithSegments("/Statistics/Statistics"))
             {
@@ -45,25 +45,25 @@
         else if (User.IsInRole((UserRoles.PlatformAdmin))) // If the user is a PlatformAdmin
         {
             <li class="navbar-menu-item" id="tohideD">
-                <a asp-action="Dashboard" asp-controller="SharedPlatform" aria-current="page">Dashboard</a>
+                <i class="bi bi-table"><a asp-action="Dashboard" asp-controller="SharedPlatform" aria-current="page"> Dashboard</a></i>
             </li>
             <li class="navbar-menu-item" id="tohideS">
-                <a asp-controller="Statistics" asp-action="Statistics" aria-current="page">Statistics</a>
+                <i class="bi bi-pie-chart-fill"><a asp-controller="Statistics" asp-action="Statistics" aria-current="page"> Statistics</a></i>
             </li>
         }
         else if (User.IsInRole(UserRoles.Facilitator)) // If the user is a Facilitator
         {
             <li class="navbar-menu-item" id="tohideD">
-                <a asp-action="Dashboard" asp-controller="Facilitator" aria-current="page">Dashboard</a>
+                <i class="bi bi-table"><a asp-action="Dashboard" asp-controller="Facilitator" aria-current="page"> Dashboard</a></i>
             </li>
             <li class="navbar-menu-item" id="tohideS">
-                <a asp-action="Facilitator" asp-controller="Flow" aria-current="page">Connect to kiosk</a>
+                <i class="bi bi-tv-fill"><a asp-action="Facilitator" asp-controller="Flow" aria-current="page"> Connect to kiosk</a></i>
             </li>
         }
         else
         {
             <li class="navbar-menu-item" id="tohideD">
-                <a asp-action="Dashboard" asp-controller="SharedPlatform" aria-current="page">Dashboard</a>
+                <i class="bi bi-table"><a asp-action="Dashboard" asp-controller="SharedPlatform" aria-current="page">Dashboard</a></i>
             </li>
         }
         <li class="navbar-menu-item-logout" id="tohideLO">
