@@ -37,24 +37,26 @@ let feedId: number;
 btnPlaceIdea.onclick = async () => {
     let text = textArea.value
     let user = await GetLoggedInUser();
-    IsValidIdea(text).then(res => {
-        if (res) {
-            PostIdea(feedId, text).then(idea => {
-                ideaContainer.prepend(generateIdeaCard(idea, user.email));
-                addReactionFunctionality();
-                addLikeFunctionality();
-                textArea.value = "";
-                fileInput.value = "";
-                imageContainer.innerHTML = "";
-                btnRemoveImage.classList.add("visually-hidden");
-                webappImage.classList.add("visually-hidden");
-            })
-        } else {
-            modalInvalidIdea.show();
-            delay(3000).then(() => modalInvalidIdea.hide());
-        }
-    })
-
+    const fileInput = document.getElementById("file-input") as HTMLInputElement;
+    if (fileInput.files![0] != null || text.trim() != "") {
+        IsValidIdea(text).then(res => {
+            if (res) {
+                PostIdea(feedId, text).then(idea => {
+                    ideaContainer.prepend(generateIdeaCard(idea, user.email));
+                    addReactionFunctionality();
+                    addLikeFunctionality();
+                    textArea.value = "";
+                    fileInput.value = "";
+                    imageContainer.innerHTML = "";
+                    btnRemoveImage.classList.add("visually-hidden");
+                    webappImage.classList.add("visually-hidden");
+                })
+            } else {
+                modalInvalidIdea.show();
+                delay(3000).then(() => modalInvalidIdea.hide());
+            }
+        })
+    }   
 }
 
 btnRemoveImage.onclick = () => {
