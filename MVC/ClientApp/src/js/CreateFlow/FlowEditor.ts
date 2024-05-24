@@ -245,7 +245,9 @@ function showStepVisibility(step: Step) {
         }
     });
 }
-
+// async function updateStepList(steps: Step[]) {
+//    
+// }
 async function updateStepList(steps: Step[]) {
     for (const step of steps) {
         await GetStepByNumber(flowId, step.stepNumber).then(s => currentStepList[s.stepNumber - 1] = s);
@@ -276,6 +278,31 @@ async function updateStepList(steps: Step[]) {
                 stepCard.classList.add('step-card-hidden')
 
             stepCard.appendChild(cardHeader);
+
+            const buttons = document.createElement('div');
+            stepCard.classList.add("step-btns","justify-content-center", "align-items-center");
+
+            const leftArrowButton = document.createElement('button');
+            const leftArrowIcon = document.createElement('i');
+            leftArrowIcon.classList.add('bi', 'bi-arrow-left');
+            leftArrowButton.classList.add('arrow-button', 'left-arrow','btn-add-element','bhover');
+            leftArrowButton.addEventListener('click', () => {
+                // Handle left arrow button click action
+            });
+            const rightArrowButton = document.createElement('button');
+            const rightArrowIcon = document.createElement('i');
+            rightArrowIcon.classList.add('bi', 'bi-arrow-right');
+            rightArrowButton.classList.add('arrow-button', 'right-arrow','btn-add-element','bhover');
+            rightArrowButton.addEventListener('click', () => {
+                // Handle right arrow button click action
+            });
+            leftArrowButton.appendChild(leftArrowIcon);
+            rightArrowButton.appendChild(rightArrowIcon);
+            buttons.appendChild(leftArrowButton);
+            buttons.appendChild(rightArrowButton);
+            
+            stepCard.appendChild(buttons)
+            
             stepsList.appendChild(stepCard);
         })
     } else {
