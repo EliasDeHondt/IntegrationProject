@@ -1,22 +1,141 @@
-@model Domain.Platform.Statistic
-
+@using Domain.Accounts
 @{
-    Layout = null;
+    Layout = "_NavLayout";
+    ViewData["Title"] = "Statistic";
 }
 
 <!DOCTYPE html>
 
 <html lang="" class="h-100 w-100 overflow-hidden">
 <head>
-    <title>title</title>
     <link rel="stylesheet" href="~/dist/site.css"/>
+    <style>
+        .chart-container {
+          display: flex;
+          padding-left: 20px;
+          justify-content: center;
+        }
+        hr{
+          width: 60%; border: 3px solid rgba(243, 124, 0, 1); border-radius: 5px;
+        }
+        h2{
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+        .csv{
+          outline: none;
+          position: absolute;
+          right: 10%;
+          background: none;
+          padding-right: 1%;
+          padding-left: 1%;
+          border-radius: 5px;
+          border: 1px solid black;
+        }
+        .title-container{
+          padding-top: 40px;
+          position: relative;
+        }
+    </style>
 </head>
 <body class="row h-100 w-100">
-<div class="text-center">
+<div class="text-center col-lg-10">
+    <div class="row container-content-body">
+        
+        <div class="title-container d-flex justify-content-center align-items-center">
+            <h2>FLOWS STATISTICS</h2>
+            @if (User.IsInRole(UserRoles.SystemAdmin))
+            {
+                <div class="csv nav-item bgAccent bhover">
+                    <button id="exportCSVFlows" class="btn text-dark text-decoration-none">Download CSV</button>
+                </div>
+            }
+        </div>
+        
+        <div class="chart-container align-items-center">
+            <div class="col-md-6">
+                <canvas id="barChart" class="w-100"></canvas>
+            </div>
+            <div class="col-md-6">
+                <canvas id="lineChart" class="w-100"></canvas>
+            </div>
+        </div>
+        
+        
+        <div class="d-flex justify-content-center align-items-center" style="padding: 20px 0;">
+            <hr>
+        </div>
+        
+        <div class="title-container d-flex justify-content-center align-items-center">
+            <h2>FLOW STATISTICS</h2>
+            @if (User.IsInRole(UserRoles.SystemAdmin))
+            {
+                <div class="csv nav-item bgAccent bhover">
+                    <button id="exportCSVFlow" class="btn text-dark text-decoration-none">Download CSV</button>
+                </div>
+            }
+        </div>
+        
+        <div class="col-md-6">
+            <div class="kiosk-container-top-left">
+                <label class="d-flex flex-column">
+                    <p style="color: aliceblue">Select a Flow to get its specific statistics.</p>
+                    <select id="selectFlow">
+                    </select>
+                </label>
+            </div>
+        </div>
+        <div class="chart-container align-items-center">
+            <div class="col-md-6">
+                <canvas id="radarChart" class="w-100"></canvas>
+            </div>
+            <div class="col-md-6">
+                <div class="right-graph">
+                    <canvas class="w-100" id="pieChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-center align-items-center" style="padding: 20px 0;">
+            <hr>
+        </div>
+        
+        <div class="title-container d-flex justify-content-center align-items-center">
+            <h2>QUESTION STATISTICS</h2>
+            @if (User.IsInRole(UserRoles.SystemAdmin))
+            {
+                <div class="csv nav-item bgAccent bhover"> 
+                    <button id="exportCSVQuestion" class="btn text-dark text-decoration-none">Download CSV</button>
+                </div>
+            }
+        </div>
+        
+        
+        <div class="container-selectFlow">
+            <div class="kiosk-container-top-left">
+                <label class="d-flex flex-column">
+                    <p style="color: aliceblue">Select a Question to get its specific statistics.<br>(dependent on your chosen flow above)</p>
+                    <select id="selectQuestion">
+                    </select>
+                </label>
+            </div>
+        </div>
+        <div class="chart-container d-flex flex-row align-items-center justify-content-center">
+            <div class="col-md-8">
+                <canvas id="doughnutChart"></canvas>
+            </div>
+        </div>
+
+
+    </div>
 </div>
-STATISTICS
 </body>
 </html>
 
-<script src="~/dist/site.entry.js" defer></script>
-<script src="~/dist/dashboard.entry.js" defer></script>
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/dist/site.entry.js" defer></script>
+    <script src="~/dist/statistics.entry.js" defer></script>
+}

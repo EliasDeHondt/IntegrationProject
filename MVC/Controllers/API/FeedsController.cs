@@ -71,8 +71,8 @@ public class FeedsController : Controller
             Id = idea.Id,
             author = new AuthorModel
             {
-                Email = idea.Author.Email!,
-                Name = idea.Author.UserName!
+                Email = idea.Author?.Email,
+                Name = idea.Author?.UserName!
             },
             likes = idea.Likes.Select(like => new LikeModel
             {

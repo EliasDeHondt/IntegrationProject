@@ -378,3 +378,17 @@ $g: 0 120deg, #0000 0;
   }
 
 }
+
+.webapp-invalid-body{
+  background-color: map-get($themes, light, primary);
+  height: 4.5em;
+}
+
+.webapp-invalid-header{
+  @extend .webapp-reaction-header;
+  height: 2em;
+}
+
+.webapp-invalid-content{
+  height: 7em;
+}

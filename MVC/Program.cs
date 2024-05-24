@@ -5,6 +5,7 @@
  *                                     *
  ***************************************/
 using Data_Access_Layer.DbContext;
+using Domain.Platform;
 using MVC;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,3 +19,6 @@ var app = builder.Build();
 startup.Configure(app, app.Environment);
 
 app.Run();
+
+// Statistic a = new Statistic();
+// a.testPacket();

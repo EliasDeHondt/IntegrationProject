@@ -8,6 +8,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Domain.ProjectLogics.Steps;
+using FileHelpers;
 
 namespace Domain.ProjectLogics;
 
@@ -19,9 +20,7 @@ public class Flow
     public ICollection<StepBase> Steps { get; set; }
     public ICollection<Participation> Participations { get; set; }
     public ThemeBase Theme { get; set; }
-
     private bool FlowStopped { get; set; }
-
     public FlowState State { get; set; }
 
     public Flow(FlowType flowType, ICollection<StepBase> steps, ICollection<Participation> participations, ThemeBase theme, long id = 0)

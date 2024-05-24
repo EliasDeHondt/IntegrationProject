@@ -43,7 +43,6 @@ let id: string = document.getElementById("platformId")!.textContent!
 document.addEventListener("DOMContentLoaded", async function() {
     let userPermission = await isUserInRole(UserRoles.UserPermission);
     let projectPermission = await isUserInRole(UserRoles.ProjectPermission);
-    let statisticPermission = await isUserInRole(UserRoles.StatisticPermission);
     let systemAdmin = await isUserInRole(UserRoles.SystemAdmin);
 
     dashboard.generateUserCards(id, userRoulette, userPermission || systemAdmin);
