@@ -6,7 +6,6 @@ import {delay} from "../Util";
 import {Timer} from "../Util/Timer";
 import {Modal} from "bootstrap";
 import * as kiosk from "../Kiosk/Kiosk"
-import {HubConnectionState} from "@microsoft/signalr";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
@@ -128,7 +127,7 @@ async function GetNextStep(stepNumber: number, flowId: number): Promise<Step> {
             if (!data.visible) {
                 await GetNextStep(++currentStepNumber, flowId)
             } else {
-                if (flowtype.toUpperCase() == "PHYSICAL") {
+                if (flowtype && flowtype.toUpperCase() == "PHYSICAL") {
                     await showPhysicalStep(data);
                 } else {
                     await ShowStep(data);
@@ -417,7 +416,7 @@ async function saveAnswerToDatabase(answers: string[], openAnswer: string, flowI
 }
 
 async function hideDigitalElements() {
-    if (flowtype.toUpperCase() == "PHYSICAL") {
+    if (flowtype && flowtype.toUpperCase() == "PHYSICAL") {
         const digitalElements = document.getElementsByClassName("digital-element");
         for (let i = 0; i < digitalElements.length; i++) {
             digitalElements[i].classList.add("visually-hidden");
@@ -455,7 +454,7 @@ async function hideDigitalElements() {
 
 async function nextStep(save: boolean = true) {
     if (save) {
-        if (flowtype.toUpperCase() == "PHYSICAL") {
+        if (flowtype && flowtype.toUpperCase() == "PHYSICAL") {
             let answers: number[] = getResult();
             if (choices.length > 0) {
                 answers.forEach(answer => {
@@ -476,7 +475,7 @@ async function nextStep(save: boolean = true) {
             }
         }
     }
-    if ((flowtype.toUpperCase() == "CIRCULAR" || flowtype.toUpperCase() == "PHYSICAL") && currentStepNumber >= stepTotal) {
+    if (flowtype && (flowtype.toUpperCase() == "CIRCULAR" || flowtype.toUpperCase() == "PHYSICAL") && currentStepNumber >= stepTotal) {
         currentStepNumber = 0;
         await GetNextStep(++currentStepNumber, flowId);
     } else {
@@ -506,6 +505,11 @@ function startTimers() {
 
 
 btnRestartFlow.onclick = async () => {
+    await restartFlow()
+};
+
+export async function restartFlow() {
     currentStepNumber = 0;
     await GetNextStep(++currentStepNumber, flowId);
-};
+    time = 30;
+}

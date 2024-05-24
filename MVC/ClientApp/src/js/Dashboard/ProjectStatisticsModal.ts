@@ -1,6 +1,5 @@
 ﻿import {Modal} from "bootstrap";
 import * as API from "./API/ProjectStatisticsModalAPI"
-import {div} from "@tensorflow/tfjs";
 
 const statisticsModal = new Modal(document.getElementById('projectStatisticsModal')!, {
     keyboard: false,
@@ -10,10 +9,11 @@ const statisticsModal = new Modal(document.getElementById('projectStatisticsModa
 
 const divStats = document.getElementById("divStats") as HTMLDivElement;
 const btnCloseStatistics = document.getElementById("btnCloseStatistics") as HTMLButtonElement;
-const projectTitle = document.getElementById("projectTitle") as HTMLSpanElement;
+const btnPlatformStatistics = document.getElementById("btnPlatformStatistics") as HTMLButtonElement;
+const modalTitle = document.getElementById("projectTitle") as HTMLSpanElement;
 
 export function showModal(id: number, title: string, description: string) {
-    projectTitle.innerText = title;
+    modalTitle.innerText = title;
     generateData(id, description)
     statisticsModal.show();
 }
@@ -45,4 +45,27 @@ function generateData(id: number, description: string) {
 
 btnCloseStatistics.onclick = () => {
     statisticsModal.hide();
+}
+
+btnPlatformStatistics.onclick = () => {
+    divStats.innerHTML = ""
+    
+    API.getPlatformOrganisation(getPlatformId()).then((name) => modalTitle.innerText = `${name}`);
+    
+    const pTotalRespondents = document.createElement('p');
+    API.getPlatformRespondentsCount(getPlatformId()).then((count) => pTotalRespondents.innerText = `Total amount of respondents: ${count.toString()}`)
+    
+    divStats.appendChild(pTotalRespondents);
+    
+    statisticsModal.show();
+}
+
+function getPlatformId(): number {
+    let href = window.location.href;
+    let regex = RegExp(/\/SharedPlatform\/Dashboard\/(\d+)/).exec(href);
+
+    if (regex)
+        return parseInt(regex[1], 10);
+    
+    return 0;
 }

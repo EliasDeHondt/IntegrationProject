@@ -654,7 +654,7 @@ const ViewStepModal = new Modal(document.getElementById('ViewFlowModal')!, {
 
 btnViewFlow.onclick = () => {
     ViewStepModal.show();
-    btnConfirmViewFlow.setAttribute('href', "/Flow/Step/" + flowId);
+    window.location.href = `/Flow/Step/${flowId}`
 }
 
 btnCancelViewFlowModal.onclick = () => {
