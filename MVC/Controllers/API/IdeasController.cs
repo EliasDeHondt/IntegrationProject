@@ -76,8 +76,8 @@ public class IdeasController : Controller
             Text = idea.Text,
             author = new AuthorModel
             {
-                Email = idea.Author.Email!,
-                Name = idea.Author.UserName!
+                Email = idea.Author?.Email,
+                Name = idea.Author?.UserName
             },
             likes = idea.Likes.Select(like => new LikeModel
             {
