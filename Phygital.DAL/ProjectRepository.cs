@@ -166,16 +166,6 @@ public class ProjectRepository
         stylingTemplate.CustomAccentColor = template.CustomAccentColor;
 
         _ctx.StylingTemplates.Update(stylingTemplate);
-
-        foreach (StylingTemplate stylingTemp in _ctx.StylingTemplates)
-        {
-            Console.WriteLine(stylingTemp.ThemeName);
-            Console.WriteLine(stylingTemp.ProjectId);
-            Console.WriteLine(stylingTemp.CustomPrimaryColor);
-            Console.WriteLine(stylingTemp.CustomSecondaryColor);
-            Console.WriteLine(stylingTemp.CustomBackgroundColor);
-            Console.WriteLine(stylingTemp.CustomAccentColor);
-        }
         
         return true;
     }
@@ -188,15 +178,6 @@ public class ProjectRepository
             Console.WriteLine("Styling Template not found for projectId: " + projectId);
             return null;
         }
-        
-        Console.WriteLine("Found the template: \n");
-
-        Console.WriteLine(template.ThemeName);
-        Console.WriteLine(template.ProjectId);
-        Console.WriteLine(template.CustomPrimaryColor);
-        Console.WriteLine(template.CustomSecondaryColor);
-        Console.WriteLine(template.CustomBackgroundColor);
-        Console.WriteLine(template.CustomAccentColor);
         
         return template;
     }
