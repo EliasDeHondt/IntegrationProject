@@ -129,13 +129,28 @@ export async function loadNotesProject(id: number): Promise<Flow[]> {
 
 
 export async function UpdateProjectClosed(projectId: number,closeProject: boolean) {
-    await fetch("/api/Projects/UpdateProjectClosed/" + projectId + "/" + closeProject, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
+    // await fetch("/api/Projects/UpdateProjectClosed/" + projectId + "/" + closeProject, {
+    //     method: "PUT",
+    //     headers: {
+    //         "Content-Type": "application/json"
+    //     }
+    // }).then(response => response.json())
+    //     .catch(error => console.error("Error:", error))
+    try {
+        const response = await fetch("/api/Projects/UpdateProjectClosed/" + projectId + "/" + closeProject, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.ok) {
+            console.log("Project closed successfully.");
+        } else {
+            console.error("Failed to close project.");
         }
-    }).then(response => response.json())
-        .catch(error => console.error("Error:", error))
+    } catch (error) {
+        console.error("Error:", error);
+    }
 }
 
 export async function GetProjectClosed(projectId: number) : Promise<boolean> {
