@@ -34,6 +34,7 @@ public class Startup
         //REMOVE AFTER TESTING
         Environment.SetEnvironmentVariable("ASPNETCORE_EMAIL", "codeforge.noreply@gmail.com");
         Environment.SetEnvironmentVariable("ASPNETCORE_EMAIL_PASSWORD", "evqb lztz oqvu kgwc");
+        Environment.SetEnvironmentVariable("GROQ_API_KEY", "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");
 
 
         var googleCloudOptions = new CloudStorageOptions
@@ -59,6 +60,8 @@ public class Startup
         {
             options.AddPolicy("admin",
                 policy => policy.RequireRole(UserRoles.PlatformAdmin, UserRoles.SystemAdmin));
+            options.AddPolicy("systemAdmin",
+                policy => policy.RequireRole(UserRoles.SystemAdmin));
         });
 
         services.ConfigureApplicationCookie(cfg =>
@@ -265,7 +268,6 @@ public class Startup
 
         await roleManager.CreateAsync(new IdentityRole(UserRoles.UserPermission));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.ProjectPermission));
-        await roleManager.CreateAsync(new IdentityRole(UserRoles.StatisticPermission));
 
         await userManager.CreateAsync(sharedPlatformAdminHenk, "Henk!123");
         await userManager.CreateAsync(sharedPlatformAdminCodeForge, "Codeforge!123");
@@ -279,12 +281,10 @@ public class Startup
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.PlatformAdmin);
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.UserPermission);
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.ProjectPermission);
-        await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.StatisticPermission);
         
         await userManager.AddToRoleAsync(sharedPlatformAdminThomas, UserRoles.PlatformAdmin);
         await userManager.AddToRoleAsync(sharedPlatformAdminThomas, UserRoles.UserPermission);
         await userManager.AddToRoleAsync(sharedPlatformAdminThomas, UserRoles.ProjectPermission);
-        await userManager.AddToRoleAsync(sharedPlatformAdminThomas, UserRoles.StatisticPermission);
 
         await userManager.AddToRoleAsync(sharedPlatformAdminCodeForge, UserRoles.PlatformAdmin);
         

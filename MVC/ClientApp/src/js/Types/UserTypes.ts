@@ -15,8 +15,7 @@ export enum UserRoles {
     PlatformAdmin = "PlatformAdmin",
     Facilitator = "Facilitator",
     UserPermission = "UserPermission",
-    ProjectPermission = "ProjectPermission",
-    StatisticPermission = "StatisticPermission",
+    ProjectPermission = "ProjectPermission"
 }
 
 export interface FacilitatorUpdate extends User {

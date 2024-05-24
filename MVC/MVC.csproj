@@ -88,8 +88,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Chart.js" Version="3.7.1" />
         <PackageReference Include="Google.Apis.Gmail.v1" Version="1.68.0.3399" />
         <PackageReference Include="Google.Cloud.Storage.V1" Version="4.9.0" />
+<!--        <PackageReference Include="GrapeCity.DataVisualization.Chart" Version="0.4.136" />-->
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="7.0.16" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.17" />
         <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />

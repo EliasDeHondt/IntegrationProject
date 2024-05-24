@@ -25,8 +25,8 @@ module.exports = {
         navigation: './src/js/Layout/Navigation.ts',
         systemDashboard: "./src/js/SystemDashboard/Dashboard.ts",
         webapp: "./src/js/Webapp/Dashboard.ts",
-        systemDashboard: "./src/js/SystemDashboard/Dashboard.ts",
-        notes: "./src/js/Project/Notes.ts"
+        notes: "./src/js/Project/Notes.ts",
+        statistics: "./src/js/Statistics/Statistics.ts"
     },
     output: {
         filename: '[name].entry.js',

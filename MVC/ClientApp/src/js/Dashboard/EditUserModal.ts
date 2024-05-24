@@ -125,16 +125,12 @@ butCloseEditUserModal.onclick = () => {
 function getSelectedPermissions(): UserRoles[]{
     let userPermissions = document.getElementById("checkEditUserPermission") as HTMLInputElement;
     let projectPermissions = document.getElementById("checkEditProjectPermission") as HTMLInputElement;
-    let statisticPermissions = document.getElementById("checkEditStatisticPermission") as HTMLInputElement;
     let permissions: UserRoles[] = [];
     if(userPermissions.checked){
         permissions.push(UserRoles.UserPermission)
     }
     if(projectPermissions.checked){
         permissions.push(UserRoles.ProjectPermission)
-    }
-    if(statisticPermissions.checked){
-        permissions.push(UserRoles.StatisticPermission)
     }
     permissions.push(UserRoles.PlatformAdmin)
     return permissions
@@ -199,11 +195,9 @@ function fillDropdown(projects: Project[], dropdown: HTMLSelectElement){
 function loadPermissions(permissions: string[]){
     let userPermissions = document.getElementById("checkEditUserPermission") as HTMLInputElement;
     let projectPermissions = document.getElementById("checkEditProjectPermission") as HTMLInputElement;
-    let statisticPermissions = document.getElementById("checkEditStatisticPermission") as HTMLInputElement;
     
     userPermissions.checked = permissions.includes(UserRoles.UserPermission);
     projectPermissions.checked = permissions.includes(UserRoles.ProjectPermission);
-    statisticPermissions.checked = permissions.includes(UserRoles.StatisticPermission);
     
 }
 

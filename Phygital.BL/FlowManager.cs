@@ -130,6 +130,48 @@ public class FlowManager
         return _repository.ReadFlowsByProject(id);
     }
     
+    
+    public string[] GetCountStepsPerFlow()
+    {
+        return _repository.GetCountStepsPerFlow();
+    }
+    public string[] GetCountParticipationsPerFlow()
+    {
+        return _repository.GetCountParticipationsPerFlow();
+    }
+    public string[] GetNamesPerFlow()
+    {
+        return _repository.GetNamesPerFlow();
+    }
+    public string[] GetQuestionCountsForFlow(string flowName)
+    {
+        return _repository.GetQuestionCountsForFlow(flowName);
+    }
+    public string[] GetRespondentCountsFromFlow(string flowName)
+    {
+        return _repository.GetRespondentCountsFromFlow(flowName);
+    }
+    
+    public IEnumerable<QuestionStep> GetQuestionsFromFlow(string flowName)
+    {
+        var flows = _repository.ReadAllFlowsWithTheme();
+        var flow = flows.Where(flow => flow.Theme.Subject == flowName).Single();
+        return _repository.ReadQuestionsFromFlow(flow.Id);
+    }
+    
+    public IEnumerable<QuestionBase> GetQuestionNames(string flowName)
+    {
+        var flows = _repository.ReadAllFlowsWithTheme();
+        var flow = flows.Where(flow => flow.Theme.Subject == flowName).Single();
+        return _repository.GetQuestions(flow.Id);
+    }
+    public string[] GetParticipationNames(string flowName)
+    {
+        var flows = _repository.ReadAllFlowsWithTheme();
+        var flow = flows.Where(flow => flow.Theme.Subject == flowName).Single();
+        return _repository.GetParticipationNames(flow.Id);
+    }
+    
     public Flow GetFlowWithSteps(long flowId)
     {
         return _repository.ReadFlowWithSteps(flowId);

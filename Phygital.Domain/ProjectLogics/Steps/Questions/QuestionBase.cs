@@ -7,9 +7,10 @@
 
 using System.ComponentModel.DataAnnotations;
 using Domain.ProjectLogics.Steps.Questions.Answers;
+using Domain.Statistics;
+using FileHelpers;
 
 namespace Domain.ProjectLogics.Steps.Questions;
-
 public abstract class QuestionBase
 {
     [Key]
@@ -20,7 +21,6 @@ public abstract class QuestionBase
     [MaxLength(600)]
     public string Question { get; set; }
     
-
     protected QuestionBase(ICollection<ChoiceAnswer> answers, string question, long id = 0)
     {
         Id = id;

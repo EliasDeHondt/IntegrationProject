@@ -55,7 +55,6 @@ public class SharedPlatformsController : Controller
         await _userManager.CreateAsync(user, sharedPlatformDto.Password);
         await _userManager.AddToRoleAsync(user, UserRoles.PlatformAdmin);
         await _userManager.AddToRoleAsync(user, UserRoles.ProjectPermission);
-        await _userManager.AddToRoleAsync(user, UserRoles.StatisticPermission);
         await _userManager.AddToRoleAsync(user, UserRoles.UserPermission);
         
         var platformDto = new SharedPlatformDto

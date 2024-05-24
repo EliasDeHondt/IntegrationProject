@@ -177,6 +177,15 @@ public class FlowRepository
 
         return flow.Steps;
     }
+    public IEnumerable<Participation> GetAllParticipations(long flowId)
+    {
+        Flow flow = _context.Flows
+            .AsNoTracking()
+            .Include(flow => flow.Participations)
+            .First(flow => flow.Id == flowId);
+
+        return flow.Participations;
+    }
 
     public IEnumerable<Flow> ReadFlowsByProject(long id)
     {
@@ -184,6 +193,160 @@ public class FlowRepository
             .Where(p => p.Id == id)
             .SelectMany(p => p.MainTheme.Themes.SelectMany(t => t.Flows))
             .ToList();
+    }
+
+
+    public string[] GetCountStepsPerFlow()
+    {
+        var flows = ReadAllFlows();
+        var stepsPerFlow = new List<int>();
+
+        foreach (var flow in flows)
+        {
+            var stepsCount = ReadAllSteps(flow.Id);
+            var v = stepsCount.Count();
+            stepsPerFlow.Add(v);
+        }
+        var a =  stepsPerFlow.Select(count => count.ToString()).ToArray();
+        return a;
+    }
+    public string[] GetCountParticipationsPerFlow()
+    {
+        var flows = ReadAllFlows();
+        var partPerFlow = new List<int>();
+
+        foreach (var flow in flows)
+        {
+            var partsCount = GetAllParticipations(flow.Id);
+            var v = partsCount.Count();
+            partPerFlow.Add(v);
+        }
+        var a =  partPerFlow.Select(count => count.ToString()).ToArray();
+        return a;
+    }
+    public string[] GetRespondentCountsFromFlow(string flowName)
+    {
+        // var flow = ReadFlowByName(flowName);
+        var flow = _context.Flows
+            .Include(f => f.Participations)
+            .ThenInclude(p => p.Respondents)
+            .First(flow => flow.Theme.Subject == flowName).Participations.ToList();
+        var respCountsPerPart = new List<int>();
+        
+        foreach (var participation in flow)
+        {
+            int newResp = 0;
+            foreach (var respondent in participation.Respondents)
+            {
+                // if (respondent.Participation == participation)
+                // {
+                    newResp++;
+                // }
+            }
+            respCountsPerPart.Add(newResp);
+        }
+        return respCountsPerPart.Select(i => i.ToString()).ToArray();
+    }
+    public string[] GetNamesPerFlow()
+    {
+        var flows = ReadAllFlows();
+        var namesPerFlow = new List<string>();
+
+        foreach (var flow in flows)
+        {
+            var name = ReadFlowByIdIncludingTheme(flow.Id);
+            namesPerFlow.Add(name.Theme.Subject);
+        }
+        var a =  namesPerFlow.Select(count => count.ToString()).ToArray();
+        return a;
+    }
+
+    public Flow ReadFlowByName(string flowName)
+    {
+        return _context.Flows
+            .AsNoTracking()
+            .First(flow => flow.Theme.Subject == flowName);
+    }
+    public string[] GetQuestionCountsForFlow(string flowName)
+    {
+        var flow = ReadFlowByName(flowName);
+        var questionNamesPerFlow = new List<int>();
+        int questionS = 0; int questionM = 0; int questionR = 0; int questionO = 0;
+
+        foreach (var q in ReadQuestionsFromFlow(flow.Id))
+        {
+            switch (q.QuestionBase)
+            {
+                case SingleChoiceQuestion:
+                    questionS++; break;
+                case MultipleChoiceQuestion:
+                    questionM++; break;
+                case OpenQuestion:
+                    questionR++; break;
+                case RangeQuestion:
+                    questionO++; break;
+            }
+        }
+        questionNamesPerFlow.Add(questionM);
+        questionNamesPerFlow.Add(questionS);
+        questionNamesPerFlow.Add(questionO);
+        questionNamesPerFlow.Add(questionR);
+        
+        return questionNamesPerFlow.Select(i => i.ToString()).ToArray();
+    }
+    
+    public IEnumerable<QuestionStep> ReadQuestionsFromFlow(long flowId)
+    {
+        var a = _context.QuestionSteps
+            .Include(qs => qs.QuestionBase).Where(qs => qs.Flow.Id == flowId)//.Select(step => step.QuestionBase)
+            .ToList();
+        return a;
+    }
+    
+    public string[] GetParticipationNames(long flowId)
+    {
+        var names = new List<string>();
+
+        int counter = 1;
+        foreach (var participation in GetAllParticipations(flowId))
+        {
+            var name = "participation " + counter;
+            names.Add(name);
+            counter++;
+        }
+        
+        return names.Select(count => count.ToString()).ToArray();
+    }
+    public string[] GetQuestionNames(long flowId)
+    {
+        var names = new List<string>();
+
+        foreach (var qs in ReadQuestionsFromFlow(flowId))
+        {
+            var name = qs.QuestionBase.Question;
+            names.Add(name);
+        }
+        var a =  names.Select(count => count.ToString()).ToArray();
+        return a;
+    }
+    public IEnumerable<QuestionBase> GetQuestions(long flowId)
+    {
+        var names = new List<QuestionBase>();
+
+        foreach (var qs in ReadQuestionsFromFlow(flowId))
+        {
+            if (qs.QuestionBase.GetType() != typeof(OpenQuestion))
+            {
+                var name = qs.QuestionBase;
+                names.Add(name);
+            }
+        }
+
+        // if (names.Capacity == 0)
+        // {
+        //     names.Add(new SingleChoiceQuestion("No questions available."));
+        // }
+        return names;
     }
     
     public Flow ReadFlowWithSteps(long flowId)
