@@ -59,6 +59,8 @@ public class Startup
         {
             options.AddPolicy("admin",
                 policy => policy.RequireRole(UserRoles.PlatformAdmin, UserRoles.SystemAdmin));
+            options.AddPolicy("systemAdmin",
+                policy => policy.RequireRole(UserRoles.SystemAdmin));
         });
 
         services.ConfigureApplicationCookie(cfg =>
@@ -265,7 +267,6 @@ public class Startup
 
         await roleManager.CreateAsync(new IdentityRole(UserRoles.UserPermission));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.ProjectPermission));
-        await roleManager.CreateAsync(new IdentityRole(UserRoles.StatisticPermission));
 
         await userManager.CreateAsync(sharedPlatformAdminHenk, "Henk!123");
         await userManager.CreateAsync(sharedPlatformAdminCodeForge, "Codeforge!123");
@@ -279,12 +280,10 @@ public class Startup
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.PlatformAdmin);
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.UserPermission);
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.ProjectPermission);
-        await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.StatisticPermission);
         
         await userManager.AddToRoleAsync(sharedPlatformAdminThomas, UserRoles.PlatformAdmin);
         await userManager.AddToRoleAsync(sharedPlatformAdminThomas, UserRoles.UserPermission);
         await userManager.AddToRoleAsync(sharedPlatformAdminThomas, UserRoles.ProjectPermission);
-        await userManager.AddToRoleAsync(sharedPlatformAdminThomas, UserRoles.StatisticPermission);
 
         await userManager.AddToRoleAsync(sharedPlatformAdminCodeForge, UserRoles.PlatformAdmin);
         

@@ -12,6 +12,7 @@
 
 @import "Login/login";
 @import "variables";
+@import "statistics";
 @import "flowcards";
 @import "flowEditor";
 @import "Flow/kiosk";
@@ -156,10 +157,6 @@ button.accept-policy {
 #navbar {
   transition: width 0.5s;
 }
-//#maincontent.collapsed { //todo werkt niet
-//  width: 200px;
-//  transition: width 2s !important; 
-//}
 #navbar.collapsed {
   width: 200px;
 }
@@ -377,5 +374,4 @@ button.accept-policy {
   border: thick map-get($themes, light, secondary) solid;
   border-radius: 20px;
 }
-
 
