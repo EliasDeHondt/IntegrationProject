@@ -1,13 +1,113 @@
+/***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************/
 
-/*NavBar*/
-#navbar {
-  padding-right: 2%;
-  padding-left: 2%;
-  margin-right: 0;
-  margin-left: 0;
-  padding-bottom: 100px;
+/* NavBar */
+.navbar-container {
+  background: #7ca8c9;
+  font-family: 'Roboto', sans-serif;
+  width: 200px;
+  margin: 0;
+  padding: 0;
   border-radius: 10px;
 }
+
+.navbar-logo {
+  margin-right: 15%;
+  margin-left: 15%;
+  padding-top: 10%;
+  padding-bottom: 10%;
+}
+
+.navbar-logo img {
+  width: 110%;
+  height: auto;
+}
+
+.navbar-nameuser {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 600;
+  padding-top: 5%;
+  padding-bottom: 10%;
+  text-align: center;
+}
+
+.navbar-menu {
+  list-style: none;
+  padding: 0;
+}
+
+.navbar-menu .navbar-menu-item {
+  font-size: 16px;
+  font-weight: 500;
+  padding: 10% 10% 10% 10%; /* Top Right Bottom Left */
+  border-radius: 10px;
+  transition: 0.5s;
+}
+
+.navbar-menu .navbar-menu-item a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.navbar-menu .navbar-menu-item:hover {
+  background: #d17d64;
+  color: #ffffff;
+}
+
+.navbar-menu-item-logout {
+  background: #e3a05e;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 10%;
+  padding: 10% 10% 10% 10%;
+  border-radius: 10px;
+  transition: 0.5s;
+}
+
+.navbar-menu-item-logout:hover {
+  background: #d17d64;
+}
+
+.navbar-menu-item-logout form {
+  display: inline;
+}
+
+.navbar-menu-item-logout form button {
+  color: #ffffff;
+  background: none;
+  border: none;
+  margin-left: 22%;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.navbar-menu-item-arrow-button {
+  background: #e3a05e;
+  font-size: 16px;
+  font-weight: 500;
+  margin-left: 270%;
+  margin-bottom: 10%;
+  border-radius: 10px;
+  transition: 0.5s;
+}
+
+.navbar-menu-item-language-button {
+  background: #e3a05e;
+  font-size: 16px;
+  font-weight: 500;
+  margin-left: 50%;
+  margin-bottom: 10%;
+  border-radius: 10px;
+  transition: 0.5s;
+}
+/* NavBar */
 
 #maincontent {
   display: flex;
@@ -16,76 +116,27 @@
   height: 100%;
 }
 
-#tohideAN {
-  background: white;
-  padding-bottom: 20px;
-  padding-top: 20px;
-  border-radius: 5px;
-}
-#tohideD, #tohideS, #tohideLO, #tohideC {
-  padding-bottom: 10px;
-  padding-top: 20px;
-}
-#tohideS {
-  padding-top: 10px;
-}
 #tohideLO {
-  padding: 10px 0;
   margin-top: auto;
-  border-radius: 5px;
-  border: 1px solid black;
-  transition: opacity 0.3s;
 }
-#logoutForm .d-block {
-  display: block;
-  width: 100%;
-}
-#logout {
-  font-size: 20px;
-  background: none;
-  padding: 0;
-}
+
 #language, #collapseButton {
   padding-top: 20px;
 }
-.nav-bhover {
-  transition: opacity 0.3s;
-}
-.nav-text-dark {
-  color: #000;
-}
+
 .w-100 {
   width: 100%;
 }
 
-.nav-nav-item {
-  text-align: center;
-}
-.nav-nav-link {
-  display: block;
-  padding: 20px 0;
-  border-radius: 5px;
-  border: 1px solid black;
-  transition: opacity 0.3s;
-}
-
-.nav-button, .nav-btn-link {
-  display: block;
-  padding: 20px 0;
-  border-radius: 5px;
-  border: 1px solid black;
-  transition: opacity 0.3s;
-}
 .nav-button {
   padding-left: 20px;
   padding-right: 20px;
 }
+
 .nav-form-inline {
   display: inline-block;
 }
+
 #nav-icon {
   font-size: 20px;
-}
-.nav-btn:focus, .nav-btn:active:focus, .nav-btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }

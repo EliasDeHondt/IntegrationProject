@@ -113,7 +113,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="ClientApp\src\js\Layout\API\" />
       <Folder Include="Views\Statistics\" />
     </ItemGroup>
 
