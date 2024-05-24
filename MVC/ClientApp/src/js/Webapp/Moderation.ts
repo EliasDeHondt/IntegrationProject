@@ -18,7 +18,6 @@
 
 export async function IsValidIdea(ideaText: string): Promise<boolean> {
     return response(ideaText).then(res => {
-        console.log(res);
         return res;
     })
 }

@@ -9,7 +9,8 @@ import {
 import {Feed} from "../Types/WebApp/Types";
 import {PostIdea} from "./Ideas";
 import {IsValidIdea} from "./Moderation";
-import {readFileAsBase64} from "../Util";
+import {delay, readFileAsBase64} from "../Util";
+import {Modal} from "bootstrap";
 
 const ideaContainer = document.getElementById("ideaContainer") as HTMLDivElement;
 const navContainer = document.getElementById("navContainer") as HTMLDivElement;
@@ -20,21 +21,40 @@ const imageContainer = document.getElementById("imageContainer") as HTMLDivEleme
 const webappImage = document.getElementById("webapp-idea-image") as HTMLDivElement;
 const btnRemoveImage = document.getElementById("btnRemoveImage") as HTMLButtonElement;
 const textArea = document.getElementById("textIdea") as HTMLTextAreaElement;
+
+const modalInvalidIdea = new Modal(document.getElementById("modalInvalidIdea") as HTMLDivElement, {
+    keyboard: true,
+    backdrop: false,
+});
+const btnCloseInvalidIdea = document.getElementById("btnCloseInvalidIdea") as HTMLButtonElement;
+
+btnCloseInvalidIdea.onclick = () => {
+    modalInvalidIdea.hide();
+}
+
 let feedId: number;
 
 btnPlaceIdea.onclick = async () => {
     let text = textArea.value
     let user = await GetLoggedInUser();
-    PostIdea(feedId,text).then(idea => {
-        IsValidIdea(idea.text)
-        ideaContainer.prepend(generateIdeaCard(idea, user.email));
-        addReactionFunctionality();
-        addLikeFunctionality();
-        fileInput.value = "";
-        imageContainer.innerHTML = "";
-        btnRemoveImage.classList.add("visually-hidden");
-        webappImage.classList.add("visually-hidden");
+    IsValidIdea(text).then(res => {
+        if (res) {
+            PostIdea(feedId, text).then(idea => {
+                ideaContainer.prepend(generateIdeaCard(idea, user.email));
+                addReactionFunctionality();
+                addLikeFunctionality();
+                textArea.value = "";
+                fileInput.value = "";
+                imageContainer.innerHTML = "";
+                btnRemoveImage.classList.add("visually-hidden");
+                webappImage.classList.add("visually-hidden");
+            })
+        } else {
+            modalInvalidIdea.show();
+            delay(3000).then(() => modalInvalidIdea.hide());
+        }
     })
+
 }
 
 btnRemoveImage.onclick = () => {
@@ -48,7 +68,7 @@ fileInput.onchange = async () => {
     let image = fileInput.files![0];
     imageContainer.innerHTML = "";
     let base64 = await readFileAsBase64(image);
-    if(base64){
+    if (base64) {
         btnRemoveImage.classList.remove("visually-hidden");
         webappImage.classList.remove("visually-hidden");
         imageContainer.appendChild(generateImage(base64));
@@ -71,9 +91,9 @@ GetFeedIds().then(feeds => {
     })
 })
 
-function addGetFeedButtons(){
+function addGetFeedButtons() {
     let btns = document.getElementsByClassName("webapp-nav-button") as HTMLCollectionOf<HTMLButtonElement>
-    for(const element of btns) {
+    for (const element of btns) {
         element.onclick = () => {
             let id = parseInt(element.getAttribute("data-id")!);
             GetFeed(id).then(feed => {
@@ -85,7 +105,7 @@ function addGetFeedButtons(){
     }
 }
 
-async function generateIdeas(feed: Feed){
+async function generateIdeas(feed: Feed) {
     let user = await GetLoggedInUser();
     ideaContainer.innerHTML = "";
     feed.ideas.forEach(idea => {
