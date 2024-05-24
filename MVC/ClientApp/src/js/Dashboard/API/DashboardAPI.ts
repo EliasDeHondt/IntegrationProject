@@ -187,7 +187,9 @@ export function generateProjectCard(project: Project): HTMLDivElement {
 
         var a = await GetProjectClosed(projectId)
         console.log("GetProjectClosed(projectId)",a)
-        if (a) {
+        // if (!a) {
+        // @ts-ignore
+        if (btnHideProject.firstChild.contains("bi-eye-slash")) {
             UpdateProjectClosed(projectId,true);
             cardBodyDiv.classList.remove("bgAccent")
             cardBodyDiv.classList.add("bgAccentDark")
