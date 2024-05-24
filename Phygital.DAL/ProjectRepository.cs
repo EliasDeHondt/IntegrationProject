@@ -155,6 +155,7 @@ public class ProjectRepository
 
         if (stylingTemplate == null)
         {
+            Console.WriteLine("The styling template was not found.");
             return false;
         }
 
@@ -166,11 +167,37 @@ public class ProjectRepository
 
         _ctx.StylingTemplates.Update(stylingTemplate);
 
+        foreach (StylingTemplate stylingTemp in _ctx.StylingTemplates)
+        {
+            Console.WriteLine(stylingTemp.ThemeName);
+            Console.WriteLine(stylingTemp.ProjectId);
+            Console.WriteLine(stylingTemp.CustomPrimaryColor);
+            Console.WriteLine(stylingTemp.CustomSecondaryColor);
+            Console.WriteLine(stylingTemp.CustomBackgroundColor);
+            Console.WriteLine(stylingTemp.CustomAccentColor);
+        }
+        
         return true;
     }
 
     public StylingTemplate? ReadStylingTemplate(long projectId)
     {
-        return _ctx.StylingTemplates.Find(projectId);
+        StylingTemplate? template = _ctx.StylingTemplates.Find(projectId);
+        if (template == null)
+        {
+            Console.WriteLine("Styling Template not found for projectId: " + projectId);
+            return null;
+        }
+        
+        Console.WriteLine("Found the template: \n");
+
+        Console.WriteLine(template.ThemeName);
+        Console.WriteLine(template.ProjectId);
+        Console.WriteLine(template.CustomPrimaryColor);
+        Console.WriteLine(template.CustomSecondaryColor);
+        Console.WriteLine(template.CustomBackgroundColor);
+        Console.WriteLine(template.CustomAccentColor);
+        
+        return template;
     }
 }

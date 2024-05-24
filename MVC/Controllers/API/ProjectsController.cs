@@ -3,6 +3,7 @@ using Domain.ProjectLogics;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 using MVC.Models.projectModels;
+using MVC.Models.stylingModels;
 
 namespace MVC.Controllers.API;
 
@@ -140,5 +141,51 @@ public class ProjectsController : Controller
             Participations = flow.Participations,
             ThemeId = flow.Theme.Id
         }));
+    }
+    
+    [HttpGet("/Project/GetStylingTemplate/{projectId:long}")]
+    public IActionResult GetStylingTemplate(long projectId)
+    {
+        StylingTemplate? stylingTemplate = _projectManager.ReadStylingTemplate(projectId);
+        if (stylingTemplate != null)
+        {
+            return Json(stylingTemplate);
+        }
+        return NotFound();
+    }
+    
+    [HttpPost("/Project/SaveCustomColors/")]
+    public IActionResult SaveCustomColors([FromForm] StylingViewModel model)
+    {
+        
+        if (ModelState.IsValid)
+        {
+            StylingTemplate template = new StylingTemplate(
+                model.ProjectId,
+                model.ThemeName,
+                model.CustomPrimaryColor,
+                model.CustomSecondaryColor,
+                model.CustomBackgroundColor,
+                model.CustomAccentColor
+            );
+            
+            _uow.BeginTransaction();
+            
+            bool result = _projectManager.UpdateStylingSettings(template);
+            
+            _uow.Commit();
+            
+            if (!result)
+            {
+                ModelState.AddModelError("", "There was an error saving the styling settings.");
+                return BadRequest("An error occurred with the provided data.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("The given model is invalid.");
+        }
+        
+        return Ok("Colors updated succesfully");
     }
 }

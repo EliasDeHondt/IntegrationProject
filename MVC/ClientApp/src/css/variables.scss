@@ -5,6 +5,13 @@
  *                                     *
  ***************************************/
 
+:root {
+  --primary-color: #479ecd;
+  --secondary-color: #e9521c;
+  --accent-color: #f57e00;
+  --background-color: #f4edd2;
+}
+
 $themes: (
         light: (
                 text: hsl(0, 0%, 0%),

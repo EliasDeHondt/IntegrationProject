@@ -37,7 +37,7 @@ html {
 
 body {
   margin-bottom: 60px;
-  background-color: map-get($themes, light, background);
+  background-color: var(--background-color);
   font-family: $font;
   font-size: $fontSize;
 }
@@ -55,15 +55,15 @@ a {
 .btn-primary {
   color: black;
   font-weight: bold;
-  background-color: map-get($themes, light, primary);
-  border-color: map-get($themes, light, primary);
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 .btn-secondary {
   color: black;
   font-weight: bold;
-  background-color: map-get($themes, light, secondary);
-  border-color: map-get($themes, light, secondary);
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
@@ -112,19 +112,19 @@ button.accept-policy {
 }
 
 .bgSecondary{
-  background: map-get($themes, light, secondary);
+  background: var(--secondary-color);
 }
 
 .bgAccent {
-  background: map-get($themes, light, accent);
+  background: var(--accent-color);
 }
 
 .bgPrimary {
-  background: map-get($themes, light, primary);
+  background: var(--primary-color);
 }
 
 .bgColor {
-  background: map-get($themes, light, background);
+  background: var(--background-color);
 }
 
 .bgModal {
@@ -135,7 +135,7 @@ button.accept-policy {
 }
 
 .border-accent {
-  border-color: map-get($themes, light, accent);
+  border-color: var(--accent-color);
 }
 
 .bi-person-plus-fill {
@@ -147,7 +147,7 @@ button.accept-policy {
 }
 
 .warning {
-  color: map-get($themes, light, accent);
+  color: var(--accent-color);
   font-size: 0.8em;
 }
 
@@ -166,7 +166,7 @@ button.accept-policy {
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3) !important;
 }
 .modal-content {
-  background-color: map-get($themes, light, background);
+  background-color: var(--background-color);
 }
 
 .flow-container {
@@ -192,7 +192,7 @@ button.accept-policy {
   height: 700px;
 }
 .flow-card {
-  background-color: map-get($themes, light, primary);
+  background-color: var(--primary-color);
   border: 1px solid #ccc;
   border-radius: 10px;
   display: flex;
@@ -210,22 +210,22 @@ button.accept-policy {
 .forSubtheme:hover {
   width: 220px;
   height: 730px;
-  background-color: map-get($themes, light, primary);
+  background-color: var(--primary-color);
 }
 .forSubtheme#btnCreateFlowSub:hover {
   width: 220px;
   height: 730px;
-  background-color: map-get($themes, light, primary);
+  background-color: var(--primary-color);
 }
 .forProject:hover {
   width: 220px;
   height: 330px;
-  background-color: map-get($themes, light, primary);
+  background-color: var(--primary-color);
 }
 .flow-card#btnCreateFlowProject:hover {
   width: 220px;
   height: 330px;
-  background-color: map-get($themes, light, primary);
+  background-color: var(--primary-color);
 }
 .flow-card-header {
   text-align: center;
@@ -237,7 +237,7 @@ button.accept-policy {
 .flow-card-footer {
   text-align: center;
   font-weight: bold;
-  background-color: map-get($themes, light, accent);
+  background-color: var(--accent-color);
 }
 
 .btn-container {
@@ -346,7 +346,7 @@ button.accept-policy {
   overflow-x: hidden;
   /* Firefox */
   scrollbar-width: thin;
-  scrollbar-color: map-get($themes, light, primary) map-get($themes, light, secondary);
+  scrollbar-color: var(--primary-color) var(--secondary-color);;
 }
 
 /* Chrome, Safari, ... */
@@ -372,7 +372,7 @@ button.accept-policy {
   height: 25em;
   align-self: center;
   justify-self: center;
-  border: thick map-get($themes, light, secondary) solid;
+  border: thick var(--secondary-color) solid;
   border-radius: 20px;
 }
 
@@ -384,7 +384,7 @@ button.accept-policy {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: map-get($themes, light, primary);
+  background: var(--primary-color);
   overflow: hidden;
   position: relative;
   transition: background .4s ease-in-out, transform .4s ease-in-out;
@@ -397,7 +397,7 @@ button.accept-policy {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, map-get($themes, light, accent) 0%, map-get($themes, light, secondary) 40%, map-get($themes, light, primary) 90%, map-get($themes, light, primary) 100%);
+  background: linear-gradient(135deg, var(--accent-color) 0%, var(--secondary-color) 40%, var(--primary-color) 90%, var(--primary-color) 100%);
   opacity: 0;
   transition: opacity .4s ease-in-out;
   z-index: 0;

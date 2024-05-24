@@ -115,4 +115,30 @@ public class ThemeRepository
         
         return flowIds;
     }
+
+    public long? ReadProjectId(long themeId)
+    {
+        MainTheme mainTheme = _context.SubThemes.Find(themeId)!.MainTheme;
+
+        Console.WriteLine(mainTheme.Id);
+
+        foreach (var proj in _context.Projects)
+        {
+            Console.WriteLine("projId : " + proj.Id);
+            Console.WriteLine(proj.MainTheme.Id);
+        }
+        Console.WriteLine(_context.Projects);
+
+        Project? project = _context.Projects.FirstOrDefault(p => p.MainTheme == mainTheme);
+        
+        Console.WriteLine(project);
+
+        if (project == null)
+        {
+            Console.WriteLine("yo");
+            return null;
+        }
+
+        return project.Id;
+    }
 }

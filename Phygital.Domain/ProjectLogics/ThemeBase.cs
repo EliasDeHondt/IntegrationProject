@@ -19,13 +19,13 @@ public abstract class ThemeBase
     {
         Subject = subject;
         Flows = flows;
-        Id = id;
+        Id = id == 0 ? default : id;
     }
 
     protected ThemeBase (string subject, long id = 0)
     {
         Subject = subject;
-        Id = id;
+        Id = id == 0 ? default : id;
         Flows = new List<Flow>();
     }
     

@@ -56,3 +56,20 @@ export function resetFlowsSub(flows: Flow[], flowcontainer: HTMLDivElement){
     }
     showFlows(flows, "forSubtheme",flowcontainer);
 }
+
+export async function getProjectId(subthemeId: number) {
+
+    await fetch("/api/SubThemes/GetProjectId/" + subthemeId, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
+        .catch(error => console.error("Error:", error));
+}
+    

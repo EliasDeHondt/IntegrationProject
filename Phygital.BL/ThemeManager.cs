@@ -86,4 +86,9 @@ public class ThemeManager
         
         _repository.DeleteSubTheme(id);
     }
+
+    public long? ReadProjectId(long themeId)
+    {
+        return _repository.ReadProjectId(themeId);
+    }
 }

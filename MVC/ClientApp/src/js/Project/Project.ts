@@ -125,7 +125,19 @@ async function checkFlowsNotEmpty() {
     // }
 }
 
-
+function getTemplate(projectId:number) {
+    fetch(`/Project/GetStylingTemplate/${projectId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data) {
+                document.documentElement.style.setProperty('--primary-color', data.customPrimaryColor);
+                document.documentElement.style.setProperty('--secondary-color', data.customSecondaryColor);
+                document.documentElement.style.setProperty('--accent-color', data.customAccentColor);
+                document.documentElement.style.setProperty('--background-color', data.customBackgroundColor)
+            }
+        })
+        .catch(error => console.error('Error fetching styling template:', error));
+}
 
 document.addEventListener("DOMContentLoaded", async function () {
     // loadFlowsProject(getIdProject()).then(flows => {
@@ -135,6 +147,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     
     const projectIdNumber = getIdProject();
     const project = await getProjectWithId(projectIdNumber);
+    getTemplate(projectIdNumber);
     fillExisting(project, inputTitle, inputText);
     getSubThemesForProject(project.id).then(subThemes => generateCards(subThemes, subThemeRoulette));
     btnPublishProject.onclick = function () {
