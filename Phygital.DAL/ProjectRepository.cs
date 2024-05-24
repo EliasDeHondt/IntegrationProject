@@ -210,4 +210,16 @@ public class ProjectRepository
 
         return totalSubThemeCount;
     }
+
+    public void UpdateProjectClosed(long projectId,bool closeProject)
+    {
+        var proj = ReadProjectIncludingSharedPlatformAndMainTheme(projectId);
+        proj.ProjectClosed = closeProject;
+    }
+    
+    public bool ReadProjectClosed(long projectId)
+    {
+        var proj = ReadProjectIncludingSharedPlatformAndMainTheme(projectId);
+        return proj.ProjectClosed;
+    }
 }

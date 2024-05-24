@@ -4,6 +4,7 @@ import {Project} from "../../Types/ProjectObjects";
 import * as deleteModal from "../DeleteUserModal";
 import * as statisticsModal from "../ProjectStatisticsModal";
 import {Toast} from "bootstrap";
+import {UpdateProjectClosed} from "../../Project/API/ProjectAPI";
 const projectClosedToast = new Toast(document.getElementById("projectClosedToast")!);
 
 // Users
@@ -185,9 +186,9 @@ export function generateProjectCard(project: Project): HTMLDivElement {
         // @ts-ignore
         
         if(btnHideProject.firstChild.classList.contains("bi-eye-slash")){
-            closeProject(cardBodyDiv);
+            closeProject(cardBodyDiv,projectId);
         }else{
-            openProject(cardBodyDiv);
+            openProject(cardBodyDiv,projectId);
         }
     });
     btnEnterProject.addEventListener("click", function() {
@@ -203,7 +204,8 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     colDiv.appendChild(cardDiv);
     return colDiv;
 }
-function closeProject(cardBodyDiv: HTMLDivElement) {
+function closeProject(cardBodyDiv: HTMLDivElement,projectId: number) {
+    UpdateProjectClosed(projectId,true);
     cardBodyDiv.classList.remove("bgAccent")
     cardBodyDiv.classList.add("bgAccentDark")
     
@@ -211,7 +213,8 @@ function closeProject(cardBodyDiv: HTMLDivElement) {
     let closeProjectClosedToast = document.getElementById("closeProjectClosedToast") as HTMLButtonElement
     closeProjectClosedToast.onclick = () => projectClosedToast.hide()
 }
-function openProject(cardBodyDiv: HTMLDivElement) {
+function openProject(cardBodyDiv: HTMLDivElement,projectId: number) {
+    UpdateProjectClosed(projectId,false);
     cardBodyDiv.classList.remove("bgAccentDark")
     cardBodyDiv.classList.add("bgAccent")
 }

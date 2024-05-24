@@ -125,3 +125,37 @@ export async function loadNotesProject(id: number): Promise<Flow[]> {
         })
         .catch(error => console.error("Error:", error))
 }
+
+
+export async function UpdateProjectClosed(projectId: number,closeProject: boolean) {
+    try{
+        const response = await fetch("/api/Projects/UpdateProjectClosed/" + projectId + "/" + closeProject, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.ok) {
+            console.log("Project saved successfully.");
+        } else {
+            console.error("Failed to save Project.");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+export async function GetProjectClosed(projectId: number) : Promise<boolean> {
+    return await fetch(`/api/Projects/GetProjectClosed/${projectId}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(boolean => {
+            return boolean
+        })
+        .catch(error => console.error("Error:", error))
+}

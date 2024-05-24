@@ -123,4 +123,12 @@ public class ProjectManager
     {
         return _repo.ReadSubThemeCountFromProject(id);
     }
+    public void UpdateProjectClosed(long id, bool closeProject)
+    { 
+        _repo.UpdateProjectClosed(id, closeProject);
+    }
+    public bool GetProjectClosed(long id)
+    { 
+        return _repo.ReadProjectClosed(id);
+    }
 }

@@ -3,9 +3,9 @@ import "./DeleteSubThemeModal"
 import {
     CheckNotEmpty, createProjectFlow,
     fillExisting,
-    getIdProject,
+    getIdProject, GetProjectClosed,
     getProjectWithId, loadFlowsProject, resetFlowsProject,
-    SetProject,
+    SetProject, UpdateProjectClosed,
 } from "./API/ProjectAPI";
 import {generateCards, getSubThemesForProject, resetCards} from "./API/SubThemeAPI";
 import {Modal, Toast} from "bootstrap";
@@ -91,12 +91,14 @@ btnCreateFlowProject.onclick = async() => {
 
 function projectOverlay(isVisible: boolean) {
     if (isVisible) {
-        closedProjectOverlay.style.display = isVisible ? 'block' : 'none';
+        closedProjectOverlay.style.visibility = isVisible ? 'visible' : 'hidden';
+        // closedProjectOverlay.style.display = isVisible ? 'block' : 'none';
     }
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-    projectOverlay(false);
+    var closeProj = await GetProjectClosed(projectId);
+    closeProj ? projectOverlay(true) : projectOverlay(false)
     
     const projectIdNumber = getIdProject();
     const project = await getProjectWithId(projectIdNumber);
