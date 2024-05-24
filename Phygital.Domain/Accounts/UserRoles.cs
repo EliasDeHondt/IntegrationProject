@@ -9,6 +9,5 @@ public static class UserRoles
     
     public const string UserPermission = "UserPermission";
     public const string ProjectPermission = "ProjectPermission";
-    public const string StatisticPermission = "StatisticPermission";
     
 }
