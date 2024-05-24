@@ -91,14 +91,12 @@ btnCreateFlowProject.onclick = async() => {
 
 function projectOverlay(isVisible: boolean) {
     if (isVisible) {
-        closedProjectOverlay.style.display = 'block';
-    } else {
-        closedProjectOverlay.style.display = 'none';
+        closedProjectOverlay.style.display = isVisible ? 'block' : 'none';
     }
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-    //projectOverlay(false);
+    projectOverlay(false);
     
     const projectIdNumber = getIdProject();
     const project = await getProjectWithId(projectIdNumber);

@@ -159,6 +159,7 @@ button.accept-policy {
 
 #navbar {
   transition: width 0.5s;
+  z-index: 1000;
 }
 #navbar.collapsed {
   width: 200px;
@@ -385,6 +386,6 @@ button.accept-policy {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9999; 
+  z-index: 999; 
   pointer-events: auto;
 }
