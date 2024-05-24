@@ -2,6 +2,9 @@
 import * as signalR from "@microsoft/signalr";
 import {Modal} from "bootstrap";
 import {clockTimer, stepTimer} from "../Flow/StepAPI";
+import {generateQrCode} from "../Util";
+import {GetFlowsForProject} from "./FlowAPI";
+import {setProjectId} from "../Flow/FlowTypeModal";
 
 const connection = new signalR.HubConnectionBuilder()
     .withUrl("/hub")
@@ -14,6 +17,9 @@ const modal = new Modal(document.getElementById("pausedFlowModal") as HTMLDivEle
 });
 
 let currStateOfFlow = "";
+let projectId: number = 0;
+
+const qrcode = document.getElementById("qrcode") as HTMLImageElement;
 
 document.addEventListener("DOMContentLoaded", async () => {
     await connection.start().then(() => {
@@ -21,6 +27,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             connection.invoke("ActivateFlow", kiosk.code, currFlow.innerText)
         })
     });
+})
+
+let url: string = window.location.hostname;
+generateQrCode(url + `/WebApp/Feed/${projectId}`).then(qr => {
+    qrcode.src += qr.replace(new RegExp("\"", 'g'), "");
 })
 
 connection.on("ReceiveFlowUpdate", async (id, state) => {
@@ -38,4 +49,8 @@ connection.on("ReceiveFlowUpdate", async (id, state) => {
 
 connection.on("FlowActivated", (flowType, id) => {
     window.location.href = `/Flow/Step/${flowType}/${id}`
+})
+
+connection.on("ReceiveProjectId", (id) => {
+    projectId = id;
 })

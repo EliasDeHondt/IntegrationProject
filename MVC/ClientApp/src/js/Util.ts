@@ -12,3 +12,20 @@ export async function readFileAsBase64(file: File): Promise<string | null> {
         };
     });
 }
+
+export async function generateQrCode(text: string): Promise<string> {
+    return await fetch('/api/Qr', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+            text: text
+        })
+    })
+        .then(response => response.text())
+        .then(data => {
+            return data
+        })
+}

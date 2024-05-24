@@ -4,24 +4,13 @@ import * as phyAPI from "../Webcam/WebCamDetection";
 import {detectionCanvas, drawChoiceBoundaries, getResult} from "../Webcam/WebCamDetection";
 import {delay} from "../Util";
 import {Timer} from "../Util/Timer";
-import {Modal} from "bootstrap";
 import * as kiosk from "../Kiosk/Kiosk"
-import {HubConnectionState} from "@microsoft/signalr";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
 const btnNextStep = document.getElementById("btnNextStep") as HTMLButtonElement;
 const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonElement;
-const btnPauseFlow = document.getElementById("btnPauseFlow") as HTMLButtonElement;
-const btnUnPauseFlow = document.getElementById("btnUnPauseFlow") as HTMLButtonElement;
 const btnEmail = document.getElementById("btnEmail") as HTMLButtonElement;
-const btnExitFlow = document.getElementById("butExitFlow") as HTMLButtonElement;
-const modal = new Modal(document.getElementById("pausedFlowModal") as HTMLDivElement, {
-    backdrop: 'static',
-    keyboard: false
-});
-const btnShowFlows = document.getElementById("flowDropdownBtn") as HTMLButtonElement;
-const ddFlows = document.getElementById("flowDropdown") as HTMLUListElement;
 let currentStepNumber: number = 0;
 let userAnswers: string[] = []; // Array to store user answers
 let openUserAnswer: string = "";
@@ -30,15 +19,13 @@ let stepTotal = Number((document.getElementById("stepTotal") as HTMLSpanElement)
 let flowtype = sessionStorage.getItem("flowType")!;
 let sessionCode = sessionStorage.getItem("connectionCode")!;
 
-export let stepTimer = new Timer(nextStep, 30000);
-export let clockTimer = new Timer(updateClock, 1000);
+export const stepTimer = new Timer(nextStep, 30000);
+export const clockTimer = new Timer(updateClock, 1000);
 
 let time: number = 29;
 let choices: string[] = [];
 
 hideDigitalElements();
-let prevFlowId = sessionStorage.getItem('prevFlowId');
-let currentState: string = "";
 let conditionalAnswer: number = 0;
 
 //email checken
@@ -127,12 +114,10 @@ async function GetNextStep(stepNumber: number, flowId: number): Promise<Step> {
             await kiosk.connection.invoke("SendCurrentStep", kiosk.code, stepNumber);
             if (!data.visible) {
                 await GetNextStep(++currentStepNumber, flowId)
+            } else if (flowtype.toUpperCase() == "PHYSICAL") {
+                await showPhysicalStep(data);
             } else {
-                if (flowtype.toUpperCase() == "PHYSICAL") {
-                    await showPhysicalStep(data);
-                } else {
-                    await ShowStep(data);
-                }
+                await ShowStep(data);
             }
 
             return data;
@@ -419,8 +404,8 @@ async function saveAnswerToDatabase(answers: string[], openAnswer: string, flowI
 async function hideDigitalElements() {
     if (flowtype.toUpperCase() == "PHYSICAL") {
         const digitalElements = document.getElementsByClassName("digital-element");
-        for (let i = 0; i < digitalElements.length; i++) {
-            digitalElements[i].classList.add("visually-hidden");
+        for (const element of digitalElements) {
+            element.classList.add("visually-hidden");
         }
         const webcam = document.getElementById("webcamDiv") as HTMLDivElement;
         const topLeft = document.getElementById("topLeft") as HTMLDivElement;
@@ -467,28 +452,24 @@ async function nextStep(save: boolean = true) {
                     userAnswers = [];
                 });
             }
-        } else {
-            if (userAnswers.length > 0 || openUserAnswer.length > 0) {
-                await saveAnswerToDatabase(userAnswers, openUserAnswer, flowId, currentStepNumber);
-                // Clear the userAnswers array for the next step
-                userAnswers = [];
-                openUserAnswer = "";
-            }
+        } else if (userAnswers.length > 0 || openUserAnswer.length > 0) {
+            await saveAnswerToDatabase(userAnswers, openUserAnswer, flowId, currentStepNumber);
+            // Clear the userAnswers array for the next step
+            userAnswers = [];
+            openUserAnswer = "";
         }
     }
     if ((flowtype.toUpperCase() == "CIRCULAR" || flowtype.toUpperCase() == "PHYSICAL") && currentStepNumber >= stepTotal) {
         currentStepNumber = 0;
         await GetNextStep(++currentStepNumber, flowId);
+    } else if (conditionalAnswer > 0) {
+        await GetConditionalNextStep(conditionalAnswer).then(step => {
+            conditionalAnswer = 0;
+            currentStepNumber = step.stepNumber
+            GetNextStep(currentStepNumber, flowId);
+        })
     } else {
-        if (conditionalAnswer > 0) {
-            await GetConditionalNextStep(conditionalAnswer).then(step => {
-                conditionalAnswer = 0;
-                currentStepNumber = step.stepNumber
-                GetNextStep(currentStepNumber, flowId);
-            })
-        } else {
-            await GetNextStep(++currentStepNumber, flowId);
-        }
+        await GetNextStep(++currentStepNumber, flowId);
     }
     time = 30;
 }

@@ -61,6 +61,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 connection.on("FlowActivated", (id) => {
     currentFlow.innerText = `${id}`
     currentState.innerText = "Active"
+    connection.invoke("SendProjectId", code, projectId)
 })
 
 connection.on("ReceiveFlowUpdate", (id, state) => {
