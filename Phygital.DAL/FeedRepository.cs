@@ -20,6 +20,8 @@ public class FeedRepository
             .Include(feed => feed.Ideas)
             .ThenInclude(idea => idea.Likes)
             .ThenInclude(like => like.WebAppUser)
+            .Include(feed => feed.Ideas)
+            .ThenInclude(idea => idea.Image)
             .Include(feed => feed.Project)
             .Single(feed => feed.Id == id);
     }

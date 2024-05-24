@@ -1,7 +1,18 @@
-﻿import {Feed, Idea} from "../Types/WebApp/Types";
-import {CreateLike, DeleteLike, GetLoggedInUser} from "./WebAppAPI";
+﻿import {Feed, Idea, Reaction} from "../Types/WebApp/Types";
+import {CreateLike, DeleteLike} from "./WebAppAPI";
+import {OpenModal} from "./ReactionModal";
 
 export function generateIdeaCard(idea: Idea, email: string): HTMLDivElement {
+    let image: HTMLImageElement | null;
+    if(idea.image){
+        image = generateImage(idea.image);
+    } else {
+        image = null
+    }
+    
+    let imagediv = document.createElement("div");
+    if(image) imagediv.appendChild(image);
+    
     let div = document.createElement("div");
     let liked: boolean = idea.likes.some(like => like.liker.email === email);
     div.classList.add("webapp-card")
@@ -15,7 +26,8 @@ export function generateIdeaCard(idea: Idea, email: string): HTMLDivElement {
                     </div>
                 </div>
                 <div class="row webapp-card-content">
-                    <span>${idea.text}</span>
+                    <span class="webapp-card-text">${idea.text}</span>
+                    ${image ? imagediv.innerHTML : ""}
                 </div>
                 <div class="row mt-2">
                     <div class="col-2">
@@ -64,7 +76,14 @@ export function generateNavButton(feed: Feed): HTMLButtonElement {
     return btn
 }
 
-export function addHoverEffect() {
+export function generateImage(image: string): HTMLImageElement {
+    let img = document.createElement("img");
+    img.classList.add("webapp-image");
+    img.src = "data:image/png;base64," + image;
+    return img;
+}
+
+export function addReactionFunctionality() {
     let btn = document.getElementsByClassName("btnReaction") as HTMLCollectionOf<HTMLButtonElement>;
     let icons = document.getElementsByClassName("iconReaction") as HTMLCollectionOf<SVGSVGElement>;
     for (let i = 0; i < btn.length; i++) {
@@ -75,9 +94,27 @@ export function addHoverEffect() {
             icons[i].classList.replace("bi-chat-dots-fill", "bi-chat-dots")
         }
 
+        btn[i].onclick = () => {
+            OpenModal(parseInt(btn[i].getAttribute("data-id")!));
+        }
+        
     }
 }
-
+export function generateReaction(reaction: Reaction): HTMLDivElement {
+    let div = document.createElement("div");
+    div.classList.add("row");
+    div.classList.add("h-25");
+    div.classList.add("reply-container");
+    div.innerHTML = `<div class="col h-100">
+                        <div class="row ps-3 reply-header">
+                            ${reaction.author.name}
+                        </div>
+                        <div class="row ms-1 reply-body">
+                            ${reaction.text}
+                        </div>
+                    </div>`
+    return div
+}
 export function addLikeFunctionality() {
     let btns = document.getElementsByClassName("btnLikes") as HTMLCollectionOf<HTMLButtonElement>;
     let counts = document.getElementsByClassName("spanLikes") as HTMLCollectionOf<HTMLSpanElement>;

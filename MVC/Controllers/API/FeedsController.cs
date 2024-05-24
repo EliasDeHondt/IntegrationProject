@@ -76,7 +76,8 @@ public class FeedsController : Controller
                     Name = like.WebAppUser.UserName!
                 }
             }),
-            Text = idea.Text
+            Text = idea.Text,
+            image = idea.Image?.Base64
         }).ToList();
     }
     

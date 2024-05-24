@@ -29,7 +29,7 @@ Please also see following documents:
     - <font color="#5a3286" style="font-weight: bold;">Vera Wise</font>
     - <font color="#ffe5a0" style="font-weight: bold;">Jana Yang</font>
     - <font color="#11734b" style="font-weight: bold;">Matthias Hendrickx</font>
-- **Short Description:** This project is a .NET Core application that allows users to create flows and and respondents to go through these flows.
+- **Short Description:** This project is a .NET Core application that allows users to create flows and respondents to go through these flows.
 - **Documentation:**
   - **Credentials:**
     - Shared Platform Admin:

@@ -4,14 +4,9 @@ import * as phyAPI from "../Webcam/WebCamDetection";
 import {detectionCanvas, drawChoiceBoundaries, getResult} from "../Webcam/WebCamDetection";
 import {delay} from "../Util";
 import {Timer} from "../Util/Timer";
-import {Flow} from "./FlowObjects";
 import {Modal} from "bootstrap";
 import * as kiosk from "../Kiosk/Kiosk"
-import * as signalR from "@microsoft/signalr";
-
-const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/hub")
-    .build();
+import {HubConnectionState} from "@microsoft/signalr";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
@@ -30,7 +25,7 @@ const ddFlows = document.getElementById("flowDropdown") as HTMLUListElement;
 let currentStepNumber: number = 0;
 let userAnswers: string[] = []; // Array to store user answers
 let openUserAnswer: string = "";
-let flowId :number = Number((document.getElementById("flowId") as HTMLSpanElement).innerText);
+let flowId: number = Number((document.getElementById("flowId") as HTMLSpanElement).innerText);
 let stepTotal = Number((document.getElementById("stepTotal") as HTMLSpanElement).innerText);
 let flowtype = sessionStorage.getItem("flowType")!;
 let sessionCode = sessionStorage.getItem("connectionCode")!;
@@ -89,9 +84,9 @@ async function SetRespondentEmail(flowId: number, inputEmail: string) {
 
 //button submit email 
 document.addEventListener("DOMContentLoaded", async function () {
-    await connection.start().then(() => {
-        connection.invoke("JoinConnection", kiosk.code).then(() => {
-            connection.invoke("SendCurrentStep", kiosk.code, currentStepNumber)
+    await kiosk.connection.start().then(() => {
+        kiosk.connection.invoke("JoinConnection", kiosk.code).then(() => {
+            kiosk.connection.invoke("SendCurrentStep", kiosk.code, currentStepNumber)
         })
     });
 
@@ -129,7 +124,7 @@ async function GetNextStep(stepNumber: number, flowId: number): Promise<Step> {
     })
         .then(response => response.json())
         .then(async (data): Promise<Step> => {
-            await connection.invoke("SendCurrentStep", kiosk.code, stepNumber);
+            await kiosk.connection.invoke("SendCurrentStep", kiosk.code, stepNumber);
             if (!data.visible) {
                 await GetNextStep(++currentStepNumber, flowId)
             } else {
@@ -139,7 +134,7 @@ async function GetNextStep(stepNumber: number, flowId: number): Promise<Step> {
                     await ShowStep(data);
                 }
             }
-            
+
             return data;
         })
         .catch(error => {
@@ -160,7 +155,7 @@ async function GetConditionalNextStep(stepId: number): Promise<Step> {
         .then(response => response.json())
         .then(data => {
             return data
-    })
+        })
 }
 
 
@@ -176,7 +171,7 @@ async function showPhysicalStep(data: Step) {
         showPhysicalQuestionStep(data.questionViewModel);
 }
 
-async function showInformationStep(data: Information[]){
+async function showInformationStep(data: Information[]) {
     if (data != undefined) {
         const webcam = document.getElementById("webcamDiv") as HTMLDivElement;
         webcam.classList.add("visually-hidden");
@@ -201,7 +196,7 @@ async function showInformationStep(data: Information[]){
                     if (typeof path === "string") {
                         path = path.substring(1, path.length - 1);
                         video.src = path;
-                        
+
                     }
                     break;
                 }
@@ -218,12 +213,12 @@ async function showInformationStep(data: Information[]){
     }
 }
 
-function showPhysicalQuestionStep(data: Question){
+function showPhysicalQuestionStep(data: Question) {
     choices = [];
     if (data != undefined) {
         const webcam = document.getElementById("webcamDiv") as HTMLDivElement;
         webcam.classList.remove("visually-hidden");
-        switch(data.questionType){
+        switch (data.questionType) {
             case "RangeQuestion":
                 createQuestion(data)
                 break;
@@ -238,7 +233,7 @@ function showPhysicalQuestionStep(data: Question){
     }
 }
 
-function createQuestion(data: Question){
+function createQuestion(data: Question) {
     let p = document.createElement("p");
     p.innerText = data.question;
     p.classList.add("text-start");
@@ -254,7 +249,7 @@ function createQuestion(data: Question){
     for (const element of data.choices) {
         let colDiv = document.createElement("div");
         colDiv.classList.add("col");
-        
+
         let choice = document.createElement("p");
         choice.innerText = element.text;
         choice.style.fontSize = "24px";
@@ -265,9 +260,9 @@ function createQuestion(data: Question){
     questionContainer.appendChild(rowDiv);
 }
 
-function showQuestionStep(data: Question){
+function showQuestionStep(data: Question) {
     if (data != undefined) {
-        
+
         let p = document.createElement("p");
         p.innerText = data.question;
         p.classList.add("text-start");
@@ -421,8 +416,8 @@ async function saveAnswerToDatabase(answers: string[], openAnswer: string, flowI
     }
 }
 
-async function hideDigitalElements(){
-    if(flowtype.toUpperCase() == "PHYSICAL") {
+async function hideDigitalElements() {
+    if (flowtype.toUpperCase() == "PHYSICAL") {
         const digitalElements = document.getElementsByClassName("digital-element");
         for (let i = 0; i < digitalElements.length; i++) {
             digitalElements[i].classList.add("visually-hidden");
@@ -439,11 +434,11 @@ async function hideDigitalElements(){
         centerDiv.style.top = "58%";
         const centerContainerDiv = document.getElementById("kioskContainerCenter") as HTMLDivElement;
         centerContainerDiv.style.height = "800px";
-        
+
         const timer = document.getElementById("timer") as HTMLDivElement;
         timer.classList.remove("visually-hidden");
         timer.innerText = "Loading physical setup...";
-        
+
         let model = await phyAPI.loadModel();
         phyAPI.startPhysical(model).then(async () => {
             await delay(2500);
@@ -458,11 +453,11 @@ async function hideDigitalElements(){
     }
 }
 
-async function nextStep(save: boolean = true){
-    if(save) {
+async function nextStep(save: boolean = true) {
+    if (save) {
         if (flowtype.toUpperCase() == "PHYSICAL") {
             let answers: number[] = getResult();
-            if(choices.length > 0){
+            if (choices.length > 0) {
                 answers.forEach(answer => {
                     userAnswers.push(choices[answer]);
                 })
@@ -498,17 +493,16 @@ async function nextStep(save: boolean = true){
     time = 30;
 }
 
-function updateClock(){
+function updateClock() {
     const timer = document.getElementById("timer") as HTMLDivElement;
     time -= 1
     timer.innerText = time.toString();
 }
 
-function startTimers(){
+function startTimers() {
     clockTimer.start();
     stepTimer.start();
 }
-
 
 
 btnRestartFlow.onclick = async () => {
