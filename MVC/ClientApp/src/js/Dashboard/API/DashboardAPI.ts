@@ -128,7 +128,7 @@ export async function getProjectsForPlatform(platformId: string): Promise<Projec
         })
 }
 
-export function generateProjectCard(project: Project): HTMLDivElement {
+export async function generateProjectCard(project: Project): Promise<HTMLDivElement> {
     let colDiv = document.createElement("div");
     colDiv.className = "col mt-3 mb-3 embla__slide";
     let cardDiv = document.createElement("div");
@@ -155,7 +155,7 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     btnDeleteProject.style.fontSize = "3vh";
     btnGraphProject.style.fontSize = "3vh";
     btnNotesProject.style.fontSize = "3vh";
-    
+
 
     let cardBodyDiv = document.createElement("div");
     cardBodyDiv.className = "card-body align-items-center d-flex justify-content-center";
@@ -171,12 +171,29 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     projDiv.className = "text-center";
     projDiv.append(btnEnterProject, editProjectLink);
     cardBodyDiv.appendChild(projDiv);
-    
+
     cardDiv.appendChild(btnHideProject);
     cardDiv.appendChild(btnDeleteProject);
     cardDiv.appendChild(btnGraphProject);
     cardDiv.appendChild(btnNotesProject);
     cardDiv.appendChild(cardBodyDiv);
+
+    var close = await GetProjectClosed(projectId)
+    if (close) {
+        // @ts-ignore
+        btnHideProject.firstChild.classList.add("bi-eye-slash");
+        // @ts-ignore
+        btnHideProject.firstChild.classList.remove("bi-eye");
+        cardBodyDiv.classList.remove("bgAccent")
+        cardBodyDiv.classList.add("bgAccentDark")
+    } else {
+        // @ts-ignore
+        btnHideProject.firstChild.classList.add("bi-eye");
+        // @ts-ignore
+        btnHideProject.firstChild.classList.remove("bi-eye-slash");
+        cardBodyDiv.classList.remove("bgAccentDark")
+        cardBodyDiv.classList.add("bgAccent")
+    }
 
     btnHideProject.addEventListener("click", async function () {
         // @ts-ignore
@@ -184,32 +201,19 @@ export function generateProjectCard(project: Project): HTMLDivElement {
         // @ts-ignore
         btnHideProject.firstChild.classList.toggle("bi-eye");
         // @ts-ignore
-
-        var a = await GetProjectClosed(projectId)
-        console.log("GetProjectClosed(projectId)",a)
-        if (!a) {
-        // @ts-ignore
-        // if (btnHideProject.firstChild.classList.contains("bi-eye-slash")) {
-            UpdateProjectClosed(projectId,true);
-            cardBodyDiv.classList.remove("bgAccent")
-            cardBodyDiv.classList.add("bgAccentDark")
-            a = await GetProjectClosed(projectId)
-            console.log("ssss(projectId)",a)
-           // closeProject(cardBodyDiv, projectId);
+        if (!close) {
+            closeProject(cardBodyDiv, projectId);
         } else {
-            UpdateProjectClosed(projectId,false);
-            cardBodyDiv.classList.remove("bgAccentDark")
-            cardBodyDiv.classList.add("bgAccent")
-            //openProject(cardBodyDiv, projectId);
+            openProject(cardBodyDiv, projectId);
         }
     });
-    btnEnterProject.addEventListener("click", function() {
+    btnEnterProject.addEventListener("click", function () {
         window.location.href = "/Project/ProjectPage/" + projectId;
     });
-    btnNotesProject.addEventListener("click", function() {
+    btnNotesProject.addEventListener("click", function () {
         window.location.href = "/Project/Notes/" + projectId;
     });
-    btnGraphProject.addEventListener("click", function() {
+    btnGraphProject.addEventListener("click", function () {
         statisticsModal.showModal(projectId, project.name, project.description);
     });
 
@@ -218,7 +222,8 @@ export function generateProjectCard(project: Project): HTMLDivElement {
 }
 function closeProject(cardBodyDiv: HTMLDivElement,projectId: number) {
     UpdateProjectClosed(projectId,true);
-    
+    cardBodyDiv.classList.remove("bgAccent")
+    cardBodyDiv.classList.add("bgAccentDark")
     
     projectClosedToast.show()
     let closeProjectClosedToast = document.getElementById("closeProjectClosedToast") as HTMLButtonElement
@@ -246,9 +251,10 @@ function createButton(id: string, iconClass: string): HTMLButtonElement {
 export function generateProjectCards(id: string, projectRoulette: HTMLDivElement) {
     let cardCreateProject = document.getElementById("cardCreateProject") as HTMLDivElement;
     cardCreateProject.style.display = "block";
-    getProjectsForPlatform(id).then(projects => {
-        projects.forEach(project => {
+    getProjectsForPlatform(id).then(async projects => {
+        for (const project of projects) {
             let card = generateProjectCard(project);
-            projectRoulette.appendChild(card);
-        })})
+            projectRoulette.appendChild(await card);
+        }
+    })
 }

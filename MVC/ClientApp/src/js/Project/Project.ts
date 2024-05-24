@@ -89,17 +89,20 @@ btnCreateFlowProject.onclick = async() => {
     };
 }
 
-function projectOverlay(isVisible: boolean) {
-    if (isVisible) {
-        // closedProjectOverlay.style.visibility = isVisible ? 'visible' : 'hidden';
-        closedProjectOverlay.style.display = isVisible ? 'block' : 'none';
+async function projectOverlay() {
+    // closedProjectOverlay.style.visibility = isVisible ? 'visible' : 'hidden';
+    var closeProj = await GetProjectClosed(projectId);
+    // closeProj ? projectOverlay(true) : projectOverlay(false)
+    if (closeProj) {
+        closedProjectOverlay.style.display = 'block';
+    } else {
+        closedProjectOverlay.style.display = 'none';
     }
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-    var closeProj = await GetProjectClosed(projectId);
-    closeProj ? projectOverlay(true) : projectOverlay(false)
-    
+    await projectOverlay()
+
     const projectIdNumber = getIdProject();
     const project = await getProjectWithId(projectIdNumber);
     fillExisting(project, inputTitle, inputText);
