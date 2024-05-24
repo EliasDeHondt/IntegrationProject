@@ -11,19 +11,16 @@ using Domain.Statistics;
 using FileHelpers;
 
 namespace Domain.ProjectLogics.Steps.Questions;
-[DelimitedRecord(",")]
 public abstract class QuestionBase
 {
     [Key]
     public long Id { get; set; }
     [Required]
-    [FieldConverter(typeof(CollectionConverter<ChoiceAnswer>))]
     public ICollection<ChoiceAnswer> Answers { get; set; }
     [Required]
     [MaxLength(600)]
     public string Question { get; set; }
     
-
     protected QuestionBase(ICollection<ChoiceAnswer> answers, string question, long id = 0)
     {
         Id = id;
