@@ -4,7 +4,7 @@ import {Project} from "../../Types/ProjectObjects";
 import * as deleteModal from "../DeleteUserModal";
 import * as statisticsModal from "../ProjectStatisticsModal";
 import {Toast} from "bootstrap";
-import {UpdateProjectClosed} from "../../Project/API/ProjectAPI";
+import {GetProjectClosed, UpdateProjectClosed} from "../../Project/API/ProjectAPI";
 const projectClosedToast = new Toast(document.getElementById("projectClosedToast")!);
 
 // Users
@@ -178,17 +178,20 @@ export function generateProjectCard(project: Project): HTMLDivElement {
     cardDiv.appendChild(btnNotesProject);
     cardDiv.appendChild(cardBodyDiv);
 
-    btnHideProject.addEventListener("click", function() {
+    btnHideProject.addEventListener("click", async function () {
         // @ts-ignore
         btnHideProject.firstChild.classList.toggle("bi-eye-slash");
         // @ts-ignore
         btnHideProject.firstChild.classList.toggle("bi-eye");
         // @ts-ignore
-        
-        if(btnHideProject.firstChild.classList.contains("bi-eye-slash")){
-            closeProject(cardBodyDiv,projectId);
-        }else{
-            openProject(cardBodyDiv,projectId);
+
+        console.log(GetProjectClosed(projectId))
+        var a = await GetProjectClosed(projectId)
+        console.log("GetProjectClosed(projectId)",a)
+        if (a) {
+            closeProject(cardBodyDiv, projectId);
+        } else {
+            openProject(cardBodyDiv, projectId);
         }
     });
     btnEnterProject.addEventListener("click", function() {

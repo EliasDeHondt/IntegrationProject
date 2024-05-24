@@ -91,8 +91,8 @@ btnCreateFlowProject.onclick = async() => {
 
 function projectOverlay(isVisible: boolean) {
     if (isVisible) {
-        closedProjectOverlay.style.visibility = isVisible ? 'visible' : 'hidden';
-        // closedProjectOverlay.style.display = isVisible ? 'block' : 'none';
+        // closedProjectOverlay.style.visibility = isVisible ? 'visible' : 'hidden';
+        closedProjectOverlay.style.display = isVisible ? 'block' : 'none';
     }
 }
 
