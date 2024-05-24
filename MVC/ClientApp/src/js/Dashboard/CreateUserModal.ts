@@ -25,7 +25,6 @@ const facilitatorContainer = document.getElementById("facilitatorContainer") as 
 const adminContainer = document.getElementById("adminContainer") as HTMLDivElement;
 const checkUserPermission = document.getElementById("checkUserPermission") as HTMLInputElement;
 const checkProjectPermission = document.getElementById("checkProjectPermission") as HTMLInputElement;
-const checkStatisticPermission = document.getElementById("checkStatisticPermission") as HTMLInputElement;
 
 
 const inputName = document.getElementById("inputName") as HTMLInputElement;
@@ -80,9 +79,6 @@ butConfirmCreateUser.onclick = async (ev) => {
             if (checkProjectPermission.checked) {
                 permissions.push(UserRoles.ProjectPermission);
             }
-            if (checkStatisticPermission.checked) {
-                permissions.push(UserRoles.StatisticPermission);
-            }
             API.createAdmin(inputName.value, inputEmail.value, inputPassword.value, id, permissions)
                 .then(() => {
                     sendEmail(inputEmail.value, inputPassword.value)
@@ -112,7 +108,6 @@ radioFacilitator.onchange = () => {
     adminContainer.classList.add("visually-hidden");
     checkUserPermission.checked = false;
     checkProjectPermission.checked = false;
-    checkStatisticPermission.checked = false;
     API.getProjects(id).then(projects => {
         fillDropdown(projects)
     });
@@ -127,7 +122,6 @@ function clearModal() {
     radioFacilitator.checked = false;
     checkUserPermission.checked = false;
     checkProjectPermission.checked = false;
-    checkStatisticPermission.checked = false;
     facilitatorContainer.classList.add("visually-hidden");
     adminContainer.classList.remove("visually-hidden");
     selectProject.length = 0;
