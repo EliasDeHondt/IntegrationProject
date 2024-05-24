@@ -154,7 +154,7 @@ public class ProjectsController : Controller
         return NoContent();
     }
     
-    [HttpPost("GetProjectClosed/{projectId}")]
+    [HttpGet("GetProjectClosed/{projectId}")]
     public IActionResult GetProjectClosed(long projectId)
     {
         _uow.BeginTransaction();

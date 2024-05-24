@@ -185,13 +185,18 @@ export function generateProjectCard(project: Project): HTMLDivElement {
         btnHideProject.firstChild.classList.toggle("bi-eye");
         // @ts-ignore
 
-        console.log(GetProjectClosed(projectId))
         var a = await GetProjectClosed(projectId)
         console.log("GetProjectClosed(projectId)",a)
         if (a) {
-            closeProject(cardBodyDiv, projectId);
+            UpdateProjectClosed(projectId,true);
+            cardBodyDiv.classList.remove("bgAccent")
+            cardBodyDiv.classList.add("bgAccentDark")
+           // closeProject(cardBodyDiv, projectId);
         } else {
-            openProject(cardBodyDiv, projectId);
+            UpdateProjectClosed(projectId,false);
+            cardBodyDiv.classList.remove("bgAccentDark")
+            cardBodyDiv.classList.add("bgAccent")
+            //openProject(cardBodyDiv, projectId);
         }
     });
     btnEnterProject.addEventListener("click", function() {
@@ -209,8 +214,7 @@ export function generateProjectCard(project: Project): HTMLDivElement {
 }
 function closeProject(cardBodyDiv: HTMLDivElement,projectId: number) {
     UpdateProjectClosed(projectId,true);
-    cardBodyDiv.classList.remove("bgAccent")
-    cardBodyDiv.classList.add("bgAccentDark")
+    
     
     projectClosedToast.show()
     let closeProjectClosedToast = document.getElementById("closeProjectClosedToast") as HTMLButtonElement
