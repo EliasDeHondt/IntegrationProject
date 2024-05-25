@@ -164,9 +164,6 @@ function showStepVisibility(step: Step) {
         }
     });
 }
-// async function updateStepList(steps: Step[]) {
-//    
-// }
 
 // async function updateStepList(steps: Step[]) {
 //     // Fetch steps and update currentStepList
@@ -273,12 +270,10 @@ async function updateStepList(steps: Step[]) {
     console.log(currentStepList);
 
     const stepsList = document.getElementById("steps-list") as HTMLDivElement;
-
     stepsList.innerHTML = "";
 
     if (currentStepList.length > 0) {
         currentStepList.forEach(step => {
-            console.log("index aaaaa",  currentStepList.indexOf(step))
             const stepCard = document.createElement('a');
             stepCard.classList.add("step-card", "justify-content-center", "align-items-center");
             stepCard.dataset.stepNumber = step.stepNumber.toString();
@@ -328,45 +323,60 @@ async function updateStepList(steps: Step[]) {
             leftArrowIcon.classList.add('bi', 'bi-caret-left-fill');
             leftArrowButton.classList.add('arrow-button', 'left-arrow', 'btn-add-element', 'bhover', 'bgAccent');
             leftArrowButton.appendChild(leftArrowIcon);
+            const rightArrowButton = document.createElement('button');
+            const rightArrowIcon = document.createElement('i');
+            rightArrowIcon.classList.add('bi', 'bi-caret-right-fill');
+            rightArrowButton.classList.add('arrow-button', 'right-arrow','btn-add-element','bhover','bgAccent');
 
             leftArrowButton.onclick = async () => {
                 const index = currentStepList.indexOf(step);
-                if (index > 1) {
+                if (index > 0 && index < currentStepList.length) { // Ensure index is valid
                     const previousStep = currentStepList[index - 1];
-                    console.log("previousStep",previousStep.stepNumber);
-                    // [currentStepList[index], currentStepList[index - 1]] = [previousStep, step];
-                    step.stepNumber--;
-                    previousStep.stepNumber++;
-                    // currentStepList[index].stepNumber = step.stepNumber;
-                    console.log("currentStepList.stepNumber",currentStepList[index].stepNumber)
-                    console.log("step.stepNumber",step.stepNumber)
-                    console.log("previousStep[index - 1].stepNumber",previousStep.stepNumber)
-                    updatehelp(step,step.id,previousStep.stepNumber)
-                    updatehelp(previousStep,previousStep.id, step.stepNumber)
-                    // await UpdateStepByNumber(previousStep.id, step.stepNumber)
-                    // await UpdateStepByNumber(step.id,previousStep.stepNumber)
-                    
-                    updateStepCardheader(cardHeader,stepCard,step)
-                    updateStepCardheader(cardHeader,stepCard,previousStep)
-                    
-                    // // [currentStepList[index - 1], currentStepList[index]] = [currentStepList[index], currentStepList[index - 1]];
-                    // step.stepNumber=previousStep.stepNumber;
-                    // // currentStepList[index - 1].stepNumber = index+1;
-                    // currentStepList[index].stepNumber = previousStep.stepNumber;
-                    // currentStepList[index - 1].stepNumber = index + 1;
-                    // console.log("step.stepNumber",currentStepList[index].stepNumber)
-                    // console.log("currentStepList[index - 1].stepNumber",currentStepList[index - 1].stepNumber)
-                    // await UpdateStepByNumber(step.id, previousStep.stepNumber)
-                    // cardHeader.innerText = "Step " + previousStep.stepNumber.toString();
+                    console.log("previousStep", previousStep.stepNumber);
+
+                    // Swap step numbers
+                    const tempStepNumber = step.stepNumber;
+                    step.stepNumber = previousStep.stepNumber;
+                    previousStep.stepNumber = tempStepNumber;
+
+                    console.log("currentStepList.stepNumber", currentStepList[index].stepNumber);
+                    console.log("step.stepNumber", step.stepNumber);
+                    console.log("previousStep.stepNumber", previousStep.stepNumber);
+
+                    // Update help and UI
+                    await updatehelp(step, step.id, step.stepNumber);
+                    await updatehelp(previousStep, previousStep.id, previousStep.stepNumber);
+
+                    updateStepCardheader(cardHeader, stepCard, step);
+                    updateStepCardheader(cardHeader, stepCard, previousStep);
                 }
-                
-                // moveStepToLeft(step, currentStepList);
-                // const index = currentStepList.findIndex(s => s.stepNumber === step.stepNumber);
-                // await GetStepsFromFlow(flowId);
-                // updateStepList(currentStepList);
-                // initializeCardLinks();
-                // await showStepInContainer(currentStepList[index]);
-            }
+            };
+
+            rightArrowButton.onclick = async () => {
+                const index = currentStepList.indexOf(step);
+                console.log("index", index);
+                if (index > 0 && index < currentStepList.length - 1) { // Ensure index is valid
+                    const nextStep = currentStepList[index + 1];
+                    console.log("nextStep", nextStep.stepNumber);
+
+                    // Swap step numbers
+                    const tempStepNumber = step.stepNumber;
+                    step.stepNumber = nextStep.stepNumber;
+                    nextStep.stepNumber = tempStepNumber;
+
+                    console.log("currentStepList.stepNumber", currentStepList[index].stepNumber);
+                    console.log("step.stepNumber", step.stepNumber);
+                    console.log("nextStep.stepNumber", nextStep.stepNumber);
+
+                    // Update help and UI
+                    await updatehelp(step, step.id, step.stepNumber);
+                    await updatehelp(nextStep, nextStep.id, nextStep.stepNumber);
+
+                    updateStepCardheader(cardHeader, stepCard, step);
+                    updateStepCardheader(cardHeader, stepCard, nextStep);
+                }
+            };
+
             updateStepCardheader(cardHeader,stepCard,step)
             // cardHeader.innerText = "Step " + step.stepNumber.toString();
             //
@@ -380,14 +390,13 @@ async function updateStepList(steps: Step[]) {
 
 
             leftArrowButton.appendChild(leftArrowIcon);
-            //rightArrowButton.appendChild(rightArrowIcon);
+            rightArrowButton.appendChild(rightArrowIcon);
             buttons.appendChild(leftArrowButton);
-            //buttons.appendChild(rightArrowButton);
-
-            stepCard.appendChild(buttons)
+            buttons.appendChild(rightArrowButton);
+            
             stepCard.appendChild(cardHeader);
-
-
+            stepCard.appendChild(buttons)
+            
             stepsList.appendChild(stepCard);
         })
     } else {
