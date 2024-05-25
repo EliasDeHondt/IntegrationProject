@@ -235,8 +235,8 @@ async function updateStepList(steps: Step[]) {
 
             const cardHeader = document.createElement('h2');
             cardHeader.classList.add("step-card-header");
-            
-            
+
+
             const leftArrowButton = document.createElement('button');
             const leftArrowIcon = document.createElement('i');
             leftArrowIcon.classList.add('bi', 'bi-caret-left-fill');
@@ -265,7 +265,8 @@ async function updateStepList(steps: Step[]) {
 
                     updateStepCardheader(cardHeader,stepCard,step)
                     updateStepCardheader(cardHeader,stepCard,previousStep)
-
+                    await saveFlow()
+                    window.location.reload();
                     // // [currentStepList[index - 1], currentStepList[index]] = [currentStepList[index], currentStepList[index - 1]];
                     // step.stepNumber=previousStep.stepNumber;
                     // // currentStepList[index - 1].stepNumber = index+1;
@@ -293,11 +294,14 @@ async function updateStepList(steps: Step[]) {
 
                     updateStepCardheader(cardHeader,stepCard,step)
                     updateStepCardheader(cardHeader,stepCard,nextStep)
+                    await saveFlow()
+                    window.location.reload();
+
                 }
             }
 
             updateStepCardheader(cardHeader,stepCard,step)
-            
+
             // if(previousStep != null){
             //     updateStepCardheader(cardHeader,stepCard,previousStep)
             // }
@@ -319,10 +323,10 @@ async function updateStepList(steps: Step[]) {
             rightArrowButton.appendChild(rightArrowIcon);
             buttons.appendChild(leftArrowButton);
             buttons.appendChild(rightArrowButton);
-            
+
             stepCard.appendChild(cardHeader);
             stepCard.appendChild(buttons)
-            
+
             stepsList.appendChild(stepCard);
         })
     } else {
