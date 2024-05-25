@@ -28,6 +28,27 @@ public static class DataSeeder
         dbContext.Answers.Add(answer);
         dbContext.Selections.Add(selection);
     }
+    
+    private static void GenerateMultipleAnswers(CodeForgeDbContext dbContext,
+        MultipleChoiceQuestion multipleChoiceQuestion, Choice choice1, Choice choice2, Choice choice3)
+    {
+        ChoiceAnswer answer = new ChoiceAnswer(multipleChoiceQuestion);
+        Selection selection1 = new Selection(choice1, answer);
+        Selection selection2 = new Selection(choice2, answer);
+        Selection selection3 = new Selection(choice3, answer);
+        answer.Answers.Add(selection1);
+        answer.Answers.Add(selection2);
+        answer.Answers.Add(selection3);
+        dbContext.Answers.Add(answer);
+        dbContext.Selections.AddRange(selection1, selection2, selection3);
+    }
+    
+    private static void GenerateOpenAnswers(CodeForgeDbContext dbContext,
+        OpenQuestion openQuestion, string openAnswer)
+    {
+        OpenAnswer answer = new OpenAnswer(openQuestion, openAnswer);
+        dbContext.Answers.Add(answer);
+    }
 
     private static void GenerateSingleQuestions(CodeForgeDbContext dbContext, Flow flow, int caseIndex,
         int stepIndexFlow)
@@ -142,6 +163,13 @@ public static class DataSeeder
                 dbContext.ChoiceQuestions.AddRange(multipleChoiceQuestions1);
                 dbContext.Choices.AddRange(choice1, choice2, choice3, choice4, choice5);
 
+                //Answer data
+                GenerateMultipleAnswers(dbContext, multipleChoiceQuestions1, choice1, choice2, choice3);
+                GenerateMultipleAnswers(dbContext, multipleChoiceQuestions1, choice1, choice4, choice5);
+                GenerateMultipleAnswers(dbContext, multipleChoiceQuestions1, choice4, choice3, choice1);
+                GenerateMultipleAnswers(dbContext, multipleChoiceQuestions1, choice2, choice5, choice3);
+                GenerateMultipleAnswers(dbContext, multipleChoiceQuestions1, choice1, choice2, choice4);
+
                 // Add to step
                 QuestionStep step1 = new QuestionStep(stepIndexFlow, multipleChoiceQuestions1, flow);
                 flow.Steps.Add(step1);
@@ -247,6 +275,14 @@ public static class DataSeeder
                     new OpenQuestion(
                         "What do you think is the most important issue in your municipality? Please provide your thoughts.");
                 QuestionStep step1 = new QuestionStep(stepIndexFlow, openQuestions1, flow);
+                
+                //Answer data
+                GenerateOpenAnswers(dbContext, openQuestions1, "Implementing policies to address the rising cost of housing and provide affordable options for residents.");
+                GenerateOpenAnswers(dbContext, openQuestions1, "Investing in transportation infrastructure to alleviate congestion and improve connectivity across the municipality.");
+                GenerateOpenAnswers(dbContext, openQuestions1, "Enhancing educational resources and facilities to ensure all students receive a high-quality education.");
+                GenerateOpenAnswers(dbContext, openQuestions1, "Implementing initiatives to protect natural resources, reduce pollution, and promote sustainable practices.");
+                GenerateOpenAnswers(dbContext, openQuestions1, "Strengthening community policing efforts and investing in crime prevention strategies to ensure the safety of residents.");
+                
                 flow.Steps.Add(step1);
                 dbContext.OpenQuestions.Add(openQuestions1);
                 dbContext.QuestionSteps.Add(step1);

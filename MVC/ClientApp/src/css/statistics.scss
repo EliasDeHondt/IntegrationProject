@@ -5,6 +5,8 @@
  *                                     *
  ***************************************/
 
+@import "variables";
+
 //.chart-container {
 //  display: flex;
 //  padding-left: 20px;
@@ -59,3 +61,11 @@
 //  padding-right: 60px; 
 //  margin: auto;
 //}
+
+#answersSummary {
+  margin: 24px auto;
+  width: 1200px;
+  border: thin solid map-get($themes, light, secondary);
+  border-radius: 24px;
+  padding: 16px;
+}

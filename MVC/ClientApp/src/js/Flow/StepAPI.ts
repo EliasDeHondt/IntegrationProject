@@ -349,8 +349,8 @@ function showQuestionStep(data: Question) {
                 textInput.name = 'answer';
                 textInput.rows = 8;
                 textInput.cols = 75;
-                textInput.maxLength = 650;
-                textInput.placeholder = "Your answer here... (Max 650 characters)"
+                textInput.maxLength = 300;
+                textInput.placeholder = "Your answer here... (Max 300 characters)"
 
                 // Event listener that ensures the 650 character limit.
                 textInput.addEventListener('input', function () {
