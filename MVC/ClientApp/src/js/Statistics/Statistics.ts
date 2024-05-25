@@ -267,7 +267,7 @@ export function initQuestionNames(labels: Question[]) {
     });
 }
 export function initChoicesNames(labels: string[]) {
-    GetAnswerCountsForQuestions(labels,showSelectedQuestion(),showSelectedQuestionText());
+    GetAnswerCountsForQuestions(labels,showSelectedQuestion(),showSelectedQuestionText(),showSelectedQuestionNumber());
 }
 
 GetNamesPerFlow()
@@ -303,11 +303,15 @@ exportAllCSV.addEventListener('click', function() {
     exportQuestionCSV();
 });
 
-async function generateSummary(questionId: number) {
+export async function generateAnswerSummary(questionId: number) {
     let question : string = "";
     let answers : string[] = [];
     await GetQuestionText(questionId).then((q) => question = q);
     await GetAnswersFromQuestion(questionId).then((a) => answers = a)
-
-    GenerateSummary(question, answers).then(s => summary.innerText = s);
+    
+    if (answers.length == 0) {
+        summary.innerText = `No answers available!`
+    } else {
+        GenerateSummary(question, answers).then(s => summary.innerText = s);
+    }
 }

@@ -4,6 +4,7 @@ import {
     drawPieChart,
     drawRadarChart,
     initChoicesNames, initDataStatistics, initQuestionNames,
+    generateAnswerSummary
 } from "../Statistics";
 import {Question, Answer} from "../../Types/ProjectObjects";
 
@@ -141,7 +142,7 @@ export async function GetRespondentsFromFlow(labels: string[],flowname: string){
         .then(data => drawPieChart("Aantal Respondents voor de Flow \""+flowname+"\" verdeeld over de participations",labels,'Aantal Respondents', data))
         .catch(error => console.error("Error:", error))
 }
-export async function GetAnswerCountsForQuestions(labels: string[],question: string,questionText: string){
+export async function GetAnswerCountsForQuestions(labels: string[],question: string,questionText: string, questionNumber: string){
     console.log("question: GetAnswerCountsForQuestions",question)
     //voor elk answer te tellen
     await fetch("/api/Statistics/GetAnswerCountsForQuestions/" + question, {
@@ -155,6 +156,7 @@ export async function GetAnswerCountsForQuestions(labels: string[],question: str
         .then(data => {
             console.log("data QA",data)
             drawDoughnutChart("Aantal antwoorden voor de vraag: "+questionText, labels,'Aantal Answers', data)
+            generateAnswerSummary(parseInt(questionNumber));
         })
         .catch(error => console.error("Error:", error))
 }
