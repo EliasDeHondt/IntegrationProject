@@ -29,10 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 })
 
-let url: string = window.location.hostname;
-generateQrCode(url + `/WebApp/Feed/${projectId}`).then(qr => {
-    qrcode.src += qr.replace(new RegExp("\"", 'g'), "");
-})
+
 
 connection.on("ReceiveFlowUpdate", async (id, state) => {
     currStateOfFlow = state;
@@ -53,4 +50,8 @@ connection.on("FlowActivated", (flowType, id) => {
 
 connection.on("ReceiveProjectId", (id) => {
     projectId = id;
+    let url: string = window.location.hostname;
+    generateQrCode(url + `/WebApp/Feed/${projectId}`).then(qr => {
+        qrcode.src += qr.replace(new RegExp("\"", 'g'), "");
+    })
 })
