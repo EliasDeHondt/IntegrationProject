@@ -1,44 +1,43 @@
 import {Step} from "../../Flow/Step/StepObjects";
 
 
-export function moveStepToLeft(step: Step){
-    step.stepNumber--;
-    // const index = currentStepList.indexOf(step);
-    // if (index > 0) {
-    //     // Swap steps
-    //     [currentStepList[index], currentStepList[index - 1]] = [currentStepList[index - 1], currentStepList[index]];
-    //     // Re-render the steps list
-    //     renderStepsList();
-    // }
-}
-export function moveStepToRight(step: Step){
-    step.stepNumber++;
+// export function moveStepToLeft(step: Step){
+//     step.stepNumber--;
+//     // const index = currentStepList.indexOf(step);
+//     // if (index > 0) {
+//     //     // Swap steps
+//     //     [currentStepList[index], currentStepList[index - 1]] = [currentStepList[index - 1], currentStepList[index]];
+//     //     // Re-render the steps list
+//     //     renderStepsList();
+//     // }
+// }
+// export function moveStepToRight(step: Step){
+//     step.stepNumber++;
+// }
+
+export function moveStepToLeft(step: Step, currentStepList: string | any[] | undefined) {
+    // @ts-ignore
+    const index = currentStepList.indexOf(step);
+    if (index > 0) {
+        if (currentStepList != null) {
+            // @ts-ignore
+            [currentStepList[index - 1], currentStepList[index]] = [currentStepList[index], currentStepList[index - 1]];
+        }
+    }
 }
 
-// export function moveStepToLeft(step: Step, currentStepList: string | any[] | undefined,stepsList: HTMLDivElement | undefined) {
-//     // @ts-ignore
-//     const index = currentStepList.indexOf(step);
-//     if (index > 0) {
-//         if (currentStepList != null) {
-//             // @ts-ignore
-//             [currentStepList[index - 1], currentStepList[index]] = [currentStepList[index], currentStepList[index - 1]];
-//         }
-//         renderSteps(stepsList,currentStepList);;
-//     }
-// }
-//
-// export function moveStepToRight(step: string | Step, currentStepList: string | any[] | undefined,stepsList: HTMLDivElement | undefined) {
-//     // @ts-ignore
-//     const index = currentStepList.indexOf(step);
-//     // @ts-ignore
-//     if (index < currentStepList.length - 1) {
-//         if (currentStepList != null) {
-//             // @ts-ignore
-//             [currentStepList[index + 1], currentStepList[index]] = [currentStepList[index], currentStepList[index + 1]];
-//         }
-//         renderSteps(stepsList,currentStepList);
-//     }
-// }
+export function moveStepToRight(step: string | Step, currentStepList: string | any[] | undefined,stepsList: HTMLDivElement | undefined) {
+    // @ts-ignore
+    const index = currentStepList.indexOf(step);
+    // @ts-ignore
+    if (index < currentStepList.length - 1) {
+        if (currentStepList != null) {
+            // @ts-ignore
+            [currentStepList[index + 1], currentStepList[index]] = [currentStepList[index], currentStepList[index + 1]];
+        }
+        //renderSteps(stepsList,currentStepList);
+    }
+}
 //
 // function renderSteps(stepsList: HTMLDivElement | undefined, currentStepList: string | any[] | undefined) {
 //     // @ts-ignore
