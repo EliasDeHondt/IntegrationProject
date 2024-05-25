@@ -30,7 +30,7 @@ public class StepsController : Controller
         _uow = uow;
     }
 
-    [HttpGet("GetNextStep/{flowId:int}/{stepNumber:long}")]
+    [HttpGet("GetNextStep/{flowId}/{stepNumber}")]
     public ActionResult GetNextStep(int stepNumber, long flowId)
     {
         StepBase stepBase = _manager.GetStepForFlowByNumber(flowId, stepNumber);
@@ -40,7 +40,7 @@ public class StepsController : Controller
         return Ok(stepViewModel);
     }
 
-    [HttpGet("GetConditionalNextStep/{stepId:long}")]
+    [HttpGet("GetConditionalNextStep/{stepId}")]
     public ActionResult GetConditionalNextStep(long stepId)
     {
         StepBase stepBase = _manager.GetStepById(stepId);
@@ -62,7 +62,7 @@ public class StepsController : Controller
         return Created("AddNote", newNote);
     }
 
-    [HttpGet("GetStepsFromFlow/{flowId:long}")]
+    [HttpGet("GetStepsFromFlow/{flowId}")]
     public ActionResult GetStepsFromFlow(long flowId)
     {
         var steps = _manager.GetAllStepsForFlow(flowId);
@@ -121,6 +121,20 @@ public class StepsController : Controller
 
         _uow.Commit();
 
+        return NoContent();
+    }
+    
+    [HttpPut("UpdateStepByNumber/{stepId}/{stepNumber}")]
+    public ActionResult UpdateStepByNumber(long stepId, int stepNumber)
+    {
+        _uow.BeginTransaction();
+    
+        var step = _manager.GetStepById(stepId);
+
+        step.StepNumber = stepNumber;
+    
+        _uow.Commit();
+    
         return NoContent();
     }
 }

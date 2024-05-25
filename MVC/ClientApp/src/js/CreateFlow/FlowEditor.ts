@@ -12,6 +12,13 @@ import {Modal, Toast} from "bootstrap";
 import {Flow, Participation} from "../Flow/FlowObjects";
 import {readFileAsBase64} from "../Util";
 import {moveStepToLeft, moveStepToRight} from "./API/MoveStepAPI";
+import {
+    AddChoice,
+    AddInformation, GetStepByNumber, GetStepId,
+    GetStepsFromFlow,
+    UpdateInformationStep,
+    UpdateQuestionStep, UpdateStepByNumber
+} from "./API/FlowEditorAPI";
 
 const saveFlowToast = new Toast(document.getElementById("saveFlowToast")!);
 
@@ -32,95 +39,6 @@ let currentStep: Step;
 let currentStepList: Step[] = [];
 let flowId: number;
 
-async function GetStepsFromFlow(flowId: number): Promise<Step[]> {
-    return await fetch(`/api/Steps/GetStepsFromFlow/${flowId}`, {
-        method: "GET",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-            return data;
-        })
-}
-
-async function GetStepByNumber(flowId: number, stepNr: number): Promise<Step> {
-    return await fetch(`/api/Steps/GetNextStep/${flowId}/${stepNr}`, {
-        method: "GET",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-            return data;
-        })
-}
-
-async function GetStepId(stepNr: number): Promise<number> {
-    return await fetch(`/EditFlows/GetStepId/${flowId}/${stepNr}`, {
-        method: "GET",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-            return data
-        })
-}
-
-async function AddChoice(stepNr: number) {
-    await fetch(`/EditFlows/CreateChoice/${flowId}/${stepNr}`, {
-        method: "POST",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
-    })
-        .then(response => response.json())
-        .catch(error => console.error("Error:", error))
-}
-
-async function AddInformation(stepNr: number, type: string) {
-    await fetch(`/EditFlows/CreateInformation/${flowId}/${stepNr}/${type}`, {
-        method: "POST",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
-    })
-        .then(response => response.json())
-        .catch(error => console.error("Error:", error))
-}
-
-async function UpdateInformationStep(step: Step) {
-    await fetch(`/api/Steps/UpdateInformationStep`, {
-        method: "PUT",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(step)
-    })
-}
-
-async function UpdateQuestionStep(step: Step) {
-    await fetch(`/api/Steps/UpdateQuestionStep`, {
-        method: "PUT",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(step)
-    })
-}
-
-
 document.addEventListener("DOMContentLoaded", () => {
     flowId = getFlowId();
     GetStepsFromFlow(flowId)
@@ -130,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 btnAddChoice.onclick = async () => {
-    await AddChoice(currentStep.stepNumber)
+    await AddChoice(flowId,currentStep.stepNumber)
         .then(() => GetStepsFromFlow(flowId))
         .then(() => updateStepList(currentStepList))
         .then(() => initializeCardLinks());
@@ -139,7 +57,7 @@ btnAddChoice.onclick = async () => {
 }
 
 btnAddText.onclick = async () => {
-    await AddInformation(currentStep.stepNumber, 'Text')
+    await AddInformation(flowId,currentStep.stepNumber, 'Text')
         .then(() => GetStepsFromFlow(flowId))
         .then(() => updateStepList(currentStepList))
         .then(() => initializeCardLinks());
@@ -148,7 +66,7 @@ btnAddText.onclick = async () => {
 }
 
 btnAddLink.onclick = async () => {
-    await AddInformation(currentStep.stepNumber, 'Hyperlink')
+    await AddInformation(flowId,currentStep.stepNumber, 'Hyperlink')
         .then(() => GetStepsFromFlow(flowId))
         .then(() => updateStepList(currentStepList))
         .then(() => initializeCardLinks());
@@ -157,7 +75,7 @@ btnAddLink.onclick = async () => {
 }
 
 btnAddImage.onclick = async () => {
-    await AddInformation(currentStep.stepNumber, 'Image')
+    await AddInformation(flowId,currentStep.stepNumber, 'Image')
         .then(() => GetStepsFromFlow(flowId))
         .then(() => updateStepList(currentStepList))
         .then(() => initializeCardLinks());
@@ -166,7 +84,7 @@ btnAddImage.onclick = async () => {
 }
 
 btnAddVideo.onclick = async () => {
-    await AddInformation(currentStep.stepNumber, 'Video')
+    await AddInformation(flowId,currentStep.stepNumber, 'Video')
         .then(() => GetStepsFromFlow(flowId))
         .then(() => updateStepList(currentStepList))
         .then(() => initializeCardLinks());
@@ -390,12 +308,36 @@ async function updateStepList(steps: Step[]) {
             leftArrowButton.appendChild(leftArrowIcon);
 
             leftArrowButton.onclick = async () => {
-                moveStepToLeft(step, currentStepList);
-                const index = currentStepList.findIndex(s => s.stepNumber === step.stepNumber);
-                await GetStepsFromFlow(flowId);
-                updateStepList(currentStepList);
-                initializeCardLinks();
-                await showStepInContainer(currentStepList[index]);
+                const index = currentStepList.indexOf(step);
+                if (index > 1) {
+                    const previousStep = currentStepList[index - 1];
+                    console.log("previousStep",previousStep.stepNumber);
+                    [currentStepList[index], currentStepList[index - 1]] = [previousStep, step];
+                    // [currentStepList[index - 1], currentStepList[index]] = [currentStepList[index], currentStepList[index - 1]];
+                    // step.stepNumber=previousStep.stepNumber;
+                    // currentStepList[index - 1].stepNumber = index+1;
+                    currentStepList[index].stepNumber = 3;
+                    currentStepList[index - 1].stepNumber = index + 1;
+                    console.log("step.stepNumber",step.stepNumber)
+                    console.log("currentStepList[index - 1].stepNumber",currentStepList[index - 1].stepNumber)
+                    //UpdateQuestionStep(step)
+                    await UpdateStepByNumber(step.id, previousStep.stepNumber)
+                    //UpdateStepByNumber(step,step.stepNumber);
+                    // const previousStep = currentStepList[index - 1];
+                    // [currentStepList[index], currentStepList[index - 1]] = [previousStep, step];
+                    // currentStepList[index].stepNumber = index + 1;
+                    // currentStepList[index - 1].stepNumber = index;
+                    // // updateStepList(currentStepList);
+                    // console.log("step.stepNumber",currentStepList[index].stepNumber)
+                    // console.log("currentStepList[index - 1].stepNumber",currentStepList[index - 1].stepNumber)
+                }
+                
+                // moveStepToLeft(step, currentStepList);
+                // const index = currentStepList.findIndex(s => s.stepNumber === step.stepNumber);
+                // await GetStepsFromFlow(flowId);
+                // updateStepList(currentStepList);
+                // initializeCardLinks();
+                // await showStepInContainer(currentStepList[index]);
             }
 
             const cardHeader = document.createElement('h2');
@@ -699,7 +641,7 @@ async function fillConditionalPoints(select: HTMLSelectElement, nextStepId?: num
 
     for (const step of currentStepList) {
         let option = document.createElement("option");
-        await GetStepId(step.stepNumber).then(id => option.value = id.toString());
+        await GetStepId(flowId,step.stepNumber).then(id => option.value = id.toString());
         option.innerText = `Step ${step.stepNumber}`
         select.appendChild(option);
         if (parseInt(option.value) == nextStepId)
