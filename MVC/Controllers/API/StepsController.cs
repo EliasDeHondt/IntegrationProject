@@ -81,6 +81,8 @@ public class StepsController : Controller
 
         if (step is InformationStep infoStep)
         {
+            step.StepNumber = model.StepNumber;
+            
             infoStep.InformationBases = model.InformationViewModel
                 .Select(infoViewModel =>
                 {
@@ -104,6 +106,8 @@ public class StepsController : Controller
 
         if (step is QuestionStep questionStep)
         {
+            step.StepNumber = model.StepNumber;
+            
             var question = questionStep.QuestionBase;
             question.Question = model.QuestionViewModel.Question;
             if (question is ChoiceQuestionBase choiceQuestion)
@@ -114,6 +118,7 @@ public class StepsController : Controller
                         {
                             var choice = _manager.GetChoiceById(choiceViewModel.Id);
                             _manager.ChangeChoice(choice, choiceViewModel.Text, choiceViewModel.NextStepId);
+                           // _manager.ChangeStepNum(step,step.StepNumber);
                             return choice;
                         }).ToList();
             }
@@ -133,6 +138,46 @@ public class StepsController : Controller
 
         step.StepNumber = stepNumber;
     
+        _uow.Commit();
+    
+        return NoContent();
+    }
+    [HttpPut("UpdateQuestionStepByNumber/{stepId}/{stepNumber}")]
+    public ActionResult UpdateQuestionStepByNumber(long stepId, int stepNumber)
+    {
+        _uow.BeginTransaction();
+    
+        var step = _manager.GetStepById(stepId);
+
+        step.StepNumber = stepNumber;
+    
+        _uow.Commit();
+    
+        return NoContent();
+    }
+    [HttpPut("UpdateInfoStepByNumber/{stepId}/{stepNumber}")]
+    public ActionResult UpdateInfoStepByNumber(long stepId, int stepNumber)
+    {
+        _uow.BeginTransaction();
+    
+        var step = _manager.GetStepById(stepId);
+
+        step.StepNumber = stepNumber;
+    
+        _uow.Commit();
+    
+        return NoContent();
+    }
+    
+    [HttpPut("UpdateStepsByNumber")]
+    public ActionResult UpdateStepsByNumber(StepBase step)
+    {
+        _uow.BeginTransaction();
+    
+        // _manager.UpdateStepsByNumber(step,prevstep);
+        //_manager.ChangeStep(step);
+        //_manager.ChangeStep(prevstep);
+        
         _uow.Commit();
     
         return NoContent();

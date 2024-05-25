@@ -96,8 +96,32 @@ export async function UpdateStepByNumber(stepId: number,stepNumber: number){//fl
             "Content-Type": "application/json"
         }
     })
-    // .then(response => response.json())
-    // .then(data => {
-    //     return data;
-    // })
+}
+export async function UpdateQuestionStepByNumber(stepId: number,stepNumber: number){//flowId: number, stepNr: number) {
+    await fetch(`/api/Steps/UpdateQuestionStepByNumber/${stepId}/${stepNumber}`, {
+        method: "PUT",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+}
+export async function UpdateInfoStepByNumber(stepId: number,stepNumber: number){//flowId: number, stepNr: number) {
+    await fetch(`/api/Steps/UpdateInfoStepByNumber/${stepId}/${stepNumber}`, {
+        method: "PUT",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+}
+export async function UpdateStepsByNumber(step: Step){//flowId: number, stepNr: number) {
+    await fetch(`/api/Steps/UpdateStepsByNumber`, {
+        method: "PUT",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(step)
+    })
 }

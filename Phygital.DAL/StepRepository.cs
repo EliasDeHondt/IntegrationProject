@@ -241,9 +241,29 @@ public class StepRepository
         if (nextStepId != null)
             newChoice.NextStep = _ctx.Steps.Single(s => s.Id == nextStepId);
     }
+    public void UpdateStepNum(QuestionStep step,long? stepNum)
+    {
+        //_ctx.Steps.Find(step.Id).Single(s => s.StepNumber == stepNum);
+    }
 
     public void UpdateQuestion(QuestionBase question)
     {
         _ctx.Questions.Update(question);
+    }
+    
+    public void UpdateStepsByNumber(StepBase step, StepBase prevstep)
+    {
+        switch (step)
+        {
+            case InformationStep i:
+                _ctx.InformationSteps.Update(i);
+                break;
+            case QuestionStep q:
+                _ctx.QuestionSteps.Update(q);
+                break;
+            case CombinedStep c:
+                _ctx.CombinedSteps.Update(c);
+                break;
+        }
     }
 }

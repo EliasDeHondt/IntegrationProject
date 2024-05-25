@@ -16,8 +16,8 @@ import {
     AddChoice,
     AddInformation, GetStepByNumber, GetStepId,
     GetStepsFromFlow,
-    UpdateInformationStep,
-    UpdateQuestionStep, UpdateStepByNumber
+    UpdateInformationStep, UpdateInfoStepByNumber,
+    UpdateQuestionStep, UpdateQuestionStepByNumber, UpdateStepByNumber, UpdateStepsByNumber
 } from "./API/FlowEditorAPI";
 
 const saveFlowToast = new Toast(document.getElementById("saveFlowToast")!);
@@ -259,6 +259,12 @@ function updateStepCardheader(cardHeader: HTMLHeadingElement, stepCard: HTMLAnch
     if (!step.visible)
         stepCard.classList.add('step-card-hidden')
 }
+async function updatehelp(step: Step, stepId: number, stepNumber: number) {
+    if (isQuestionStep(step))
+        await UpdateQuestionStepByNumber(stepId, stepNumber)
+    if (isInformationStep(step))
+        await UpdateInfoStepByNumber(stepId, stepNumber)
+}
 async function updateStepList(steps: Step[]) {
     for (const step of steps) {
         await GetStepByNumber(flowId, step.stepNumber).then(s => currentStepList[s.stepNumber - 1] = s);
@@ -328,12 +334,20 @@ async function updateStepList(steps: Step[]) {
                 if (index > 1) {
                     const previousStep = currentStepList[index - 1];
                     console.log("previousStep",previousStep.stepNumber);
-                    [currentStepList[index], currentStepList[index - 1]] = [previousStep, step];
+                    // [currentStepList[index], currentStepList[index - 1]] = [previousStep, step];
+                    step.stepNumber--;
+                    previousStep.stepNumber++;
+                    // currentStepList[index].stepNumber = step.stepNumber;
+                    console.log("currentStepList.stepNumber",currentStepList[index].stepNumber)
+                    console.log("step.stepNumber",step.stepNumber)
+                    console.log("previousStep[index - 1].stepNumber",previousStep.stepNumber)
+                    updatehelp(step,step.id,previousStep.stepNumber)
+                    updatehelp(previousStep,previousStep.id, step.stepNumber)
+                    // await UpdateStepByNumber(previousStep.id, step.stepNumber)
+                    // await UpdateStepByNumber(step.id,previousStep.stepNumber)
                     
-                    console.log("step.stepNumber",currentStepList[index].stepNumber)
-                    console.log("currentStepList[index - 1].stepNumber",currentStepList[index - 1].stepNumber)
-                    await UpdateStepByNumber(step.id, previousStep.stepNumber)
                     updateStepCardheader(cardHeader,stepCard,step)
+                    updateStepCardheader(cardHeader,stepCard,previousStep)
                     
                     // // [currentStepList[index - 1], currentStepList[index]] = [currentStepList[index], currentStepList[index - 1]];
                     // step.stepNumber=previousStep.stepNumber;
