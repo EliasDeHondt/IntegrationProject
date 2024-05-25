@@ -32,8 +32,8 @@ btnCloseInvalidIdea.onclick = () => {
     modalInvalidIdea.hide();
 }
 
+const feedNumber = document.getElementById("feedNumber") as HTMLDivElement;
 let feedId: number;
-
 btnPlaceIdea.onclick = async () => {
     let text = textArea.value.trim()
     let user = await GetLoggedInUser();
@@ -80,11 +80,21 @@ fileInput.onchange = async () => {
     }
 }
 
-GetRandomFeed().then(feed => {
-    generateIdeas(feed);
-    titleHeader.innerHTML = feed.title
-    feedId = feed.id
-})
+if(feedNumber.textContent){
+    feedId = parseInt(feedNumber.textContent);
+    if(feedId > 0){
+        GetFeed(feedId).then(feed => {
+            generateIdeas(feed);
+            titleHeader.innerHTML = feed.title
+        })
+    } else {
+        GetRandomFeed().then(feed => {
+            generateIdeas(feed);
+            titleHeader.innerHTML = feed.title
+            feedId = feed.id
+        })
+    }
+}
 
 GetFeedIds().then(feeds => {
     feeds.forEach(feed => {

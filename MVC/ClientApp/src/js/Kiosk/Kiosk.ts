@@ -1,7 +1,7 @@
 ﻿import * as signalR from "@microsoft/signalr";
 import {GenerateCards, GetFlowById} from "./FlowAPI";
 import {Flow} from "../Flow/FlowObjects"
-import {getFlowType} from "../Flow/ChooseFlow";
+import {generateQrCode} from "../Util";
 
 export const connection = new signalR.HubConnectionBuilder()
     .withUrl("/hub")
@@ -62,6 +62,7 @@ async function GenerateFlowOptions(ids: string) {
 connection.on("UserLeftConnection", (message) => console.log(message))
 connection.on("UserJoinedConnection", () => {
     const projectId = Number.parseInt(document.getElementById("projectId")!.dataset.projectId!);
+    
     connection.invoke("SendProjectId", code, projectId)  
     if(storedFlows != null){
         connection.invoke("OngoingFlow", code, true)
@@ -75,5 +76,6 @@ window.onclose = () => {
 }
 
 connection.on("FlowActivated", (id) => {
+    const projectId = Number.parseInt(document.getElementById("projectId")!.dataset.projectId!);
     window.location.href = `/Flow/Step/${id}`
 })

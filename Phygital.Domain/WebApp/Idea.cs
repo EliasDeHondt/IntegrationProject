@@ -18,11 +18,11 @@ public class Idea
     public string Text { get; set; }
     public ICollection<Reaction> Reactions { get; set; }
     public ICollection<Like> Likes { get; set;  }
-    public WebAppUser Author { get; set; }
+    public WebAppUser? Author { get; set; }
     public Feed Feed { get; set; }
     public Image? Image { get; set; }
 
-    public Idea(string text, WebAppUser author, Feed feed, Image? image, long id = default)
+    public Idea(string text, WebAppUser? author, Feed feed, Image? image, long id = default)
     {
         Id = id;
         Text = text;
