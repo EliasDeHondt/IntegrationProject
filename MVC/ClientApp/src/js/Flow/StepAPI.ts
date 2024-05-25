@@ -178,9 +178,8 @@ async function showInformationStep(data: Information[]) {
                 case "Video": {
                     let path = await downloadVideoFromBucket(infoStep.information);
                     let video = document.createElement("video");
-                    video.classList.add("w-100");
+                    video.style.height = "25em";
                     video.autoplay = true;
-                    video.classList.add("h-75")
                     if (typeof path === "string") {
                         path = path.substring(1, path.length - 1);
                         video.src = path;
