@@ -183,6 +183,7 @@ async function showInformationStep(data: Information[]) {
                         video.src = path;
 
                     }
+                    informationContainer.appendChild(video);
                     break;
                 }
                 case "Hyperlink": {
