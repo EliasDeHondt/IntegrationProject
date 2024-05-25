@@ -171,6 +171,7 @@ function updateStepCardheader(cardHeader: HTMLHeadingElement, stepCard: HTMLAnch
     if (isInformationStep(step))
         cardHeader.innerText += "\nInformation"
 
+    console.log(step.stepNumber,cardHeader.innerText)
     if (!step.visible)
         stepCard.classList.add('step-card-hidden')
 }
@@ -257,8 +258,8 @@ async function updateStepList(steps: Step[]) {
                     console.log("currentStepList.stepNumber",currentStepList[index].stepNumber)
                     console.log("step.stepNumber",step.stepNumber)
                     console.log("previousStep[index - 1].stepNumber",previousStep.stepNumber)
-                    updatehelp(step,step.id,previousStep.stepNumber)
-                    updatehelp(previousStep,previousStep.id, step.stepNumber)
+                    await updatehelp(step, step.id, previousStep.stepNumber)
+                    await updatehelp(previousStep, previousStep.id, step.stepNumber)
                     // await UpdateStepByNumber(previousStep.id, step.stepNumber)
                     // await UpdateStepByNumber(step.id,previousStep.stepNumber)
 
@@ -296,6 +297,13 @@ async function updateStepList(steps: Step[]) {
             }
 
             updateStepCardheader(cardHeader,stepCard,step)
+            
+            // if(previousStep != null){
+            //     updateStepCardheader(cardHeader,stepCard,previousStep)
+            // }
+            // if(nextStep != null){
+            //     updateStepCardheader(cardHeader,stepCard,nextStep)
+            // }
             // cardHeader.innerText = "Step " + step.stepNumber.toString();
             //
             // if (isQuestionStep(step))
