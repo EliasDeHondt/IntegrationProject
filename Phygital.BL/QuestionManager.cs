@@ -46,4 +46,9 @@ public class QuestionManager
     {
         return _repo.ReadQuestionText(questionId);
     }
+
+    public string GetQuestionType(long questionId)
+    {
+        return _repo.ReadQuestionType(questionId);
+    }
 }

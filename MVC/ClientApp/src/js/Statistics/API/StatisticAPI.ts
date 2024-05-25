@@ -142,7 +142,7 @@ export async function GetRespondentsFromFlow(labels: string[],flowname: string){
         .then(data => drawPieChart("Aantal Respondents voor de Flow \""+flowname+"\" verdeeld over de participations",labels,'Aantal Respondents', data))
         .catch(error => console.error("Error:", error))
 }
-export async function GetAnswerCountsForQuestions(labels: string[],question: string,questionText: string, questionNumber: string){
+export async function GetAnswerCountsForQuestions(labels: string[],question: string,questionText: string){
     console.log("question: GetAnswerCountsForQuestions",question)
     //voor elk answer te tellen
     await fetch("/api/Statistics/GetAnswerCountsForQuestions/" + question, {
@@ -156,7 +156,6 @@ export async function GetAnswerCountsForQuestions(labels: string[],question: str
         .then(data => {
             console.log("data QA",data)
             drawDoughnutChart("Aantal antwoorden voor de vraag: "+questionText, labels,'Aantal Answers', data)
-            generateAnswerSummary(parseInt(questionNumber));
         })
         .catch(error => console.error("Error:", error))
 }
@@ -179,6 +178,20 @@ export async function GetAnswersFromQuestion(questionId: number): Promise<string
 
 export async function GetQuestionText(questionId: number): Promise<string> {
     return await fetch(`/api/Statistics/GetQuestionText/${questionId}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data;
+        })
+}
+
+export async function GetQuestionType(questionId: number): Promise<string> {
+    return await fetch(`/api/Statistics/GetQuestionType/${questionId}`, {
         method: "GET",
         headers: {
             "Accept": "application/json",

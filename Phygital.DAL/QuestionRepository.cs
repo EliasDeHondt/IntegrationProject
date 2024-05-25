@@ -161,4 +161,16 @@ public class QuestionRepository
     {
         return _ctx.Questions.Find(questionId)!.Question;
     }
+
+    public string ReadQuestionType(long questionId)
+    {
+        var question = _ctx.Questions.Find(questionId)!;
+
+        switch (question)
+        {
+            case OpenQuestion:
+                return "OpenQuestion";
+            default: return "ChoiceQuestion";
+        }
+    }
 }

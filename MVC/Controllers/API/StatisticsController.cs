@@ -159,4 +159,12 @@ public class StatisticsController : Controller
 
         return Ok(question);
     }
+
+    [HttpGet("GetQuestionType/{questionId:long}")]
+    public IActionResult GetQuestionType(long questionId)
+    {
+        var question = _Qmanager.GetQuestionType(questionId);
+
+        return Ok(question);
+    }
 }

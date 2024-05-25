@@ -6,7 +6,7 @@ import {
     GetCountParticipationsPerFlow,
     GetCountStepsPerFlow,
     GetNamesPerFlow, GetParticipatoinNames, GetQuestionNames,
-    GetQuestionsFromFlow, GetQuestionText
+    GetQuestionsFromFlow, GetQuestionText, GetQuestionType
 } from "./API/StatisticAPI";
 import {Question} from "../Types/ProjectObjects";
 import {chartDatasToCSV, chartDataToCSV, downloadCSV} from "./ExportStatistics";
@@ -259,15 +259,31 @@ export function initDataStatistics(labels: string[]) {
         GetParticipatoinNames(showSelectedFlow());
     });
 }
-export function initQuestionNames(labels: Question[]) {
-    fillDropdownQuestions(labels,selectQuestion)
-    GetChoicesNames(showSelectedQuestion())
-    selectQuestion.addEventListener('change', () => {
-        GetChoicesNames(showSelectedQuestion())
+export async function initQuestionNames(labels: Question[]) {
+    fillDropdownQuestions(labels, selectQuestion)
+
+    await generateQuestionStatistics()
+    
+    selectQuestion.addEventListener('change', async () => {
+        await generateQuestionStatistics()
     });
 }
+
+async function generateQuestionStatistics() {
+    let number = parseInt(showSelectedQuestionNumber());
+    let type = await GetQuestionType(number);
+    await generateAnswerSummary(number)
+
+    if (type == "ChoiceQuestion") {
+        doughnutCtx.style.display = 'block'
+        GetChoicesNames(showSelectedQuestion())
+    } else {
+        doughnutCtx.style.display = 'none'
+    }
+}
+
 export function initChoicesNames(labels: string[]) {
-    GetAnswerCountsForQuestions(labels,showSelectedQuestion(),showSelectedQuestionText(),showSelectedQuestionNumber());
+    GetAnswerCountsForQuestions(labels,showSelectedQuestion(),showSelectedQuestionText());
 }
 
 GetNamesPerFlow()
