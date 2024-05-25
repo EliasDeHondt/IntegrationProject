@@ -185,24 +185,3 @@
   border: darkred thin solid;
 }
 
-.step-btns {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  height: 100%;
-  gap: 10px;
-  .bi{
-    color: white;
-  }
-}
-
-.arrow-button{
-  border-radius: 10px; /* Adjust the border-radius for rounded corners */
-  padding: 15px 20px; /* Adjust padding for button size */
-  //background-color: #3498db; /* Choose your desired background color */
-  //color: white; /* Text color */
-  text-decoration: none; /* Remove default underline for anchor tags */
-  border: none; /* Remove default border */
-  font-size: 18px;
-}

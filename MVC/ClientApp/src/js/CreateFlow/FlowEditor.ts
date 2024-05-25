@@ -11,6 +11,7 @@ import {downloadVideoFromBucket, uploadVideoToBucket} from "../StorageAPI";
 import {Modal, Toast} from "bootstrap";
 import {Flow, Participation} from "../Flow/FlowObjects";
 import {readFileAsBase64} from "../Util";
+import {moveStepToLeft, moveStepToRight} from "./API/MoveStepAPI";
 
 const saveFlowToast = new Toast(document.getElementById("saveFlowToast")!);
 
@@ -264,7 +265,41 @@ async function updateStepList(steps: Step[]) {
             const stepCard = document.createElement('a');
             stepCard.classList.add("step-card", "justify-content-center", "align-items-center");
             stepCard.dataset.stepNumber = step.stepNumber.toString();
+            
 
+            const buttons = document.createElement('div');
+            stepCard.classList.add("step-btns","justify-content-center", "align-items-center");
+
+            const leftArrowButton = document.createElement('button');
+            const leftArrowIcon = document.createElement('i');
+            leftArrowIcon.classList.add('bi', 'bi-caret-left-fill');
+            leftArrowButton.classList.add('arrow-button', 'left-arrow','btn-add-element','bhover','bgAccent');
+            leftArrowButton.addEventListener('click', () => {
+                const index = currentStepList.indexOf(step);
+                console.log("index l",index)
+                if (index > 0) {
+                    currentStepList[index] = currentStepList[index - 1];
+                    currentStepList[index - 1] =  currentStepList[index];
+                    //stepCard.dataset.stepNumber = step.stepNumber.toString();
+                    console.log("aaa",currentStepList[index])
+                }
+                //moveStepToLeft(step,currentStepList,stepsList);
+            });
+            const rightArrowButton = document.createElement('button');
+            const rightArrowIcon = document.createElement('i');
+            rightArrowIcon.classList.add('bi', 'bi-caret-right-fill');
+            rightArrowButton.classList.add('arrow-button', 'right-arrow','btn-add-element','bhover','bgAccent');
+            rightArrowButton.addEventListener('click', () => {
+                const index = currentStepList.indexOf(step);
+                console.log("index r",index)
+                if (index < currentStepList.length - 1) {
+                    [currentStepList[index], currentStepList[index + 1]] = [currentStepList[index + 1], currentStepList[index]];
+                    //stepCard.dataset.stepNumber = step.stepNumber.toString();
+                    console.log("bbb",currentStepList[index])
+                }
+                //moveStepToRight(step,currentStepList,stepsList);
+            });
+            
             const cardHeader = document.createElement('h2');
             cardHeader.classList.add("step-card-header");
             cardHeader.innerText = "Step " + step.stepNumber.toString();
@@ -277,31 +312,15 @@ async function updateStepList(steps: Step[]) {
             if (!step.visible)
                 stepCard.classList.add('step-card-hidden')
 
-            stepCard.appendChild(cardHeader);
 
-            const buttons = document.createElement('div');
-            stepCard.classList.add("step-btns","justify-content-center", "align-items-center");
-
-            const leftArrowButton = document.createElement('button');
-            const leftArrowIcon = document.createElement('i');
-            leftArrowIcon.classList.add('bi', 'bi-arrow-left');
-            leftArrowButton.classList.add('arrow-button', 'left-arrow','btn-add-element','bhover');
-            leftArrowButton.addEventListener('click', () => {
-                // Handle left arrow button click action
-            });
-            const rightArrowButton = document.createElement('button');
-            const rightArrowIcon = document.createElement('i');
-            rightArrowIcon.classList.add('bi', 'bi-arrow-right');
-            rightArrowButton.classList.add('arrow-button', 'right-arrow','btn-add-element','bhover');
-            rightArrowButton.addEventListener('click', () => {
-                // Handle right arrow button click action
-            });
             leftArrowButton.appendChild(leftArrowIcon);
             rightArrowButton.appendChild(rightArrowIcon);
             buttons.appendChild(leftArrowButton);
             buttons.appendChild(rightArrowButton);
-            
+
             stepCard.appendChild(buttons)
+            stepCard.appendChild(cardHeader);
+            
             
             stepsList.appendChild(stepCard);
         })
