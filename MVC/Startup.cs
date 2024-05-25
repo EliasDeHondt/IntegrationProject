@@ -27,7 +27,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        string bucketName = Environment.GetEnvironmentVariable("BUCKET_NAME_VIDEO")!;
+        string bucketName = Environment.GetEnvironmentVariable("ASPNETCORE_STORAGE_BUCKET")!;
 
 
         var googleCloudOptions = new CloudStorageOptions
