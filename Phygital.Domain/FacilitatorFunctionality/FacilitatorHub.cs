@@ -38,4 +38,7 @@ public class FacilitatorHub : Hub
 
     public async Task SendCurrentStep(string code, int stepNr) =>
         await Clients.OthersInGroup(code).SendAsync("ReceiveCurrentStep", stepNr);
+
+    public async Task RestartCurrentFlow(string code) =>
+        await Clients.OthersInGroup(code).SendAsync("CurrentFlowRestarted");
 }

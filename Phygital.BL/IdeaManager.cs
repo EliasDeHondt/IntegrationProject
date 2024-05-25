@@ -15,7 +15,7 @@ public class IdeaManager
         _repo = repo;
     }
 
-    public Idea AddIdea(string text, WebAppUser author, Feed feed, string? imageBase64)
+    public Idea AddIdea(string text, WebAppUser? author, Feed feed, string? imageBase64)
     {
         Image? image = null;
         if (imageBase64 is not null)

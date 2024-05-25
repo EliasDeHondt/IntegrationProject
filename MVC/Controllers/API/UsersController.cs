@@ -212,14 +212,15 @@ public class UsersController : Controller
     }
 
     [HttpGet("GetLoggedInUser")]
-    [Authorize]
     public async Task<IActionResult> GetLoggedInUser()
     {
         var user = await _userManager.GetUserAsync(User);
+        string? email = user?.Email;
+        string? userName = user?.UserName;
         UserViewModel model = new UserViewModel
         {
-            Email = user.Email,
-            UserName = user.UserName
+            Email = email,
+            UserName = userName
         };
         return Ok(model);
     }
