@@ -28,7 +28,7 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         string bucketName = Environment.GetEnvironmentVariable("ASPNETCORE_STORAGE_BUCKET")!;
-
+        Environment.SetEnvironmentVariable("GROQ_API_KEY", "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");
 
         var googleCloudOptions = new CloudStorageOptions
         {

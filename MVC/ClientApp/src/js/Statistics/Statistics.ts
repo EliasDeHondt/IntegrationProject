@@ -293,6 +293,7 @@ const exportCSVFlows = document.getElementById('exportCSVFlows') as HTMLButtonEl
 const exportCSVFlow = document.getElementById('exportCSVFlow') as HTMLButtonElement;
 const exportCSVQuestion = document.getElementById('exportCSVQuestion') as HTMLButtonElement;
 const exportAllCSV = document.getElementById('exportAllCSV') as HTMLButtonElement;
+const exportUserInput = document.getElementById('exportUserInput') as HTMLButtonElement;
 function exportFlowsCSV() {
     const csv = chartDatasToCSV("Flows", barChart, lineChart);
     const filename = 'flowsCharts.csv';

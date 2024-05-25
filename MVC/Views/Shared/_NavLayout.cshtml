@@ -50,6 +50,9 @@
             <li class="navbar-menu-item" id="tohideS">
                 <i class="bi bi-pie-chart-fill"><a asp-controller="Statistics" asp-action="Statistics" aria-current="page"> Statistics</a></i>
             </li>
+            <li class="navbar-menu-item" id="tohideC">
+                <button id="exportUserInput">Download user input</button>
+            </li>
         }
         else if (User.IsInRole(UserRoles.Facilitator)) // If the user is a Facilitator
         {
