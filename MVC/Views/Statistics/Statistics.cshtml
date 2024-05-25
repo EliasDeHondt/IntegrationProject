@@ -27,7 +27,6 @@
           outline: none;
           position: absolute;
           right: 10%;
-          background: none;
           padding-right: 1%;
           padding-left: 1%;
           border-radius: 5px;
@@ -72,7 +71,7 @@
             @if (User.IsInRole(UserRoles.SystemAdmin))
             {
                 <div class="csv nav-item bgAccent bhover">
-                    <button id="exportCSVFlow" class="btn text-dark text-decoration-none">Download CSV</button>
+                    <button id="exportCSVFlow" class="bgAccent btn text-dark text-decoration-none">Download CSV</button>
                 </div>
             }
         </div>
@@ -106,7 +105,7 @@
             @if (User.IsInRole(UserRoles.SystemAdmin))
             {
                 <div class="csv nav-item bgAccent bhover"> 
-                    <button id="exportCSVQuestion" class="btn text-dark text-decoration-none">Download CSV</button>
+                    <button id="exportCSVQuestion" class="bgAccent btn text-dark text-decoration-none">Download CSV</button>
                 </div>
             }
         </div>
