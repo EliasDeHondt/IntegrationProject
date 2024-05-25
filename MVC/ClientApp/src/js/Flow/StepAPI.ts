@@ -402,7 +402,7 @@ async function saveAnswerToDatabase(answers: string[], openAnswer: string, flowI
 }
 
 async function hideDigitalElements() {
-    if (flowtype.toUpperCase() == "PHYSICAL") {
+    if (flowtype && flowtype.toUpperCase() == "PHYSICAL") {
         const digitalElements = document.getElementsByClassName("digital-element");
         for (const element of digitalElements) {
             element.classList.add("visually-hidden");
@@ -440,7 +440,7 @@ async function hideDigitalElements() {
 
 async function nextStep(save: boolean = true) {
     if (save) {
-        if (flowtype.toUpperCase() == "PHYSICAL") {
+        if (flowtype && flowtype.toUpperCase() == "PHYSICAL") {
             let answers: number[] = getResult();
             if (choices.length > 0) {
                 answers.forEach(answer => {
@@ -459,7 +459,7 @@ async function nextStep(save: boolean = true) {
             openUserAnswer = "";
         }
     }
-    if ((flowtype.toUpperCase() == "CIRCULAR" || flowtype.toUpperCase() == "PHYSICAL") && currentStepNumber >= stepTotal) {
+    if (flowtype && (flowtype.toUpperCase() == "CIRCULAR" || flowtype.toUpperCase() == "PHYSICAL") && currentStepNumber >= stepTotal) {
         currentStepNumber = 0;
         await GetNextStep(++currentStepNumber, flowId);
     } else if (conditionalAnswer > 0) {
@@ -487,6 +487,11 @@ function startTimers() {
 
 
 btnRestartFlow.onclick = async () => {
+    await restartFlow()
+};
+
+export async function restartFlow() {
     currentStepNumber = 0;
     await GetNextStep(++currentStepNumber, flowId);
-};
+    time = 30;
+}

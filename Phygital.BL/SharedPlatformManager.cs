@@ -53,4 +53,14 @@ public class SharedPlatformManager
         };
         return _repo.CreateSharedPlatform(platform);
     }
+    
+    public int GetRespondentCountFromPlatform(long id)
+    {
+        return _repo.ReadRespondentCountFromPlatform(id);
+    }
+    
+    public string GetPlatformOrganisation(long id)
+    {
+        return _repo.ReadPlatformOrganisation(id);
+    }
 }

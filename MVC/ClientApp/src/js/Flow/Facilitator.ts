@@ -9,6 +9,7 @@ export const connection = new signalR.HubConnectionBuilder()
     .build();
 
 const btnPauseFlow = document.getElementById("btnPauseFlow") as HTMLButtonElement;
+const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonElement;
 const btnCloseInstallation = document.getElementById("btnCloseInstallation") as HTMLButtonElement;
 const connectionCode = document.getElementById("connectionCode") as HTMLSpanElement;
 const flowContainer = document.getElementById("carouselContainer") as HTMLDivElement;
@@ -93,12 +94,16 @@ function SendFlowUpdate() {
 btnPauseFlow.onclick = () => {
     if (currentState.innerText == "Active") {
         currentState.innerText = "Paused";
-        btnPauseFlow.innerText = "Unpause flow";
+        btnPauseFlow.innerText = "Unpause";
     } else {
         currentState.innerText = "Active";
-        btnPauseFlow.innerText = "Pause flow";
+        btnPauseFlow.innerText = "Pause";
     }
     SendFlowUpdate()
+}
+
+btnRestartFlow.onclick = async () => {
+    await connection.invoke("RestartCurrentFlow", code);
 }
 
 function ConnectionClosed() {

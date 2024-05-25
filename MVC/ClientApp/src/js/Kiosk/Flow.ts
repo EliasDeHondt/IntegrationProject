@@ -5,6 +5,7 @@ import {clockTimer, stepTimer} from "../Flow/StepAPI";
 import {generateQrCode} from "../Util";
 import {GetFlowsForProject} from "./FlowAPI";
 import {setProjectId} from "../Flow/FlowTypeModal";
+import * as stepAPI from "../Flow/StepAPI";
 
 const connection = new signalR.HubConnectionBuilder()
     .withUrl("/hub")
@@ -35,17 +36,21 @@ connection.on("ReceiveFlowUpdate", async (id, state) => {
     currStateOfFlow = state;
     if (currStateOfFlow.toLowerCase() == "paused") {
         modal.show()
-        stepTimer.pause();
-        clockTimer.pause();
+        stepAPI.stepTimer.pause();
+        stepAPI.clockTimer.pause();
     } else {
         modal.hide()
-        stepTimer.resume();
-        clockTimer.resume();
+        stepAPI.stepTimer.resume();
+        stepAPI.clockTimer.resume();
     }
 })
 
-connection.on("FlowActivated", (flowType, id) => {
-    window.location.href = `/Flow/Step/${flowType}/${id}`
+connection.on("FlowActivated", (id) => {
+    window.location.href = `/Flow/Step/${id}`
+})
+
+connection.on("CurrentFlowRestarted", async () => {
+    await stepAPI.restartFlow()
 })
 
 connection.on("ReceiveProjectId", (id) => {
