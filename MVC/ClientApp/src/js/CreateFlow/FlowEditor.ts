@@ -248,6 +248,17 @@ function showStepVisibility(step: Step) {
 //     // Initial render of steps
 //     renderSteps();
 // }
+
+function updateStepCardheader(cardHeader: HTMLHeadingElement, stepCard: HTMLAnchorElement, step: Step){
+    cardHeader.innerText = "Step " + step.stepNumber.toString();
+    if (isQuestionStep(step))
+        cardHeader.innerText += "\n" + step.questionViewModel.questionType.toString();
+    if (isInformationStep(step))
+        cardHeader.innerText += "\nInformation"
+
+    if (!step.visible)
+        stepCard.classList.add('step-card-hidden')
+}
 async function updateStepList(steps: Step[]) {
     for (const step of steps) {
         await GetStepByNumber(flowId, step.stepNumber).then(s => currentStepList[s.stepNumber - 1] = s);
@@ -301,6 +312,11 @@ async function updateStepList(steps: Step[]) {
             //     await showStepInContainer(currentStepList[index]);
             //     //moveStepToRight(step,currentStepList,stepsList);
             // });
+
+            const cardHeader = document.createElement('h2');
+            cardHeader.classList.add("step-card-header");
+            
+            
             const leftArrowButton = document.createElement('button');
             const leftArrowIcon = document.createElement('i');
             leftArrowIcon.classList.add('bi', 'bi-caret-left-fill');
@@ -313,23 +329,21 @@ async function updateStepList(steps: Step[]) {
                     const previousStep = currentStepList[index - 1];
                     console.log("previousStep",previousStep.stepNumber);
                     [currentStepList[index], currentStepList[index - 1]] = [previousStep, step];
-                    // [currentStepList[index - 1], currentStepList[index]] = [currentStepList[index], currentStepList[index - 1]];
-                    // step.stepNumber=previousStep.stepNumber;
-                    // currentStepList[index - 1].stepNumber = index+1;
-                    currentStepList[index].stepNumber = 3;
-                    currentStepList[index - 1].stepNumber = index + 1;
-                    console.log("step.stepNumber",step.stepNumber)
+                    
+                    console.log("step.stepNumber",currentStepList[index].stepNumber)
                     console.log("currentStepList[index - 1].stepNumber",currentStepList[index - 1].stepNumber)
-                    //UpdateQuestionStep(step)
                     await UpdateStepByNumber(step.id, previousStep.stepNumber)
-                    //UpdateStepByNumber(step,step.stepNumber);
-                    // const previousStep = currentStepList[index - 1];
-                    // [currentStepList[index], currentStepList[index - 1]] = [previousStep, step];
-                    // currentStepList[index].stepNumber = index + 1;
-                    // currentStepList[index - 1].stepNumber = index;
-                    // // updateStepList(currentStepList);
+                    updateStepCardheader(cardHeader,stepCard,step)
+                    
+                    // // [currentStepList[index - 1], currentStepList[index]] = [currentStepList[index], currentStepList[index - 1]];
+                    // step.stepNumber=previousStep.stepNumber;
+                    // // currentStepList[index - 1].stepNumber = index+1;
+                    // currentStepList[index].stepNumber = previousStep.stepNumber;
+                    // currentStepList[index - 1].stepNumber = index + 1;
                     // console.log("step.stepNumber",currentStepList[index].stepNumber)
                     // console.log("currentStepList[index - 1].stepNumber",currentStepList[index - 1].stepNumber)
+                    // await UpdateStepByNumber(step.id, previousStep.stepNumber)
+                    // cardHeader.innerText = "Step " + previousStep.stepNumber.toString();
                 }
                 
                 // moveStepToLeft(step, currentStepList);
@@ -339,18 +353,16 @@ async function updateStepList(steps: Step[]) {
                 // initializeCardLinks();
                 // await showStepInContainer(currentStepList[index]);
             }
-
-            const cardHeader = document.createElement('h2');
-            cardHeader.classList.add("step-card-header");
-            cardHeader.innerText = "Step " + step.stepNumber.toString();
-
-            if (isQuestionStep(step))
-                cardHeader.innerText += "\n" + step.questionViewModel.questionType.toString();
-            if (isInformationStep(step))
-                cardHeader.innerText += "\nInformation"
-
-            if (!step.visible)
-                stepCard.classList.add('step-card-hidden')
+            updateStepCardheader(cardHeader,stepCard,step)
+            // cardHeader.innerText = "Step " + step.stepNumber.toString();
+            //
+            // if (isQuestionStep(step))
+            //     cardHeader.innerText += "\n" + step.questionViewModel.questionType.toString();
+            // if (isInformationStep(step))
+            //     cardHeader.innerText += "\nInformation"
+            //
+            // if (!step.visible)
+            //     stepCard.classList.add('step-card-hidden')
 
 
             leftArrowButton.appendChild(leftArrowIcon);
