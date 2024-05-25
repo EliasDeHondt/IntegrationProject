@@ -5,7 +5,7 @@ import {
     drawRadarChart,
     initChoicesNames, initDataStatistics, initQuestionNames,
 } from "../Statistics";
-import {Question} from "../../Types/ProjectObjects";
+import {Question, Answer} from "../../Types/ProjectObjects";
 
 //get data - flows
 export async function GetCountStepsPerFlow(labels: string[]){
@@ -157,4 +157,52 @@ export async function GetAnswerCountsForQuestions(labels: string[],question: str
             drawDoughnutChart("Aantal antwoorden voor de vraag: "+questionText, labels,'Aantal Answers', data)
         })
         .catch(error => console.error("Error:", error))
+}
+
+// Summaries
+
+export async function GetAnswersFromQuestion(questionId: number): Promise<string[]> {
+    return await fetch(`/api/Statistics/GetAnswersFromQuestion/${questionId}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data;
+        })
+}
+
+export async function GetQuestionText(questionId: number): Promise<string> {
+    return await fetch(`/api/Statistics/GetQuestionText/${questionId}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data;
+        })
+}
+
+export async function GenerateSummary(question: string, answers: string[]): Promise<string> {
+    return await fetch('/api/Ai/GenerateSummary', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            question: question,
+            answers: answers
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            return data
+        })
 }

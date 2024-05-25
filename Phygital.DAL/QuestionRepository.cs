@@ -25,6 +25,11 @@ public class QuestionRepository
             .QuestionBase;
     }
 
+    public QuestionBase ReadQuestionById(long id)
+    {
+        return _ctx.Questions.Find(id)!;
+    }
+
     public IEnumerable<Choice> ReadChoicesForQuestion(long questionId)
     {
         return _ctx.ChoiceQuestions
@@ -119,5 +124,41 @@ public class QuestionRepository
         }
         
         return answerCountsPerQuestion.Select(i => i.ToString()).ToArray();
+    }
+
+    public string[] ReadAnswersFromQuestion(long questionId)
+    {
+        var question = ReadQuestionById(questionId);
+
+        switch (question)
+        {
+            case OpenQuestion:
+            {
+                var openAnswers = _ctx.Answers
+                    .OfType<OpenAnswer>()
+                    .Where(a => a.QuestionBase.Id == questionId)
+                    .Select(a => a.Answer)
+                    .ToArray();
+                return openAnswers;
+            }
+            case ChoiceQuestionBase:
+            {
+                var choiceAnswers = _ctx.Answers
+                    .OfType<ChoiceAnswer>()
+                    .Include(a => a.Answers)
+                    .ThenInclude(s => s.Choice)
+                    .Where(a => a.QuestionBase.Id == questionId)
+                    .SelectMany(a => a.Answers.Select(s => s.Choice.Text))
+                    .ToArray();
+                return choiceAnswers;
+            }
+            default:
+                return Array.Empty<string>();
+        }
+    }
+
+    public string ReadQuestionText(long questionId)
+    {
+        return _ctx.Questions.Find(questionId)!.Question;
     }
 }

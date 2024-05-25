@@ -28,3 +28,8 @@ export type Question = {
     id: number;
     question: string;
 }
+
+export type Answer = {
+    answers: string[];
+    answerText: string;
+}

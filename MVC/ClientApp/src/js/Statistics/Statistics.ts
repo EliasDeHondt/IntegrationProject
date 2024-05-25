@@ -1,11 +1,12 @@
 import Chart from 'chart.js/auto';
 import {
-    GetAnswerCountsForQuestions,
+    GenerateSummary,
+    GetAnswerCountsForQuestions, GetAnswersFromQuestion,
     GetChoicesNames,
     GetCountParticipationsPerFlow,
     GetCountStepsPerFlow,
     GetNamesPerFlow, GetParticipatoinNames, GetQuestionNames,
-    GetQuestionsFromFlow
+    GetQuestionsFromFlow, GetQuestionText
 } from "./API/StatisticAPI";
 import {Question} from "../Types/ProjectObjects";
 import {chartDatasToCSV, chartDataToCSV, downloadCSV} from "./ExportStatistics";
@@ -15,6 +16,8 @@ const lineCtx = document.getElementById('lineChart') as HTMLCanvasElement;
 const doughnutCtx = document.getElementById('doughnutChart') as HTMLCanvasElement;
 const radarCtx = document.getElementById('radarChart') as HTMLCanvasElement;
 const pieCtx = document.getElementById('pieChart') as HTMLCanvasElement;
+
+const summary = document.getElementById('answersSummary') as HTMLDivElement;
 
 const selectFlow = document.getElementById("selectFlow") as HTMLSelectElement;
 const selectQuestion = document.getElementById("selectQuestion") as HTMLSelectElement;
@@ -299,3 +302,12 @@ exportAllCSV.addEventListener('click', function() {
     exportFlowCSV();
     exportQuestionCSV();
 });
+
+async function generateSummary(questionId: number) {
+    let question : string = "";
+    let answers : string[] = [];
+    await GetQuestionText(questionId).then((q) => question = q);
+    await GetAnswersFromQuestion(questionId).then((a) => answers = a)
+
+    GenerateSummary(question, answers).then(s => summary.innerText = s);
+}
