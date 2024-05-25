@@ -1,5 +1,5 @@
 ﻿import {Modal} from "bootstrap";
-import {GetReactions, PostReaction} from "./WebAppAPI";
+import {GetLoggedInUser, GetReactions, PostReaction} from "./WebAppAPI";
 import {generateReaction} from "./Util";
 
 const modalDiv = document.getElementById("modalReplies") as HTMLDivElement;
@@ -23,7 +23,11 @@ export function OpenModal(ideaId: number) {
         })
     })
     
-    btnPostReply.onclick = () => {
+    btnPostReply.onclick = async () => {
+        let user = await GetLoggedInUser();
+        if(user.email == null){
+            return;
+        }
         let text = textReply.value;
         if(text.trim() != "") {
             PostReaction(ideaId, text).then(reaction => {
@@ -42,6 +46,7 @@ export function CloseModal() {
 modalDiv.addEventListener('hidden.bs.modal', event => {
     let container = document.getElementById("replyContainer") as HTMLDivElement;
     container.innerHTML = "";
+    textReply.value = "";
 })
 
 btnCloseReplyModal.onclick = () => {

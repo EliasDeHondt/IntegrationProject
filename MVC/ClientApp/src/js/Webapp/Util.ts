@@ -1,5 +1,5 @@
 ﻿import {Feed, Idea, Reaction} from "../Types/WebApp/Types";
-import {CreateLike, DeleteLike} from "./WebAppAPI";
+import {CreateLike, DeleteLike, GetLoggedInUser} from "./WebAppAPI";
 import {OpenModal} from "./ReactionModal";
 
 export function generateIdeaCard(idea: Idea, email: string): HTMLDivElement {
@@ -22,7 +22,7 @@ export function generateIdeaCard(idea: Idea, email: string): HTMLDivElement {
                         <i class="bi bi-person-circle webapp-util-icon"></i>
                     </div>
                     <div class="col-11 m-auto">
-                        <span>${idea.author.name}</span>
+                        <span>${idea.author.name ?? "Anonymous"}</span>
                     </div>
                 </div>
                 <div class="row webapp-card-content">
@@ -115,9 +115,13 @@ export function generateReaction(reaction: Reaction): HTMLDivElement {
                     </div>`
     return div
 }
-export function addLikeFunctionality() {
+export async function addLikeFunctionality() {
     let btns = document.getElementsByClassName("btnLikes") as HTMLCollectionOf<HTMLButtonElement>;
     let counts = document.getElementsByClassName("spanLikes") as HTMLCollectionOf<HTMLSpanElement>;
+    let user = await GetLoggedInUser()
+    if(user.email == null){
+        return;
+    }
     for (let i = 0; i < btns.length; i++) {
         let btn = btns[i];
         let count = counts[i];
