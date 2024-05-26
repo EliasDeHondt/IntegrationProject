@@ -256,12 +256,14 @@ export async function initQuestionNames(labels: Question[]) {
         await generateQuestionStatistics()
     });
 }
-let a = ""
 async function generateQuestionStatistics() {
     let number = parseInt(showSelectedQuestionNumber());
     let type = await GetQuestionType(number);
-    a = await generateAnswerSummary(number)
-
+    
+    setTimeout(async () => {
+        await generateAnswerSummary(number)
+    }, 100);
+    
     if (type == "ChoiceQuestion") {
         doughnutCtx.style.display = 'block'
         GetChoicesNames(showSelectedQuestion())
@@ -321,13 +323,11 @@ export async function generateAnswerSummary(questionId: number) {
     } else {
         GenerateSummary(question, answers).then(s => summary.innerText = s);
     }
-    return summary.innerText;
 }
 
 const exportUserInput = document.getElementById('exportUserInput') as HTMLButtonElement;
 function exportTxt() {
-    console.log("a",a)
-    const txt = a;
+    const txt = summary.innerText;
     const filename = 'summary_question_' + showSelectedQuestionNumber() + '.txt';
     downloadSummary(txt, filename);
 }
