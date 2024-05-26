@@ -122,6 +122,9 @@ button.accept-policy {
 .bgAccent {
   background: map-get($themes, light, accent);
 }
+.bgAccentDark {
+  background: hsl(20, 100%, 39%);
+}
 
 .bgPrimary {
   background: map-get($themes, light, primary);
@@ -157,6 +160,7 @@ button.accept-policy {
 
 #navbar {
   transition: width 0.5s;
+  z-index: 1000;
 }
 #navbar.collapsed {
   width: 200px;
@@ -376,3 +380,33 @@ button.accept-policy {
   border-radius: 20px;
 }
 
+#closedProjectOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999; 
+  pointer-events: auto;
+}
+
+/*titles across pages*/
+hr{
+  width: 60%; border: 3px solid rgba(243, 124, 0, 1); border-radius: 5px;
+}
+.title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.title-title {
+  font-size: 24px;
+}
+
+.title-divider {
+  margin: 0;
+}

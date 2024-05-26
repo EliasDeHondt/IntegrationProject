@@ -7,6 +7,33 @@
 
 @import "variables";
 
+.chart-container {
+  display: flex;
+  padding-left: 20px;
+  justify-content: center;
+}
+hr{
+  width: 60%; border: 3px solid rgba(243, 124, 0, 1); border-radius: 5px;
+}
+.title{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.csv{
+  outline: none;
+  position: absolute;
+  right: 10%;
+  padding-right: 1%;
+  padding-left: 1%;
+  border-radius: 5px;
+  border: 1px solid black;
+}
+.title-container{
+  padding-top: 40px;
+  position: relative;
+}
+
 //.chart-container {
 //  display: flex;
 //  padding-left: 20px;

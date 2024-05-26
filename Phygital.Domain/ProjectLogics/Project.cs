@@ -25,6 +25,7 @@ public class Project
     public SharedPlatform SharedPlatform { get; set; }
     public ICollection<ProjectOrganizer> Organizers { get; set; }
     public Feed Feed { get; set; }
+    public bool ProjectClosed { get; set; }
     
     public Project(string title, MainTheme mainTheme, SharedPlatform sharedPlatform, long id = 0)
     {

@@ -139,9 +139,18 @@ public class StepManager
     {
         _repo.UpdateChoice(choice, text, nextStepId);
     }
+    public void ChangeStepNum(QuestionStep step,long? stepnum)
+    {
+        _repo.UpdateStepNum(step,stepnum);
+    }
 
     public void ChangeQuestion(QuestionBase question)
     {
         _repo.UpdateQuestion(question);
+    }
+    
+    public void UpdateStepsByNumber(StepBase step, StepBase prevstep)
+    {
+        _repo.UpdateStepsByNumber(step, prevstep);
     }
 }

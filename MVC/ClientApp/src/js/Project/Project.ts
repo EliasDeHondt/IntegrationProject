@@ -3,15 +3,12 @@ import "./DeleteSubThemeModal"
 import {
     CheckNotEmpty, createProjectFlow,
     fillExisting,
-    getIdProject,
+    getIdProject, GetProjectClosed,
     getProjectWithId, loadFlowsProject, resetFlowsProject,
-    SetProject,
+    SetProject, UpdateProjectClosed,
 } from "./API/ProjectAPI";
 import {generateCards, getSubThemesForProject, resetCards} from "./API/SubThemeAPI";
-import {loadFlowsSub} from "../Theme/SubTheme/API/SubThemeAPI";
-import {GetFlows} from "../CreateFlow/FlowCreator";
 import {Modal, Toast} from "bootstrap";
-import {deleteFlow} from "../CreateFlow/API/DeleteFlowAPI";
 import {showFlows} from "./API/CreateProjectFlowAPI";
 
 let inputTitle = (document.getElementById("inputTitle") as HTMLInputElement);
@@ -31,6 +28,8 @@ const btnCreateFlowProject = document.getElementById("btnCreateFlowProject") as 
 const butCancelCreateprojFlow = document.getElementById('butCancelCreateprojFlow') as HTMLButtonElement;
 const butCloseCreateprojFlow = document.getElementById('butCloseCreateprojFlow') as HTMLButtonElement;
 const butConfirmCreateprojFlow = document.getElementById('butConfirmCreateprojFlow') as HTMLButtonElement;
+
+const closedProjectOverlay = document.getElementById("closedProjectOverlay") as HTMLDivElement;
 
 let deleteButtons: NodeListOf<HTMLButtonElement>;
 let id: number;
@@ -79,11 +78,8 @@ btnCreateFlowProject.onclick = async() => {
             projFlowModal.show();
         }
         
-        
         let closeProjectFlowToast = document.getElementById("closeProjectFlowToast") as HTMLButtonElement
         closeProjectFlowToast.onclick = () => projectFlowToast.hide()
-        
-        
     }
     butCancelCreateprojFlow.onclick = function () {
         projFlowModal.hide();
@@ -93,44 +89,20 @@ btnCreateFlowProject.onclick = async() => {
     };
 }
 
-async function checkFlowsNotEmpty() {
-    //try {
-    //     const flows = await loadFlowsProject(getIdProject());
-    //     const deleteFlowModalElement = document.getElementById("deleteFlowModal");
-    //     if (deleteFlowModalElement) { //niet leeg
-    //         const deleteFlowModal = new Modal(deleteFlowModalElement, {
-    //             keyboard: false,
-    //             focus: true,
-    //             backdrop: "static"
-    //         });
-    //        
-    //         butConfirmDeleteFlow.onclick = () => {
-    //             deleteFlow(id)
-    //                 .then(() => {
-    //                     GetFlows(0);
-    //                     deleteFlowModal.hide();
-    //                 });
-    //         }
-    //
-    //         butCancelDeleteFlowModal.onclick = () => {
-    //             deleteFlowModal.hide();
-    //         }
-    //     } else {
-    //         console.log("Flows array is empty");
-    //     }
-    // } catch (error) {
-    //     console.error("Error loading flows:", error);
-    // }
+async function projectOverlay() {
+    // closedProjectOverlay.style.visibility = isVisible ? 'visible' : 'hidden';
+    var closeProj = await GetProjectClosed(projectId);
+    // closeProj ? projectOverlay(true) : projectOverlay(false)
+    if (closeProj) {
+        closedProjectOverlay.style.display = 'block';
+    } else {
+        closedProjectOverlay.style.display = 'none';
+    }
 }
 
-
-
 document.addEventListener("DOMContentLoaded", async function () {
-    // loadFlowsProject(getIdProject()).then(flows => {
-    //     showFlows(flows,"forProject");
-    // })
-    checkFlowsNotEmpty()
-    
+    await projectOverlay()
+
     const projectIdNumber = getIdProject();
     const project = await getProjectWithId(projectIdNumber);
     fillExisting(project, inputTitle, inputText);
@@ -140,7 +112,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             SetProject(project.id, inputTitle.value, inputText.value);
         }
     }
-
-    
+   
 });
 

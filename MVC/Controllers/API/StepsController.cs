@@ -30,7 +30,7 @@ public class StepsController : Controller
         _uow = uow;
     }
 
-    [HttpGet("GetNextStep/{flowId:int}/{stepNumber:long}")]
+    [HttpGet("GetNextStep/{flowId}/{stepNumber}")]
     public ActionResult GetNextStep(int stepNumber, long flowId)
     {
         StepBase stepBase = _manager.GetStepForFlowByNumber(flowId, stepNumber);
@@ -40,7 +40,7 @@ public class StepsController : Controller
         return Ok(stepViewModel);
     }
 
-    [HttpGet("GetConditionalNextStep/{stepId:long}")]
+    [HttpGet("GetConditionalNextStep/{stepId}")]
     public ActionResult GetConditionalNextStep(long stepId)
     {
         StepBase stepBase = _manager.GetStepById(stepId);
@@ -62,7 +62,7 @@ public class StepsController : Controller
         return Created("AddNote", newNote);
     }
 
-    [HttpGet("GetStepsFromFlow/{flowId:long}")]
+    [HttpGet("GetStepsFromFlow/{flowId}")]
     public ActionResult GetStepsFromFlow(long flowId)
     {
         var steps = _manager.GetAllStepsForFlow(flowId);
@@ -81,6 +81,8 @@ public class StepsController : Controller
 
         if (step is InformationStep infoStep)
         {
+            step.StepNumber = model.StepNumber;
+            
             infoStep.InformationBases = model.InformationViewModel
                 .Select(infoViewModel =>
                 {
@@ -104,6 +106,8 @@ public class StepsController : Controller
 
         if (step is QuestionStep questionStep)
         {
+            step.StepNumber = model.StepNumber;
+            
             var question = questionStep.QuestionBase;
             question.Question = model.QuestionViewModel.Question;
             if (question is ChoiceQuestionBase choiceQuestion)
@@ -121,6 +125,33 @@ public class StepsController : Controller
 
         _uow.Commit();
 
+        return NoContent();
+    }
+    
+    [HttpPut("UpdateQuestionStepByNumber/{stepId}/{stepNumber}")]
+    public ActionResult UpdateQuestionStepByNumber(long stepId, int stepNumber)
+    {
+        _uow.BeginTransaction();
+    
+        var step = _manager.GetStepById(stepId);
+
+        step.StepNumber = stepNumber;
+    
+        _uow.Commit();
+    
+        return NoContent();
+    }
+    [HttpPut("UpdateInfoStepByNumber/{stepId}/{stepNumber}")]
+    public ActionResult UpdateInfoStepByNumber(long stepId, int stepNumber)
+    {
+        _uow.BeginTransaction();
+    
+        var step = _manager.GetStepById(stepId);
+
+        step.StepNumber = stepNumber;
+    
+        _uow.Commit();
+    
         return NoContent();
     }
 }
