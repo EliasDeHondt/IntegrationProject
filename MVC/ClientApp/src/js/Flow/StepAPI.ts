@@ -6,6 +6,7 @@ import {delay} from "../Util";
 import {Timer} from "../Util/Timer";
 import * as kiosk from "../Kiosk/Kiosk"
 import SignalRConnectionManager from "../Kiosk/ConnectionManager";
+import {code} from "../Kiosk/Kiosk";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
@@ -74,10 +75,17 @@ async function SetRespondentEmail(flowId: number, inputEmail: string) {
 document.addEventListener("DOMContentLoaded", async function () {
     SignalRConnectionManager.startConnection().then(() => {
         const connection = SignalRConnectionManager.getInstance();
-        
-        connection.invoke("JoinConnection", kiosk.code).then(() => {
+
+        SignalRConnectionManager.joinConnectionGroup(kiosk.code).then(() => {
             connection.invoke("ActivateFlow", kiosk.code, flowId.toString())
             connection.invoke("SendCurrentStep", kiosk.code, currentStepNumber)
+        })
+        
+        connection.onreconnected(() => {
+            SignalRConnectionManager.joinConnectionGroup(kiosk.code).then(() => {
+                connection.invoke("ActivateFlow", kiosk.code, flowId.toString())
+                connection.invoke("SendCurrentStep", kiosk.code, currentStepNumber)
+            })
         })
     })
 

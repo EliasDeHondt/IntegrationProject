@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     SignalRConnectionManager.startConnection().then(() => {
         const connection = SignalRConnectionManager.getInstance();
 
-        connection.invoke("JoinConnection", code).then(() => {
+        SignalRConnectionManager.joinConnectionGroup(code).then(() => {
             connection.invoke("SendFlowUpdate", code, "0", "Inactive");
         })
 
@@ -60,6 +60,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         connection.on("FlowActivated", (id) => {
             const projectId = Number.parseInt(document.getElementById("projectId")!.dataset.projectId!);
             window.location.href = `/Flow/Step/${id}`
+        })
+        
+        connection.onreconnected(() => {
+            SignalRConnectionManager.joinConnectionGroup(code).then(() => {
+                connection.invoke("SendFlowUpdate", code, "0", "Inactive");
+            })
         })
     })
 })

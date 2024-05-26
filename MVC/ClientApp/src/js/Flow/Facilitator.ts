@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         btnEnterCode.onclick = async () => {
             code = (document.getElementById("inputCode") as HTMLInputElement).value;
-            await connection.invoke("JoinConnection", code).then(() => {
+            SignalRConnectionManager.joinConnectionGroup(code).then(() => {
                 connectionCode.innerText = code
                 toggleButtons(true)
                 connection.on("ReceiveOngoingFlow", (ongoing) => {
@@ -113,6 +113,16 @@ document.addEventListener("DOMContentLoaded", async () => {
                 currentFlow.innerText = `${ids[0]}`
                 currentState.innerText = "Active"
             }
+        })
+        
+        connection.onreconnected(() => {
+            SignalRConnectionManager.joinConnectionGroup(code).then(() => {
+                connectionCode.innerText = code
+                toggleButtons(true)
+                connection.on("ReceiveOngoingFlow", (ongoing) => {
+                    if (!ongoing) flowTypeModal.show();
+                })
+            })
         })
     })
 

@@ -17,7 +17,7 @@ class SignalRConnectionManager {
                 .withAutomaticReconnect([0, 2000, 10000, 30000])
                 .build();
             
-            SignalRConnectionManager.instance.keepAliveIntervalInMilliseconds = 150000;
+            SignalRConnectionManager.instance.keepAliveIntervalInMilliseconds = 15000;
             SignalRConnectionManager.instance.serverTimeoutInMilliseconds = 60000;
         }
         return SignalRConnectionManager.instance;
@@ -28,6 +28,12 @@ class SignalRConnectionManager {
         if (connection.state == signalR.HubConnectionState.Disconnected) {
             await connection.start();
         }
+    }
+    
+    public static async joinConnectionGroup(code: string) {
+        const connection = SignalRConnectionManager.getInstance();
+        if (connection.state == signalR.HubConnectionState.Connected)
+            await connection.invoke("JoinConnection", code)
     }
 }
 
