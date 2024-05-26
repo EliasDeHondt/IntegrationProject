@@ -71,7 +71,10 @@ export function setupNavigation() {
     const dashboard = document.getElementById('tohideD') as HTMLElement;
     const statistics = document.getElementById('tohideS') as HTMLElement;
     const signout = document.getElementById('tohideLO') as HTMLElement;
+    const csv = document.getElementById('tohideC') as HTMLElement;
+    const text = document.getElementById('tohideI') as HTMLElement;
     const icon = document.getElementById('icon') as HTMLElement;
+    const navbarLogo = document.getElementById('navbar-logo-id') as HTMLElement;
 
     collapseButton.addEventListener('click', function(e) {
         e.preventDefault();
@@ -84,20 +87,26 @@ export function setupNavigation() {
 
     collapseButton.addEventListener('click', function() {
         if (navigationBar.classList.contains('collapsed')) {
+            navbarLogo.style.visibility = 'hidden';
             languageButton.style.display = 'none';
             accountname.style.display = 'none';
             dashboard.style.display = 'none';
             statistics.style.display = 'none';
             signout.style.display = 'none';
+            csv.style.display = 'none';
+            text.style.display = 'none';
 
             collapseButton.style.margin = 'auto';
             collapseButton.style.display = 'block';
         } else {
+            navbarLogo.style.visibility = 'visible';
             languageButton.style.display = 'block';
             accountname.style.display = 'block';
             dashboard.style.display = 'block';
             statistics.style.display = 'block';
             signout.style.display = 'block';
+            csv.style.display = 'block';
+            text.style.display = 'block';
             mainContent.style.paddingRight = '0'; // terug naar origineel
 
             collapseButton.style.margin = 'unset';
