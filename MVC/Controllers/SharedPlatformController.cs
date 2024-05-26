@@ -18,9 +18,16 @@ public class SharedPlatformController : Controller
         _customUserManager = customUserManager;
     }
 
-    [Authorize(policy: "admin")]
-    public IActionResult Dashboard(long id)
+    private long GetPlatformId()
     {
+        SpAdmin admin = _customUserManager.GetPlatformAdminWithSharedPlatform(User.FindFirstValue(ClaimTypes.Email));
+        return admin.SharedPlatform.Id;
+    }
+    
+    [Authorize(policy: "admin")]
+    public IActionResult Dashboard()
+    {
+        long id = GetPlatformId();
         var sharedPlatform = _sharedPlatformManager.GetSharedPlatformWithProjects(id);
         return View(sharedPlatform);
     }
@@ -28,8 +35,7 @@ public class SharedPlatformController : Controller
     [Authorize(policy: "admin")]
     public IActionResult RedirectToDashboard()
     {
-        SpAdmin admin = _customUserManager.GetPlatformAdminWithSharedPlatform(User.FindFirstValue(ClaimTypes.Email));
-        var id = admin.SharedPlatform.Id;
+        long id = GetPlatformId();
         return RedirectToAction("Dashboard", new {id});
     }
     
