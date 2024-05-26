@@ -4,9 +4,15 @@ import {flowTypeModal, setProjectId} from "./FlowTypeModal";
 import {GetFlowsForProject} from "../Kiosk/FlowAPI";
 import {Flow} from "./FlowObjects"
 
+const URL = window.location.hostname == "localhost"
+    ? "http://localhost:5247/hub"
+    : "https://codeforge.eliasdh.com/hub"
+
 export const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/hub")
+    .withUrl(URL)
+    .withAutomaticReconnect()
     .build();
+
 
 const btnPauseFlow = document.getElementById("btnPauseFlow") as HTMLButtonElement;
 const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonElement;

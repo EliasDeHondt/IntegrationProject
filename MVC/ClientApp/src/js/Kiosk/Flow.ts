@@ -1,15 +1,18 @@
 ﻿import * as kiosk from "./Kiosk";
 import * as signalR from "@microsoft/signalr";
 import {Modal} from "bootstrap";
-import {clockTimer, stepTimer} from "../Flow/StepAPI";
 import {generateQrCode} from "../Util";
-import {GetFlowsForProject} from "./FlowAPI";
-import {setProjectId} from "../Flow/FlowTypeModal";
 import * as stepAPI from "../Flow/StepAPI";
 
-const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/hub")
+const URL = window.location.hostname == "localhost"
+    ? "http://localhost:5247/hub"
+    : "https://codeforge.eliasdh.com/hub"
+
+export const connection = new signalR.HubConnectionBuilder()
+    .withUrl(URL)
+    .withAutomaticReconnect()
     .build();
+
 
 const currFlow = document.getElementById("flowId") as HTMLSpanElement;
 const modal = new Modal(document.getElementById("pausedFlowModal") as HTMLDivElement, {

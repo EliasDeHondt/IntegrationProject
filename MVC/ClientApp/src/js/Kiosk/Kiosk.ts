@@ -1,10 +1,14 @@
 ﻿import * as signalR from "@microsoft/signalr";
 import {GenerateCards, GetFlowById} from "./FlowAPI";
 import {Flow} from "../Flow/FlowObjects"
-import {generateQrCode} from "../Util";
+
+const URL = window.location.hostname == "localhost"
+    ? "http://localhost:5247/hub"
+    : "https://codeforge.eliasdh.com/hub"
 
 export const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/hub")
+    .withUrl(URL)
+    .withAutomaticReconnect()
     .build();
 
 const divFlows = document.getElementById("flowContainer") as HTMLDivElement;

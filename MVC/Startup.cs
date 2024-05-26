@@ -126,8 +126,25 @@ public class Startup
             options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
+        
+        services.AddCors(options =>
+        {
+            options.AddPolicy("CorsPolicy",
+                builder =>
+                {
+                    builder
+                        .WithOrigins("https://codeforge.eliasdh.com", "http://localhost:5247")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+        });
 
-        services.AddSignalR();
+        services.AddSignalR(options =>
+        {
+            options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+            options.ClientTimeoutInterval = TimeSpan.FromSeconds(60);
+        });
     }
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env)
@@ -173,6 +190,7 @@ public class Startup
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
+        app.UseCors("CorsPolicy");
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
