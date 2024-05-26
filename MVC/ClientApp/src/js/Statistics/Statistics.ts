@@ -168,16 +168,6 @@ export function drawPieChart(titel:string,labels: string[], label: string, data:
     });
 }
 
-export function getSelectedFlows(): number[] {
-    let flowIds: number[] = [];
-    for (let i = 0; i < selectFlow.options.length; i++) {
-        if (selectFlow.options[i].selected) {
-            flowIds.push(Number(selectFlow.options[i].value));
-        }
-    }
-    console.log("flowIds: ", flowIds)
-    return flowIds
-}
 export function fillDropdownFlows(data: string[], select: HTMLSelectElement) {
     select.innerHTML = "";
 
@@ -199,8 +189,6 @@ export function fillDropdownQuestions(data: Question[], select: HTMLSelectElemen
     }
     for (let i = 0; i < data.length; i++) {
         let option = document.createElement("option");
-        console.log("data[i].text",data[i].id.toString())
-        console.log("data[i].text",data[i].question)
         option.value = data[i].id.toString();
         option.text = data[i].question;
         select.appendChild(option);
@@ -309,15 +297,18 @@ function exportQuestionCSV() {
     downloadCSV(csv, filename);
 }
 
-exportCSVFlows.addEventListener('click', exportFlowsCSV);
-exportCSVFlow.addEventListener('click', exportFlowCSV);
-exportCSVQuestion.addEventListener('click', exportQuestionCSV);
+if (exportAllCSV) { //sysadmin
+    exportCSVFlows.addEventListener('click', exportFlowsCSV);
+    exportCSVFlow.addEventListener('click', exportFlowCSV);
+    exportCSVQuestion.addEventListener('click', exportQuestionCSV);
 
-exportAllCSV.addEventListener('click', function() {
-    exportFlowsCSV();
-    exportFlowCSV();
-    exportQuestionCSV();
-});
+    exportAllCSV.addEventListener('click', function() {
+        exportFlowsCSV();
+        exportFlowCSV();
+        exportQuestionCSV();
+    });
+}
+
 
 export async function generateAnswerSummary(questionId: number) {
     let question : string = "";
@@ -335,7 +326,7 @@ export async function generateAnswerSummary(questionId: number) {
 
 const exportUserInput = document.getElementById('exportUserInput') as HTMLButtonElement;
 function exportTxt() {
-    console.log(a)
+    console.log("a",a)
     const txt = a;
     const filename = 'summary_question_' + showSelectedQuestionNumber() + '.txt';
     downloadSummary(txt, filename);
