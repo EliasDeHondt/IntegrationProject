@@ -3,6 +3,7 @@ import {Flow} from "../../Flow/FlowObjects";
 import {showFlows} from "./CreateProjectFlowAPI";
 import {initializeDeleteButtons} from "../../CreateFlow/DeleteFlowModal";
 import {Note} from "../../Flow/Step/StepObjects";
+import {initChoicesNames} from "../../Statistics/Statistics";
 
 export function fillExisting(project: Project, inputTitle: HTMLInputElement, inputText: HTMLInputElement): void{
     inputTitle.value = project.title
@@ -122,6 +123,47 @@ export async function loadNotesProject(id: number): Promise<Flow[]> {
         .then(response => response.json())
         .then(data => {
             return data
+        })
+        .catch(error => console.error("Error:", error))
+}
+
+
+export async function UpdateProjectClosed(projectId: number,closeProject: boolean) {
+    // await fetch("/api/Projects/UpdateProjectClosed/" + projectId + "/" + closeProject, {
+    //     method: "PUT",
+    //     headers: {
+    //         "Content-Type": "application/json"
+    //     }
+    // }).then(response => response.json())
+    //     .catch(error => console.error("Error:", error))
+    try {
+        const response = await fetch("/api/Projects/UpdateProjectClosed/" + projectId + "/" + closeProject, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        if (response.ok) {
+            console.log("Project closed successfully.");
+        } else {
+            console.error("Failed to close project.");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+export async function GetProjectClosed(projectId: number) : Promise<boolean> {
+    return await fetch(`/api/Projects/GetProjectClosed/${projectId}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(boolean => {
+            return boolean
         })
         .catch(error => console.error("Error:", error))
 }

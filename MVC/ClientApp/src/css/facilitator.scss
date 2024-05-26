@@ -95,20 +95,24 @@
   transition: all 0.5s ease;
 }
 
-.facilitator-button-step-control:hover, .kiosk-button-flow-control:hover {
+.facilitator-button-step-control:enabled:hover, .kiosk-button-flow-control:hover {
   letter-spacing: 3px;
   background-color: #e9521c;
   color: hsl(0, 0%, 100%);
   box-shadow: #e9521c;
 }
 
-.facilitator-button-step-control:active, .kiosk-button-flow-control:hover {
+.facilitator-button-step-control:enabled:active, .kiosk-button-flow-control:hover {
   letter-spacing: 3px;
   background-color: #e9521c;
   color: hsl(0, 0%, 100%);
   box-shadow: #e9521c;
   transform: translateY(10px);
   transition: 100ms;
+}
+
+.facilitator-button-step-control:disabled {
+  cursor: default;
 }
 /* Button */
 

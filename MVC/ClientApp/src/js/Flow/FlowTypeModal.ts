@@ -1,6 +1,6 @@
 ﻿import {Modal} from "bootstrap";
 import {GenerateOptions, SubmitFlows} from "./ChooseFlow";
-import {connection, code} from "./Facilitator";
+import {code} from "./Facilitator";
 import {Flow} from "./FlowObjects";
 import {GetFlowsForProject} from "../Kiosk/FlowAPI";
 
@@ -19,7 +19,7 @@ let flows: Flow[];
 
 if (btnSubmitFlows)
     btnSubmitFlows.onclick = () => {
-        SubmitFlows(connection, code)
+        SubmitFlows(code)
         flowTypeModal.hide();
     }
 

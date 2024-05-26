@@ -12,12 +12,14 @@
     <link rel="stylesheet" href="~/dist/site.css"/>
 </head>
 <body class="row h-100 w-100">
-<div class="text-center col-lg-10">
-    <div class="row container-content-body">
-        <!-- Dashboard -->
-        
-        <!-- Titel -->
+
+    <div class="text-center col-lg-10">
+        <div class="row container-content-body">
+            <!-- Dashboard -->
+            <div id="closedProjectOverlay"></div>
+            <!-- Titel -->
             <div class="py-3">
+                @* <div > *@
                 <div class="d-flex row">
                     <div class="col">
                         <div class=" card border-black border-2 bgAccent">
@@ -30,7 +32,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col">
                 <div class="row row-cols-3 ps-4 pe-4 m-4 ">
                     <div class="flex-fill" style="overflow-y: auto;">
@@ -44,14 +46,13 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Flows -->
-                        <div class="d-flex justify-content-between" style="padding-bottom: 10px">
-                            <div class="card border-black border-2 bgAccent align-items-lg-start">
-                                <span style="color: white;" class="m-1">Edit Flows</span>
-                            </div>
+                        <div class="title-container">
+                            <span class="title-title">Edit Flows</span>
+                            <hr class="title-divider">
                         </div>
-                        
+
                         <div class="col" style="text-align: left;">
                             <div class="flow-container" style="display: flex;">
                                 <div class="flow-card" id="btnCreateFlowProject" style="width: 200px; height: 300px;">
@@ -60,13 +61,13 @@
                                         <h3 class="flow-card-footer">New Flow</h3>
                                     </a>
                                 </div>
-                                <div id="flow-cards" ></div> <!-- This gets filled automatically in FlowCreator.ts -->
+                                <div id="flow-cards"></div> <!-- This gets filled automatically in FlowCreator.ts -->
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
-                
+
                 <!-- Subthemas -->
                 <div>
                     <div class="py-3">
@@ -74,10 +75,9 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
-
 </body>
 </html>
 @* <p class="visually-hidden" id="platformId">@Model.Id</p> *@

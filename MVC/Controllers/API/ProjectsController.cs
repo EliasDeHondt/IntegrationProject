@@ -82,7 +82,7 @@ public class ProjectsController : Controller
     }
     
     [HttpGet("GetProjectWithId/{projectId}")]
-    public IActionResult GetProjectWithId(int projectId)
+    public IActionResult GetProjectWithId(long projectId)
     {
         Project project = _projectManager.GetProjectWithSharedPlatformAndMainTheme(projectId);
 
@@ -104,7 +104,7 @@ public class ProjectsController : Controller
     }
     
     [HttpGet("GetFlowsForProject/{projectId}")]
-    public IActionResult GetFlowsForProject(int projectId)
+    public IActionResult GetFlowsForProject(long projectId)
     {
         var flows = _projectManager.GetFlowsForProjectById(projectId);
 
@@ -113,7 +113,7 @@ public class ProjectsController : Controller
     }
     
     [HttpPost("CreateProjectFlow/{flowType}/{themeId}")]
-    public IActionResult CreateFlow(string flowType,int themeId)
+    public IActionResult CreateFlow(string flowType,long themeId)
     {
 
         FlowType type = Enum.Parse<FlowType>(flowType);
@@ -127,7 +127,7 @@ public class ProjectsController : Controller
         return Created("CreateFlow", flow);
     }
 
-    [HttpGet("GetNotesForProject/{projectId:long}")]
+    [HttpGet("GetNotesForProject/{projectId}")]
     public IActionResult GetNotesForProject(long projectId)
     {
         var flows = _projectManager.GetNotesForProjectById(projectId);
@@ -140,5 +140,29 @@ public class ProjectsController : Controller
             Participations = flow.Participations,
             ThemeId = flow.Theme.Id
         }));
+    }
+    
+    [HttpPut("UpdateProjectClosed/{projectId}/{closeProject}")]
+    public IActionResult UpdateProjectClosed(long projectId,bool closeProject)
+    {
+        _uow.BeginTransaction();
+
+        _projectManager.UpdateProjectClosed(projectId, closeProject);
+        
+        _uow.Commit();
+
+        return NoContent();
+    }
+    
+    [HttpGet("GetProjectClosed/{projectId}")]
+    public IActionResult GetProjectClosed(long projectId)
+    {
+        _uow.BeginTransaction();
+
+        bool isClosed = _projectManager.GetProjectClosed(projectId);
+        
+        _uow.Commit();
+
+        return Ok(isClosed);
     }
 }

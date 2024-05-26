@@ -5,6 +5,8 @@ import {detectionCanvas, drawChoiceBoundaries, getResult} from "../Webcam/WebCam
 import {delay} from "../Util";
 import {Timer} from "../Util/Timer";
 import * as kiosk from "../Kiosk/Kiosk"
+import SignalRConnectionManager from "../Kiosk/ConnectionManager";
+import {code} from "../Kiosk/Kiosk";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
@@ -71,11 +73,21 @@ async function SetRespondentEmail(flowId: number, inputEmail: string) {
 
 //button submit email 
 document.addEventListener("DOMContentLoaded", async function () {
-    await kiosk.connection.start().then(() => {
-        kiosk.connection.invoke("JoinConnection", kiosk.code).then(() => {
-            kiosk.connection.invoke("SendCurrentStep", kiosk.code, currentStepNumber)
+    SignalRConnectionManager.startConnection().then(() => {
+        const connection = SignalRConnectionManager.getInstance();
+
+        SignalRConnectionManager.joinConnectionGroup(kiosk.code).then(() => {
+            connection.invoke("ActivateFlow", kiosk.code, flowId.toString())
+            connection.invoke("SendCurrentStep", kiosk.code, currentStepNumber)
         })
-    });
+        
+        connection.onreconnected(() => {
+            SignalRConnectionManager.joinConnectionGroup(kiosk.code).then(() => {
+                connection.invoke("ActivateFlow", kiosk.code, flowId.toString())
+                connection.invoke("SendCurrentStep", kiosk.code, currentStepNumber)
+            })
+        })
+    })
 
     const emailInput = document.getElementById("inputEmail");
 
@@ -111,7 +123,6 @@ async function GetNextStep(stepNumber: number, flowId: number): Promise<Step> {
     })
         .then(response => response.json())
         .then(async (data): Promise<Step> => {
-            await kiosk.connection.invoke("SendCurrentStep", kiosk.code, stepNumber);
             if (!data.visible) {
                 await GetNextStep(++currentStepNumber, flowId)
             } else if (flowtype.toUpperCase() == "PHYSICAL") {
