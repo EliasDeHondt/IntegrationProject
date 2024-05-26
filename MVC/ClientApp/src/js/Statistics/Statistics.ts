@@ -9,7 +9,7 @@ import {
     GetQuestionsFromFlow, GetQuestionText, GetQuestionType
 } from "./API/StatisticAPI";
 import {Question} from "../Types/ProjectObjects";
-import {chartDatasToCSV, chartDataToCSV, downloadCSV} from "./ExportStatistics";
+import {chartDatasToCSV, chartDataToCSV, downloadCSV, downloadSummary} from "./ExportStatistics";
 
 const barCtx = document.getElementById('barChart') as HTMLCanvasElement;
 const lineCtx = document.getElementById('lineChart') as HTMLCanvasElement;
@@ -268,11 +268,11 @@ export async function initQuestionNames(labels: Question[]) {
         await generateQuestionStatistics()
     });
 }
-
+let a = ""
 async function generateQuestionStatistics() {
     let number = parseInt(showSelectedQuestionNumber());
     let type = await GetQuestionType(number);
-    await generateAnswerSummary(number)
+    a = await generateAnswerSummary(number)
 
     if (type == "ChoiceQuestion") {
         doughnutCtx.style.display = 'block'
@@ -293,7 +293,6 @@ const exportCSVFlows = document.getElementById('exportCSVFlows') as HTMLButtonEl
 const exportCSVFlow = document.getElementById('exportCSVFlow') as HTMLButtonElement;
 const exportCSVQuestion = document.getElementById('exportCSVQuestion') as HTMLButtonElement;
 const exportAllCSV = document.getElementById('exportAllCSV') as HTMLButtonElement;
-const exportUserInput = document.getElementById('exportUserInput') as HTMLButtonElement;
 function exportFlowsCSV() {
     const csv = chartDatasToCSV("Flows", barChart, lineChart);
     const filename = 'flowsCharts.csv';
@@ -331,4 +330,17 @@ export async function generateAnswerSummary(questionId: number) {
     } else {
         GenerateSummary(question, answers).then(s => summary.innerText = s);
     }
+    return summary.innerText;
 }
+
+const exportUserInput = document.getElementById('exportUserInput') as HTMLButtonElement;
+function exportTxt() {
+    console.log(a)
+    const txt = a;
+    const filename = 'summary_question_' + showSelectedQuestionNumber() + '.txt';
+    downloadSummary(txt, filename);
+}
+exportUserInput.addEventListener('click', function() {
+    console.log("exportUserInput")
+    exportTxt();
+});
