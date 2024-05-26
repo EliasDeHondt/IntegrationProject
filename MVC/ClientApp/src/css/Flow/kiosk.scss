@@ -10,8 +10,8 @@
 }
 
 .kiosk-logo-img {
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
 }
 
 /* Relative Positioning */
@@ -308,13 +308,10 @@
 
 .kiosk-center-center input:checked {
   border-color: #e9521c;
-}
-
-.kiosk-center-center input:focus {
-  border-color: #e9521c;
   box-shadow: 0 0 0 3px rgba(233, 82, 28, 0.3);
   background: #e9521c;
 }
+
 /* Step */
 
 /* Mobile */

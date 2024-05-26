@@ -71,4 +71,38 @@ public class SharedPlatformRepository
     {
         return _ctx.SharedPlatforms.Add(sharedPlatform).Entity;
     }
+    
+    public int ReadRespondentCountFromPlatform(long id)
+    {
+        var totalRespondentsCount = _ctx.Projects
+            .Include(p => p.MainTheme)
+            .ThenInclude(t => t.Flows)
+            .ThenInclude(f => f.Participations)
+            .ThenInclude(p => p.Respondents)
+            .Include(p => p.MainTheme)
+            .ThenInclude(t => t.Themes)
+            .ThenInclude(t => t.Flows)
+            .ThenInclude(f => f.Participations)
+            .ThenInclude(p => p.Respondents)
+            .Where(p => p.SharedPlatform.Id == id)
+            .Select(p => new
+            {
+                MainThemeRespondents = p.MainTheme.Flows
+                    .SelectMany(f => f.Participations)
+                    .SelectMany(pt => pt.Respondents).Count(),
+                SubThemesRespondents = p.MainTheme.Themes
+                    .SelectMany(t => t.Flows)
+                    .SelectMany(f => f.Participations)
+                    .SelectMany(pt => pt.Respondents).Count()
+            })
+            .Sum(x => x.MainThemeRespondents + x.SubThemesRespondents);
+
+        return totalRespondentsCount;
+    }
+
+    public string ReadPlatformOrganisation(long id)
+    {
+        return _ctx.SharedPlatforms.Find(id)!.OrganisationName;
+    }
+
 }

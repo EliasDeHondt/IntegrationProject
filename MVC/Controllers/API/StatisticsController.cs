@@ -7,6 +7,8 @@
 
 using Business_Layer;
 using Domain.ProjectLogics;
+using Domain.ProjectLogics.Steps.Questions;
+using Domain.ProjectLogics.Steps.Questions.Answers;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 
@@ -18,13 +20,15 @@ public class StatisticsController : Controller
 {
     private readonly FlowManager _manager;
     private readonly QuestionManager _Qmanager;
+    private readonly SharedPlatformManager _platformManager;
     private readonly ProjectManager _projectManager;
     private readonly UnitOfWork _uow;
 
-    public StatisticsController(FlowManager manager,QuestionManager qmanager, ProjectManager projectManager, UnitOfWork uow)
+    public StatisticsController(FlowManager manager,QuestionManager qmanager, SharedPlatformManager platformManager, ProjectManager projectManager, UnitOfWork uow)
     {
         _manager = manager;
         _Qmanager = qmanager;
+        _platformManager = platformManager;
         _projectManager = projectManager;
         _uow = uow;
     }
@@ -36,6 +40,7 @@ public class StatisticsController : Controller
 
         return Ok(flowNames);
     }
+
     [HttpGet("GetCountStepsPerFlow")]
     public IActionResult GetCountStepsPerFlow()
     {
@@ -43,6 +48,7 @@ public class StatisticsController : Controller
 
         return Ok(flowCounts);
     }
+
     [HttpGet("GetCountParticipationsPerFlow")]
     public IActionResult GetCountParticipationsPerFlow()
     {
@@ -56,6 +62,22 @@ public class StatisticsController : Controller
     {
         var flowCountQuestions = _manager.GetQuestionCountsForFlow(flowname);
         return Ok(flowCountQuestions);
+    }
+    
+    [HttpGet("GetRespondentCountFromPlatform/{platformId:long}")]
+    public IActionResult GetRespondentCountFromPlatform(long platformId)
+    {
+        var count = _platformManager.GetRespondentCountFromPlatform(platformId);
+        
+        return Ok(count);
+    }
+    
+    [HttpGet("GetPlatformOrganisation/{platformId:long}")]
+    public IActionResult GetPlatformOrganisation(long platformId)
+    {
+        var count = _platformManager.GetPlatformOrganisation(platformId);
+        
+        return Ok(count);
     }
     
     [HttpGet("GetRespondentCountFromProject/{projectId:long}")]
@@ -92,48 +114,74 @@ public class StatisticsController : Controller
     public IActionResult GetFlowCountFromProject(long projectId)
     {
         var count = _projectManager.GetFlowCountFromProject(projectId);
-        
+
         return Ok(count);
     }
+
     [HttpGet("GetChoicesNames/{question}")]
     public IActionResult GetChoicesNames(long question)
     {
         var choicesNames = _Qmanager.GetChoicesNames(question);
-        
+
         return Ok(choicesNames);
     }
-    
+
     [HttpGet("GetAnswerCountsForQuestions/{question}")]
     public IActionResult GetAnswerCountsForQuestions(long question)
     {
         var answerCountQuestions = _Qmanager.GetAnswerCountsForQuestions(question);
-        
-    
+
+
         return Ok(answerCountQuestions);
     }
-    
+
     [HttpGet("GetSubThemeCountFromProject/{projectId:long}")]
     public IActionResult GetSubThemeCountFromProject(long projectId)
     {
         var count = _projectManager.GetSubThemeCountFromProject(projectId);
-        
+
         return Ok(count);
     }
-    
+
     [HttpGet("GetRespondentsFromFlow/{flowname}")]
     public IActionResult GetRespondentsFromFlow(string flowname)
     {
         var respondentCountQuestions = _manager.GetRespondentCountsFromFlow(flowname);
-        
+
 
         return Ok(respondentCountQuestions);
     }
+
     [HttpGet("GetParticipatoinNames/{flowname}")]
     public IActionResult GetParticipationNames(string flowname)
     {
         var participations = _manager.GetParticipationNames(flowname);
-        
+
 
         return Ok(participations);
+    }
+
+    [HttpGet("GetAnswersFromQuestion/{questionId:long}")]
+    public IActionResult GetAnswersFromQuestion(long questionId)
+    {
+        var answers = _Qmanager.GetAnswersFromQuestion(questionId);
+
+        return Ok(answers);
+    }
+
+    [HttpGet("GetQuestionText/{questionId:long}")]
+    public IActionResult GetQuestionText(long questionId)
+    {
+        var question = _Qmanager.GetQuestionText(questionId);
+
+        return Ok(question);
+    }
+
+    [HttpGet("GetQuestionType/{questionId:long}")]
+    public IActionResult GetQuestionType(long questionId)
+    {
+        var question = _Qmanager.GetQuestionType(questionId);
+
+        return Ok(question);
     }
 }

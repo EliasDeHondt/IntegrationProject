@@ -1,4 +1,4 @@
-﻿import {User} from "../../Types/UserTypes";
+import {User} from "../../Types/UserTypes";
 import * as editModal from "../EditUserModal";
 import {Project} from "../../Types/ProjectObjects";
 import * as deleteModal from "../DeleteUserModal";
@@ -139,10 +139,10 @@ export async function generateProjectCard(project: Project): Promise<HTMLDivElem
     // Buttons
     let btnHideProject = createButton("btnHideProject", "bi-eye") as HTMLButtonElement;
     let btnDeleteProject = createButton("btnDeleteProject", "bi-folder-minus") as HTMLButtonElement;
-    let btnGraphProject = createButton("btnGraphProject", "bi-graph-up") as HTMLButtonElement;
+    let btnGraphProject = createButton("btnGraphProject", "bi-info-circle") as HTMLButtonElement;
     let btnNotesProject = createButton("btnNotesProject", "bi-chat-quote") as HTMLButtonElement;
     let btnEnterProject = createButton("btnEnterProject", "bi-folder") as HTMLButtonElement;
-
+    
     btnHideProject.className = "border-0 p-0 position-absolute top-0 end-1 ms-2 mb-2\" style=\"background: none;";
     btnDeleteProject.className = "border-0 p-0 position-absolute top-0 end-0 me-2 mb-2\" style=\"background: none;";
     btnGraphProject.className = "border-0 p-0 position-absolute top-0 end-0 mt-5 me-2 mb-2\" style=\"background: none;";

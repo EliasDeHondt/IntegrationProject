@@ -2,90 +2,102 @@
 <!DOCTYPE html>
 <html lang="">
 <head>
+    <!--Meta + Title-->
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - CodeForge</title>
-    <script src="~/dist/site.entry.js" defer></script>
+    <!--Meta + Title-->
+    <!--CSS-->
     <link rel="stylesheet" href="~/dist/site.css"/>
+    <!--CSS-->
 </head>
 <body>
-<div class="col-lg-2 bgPrimary h-100" id="navbar" >
-    <ul class="nav flex-column mb-auto" id="maincontent" >
-        <div class="logo">
+<div class="navbar-container col-lg-2 bgPrimary" id="navbar">
+    <ul class="navbar-menu nav flex-column mb-auto" id="maincontent">
+        <!--Logo-->
+        <div class="logo" id="navbar-logo-id">
             <img src="/favicon.ico" alt="Logo">
         </div>
-
-        <li id="tohideAN" class="nav-nav-item text-center" >
-            <a>Welcome @User.Identity!.Name!</a>
+        <!--Logo-->
+        
+        <!--Name of the user-->
+        <li class="navbar-nameuser" id="tohideAN" >
+            <a>Hi, @(User.Identity!.Name ?? "User")!</a>
         </li>
-        @if (User.IsInRole(UserRoles.SystemAdmin))
+        <!--Name of the user-->
+        
+        <!--Buttons to navigate-->
+        @if (User.IsInRole(UserRoles.SystemAdmin)) // If the user is a SystemAdmin
         {
-            <li id="tohideD" class="nav-nav-item bgPrimary text-center" >
-                <a asp-action="Dashboard" asp-controller="SystemPlatform" class="bhover nav-nav-link active text-dark bgAccent" aria-current="page">Dashboard</a>
+            <li class="navbar-menu-item" id="tohideD">
+                <i class="bi bi-table"><a asp-action="Dashboard" asp-controller="SystemPlatform" aria-current="page"> Dashboard</a></i>
             </li>
-            <li id="tohideS" class="nav-nav-item bgPrimary text-center" >
-                <a asp-controller="Statistics" asp-action="Statistics" class="bhover nav-nav-link active text-dark bgAccent" aria-current="page" >Statistics</a>
+            <li class="navbar-menu-item" id="tohideS">
+                <i class="bi bi-pie-chart-fill"><a asp-controller="Statistics" asp-action="Statistics" aria-current="page"> Statistics</a></i>
             </li>
             @if (ViewContext.HttpContext.Request.Path.StartsWithSegments("/Statistics/Statistics"))
             {
-                <li id="tohideC" class="nav-nav-item bgPrimary text-center">
-                    <button id="exportAllCSV" class="bhover nav-nav-link active text-dark bgAccent">
-                        Download all CSV's
-                    </button>
+                <li class="navbar-menu-item" id="tohideC">
+                    <button id="exportAllCSV">Download all CSV's</button>
                 </li>
-                
             }
         }
-        else if (User.IsInRole(UserRoles.Facilitator))
+        else if (User.IsInRole((UserRoles.PlatformAdmin))) // If the user is a PlatformAdmin
         {
-            <li id="tohideD" class="nav-nav-item bgPrimary text-center">
-                <a asp-action="Dashboard" asp-controller="Facilitator" class="bhover nav-nav-link active text-dark bgAccent" aria-current="page" >Dashboard</a>
+            <li class="navbar-menu-item" id="tohideD">
+                <i class="bi bi-table"><a asp-action="Dashboard" asp-controller="SharedPlatform" aria-current="page"> Dashboard</a></i>
             </li>
-            <li id="tohideS" class="nav-nav-item bgPrimary text-center">
-                <a asp-action="Facilitator" asp-controller="Flow" class="bhover nav-nav-link active text-dark bgAccent" aria-current="page">Connect to kiosk</a>
+            <li class="navbar-menu-item" id="tohideS">
+                <i class="bi bi-pie-chart-fill"><a asp-controller="Statistics" asp-action="Statistics" aria-current="page"> Statistics</a></i>
             </li>
-        } else if (User.IsInRole((UserRoles.PlatformAdmin)))
+        }
+        else if (User.IsInRole(UserRoles.Facilitator)) // If the user is a Facilitator
         {
-            <li id="tohideD" class="nav-nav-item bgPrimary text-center" >
-                <a asp-action="Dashboard" asp-controller="SharedPlatform" class="bhover nav-nav-link active nav-text-dark bgAccent" aria-current="page" >Dashboard</a>
+            <li class="navbar-menu-item" id="tohideD">
+                <i class="bi bi-table"><a asp-action="Dashboard" asp-controller="Facilitator" aria-current="page"> Dashboard</a></i>
             </li>
-            <li id="tohideS" class="nav-nav-item bgPrimary text-center" >
-                <a asp-controller="Statistics" asp-action="Statistics" class="bhover nav-nav-link active nav-text-dark bgAccent" aria-current="page" >Statistics</a>
+            <li class="navbar-menu-item" id="tohideS">
+                <i class="bi bi-tv-fill"><a asp-action="Facilitator" asp-controller="Flow" aria-current="page"> Connect to kiosk</a></i>
             </li>
         }
         else
         {
-            <li id="tohideD" class="nav-item bgPrimary text-center" >
-                <a asp-action="Dashboard" asp-controller="SharedPlatform" class="nav-bhover nav-nav-link active nav-text-dark nav-bgAccent" aria-current="page" >Dashboard</a>
+            <li class="navbar-menu-item" id="tohideD">
+                <i class="bi bi-table"><a asp-action="Dashboard" asp-controller="SharedPlatform" aria-current="page">Dashboard</a></i>
             </li>
         }
-        <li id="tohideLO" class="nav-nav-item nav-bgAccent nav-bhover" >
-            <form id="logoutForm" class="nav-form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <a class="d-block nav-text-dark">
-                    <button id="logout" type="submit" class="nav-btn nav-text-dark nav-w-100 nav-text-decoration-none" >Sign Out</button>
-                </a>
+        <li class="navbar-menu-item-logout" id="tohideLO">
+            <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button id="logout" type="submit">Logout</button>
             </form>
         </li>
+        <!--Buttons to navigate-->
 
-        <div class="d-flex justify-content-between">
-            <div class="nav-nav-item" id="language" >
-                <button class="bhover nav-text-dark nav-w-100 bgAccent">NED</button>
+        <div class="d-flex">
+            <div id="language" class="navbar-language-dropdown">
+                <button class="navbar-menu-item-language-button">NL</button>
+                <div class="navbar-language-dropdown-content">
+                    <a href="#">NL</a>
+                    <a href="#">EN</a>
+                    <a href="#">FR</a>
+                    <a href="#">DE</a>
+                </div>
             </div>
 
-            <div class="nav-nav-item" id="collapseButton">
-                <button class="nav-bhover nav-text-dark nav-w-100 bgAccent">
-                    <i id="nav-icon" class="bi bi-caret-left-fill" ></i>
+            <div id="collapseButton">
+                <button class="navbar-menu-item-arrow-button" id="arrow-button">
+                    <i id="nav-icon" class="bi bi-caret-left-fill"></i>
                 </button>
             </div>
         </div>
-
     </ul>
 </div>
-
 @RenderBody()
-
 </body>
 </html>
-@await RenderSectionAsync("Scripts", required: false)
 
+<!--JS-->
+@await RenderSectionAsync("Scripts", required: false)
 <script src="~/dist/navigation.entry.js" defer></script>
+<script src="~/dist/site.entry.js" defer></script>
+<!--JS-->

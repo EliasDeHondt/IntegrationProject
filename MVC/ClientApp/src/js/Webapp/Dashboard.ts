@@ -8,7 +8,9 @@ import {
 } from "./Util";
 import {Feed} from "../Types/WebApp/Types";
 import {PostIdea} from "./Ideas";
-import {readFileAsBase64} from "../Util";
+import {IsValidIdea} from "./Moderation";
+import {delay, readFileAsBase64} from "../Util";
+import {Modal} from "bootstrap";
 
 const ideaContainer = document.getElementById("ideaContainer") as HTMLDivElement;
 const navContainer = document.getElementById("navContainer") as HTMLDivElement;
@@ -19,20 +21,42 @@ const imageContainer = document.getElementById("imageContainer") as HTMLDivEleme
 const webappImage = document.getElementById("webapp-idea-image") as HTMLDivElement;
 const btnRemoveImage = document.getElementById("btnRemoveImage") as HTMLButtonElement;
 const textArea = document.getElementById("textIdea") as HTMLTextAreaElement;
-let feedId: number;
 
+const modalInvalidIdea = new Modal(document.getElementById("modalInvalidIdea") as HTMLDivElement, {
+    keyboard: true,
+    backdrop: false,
+});
+const btnCloseInvalidIdea = document.getElementById("btnCloseInvalidIdea") as HTMLButtonElement;
+
+btnCloseInvalidIdea.onclick = () => {
+    modalInvalidIdea.hide();
+}
+
+const feedNumber = document.getElementById("feedNumber") as HTMLDivElement;
+let feedId: number;
 btnPlaceIdea.onclick = async () => {
-    let text = textArea.value
+    let text = textArea.value.trim()
     let user = await GetLoggedInUser();
-    PostIdea(feedId,text).then(idea => {
-        ideaContainer.prepend(generateIdeaCard(idea, user.email));
-        addReactionFunctionality();
-        addLikeFunctionality();
-        fileInput.value = "";
-        imageContainer.innerHTML = "";
-        btnRemoveImage.classList.add("visually-hidden");
-        webappImage.classList.add("visually-hidden");
-    })
+    const fileInput = document.getElementById("file-input") as HTMLInputElement;
+    if (fileInput.files![0] != null || text != "") {
+        IsValidIdea(text).then(res => {
+            if (res) {
+                PostIdea(feedId, text).then(idea => {
+                    ideaContainer.prepend(generateIdeaCard(idea, user.email));
+                    addReactionFunctionality();
+                    addLikeFunctionality();
+                    textArea.value = "";
+                    fileInput.value = "";
+                    imageContainer.innerHTML = "";
+                    btnRemoveImage.classList.add("visually-hidden");
+                    webappImage.classList.add("visually-hidden");
+                })
+            } else {
+                modalInvalidIdea.show();
+                delay(3000).then(() => modalInvalidIdea.hide());
+            }
+        })
+    }   
 }
 
 btnRemoveImage.onclick = () => {
@@ -46,7 +70,7 @@ fileInput.onchange = async () => {
     let image = fileInput.files![0];
     imageContainer.innerHTML = "";
     let base64 = await readFileAsBase64(image);
-    if(base64){
+    if (base64) {
         btnRemoveImage.classList.remove("visually-hidden");
         webappImage.classList.remove("visually-hidden");
         imageContainer.appendChild(generateImage(base64));
@@ -56,11 +80,21 @@ fileInput.onchange = async () => {
     }
 }
 
-GetRandomFeed().then(feed => {
-    generateIdeas(feed);
-    titleHeader.innerHTML = feed.title
-    feedId = feed.id
-})
+if(feedNumber.textContent){
+    feedId = parseInt(feedNumber.textContent);
+    if(feedId > 0){
+        GetFeed(feedId).then(feed => {
+            generateIdeas(feed);
+            titleHeader.innerHTML = feed.title
+        })
+    } else {
+        GetRandomFeed().then(feed => {
+            generateIdeas(feed);
+            titleHeader.innerHTML = feed.title
+            feedId = feed.id
+        })
+    }
+}
 
 GetFeedIds().then(feeds => {
     feeds.forEach(feed => {
@@ -69,9 +103,9 @@ GetFeedIds().then(feeds => {
     })
 })
 
-function addGetFeedButtons(){
+function addGetFeedButtons() {
     let btns = document.getElementsByClassName("webapp-nav-button") as HTMLCollectionOf<HTMLButtonElement>
-    for(const element of btns) {
+    for (const element of btns) {
         element.onclick = () => {
             let id = parseInt(element.getAttribute("data-id")!);
             GetFeed(id).then(feed => {
@@ -83,7 +117,7 @@ function addGetFeedButtons(){
     }
 }
 
-async function generateIdeas(feed: Feed){
+async function generateIdeas(feed: Feed) {
     let user = await GetLoggedInUser();
     ideaContainer.innerHTML = "";
     feed.ideas.forEach(idea => {

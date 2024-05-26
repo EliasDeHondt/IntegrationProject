@@ -7,7 +7,6 @@ import {UserRoles} from "../Types/UserTypes";
 import "/node_modules/embla-carousel";
 import EmblaCarousel, {EmblaOptionsType} from "embla-carousel";
 import {addPrevNextBtnsClickHandlers} from '../EmblaCarouselArrowButtons'
-import '../../css/embla.scss'
 
 const userRoulette = document.getElementById("carouselContainer") as HTMLDivElement;
 const projectRoulette = document.getElementById("carouselPContainer") as HTMLDivElement;

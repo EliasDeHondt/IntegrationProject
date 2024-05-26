@@ -1,4 +1,5 @@
 ﻿import {Flow} from "./FlowObjects";
+import SignalRConnectionManager from "../Kiosk/ConnectionManager";
 
 let totalFlows: number;
 let flowType: string;
@@ -47,7 +48,7 @@ export function GenerateOptions(flows: Flow[], flowContainer: HTMLDivElement, ty
     })
 }
 
-export function SubmitFlows(connection: signalR.HubConnection, code: string) {
+export function SubmitFlows(code: string) {
     const selectedFlows: number[] = [];
     if (flowType == "linear") {
         const options = document.querySelectorAll<HTMLInputElement>('.form-check-input[type="checkbox"]:checked');
@@ -59,7 +60,7 @@ export function SubmitFlows(connection: signalR.HubConnection, code: string) {
         if (options.length == 1)
             selectedFlows.push(parseInt((options[0] as HTMLInputElement).value))
     }
-    connection.invoke("SendSelectedFlowIds", code, selectedFlows, flowType);
+    SignalRConnectionManager.getInstance().invoke("SendSelectedFlowIds", code, selectedFlows, flowType);
 }
 
 export function getFlowType(): string {

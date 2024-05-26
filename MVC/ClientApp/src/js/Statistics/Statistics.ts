@@ -1,11 +1,12 @@
 import Chart from 'chart.js/auto';
 import {
-    GetAnswerCountsForQuestions,
+    GenerateSummary,
+    GetAnswerCountsForQuestions, GetAnswersFromQuestion,
     GetChoicesNames,
     GetCountParticipationsPerFlow,
     GetCountStepsPerFlow,
     GetNamesPerFlow, GetParticipatoinNames, GetQuestionNames,
-    GetQuestionsFromFlow
+    GetQuestionsFromFlow, GetQuestionText, GetQuestionType
 } from "./API/StatisticAPI";
 import {Question} from "../Types/ProjectObjects";
 import {chartDatasToCSV, chartDataToCSV, downloadCSV} from "./ExportStatistics";
@@ -15,6 +16,8 @@ const lineCtx = document.getElementById('lineChart') as HTMLCanvasElement;
 const doughnutCtx = document.getElementById('doughnutChart') as HTMLCanvasElement;
 const radarCtx = document.getElementById('radarChart') as HTMLCanvasElement;
 const pieCtx = document.getElementById('pieChart') as HTMLCanvasElement;
+
+const summary = document.getElementById('answersSummary') as HTMLDivElement;
 
 const selectFlow = document.getElementById("selectFlow") as HTMLSelectElement;
 const selectQuestion = document.getElementById("selectQuestion") as HTMLSelectElement;
@@ -256,13 +259,29 @@ export function initDataStatistics(labels: string[]) {
         GetParticipatoinNames(showSelectedFlow());
     });
 }
-export function initQuestionNames(labels: Question[]) {
-    fillDropdownQuestions(labels,selectQuestion)
-    GetChoicesNames(showSelectedQuestion())
-    selectQuestion.addEventListener('change', () => {
-        GetChoicesNames(showSelectedQuestion())
+export async function initQuestionNames(labels: Question[]) {
+    fillDropdownQuestions(labels, selectQuestion)
+
+    await generateQuestionStatistics()
+    
+    selectQuestion.addEventListener('change', async () => {
+        await generateQuestionStatistics()
     });
 }
+
+async function generateQuestionStatistics() {
+    let number = parseInt(showSelectedQuestionNumber());
+    let type = await GetQuestionType(number);
+    await generateAnswerSummary(number)
+
+    if (type == "ChoiceQuestion") {
+        doughnutCtx.style.display = 'block'
+        GetChoicesNames(showSelectedQuestion())
+    } else {
+        doughnutCtx.style.display = 'none'
+    }
+}
+
 export function initChoicesNames(labels: string[]) {
     GetAnswerCountsForQuestions(labels,showSelectedQuestion(),showSelectedQuestionText());
 }
@@ -299,3 +318,16 @@ exportAllCSV.addEventListener('click', function() {
     exportFlowCSV();
     exportQuestionCSV();
 });
+
+export async function generateAnswerSummary(questionId: number) {
+    let question : string = "";
+    let answers : string[] = [];
+    await GetQuestionText(questionId).then((q) => question = q);
+    await GetAnswersFromQuestion(questionId).then((a) => answers = a)
+    
+    if (answers.length == 0) {
+        summary.innerText = `No answers available!`
+    } else {
+        GenerateSummary(question, answers).then(s => summary.innerText = s);
+    }
+}

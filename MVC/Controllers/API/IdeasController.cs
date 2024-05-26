@@ -31,7 +31,7 @@ public class IdeasController : Controller
         _uow.BeginTransaction();
         var user = await _userManager.GetUserAsync(User) as WebAppUser;
         var feed = _feedManager.GetFeed(feedId);
-        var idea = _manager.AddIdea(model.Text, user!, feed, model.image);
+        var idea = _manager.AddIdea(model.Text, user, feed, model.image);
         _uow.Commit();
         return CreatedAtAction(nameof(PostIdea), CreateIdeaModel(idea));
     }
@@ -76,8 +76,8 @@ public class IdeasController : Controller
             Text = idea.Text,
             author = new AuthorModel
             {
-                Email = idea.Author.Email!,
-                Name = idea.Author.UserName!
+                Email = idea.Author?.Email,
+                Name = idea.Author?.UserName
             },
             likes = idea.Likes.Select(like => new LikeModel
             {
