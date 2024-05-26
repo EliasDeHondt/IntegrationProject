@@ -148,8 +148,11 @@ public class StepsController : Controller
         _uow.BeginTransaction();
     
         var step = _manager.GetStepById(stepId);
+        // var astep = _manager.GetStepById(stepId-1);
+        
 
         step.StepNumber = stepNumber;
+        // astep.StepNumber = stepNumber+1;
     
         _uow.Commit();
     
