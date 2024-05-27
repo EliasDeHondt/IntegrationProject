@@ -53,3 +53,14 @@ export function downloadCSV(csv: string, filename: string) {
     document.body.removeChild(a);
 }
 
+export function downloadSummary(text: string, filename: string) {
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', url);
+    a.setAttribute('download', filename);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}

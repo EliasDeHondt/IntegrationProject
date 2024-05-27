@@ -79,15 +79,12 @@ export async function GetQuestionNames(flowname: string): Promise<void> {
         }
         
         const labels: Question[] = await response.json();
-        console.log("labels Question",labels)
         initQuestionNames(labels);
     } catch (error) {
         console.error("Error:", error);
     }
 }
 export async function GetChoicesNames(question: string){
-    //question = "If you were to prepare the budget for your city or municipality, where would you mainly focus on in the coming years? Choose one.";
-    console.log("question: GetChoicesNames",question)
     await fetch("/api/Statistics/GetChoicesNames/" + question, {
         method: "GET",
         headers: {
@@ -143,7 +140,6 @@ export async function GetRespondentsFromFlow(labels: string[],flowname: string){
         .catch(error => console.error("Error:", error))
 }
 export async function GetAnswerCountsForQuestions(labels: string[],question: string,questionText: string){
-    console.log("question: GetAnswerCountsForQuestions",question)
     //voor elk answer te tellen
     await fetch("/api/Statistics/GetAnswerCountsForQuestions/" + question, {
         method: "GET",
@@ -154,7 +150,6 @@ export async function GetAnswerCountsForQuestions(labels: string[],question: str
     })
         .then(response => response.json())
         .then(data => {
-            console.log("data QA",data)
             drawDoughnutChart("Aantal antwoorden voor de vraag: "+questionText, labels,'Aantal Answers', data)
         })
         .catch(error => console.error("Error:", error))
