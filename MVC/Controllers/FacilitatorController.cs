@@ -19,7 +19,15 @@ public class FacilitatorController : Controller
     [Authorize(Roles = UserRoles.Facilitator)]
     public IActionResult Dashboard()
     {
-        var projects = _projectManager.GetAssignedProjectsForFacilitator(User.FindFirstValue(ClaimTypes.Email)!);
-        return View(projects);
+        try
+        {
+            var projects = _projectManager.GetAssignedProjectsForFacilitator(User.FindFirstValue(ClaimTypes.Email)!);
+            return View(projects);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return View("Error");
+        }
     }
 }

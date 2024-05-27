@@ -23,48 +23,63 @@ public class SharedPlatformsController : Controller
         _uow = uow;
     }
 
-
     [HttpGet]
     [Authorize(Roles = UserRoles.SystemAdmin)]
     public IActionResult GetAllSharedPlatforms()
     {
-        var platforms = _sharedPlatformManager.GetAllSharedPlatforms();
-        return Ok(platforms.Select(p => new SharedPlatformDto
+        try
         {
-            Id = p.Id,
-            OrganisationName = p.OrganisationName,
-            Logo = p.Logo
-        }));
+            var platforms = _sharedPlatformManager.GetAllSharedPlatforms();
+            return Ok(platforms.Select(p => new SharedPlatformDto
+            {
+                Id = p.Id,
+                OrganisationName = p.OrganisationName,
+                Logo = p.Logo
+            }));
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500);
+        }
     }
     
     [HttpPost]
     [Authorize(Roles = UserRoles.SystemAdmin)]
     public async Task<IActionResult> CreateSharedPlatform(CreatePlatformDto sharedPlatformDto)
     {
-        _uow.BeginTransaction();
-        var newPlatform = _sharedPlatformManager.AddSharedPlatform(sharedPlatformDto.OrganisationName, sharedPlatformDto.Logo);
-
-        var user = new SpAdmin
+        try
         {
-            Email = sharedPlatformDto.Email,
-            UserName = sharedPlatformDto.Username,
-            EmailConfirmed = true,
-            SharedPlatform = newPlatform
-        };
+            _uow.BeginTransaction();
+            var newPlatform = _sharedPlatformManager.AddSharedPlatform(sharedPlatformDto.OrganisationName, sharedPlatformDto.Logo);
 
-        await _userManager.CreateAsync(user, sharedPlatformDto.Password);
-        await _userManager.AddToRoleAsync(user, UserRoles.PlatformAdmin);
-        await _userManager.AddToRoleAsync(user, UserRoles.ProjectPermission);
-        await _userManager.AddToRoleAsync(user, UserRoles.UserPermission);
+            var user = new SpAdmin
+            {
+                Email = sharedPlatformDto.Email,
+                UserName = sharedPlatformDto.Username,
+                EmailConfirmed = true,
+                SharedPlatform = newPlatform
+            };
+
+            await _userManager.CreateAsync(user, sharedPlatformDto.Password);
+            await _userManager.AddToRoleAsync(user, UserRoles.PlatformAdmin);
+            await _userManager.AddToRoleAsync(user, UserRoles.ProjectPermission);
+            await _userManager.AddToRoleAsync(user, UserRoles.UserPermission);
         
-        var platformDto = new SharedPlatformDto
+            var platformDto = new SharedPlatformDto
+            {
+                Id = newPlatform.Id,
+                OrganisationName = newPlatform.OrganisationName,
+                Logo = newPlatform.Logo
+            };
+            _uow.Commit();
+            return Created($"/api/SharedPlatforms/{platformDto.Id}", platformDto);
+        }
+        catch (Exception e)
         {
-            Id = newPlatform.Id,
-            OrganisationName = newPlatform.OrganisationName,
-            Logo = newPlatform.Logo
-        };
-        _uow.Commit();
-        return Created($"/api/SharedPlatforms/{platformDto.Id}", platformDto);
+            Console.WriteLine(e);
+            return StatusCode(500);
+        }
     }
     
 }

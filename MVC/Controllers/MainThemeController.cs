@@ -21,10 +21,18 @@ public class MainThemeController : Controller
         _manager = manager;
     }
 
-    [Authorize(Roles = UserRoles.ProjectPermission)]
+    [Authorize(policy: "projectAccess")]
     public IActionResult MainTheme(long id)
     {
-        var mainTheme = _manager.GetMainThemeById(id);
-        return View(mainTheme);
+        try
+        {
+            var mainTheme = _manager.GetMainThemeById(id);
+            return View(mainTheme);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return View("Error");
+        }
     }
 }

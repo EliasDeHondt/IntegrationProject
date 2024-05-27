@@ -1,5 +1,6 @@
 ﻿using Business_Layer;
 using Domain.Accounts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models.feedModels;
@@ -26,36 +27,53 @@ public class ReactionsController : Controller
     }
     
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> AddReaction(ReactionDto model)
     {
-        _uow.BeginTransaction();
-        var idea = _ideaManager.GetIdea(model.IdeaId);
-        var user = await _userManager.GetUserAsync(User) as WebAppUser;
-        var reaction = _manager.AddReaction(idea, user!, model.Text);
-        _uow.Commit();
-        ReactionModel reactionModel = new ReactionModel
+        try
         {
-            Author = new AuthorModel
+            _uow.BeginTransaction();
+            var idea = _ideaManager.GetIdea(model.IdeaId);
+            var user = await _userManager.GetUserAsync(User) as WebAppUser;
+            var reaction = _manager.AddReaction(idea, user!, model.Text);
+            _uow.Commit();
+            ReactionModel reactionModel = new ReactionModel
             {
-                Name = reaction.WebAppUser.UserName!
-            },
-            Text = reaction.Text
-        };
-        return CreatedAtAction(nameof(AddReaction), reactionModel);
+                Author = new AuthorModel
+                {
+                    Name = reaction.WebAppUser.UserName!
+                },
+                Text = reaction.Text
+            };
+            return CreatedAtAction(nameof(AddReaction), reactionModel);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500);
+        }
     }
     
     [HttpGet("{id}")]
     public IActionResult GetReactionsForIdea(long id)
     {
-        var reactions = _manager.GetReactionsForIdea(id);
-        return Ok(reactions.Select(reaction => new ReactionModel
+        try
         {
-            Author = new AuthorModel
+            var reactions = _manager.GetReactionsForIdea(id);
+            return Ok(reactions.Select(reaction => new ReactionModel
             {
-                Name = reaction.WebAppUser.UserName!
-            },
-            Text = reaction.Text
-        }));
+                Author = new AuthorModel
+                {
+                    Name = reaction.WebAppUser.UserName!
+                },
+                Text = reaction.Text
+            }));
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500);
+        }
     }
     
     

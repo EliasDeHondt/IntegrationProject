@@ -25,10 +25,19 @@ public class FlowController : Controller
         _manager = manager;
     }
     
+    [Authorize(Roles = UserRoles.Facilitator)]
     public IActionResult Step(long id)
     {
-        var flow = _manager.GetFlowByIdWithTheme(id);
-        return View(flow);
+        try
+        {
+            var flow = _manager.GetFlowByIdWithTheme(id);
+            return View(flow);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return View("Error");
+        }
     }
     
     [Authorize(Roles = UserRoles.Facilitator)]

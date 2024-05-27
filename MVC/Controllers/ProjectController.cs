@@ -14,17 +14,33 @@ public class ProjectController: Controller
         _manager = manager;
     }
     
-    [Authorize(Roles = UserRoles.ProjectPermission)]
+    [Authorize(policy: "projectAccess")]
     public IActionResult ProjectPage(long id, bool isMainThemeId = false)
     {
-        var project = isMainThemeId ? _manager.GetProjectThroughMainTheme(id) : _manager.GetProject(id);
-        return View(project);
+        try
+        {
+            var project = isMainThemeId ? _manager.GetProjectThroughMainTheme(id) : _manager.GetProject(id);
+            return View(project);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return View("Error");
+        }
     }
     
-    [Authorize(Roles = UserRoles.ProjectPermission)]
+    [Authorize(policy: "projectAccess")]
     public IActionResult Notes(long id)
     {
-        var project = _manager.GetProject(id);
-        return View(project);
+        try
+        {
+            var project = _manager.GetProject(id);
+            return View(project);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return View("Error");
+        }
     }
 }

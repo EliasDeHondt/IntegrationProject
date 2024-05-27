@@ -55,6 +55,12 @@ public class Startup
                 policy => policy.RequireRole(UserRoles.PlatformAdmin, UserRoles.SystemAdmin));
             options.AddPolicy("systemAdmin",
                 policy => policy.RequireRole(UserRoles.SystemAdmin));
+            options.AddPolicy("flowAccess", 
+                policy => policy.RequireRole(UserRoles.Facilitator, UserRoles.PlatformAdmin, UserRoles.SystemAdmin));
+            options.AddPolicy("projectAccess",
+                policy => policy.RequireRole(UserRoles.SystemAdmin, UserRoles.ProjectPermission));
+            options.AddPolicy("userAccess",
+                policy => policy.RequireRole(UserRoles.SystemAdmin, UserRoles.UserPermission));
         });
 
         services.ConfigureApplicationCookie(cfg =>
@@ -208,7 +214,7 @@ public class Startup
         {
             Id = "HenkId",
             Email = "Henk@CodeForge.com",
-            UserName = "Bab",
+            UserName = "Henk",
             EmailConfirmed = true,
             SharedPlatform = new SharedPlatform()
         };

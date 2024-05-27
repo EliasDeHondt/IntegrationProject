@@ -21,22 +21,38 @@ public class SharedPlatformController : Controller
     [Authorize(policy: "admin")]
     public IActionResult Dashboard(long id)
     {
-        long platId = id;
-        if (platId == null)
+        try
         {
-            SpAdmin admin = _customUserManager.GetPlatformAdminWithSharedPlatform(User.FindFirstValue(ClaimTypes.Email));
-            platId = admin.SharedPlatform.Id;
+            long platId = id;
+            if (platId == null)
+            {
+                SpAdmin admin = _customUserManager.GetPlatformAdminWithSharedPlatform(User.FindFirstValue(ClaimTypes.Email));
+                platId = admin.SharedPlatform.Id;
+            }
+            var sharedPlatform = _sharedPlatformManager.GetSharedPlatformWithProjects(platId);
+            return View(sharedPlatform);
         }
-        var sharedPlatform = _sharedPlatformManager.GetSharedPlatformWithProjects(platId);
-        return View(sharedPlatform);
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return View("Error");
+        }
     }
 
     [Authorize(policy: "admin")]
     public IActionResult RedirectToDashboard()
     {
-        SpAdmin admin = _customUserManager.GetPlatformAdminWithSharedPlatform(User.FindFirstValue(ClaimTypes.Email));
-        var id = admin.SharedPlatform.Id;
-        return RedirectToAction("Dashboard", new {id});
+        try
+        {
+            SpAdmin admin = _customUserManager.GetPlatformAdminWithSharedPlatform(User.FindFirstValue(ClaimTypes.Email));
+            var id = admin.SharedPlatform.Id;
+            return RedirectToAction("Dashboard", new {id});
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return View("Error");
+        }
     }
     
 }

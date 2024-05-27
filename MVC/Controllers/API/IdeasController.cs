@@ -1,6 +1,7 @@
 ﻿using Business_Layer;
 using Domain.Accounts;
 using Domain.WebApp;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models.feedModels;
@@ -28,43 +29,69 @@ public class IdeasController : Controller
     [HttpPost("createIdea/{feedId}")]
     public async Task<IActionResult> PostIdea(IdeaModel model, long feedId)
     {
-        _uow.BeginTransaction();
-        var user = await _userManager.GetUserAsync(User) as WebAppUser;
-        var feed = _feedManager.GetFeed(feedId);
-        var idea = _manager.AddIdea(model.Text, user, feed, model.image);
-        _uow.Commit();
-        return CreatedAtAction(nameof(PostIdea), CreateIdeaModel(idea));
+        try
+        {
+            _uow.BeginTransaction();
+            var user = await _userManager.GetUserAsync(User) as WebAppUser;
+            var feed = _feedManager.GetFeed(feedId);
+            var idea = _manager.AddIdea(model.Text, user, feed, model.image);
+            _uow.Commit();
+            return CreatedAtAction(nameof(PostIdea), CreateIdeaModel(idea));
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500);
+        }
     }
 
     [HttpPost("likeIdea/{ideaId}")]
+    [Authorize]
     public async Task<IActionResult> LikeIdea(long ideaId)
     {
-        _uow.BeginTransaction();
-        var user = await _userManager.GetUserAsync(User) as WebAppUser;
-        var idea = _manager.GetIdea(ideaId);
-        var like = _manager.LikeIdea(idea, user!);
-        _uow.Commit();
-
-        return CreatedAtAction(nameof(LikeIdea), new LikeModel
+        try
         {
-            liker = new AuthorModel
+            _uow.BeginTransaction();
+            var user = await _userManager.GetUserAsync(User) as WebAppUser;
+            var idea = _manager.GetIdea(ideaId);
+            var like = _manager.LikeIdea(idea, user!);
+            _uow.Commit();
+
+            return CreatedAtAction(nameof(LikeIdea), new LikeModel
             {
-                Email = like.WebAppUser.Email!,
-                Name = like.WebAppUser.UserName!
-            }
-        });
+                liker = new AuthorModel
+                {
+                    Email = like.WebAppUser.Email!,
+                    Name = like.WebAppUser.UserName!
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500);
+        }
     }
 
     [HttpDelete("unlikeIdea/{ideaId}")]
+    [Authorize]
     public async Task<IActionResult> UnlikeIdea(long ideaId)
     {
-        _uow.BeginTransaction();
-        var user = await _userManager.GetUserAsync(User) as WebAppUser;
-        var idea = _manager.GetIdea(ideaId);
-        _manager.UnlikeIdea(idea, user!);
-        _uow.Commit();
+        try
+        {
+            _uow.BeginTransaction();
+            var user = await _userManager.GetUserAsync(User) as WebAppUser;
+            var idea = _manager.GetIdea(ideaId);
+            _manager.UnlikeIdea(idea, user!);
+            _uow.Commit();
         
-        return NoContent();
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500);
+        }
     }
     
     private static IdeaModel CreateIdeaModel(Idea idea)

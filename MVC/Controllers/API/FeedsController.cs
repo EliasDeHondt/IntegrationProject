@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
 using Business_Layer;
+using Domain.Accounts;
 using Domain.WebApp;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models.feedModels;
 
@@ -13,7 +15,7 @@ public class FeedsController : Controller
 
     private readonly FeedManager _manager;
     private readonly CustomUserManager _userManager;
-    private readonly static Random Rng = new();
+    private static readonly Random Rng = new();
 
     public FeedsController(FeedManager feedManager, CustomUserManager userManager, UnitOfWork uow)
     {
@@ -24,44 +26,70 @@ public class FeedsController : Controller
     [HttpGet("{id}")]
     public IActionResult GetFeed(long id)
     {
-        var feed = _manager.GetFeedFromIdWithIdeas(id);
-
-        var ideas = CreateIdeaModels(feed.Ideas);
-
-        var shuffledIdeas = ideas.OrderBy(_ => Rng.Next()).ToList();
-        
-        var feedModel = new FeedModel
+        try
         {
-            Id = feed.Id,
-            Ideas = shuffledIdeas,
-            Title = feed.Project.Title
-        };
+            var feed = _manager.GetFeedFromIdWithIdeas(id);
 
-        return Ok(feedModel);
+            var ideas = CreateIdeaModels(feed.Ideas);
+
+            var shuffledIdeas = ideas.OrderBy(_ => Rng.Next()).ToList();
+        
+            var feedModel = new FeedModel
+            {
+                Id = feed.Id,
+                Ideas = shuffledIdeas,
+                Title = feed.Project.Title
+            };
+
+            return Ok(feedModel);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500);
+        }
     }
 
     [HttpGet("random")]
+    [Authorize(Roles = UserRoles.Respondent)]
     public IActionResult GetRandomFeedForUser()
     {
-        var randomId = _userManager.GetRandomFeedIdForUser(User.FindFirstValue(ClaimTypes.Email)!);
-        return RedirectToAction("GetFeed", new { id = randomId});
+        try
+        {
+            var randomId = _userManager.GetRandomFeedIdForUser(User.FindFirstValue(ClaimTypes.Email)!);
+            return RedirectToAction("GetFeed", new { id = randomId});
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500);
+        }
     }
     
     [HttpGet("ids")]
+    [Authorize(Roles = UserRoles.Respondent)]
     public IActionResult GetFeedIdsForUser()
     {
-        var email = User.FindFirstValue(ClaimTypes.Email);
-        IEnumerable<Feed> feeds = new List<Feed>();
-        if (email != null)
+        try
         {
-            feeds = _userManager.GetFeedForUserWithProject(email);
-        }
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            IEnumerable<Feed> feeds = new List<Feed>();
+            if (email != null)
+            {
+                feeds = _userManager.GetFeedForUserWithProject(email);
+            }
         
-        return Ok(feeds.Select(feed => new FeedModel
+            return Ok(feeds.Select(feed => new FeedModel
+            {
+                Title = feed.Project.Title,
+                Id = feed.Id
+            }));
+        }
+        catch (Exception e)
         {
-            Title = feed.Project.Title,
-            Id = feed.Id
-        }));
+            Console.WriteLine(e);
+            return StatusCode(500);
+        }
     }
     
     private List<IdeaModel> CreateIdeaModels(ICollection<Idea> ideas)

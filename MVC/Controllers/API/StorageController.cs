@@ -5,9 +5,11 @@
  *                                     *
  ***************************************/
 
+using Domain.Accounts;
 using Google;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 
@@ -29,25 +31,43 @@ public class StorageController : Controller
     }
     
     [HttpGet("DownloadVideo/{videoName}")]
+    [Authorize(policy: "flowAccess")]
     public IActionResult DownloadVideo(string videoName)
     {
         try
         {
             string url = _signer.Sign(_options.BucketName, videoName, TimeSpan.FromDays(7), HttpMethod.Get);
-            
+
             return Ok(url);
         }
-        catch (GoogleApiException e) when (e.HttpStatusCode == System.Net.HttpStatusCode.NotFound) { return BadRequest(); }
+        catch (GoogleApiException e) when (e.HttpStatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            return BadRequest();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500);
+        }
     }
 
     [HttpPost("UploadVideo")]
+    [Authorize(policy: "projectAccess")]
     public async Task<IActionResult> UploadVideo(IFormFile file)
     {
-        var client = await StorageClient.CreateAsync();
-        using var memoryStream = new MemoryStream();
-        await file.CopyToAsync(memoryStream);
-        var obj = await client.UploadObjectAsync(_options.BucketName, file.FileName, file.ContentType, memoryStream);
-        return Ok(obj.Name);
+        try
+        {
+            var client = await StorageClient.CreateAsync();
+            using var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream);
+            var obj = await client.UploadObjectAsync(_options.BucketName, file.FileName, file.ContentType, memoryStream);
+            return Ok(obj.Name);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500);
+        }
     }
     
 }
