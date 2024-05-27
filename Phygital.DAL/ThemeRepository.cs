@@ -122,7 +122,7 @@ public class ThemeRepository
 
         foreach (ThemeBase themeBase in _context.ThemeBases)
         {
-            //I dont know why, but if this foreach isn't here nothing works. Wonky but works.
+            //I don't know why, but if this foreach isn't here nothing works. Wonky but works.
         }
         
         foreach (Project project in _context.Projects)

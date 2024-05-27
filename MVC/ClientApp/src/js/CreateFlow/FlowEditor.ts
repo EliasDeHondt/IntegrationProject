@@ -215,11 +215,46 @@ function UpdateStepList(steps: Step[]) {
 
 }
 
+function getTemplate(projectId:number) {
+    
+    fetch(`/Project/GetStylingTemplate/${projectId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data) {
+                document.documentElement.style.setProperty('--primary-color', data.customPrimaryColor);
+                document.documentElement.style.setProperty('--secondary-color', data.customSecondaryColor);
+                document.documentElement.style.setProperty('--accent-color', data.customAccentColor);
+                document.documentElement.style.setProperty('--background-color', data.customBackgroundColor)
+            }
+        })
+        .catch(error => console.error('Error fetching styling template:', error));
+}
+
+function getStylingTemplate() {
+    
+    fetch("/EditFlows/GetProjectIdByFlowId/" + flowId, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            getTemplate(data);
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const parts = document.URL.split('/');
     const lastPart = parts[parts.length - 1];
     const btnViewFlow = document.getElementById("viewFlow") as HTMLAnchorElement;
     flowId = parseInt(lastPart, 10);
+    
+    getStylingTemplate();
 
     if (isNaN(flowId)) {
         console.error("The ID provided in the URL is not a number.")

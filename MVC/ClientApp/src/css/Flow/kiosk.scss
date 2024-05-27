@@ -5,6 +5,8 @@
  *                                     *
  ***************************************/
 
+@import "../variables";
+
 .kiosk-body * {
   font-family: 'Roboto', sans-serif;
 }
@@ -68,7 +70,7 @@
 .kiosk-container-top-left {
   border: 1px solid #ffffff;
   border-radius: 24px;
-  background-color: #479ecd;
+  background-color: var(--primary-color);
   width: 550px;
   height: 150px;
   margin: 24px;
@@ -78,7 +80,7 @@
 .kiosk-container-center-center {
   border: 1px solid #ffffff;
   border-radius: 24px;
-  background-color: #479ecd;
+  background-color: var(--primary-color);
   width: 1800px;
   height: 550px;
   margin: 24px;
@@ -88,7 +90,7 @@
 .kiosk-container-bottom-left {
   border: 1px solid #ffffff;
   border-radius: 24px;
-  background-color: #479ecd;
+  background-color: var(--primary-color);
   margin: 24px;
   padding: 24px;
   height: 127px;
@@ -97,14 +99,14 @@
 .kiosk-container-bottom-center {
   border: 1px solid #ffffff;
   border-radius: 24px;
-  background-color: #479ecd;
+  background-color: var(--primary-color);
   margin: 24px;
   padding: 24px;
   height: 127px;
 }
 
 .kiosk-container-bottom-center a {
-  color: #e9521c;
+  color: var(--secondary-color);
   text-decoration: none;
   font-weight: 1000;
 }
@@ -112,7 +114,7 @@
 .kiosk-container-bottom-right {
   border: 1px solid #ffffff;
   border-radius: 24px;
-  background-color: #479ecd;
+  background-color: var(--primary-color);
   margin: 24px;
   padding: 24px;
   height: 127px;
@@ -124,9 +126,10 @@
   width: 100%;
   height: 100%;
   --s: 600px; /* Size of cubes :) */
-  --c1: #7ca8c9; /* Don't F*** with my colors, because I will kill you. :) (Elias De Hondt) */
-  --c2: #d17d64;
-  --c3: #e3a05e;
+  --alpha: 0.8;
+  --c1: var(--primary-color);
+  --c2: var(--secondary-color);
+  --c3: var(--accent-color);
   background: repeating-conic-gradient(from 30deg, #0000 0 120deg, var(--c3) 0 180deg)
   calc(0.5 * var(--s)) calc(0.5 * var(--s) * 0.577),
   repeating-conic-gradient(from 30deg, var(--c1) 0 60deg, var(--c2) 0 120deg, var(--c3) 0 180deg);
@@ -164,16 +167,16 @@
 
 .kiosk-button-step-control:hover, .kiosk-button-flow-control:hover {
   letter-spacing: 3px;
-  background-color: #e9521c;
+  background-color: var(--secondary-color);
   color: hsl(0, 0%, 100%);
-  box-shadow: #e9521c;
+  box-shadow: var(--secondary-color);
 }
 
 .kiosk-button-step-control:active, .kiosk-button-flow-control:hover {
   letter-spacing: 3px;
-  background-color: #e9521c;
+  background-color: var(--secondary-color);
   color: hsl(0, 0%, 100%);
-  box-shadow: #e9521c;
+  box-shadow: var(--secondary-color);
   transform: translateY(10px);
   transition: 100ms;
 }
@@ -205,7 +208,7 @@
 }
 
 .kiosk-input-container .kiosk-input-email:focus {
-  border: 1px solid #e9521c;
+  border: 1px solid var(--secondary-color);
 }
 
 .kiosk-invite-btn {
@@ -216,7 +219,7 @@
   bottom: 4px;
   z-index: 10;
   border-radius: 4px;
-  background-color: #e9521c;
+  background-color: var(--secondary-color);
   color: #ffffff;
   text-align: center;
   vertical-align: middle;
@@ -236,7 +239,7 @@
 
 .input-container .kiosk-input-email:placeholder-shown ~ .kiosk-invite-btn {
   pointer-events: none;
-  background-color: #e9521c;
+  background-color: var(--secondary-color);
   opacity: 0.5;
 }
 /* Input Email */
@@ -270,8 +273,8 @@
   height: 200px;
   padding: 12px;
   border-radius: 8px;
-  border: 5px solid #e9521c;
-  background-color: #e3a05e;
+  border: 5px solid var(--secondary-color);
+  background-color: var(--accent-color);
   color: #000000;
   font-size: 16px;
   line-height: 1.25rem;
@@ -298,7 +301,7 @@
   appearance: none;
   width: 24px;
   height: 24px;
-  border: 2px solid #e9521c;
+  border: 2px solid var(--secondary-color);
   border-radius: 50%;
   outline: none;
   cursor: pointer;
@@ -307,13 +310,13 @@
 }
 
 .kiosk-center-center input:checked {
-  border-color: #e9521c;
+  border-color: var(--secondary-color);
 }
 
 .kiosk-center-center input:focus {
-  border-color: #e9521c;
+  border-color: var(--secondary-color);
   box-shadow: 0 0 0 3px rgba(233, 82, 28, 0.3);
-  background: #e9521c;
+  background: var(--secondary-color);
 }
 /* Step */
 
@@ -362,4 +365,10 @@
     height: 16px;
   }
 }
+
+#vidInput {
+  border: thin black solid;
+  border-radius: 40px;
+}
+
 /* Mobile */

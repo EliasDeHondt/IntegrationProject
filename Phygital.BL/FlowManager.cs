@@ -127,4 +127,9 @@ public class FlowManager
     {
         return _repository.ReadFlowsByProject(id);
     }
+
+    public long? ReadProjectIdByFlowId(long flowId)
+    {
+        return _repository.ReadProjectIdByFlowId(flowId);
+    }
 }

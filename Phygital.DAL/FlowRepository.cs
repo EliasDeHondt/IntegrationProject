@@ -184,4 +184,56 @@ public class FlowRepository
             .SelectMany(p => p.MainTheme.Themes.SelectMany(t => t.Flows))
             .ToList();
     }
+
+    public long? ReadProjectIdByFlowId(long flowId)
+    {
+        long? themeBaseId = _context.Flows.Find(flowId).Theme.Id;
+        
+        foreach (SubTheme subTheme in _context.SubThemes)
+        {
+            foreach (Flow flow in subTheme.Flows)
+            {
+                if (flow.Id == flowId)
+                {
+                    themeBaseId = subTheme.Id;
+                }
+            }
+        }
+        
+        foreach (MainTheme mainTheme in _context.MainThemes)
+        {
+            foreach (Flow flow in mainTheme.Flows)
+            {
+                if (flow.Id == flowId)
+                {
+                    themeBaseId = mainTheme.Id;
+                }
+            }
+        }
+
+        if (themeBaseId == null)
+        {
+            return null;
+        }
+        
+        
+
+        foreach (Project project in _context.Projects)
+        {
+            if (project.MainTheme.Id == themeBaseId)
+            {
+                return project.Id;
+            }
+
+            foreach (SubTheme subTheme in project.MainTheme.Themes)
+            {
+                if (subTheme.Id == themeBaseId)
+                {
+                    return project.Id;
+                }
+            }
+        }
+
+        return null;
+    }
 }

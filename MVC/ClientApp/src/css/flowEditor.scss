@@ -12,18 +12,18 @@
   padding: 10px;
   margin: 5px;
   border: thin solid black;
-  background-color: map-get($themes, light, secondary);
+  background-color: var(--secondary-color);
 }
 
 .editor-shared-inner-container {
-  background-color: map-get($themes, light, accent);
+  background-color: var(--accent-color);
   border: thin solid black;
   border-radius: 5px;
   height: 100%;
 }
 
 .step-card {
-  background-color: map-get($themes, light, primary);
+  background-color: var(--primary-color);
   border: thin solid black;
   border-radius: 5px;
   height: 180px;
@@ -35,7 +35,7 @@
 }
 
 .step-card:hover {
-  background-color: map-get($themes, light, secondary);
+  background-color: var(--secondary-color);
   border: thin solid black;
 }
 
@@ -125,7 +125,7 @@
 #step-view-container {
   border: thin solid black;
   border-radius: 5px;
-  background-color: map-get($themes, light, background);
+  background-color: var(--background-color);
   padding: 1em;
 }
 

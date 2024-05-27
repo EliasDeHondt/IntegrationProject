@@ -27,12 +27,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     if(!connectionCode) return;
     connectionCode.innerText = code;
 
+    const projectId = Number.parseInt(document.getElementById("projectId")!.dataset.projectId!);
+    console.log("Getting template after load...");
+    getTemplate(projectId);
+
     await connection.start().then(() => {
         connection.invoke("JoinConnection", code).then(() => {
             connection.invoke("SendFlowUpdate", code, "0", "Inactive");
         })
     })
 })
+
+function getTemplate(projectId:number) {
+
+    fetch(`/Project/GetStylingTemplate/${projectId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data) {
+                document.documentElement.style.setProperty('--primary-color', data.customPrimaryColor);
+                document.documentElement.style.setProperty('--secondary-color', data.customSecondaryColor);
+                document.documentElement.style.setProperty('--accent-color', data.customAccentColor);
+                document.documentElement.style.setProperty('--background-color', data.customBackgroundColor)
+            }
+        })
+        .catch(error => console.error('Error fetching styling template:', error));
+}
 
 connection.on("ReceiveSelectedFlowIds", async (ids, flowType) => {
     if(flowType != "physical"){

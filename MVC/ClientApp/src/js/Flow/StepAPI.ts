@@ -94,6 +94,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             connection.invoke("SendCurrentStep", kiosk.code, currentStepNumber)
         })
     });
+    
+    getStylingTemplate();
 
     const emailInput = document.getElementById("inputEmail");
 
@@ -156,6 +158,39 @@ async function GetConditionalNextStep(stepId: number): Promise<Step> {
         .then(data => {
             return data
     })
+}
+
+function getTemplate(projectId:number) {
+
+    fetch(`/Project/GetStylingTemplate/${projectId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data) {
+                document.documentElement.style.setProperty('--primary-color', data.customPrimaryColor);
+                document.documentElement.style.setProperty('--secondary-color', data.customSecondaryColor);
+                document.documentElement.style.setProperty('--accent-color', data.customAccentColor);
+                document.documentElement.style.setProperty('--background-color', data.customBackgroundColor)
+            }
+        })
+        .catch(error => console.error('Error fetching styling template:', error));
+}
+
+function getStylingTemplate() {
+
+    fetch("/EditFlows/GetProjectIdByFlowId/" + flowId, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            getTemplate(data);
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
 }
 
 

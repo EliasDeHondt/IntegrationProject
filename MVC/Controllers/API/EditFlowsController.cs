@@ -72,4 +72,17 @@ public class EditFlowsController : Controller
         return Ok(stepId);
     }
 
+    [HttpGet("/EditFlows/GetProjectIdByFlowId/{flowId:long}")]
+    public IActionResult GetProjectIdByFlowId(long flowId)
+    {
+        long? projectId = _manager.ReadProjectIdByFlowId(flowId);
+
+        if (projectId == null)
+        {
+            return NoContent();
+        }
+        
+        return Ok(projectId);
+    }
+
 }
