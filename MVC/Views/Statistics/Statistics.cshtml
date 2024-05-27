@@ -9,34 +9,6 @@
 <html lang="" class="h-100 w-100 overflow-hidden">
 <head>
     <link rel="stylesheet" href="~/dist/site.css"/>
-    @* <style> *@
-    @*     .chart-container { *@
-    @*       display: flex; *@
-    @*       padding-left: 20px; *@
-    @*       justify-content: center; *@
-    @*     } *@
-    @*     hr{ *@
-    @*       width: 60%; border: 3px solid rgba(243, 124, 0, 1); border-radius: 5px; *@
-    @*     } *@
-    @*     h2{ *@
-    @*       position: absolute; *@
-    @*       left: 50%; *@
-    @*       transform: translateX(-50%); *@
-    @*     } *@
-    @*     .csv{ *@
-    @*       outline: none; *@
-    @*       position: absolute; *@
-    @*       right: 10%; *@
-    @*       padding-right: 1%; *@
-    @*       padding-left: 1%; *@
-    @*       border-radius: 5px; *@
-    @*       border: 1px solid black; *@
-    @*     } *@
-    @*     .title-container{ *@
-    @*       padding-top: 40px; *@
-    @*       position: relative; *@
-    @*     } *@
-    @* </style> *@
 </head>
 <body class="row h-100 w-100">
 <div class="text-center col-lg-10">
@@ -46,7 +18,7 @@
             <h2 class="title">FLOWS STATISTICS</h2>
             @if (User.IsInRole(UserRoles.SystemAdmin))
             {
-                <div class="csv nav-item bgNewAccent bNewHover">
+                <div class="csv nav-item bgNewAccent">
                     <button id="exportCSVFlows" class="btn text-dark text-decoration-none">Download CSV</button>
                 </div>
             }
@@ -70,8 +42,8 @@
             <h2 class="title">FLOW STATISTICS</h2>
             @if (User.IsInRole(UserRoles.SystemAdmin))
             {
-                <div class="csv nav-item bgNewAccent bNewHover">
-                    <button id="exportCSVFlow" class="bgNewAccent btn text-dark text-decoration-none">Download CSV</button>
+                <div class="csv nav-item bgNewAccent">
+                    <button id="exportCSVFlow" class="btn text-dark text-decoration-none">Download CSV</button>
                 </div>
             }
         </div>
@@ -104,8 +76,8 @@
             <h2 class="title">QUESTION STATISTICS</h2>
             @if (User.IsInRole(UserRoles.SystemAdmin))
             {
-                <div class="csv nav-item bgNewAccent bNewHover"> 
-                    <button id="exportCSVQuestion" class="bgNewAccent btn text-dark text-decoration-none">Download CSV</button>
+                <div class="csv nav-item bgNewAccent"> 
+                    <button id="exportCSVQuestion" class="btn text-dark text-decoration-none">Download CSV</button>
                 </div>
             }
         </div>
