@@ -28,6 +28,7 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Project> Projects { get; set; } = null!;
     public DbSet<MainTheme> MainThemes { get; set; } = null!;
     public DbSet<SubTheme> SubThemes { get; set; } = null!;
+    public DbSet<ThemeBase> ThemeBases { get; set; } = null!;
     public DbSet<StepBase> Steps { get; set; } = null!;
     public DbSet<ChoiceQuestionBase> ChoiceQuestions { get; set; } = null!;
     public DbSet<InformationStep> InformationSteps { get; set; } = null!;
@@ -108,6 +109,11 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         builder.Entity<OpenAnswer>(entity => entity.Property(e => e.Answer).IsRequired().HasMaxLength(300));
         builder.Entity<Hyperlink>(entity => entity.Property(e => e.URL).IsRequired().HasMaxLength(600));
         builder.Entity<Respondent>(entity => entity.Property(e => e.Email).IsRequired().HasMaxLength(320));
+        
+        builder.Entity<MainTheme>()
+            .HasMany(m => m.Themes)
+            .WithOne(s => s.MainTheme);
+
         
         builder.Entity<ChoiceAnswer>()
             .HasMany(a => a.Answers)

@@ -538,6 +538,7 @@ namespace Data_Access_Layer.DbContext
             MainTheme mainTheme1 = new MainTheme("Local Elections");
             SubTheme subTheme1 = new SubTheme("Causes", mainTheme1);
             Flow flow1 = new Flow(FlowType.Linear, subTheme1);
+            mainTheme1.Themes.Add(subTheme1);
 
             // Create Main Themes & Sub Themes (2)
             MainTheme mainTheme2 = new MainTheme("Environmental Policies");
@@ -550,17 +551,36 @@ namespace Data_Access_Layer.DbContext
             
             SubTheme subTheme3 = new SubTheme("Sustainable Development", mainTheme2);
             Flow flow3 = new Flow(FlowType.Linear, subTheme3);
-
+            mainTheme2.Themes.Add(subTheme2);
+            mainTheme2.Themes.Add(subTheme3);
+            
             // Create Main Themes & Sub Themes (3)
             MainTheme mainTheme3 = new MainTheme("Technology");
             SubTheme subTheme4 = new SubTheme("Impact On Society", mainTheme3);
             Flow flow4 = new Flow(FlowType.Linear, subTheme4);
+            mainTheme3.Themes.Add(subTheme4);
             
             // Create Main Themes & Sub Themes (4)
             MainTheme mainTheme4 = new MainTheme("Studenten Verkiezingen");
             SubTheme subTheme5 = new SubTheme("Verkiezingen Campus Groenplaats", mainTheme4);
             Flow flow5 = new Flow(FlowType.Circular, subTheme5);
             Flow flow6 = new Flow(FlowType.Linear, subTheme5);
+            mainTheme4.Themes.Add(subTheme5);
+            
+            dbContext.MainThemes.AddRange(
+                mainTheme1,
+                mainTheme2,
+                mainTheme3,
+                mainTheme4
+                );
+            
+            dbContext.SubThemes.AddRange(
+                subTheme1,
+                subTheme2,
+                subTheme3,
+                subTheme4,
+                subTheme5
+                );
 
             //=======================
             // Add steps to flow 1 (Linear Flow)

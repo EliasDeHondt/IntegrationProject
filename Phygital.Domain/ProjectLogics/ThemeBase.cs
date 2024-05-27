@@ -6,6 +6,8 @@
  ***************************************/
 
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+
 namespace Domain.ProjectLogics;
 
 public abstract class ThemeBase
@@ -19,13 +21,13 @@ public abstract class ThemeBase
     {
         Subject = subject;
         Flows = flows;
-        Id = id == 0 ? default : id;
+        Id = id;
     }
 
     protected ThemeBase (string subject, long id = 0)
     {
         Subject = subject;
-        Id = id == 0 ? default : id;
+        Id = id;
         Flows = new List<Flow>();
     }
     

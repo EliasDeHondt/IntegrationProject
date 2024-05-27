@@ -15,7 +15,7 @@
   height: 700px;
 }
 .flow-card {
-  background-color: map-get($themes, light, primary);
+  background-color: var(--primary-color);
   border: 1px solid #ccc;
   border-radius: 10px;
   display: flex;
@@ -41,7 +41,7 @@
 }
 
 .flow-card-view-btn:hover {
-  background-color: map-get($themes, light, accent)
+  background-color: var(--accent-color);
 }
 
 #viewFlow {
@@ -52,5 +52,5 @@
 }
 
 #viewFlow:hover {
-  background-color: map-get($themes, light, secondary);
+  background-color: var(--secondary-color);
 }

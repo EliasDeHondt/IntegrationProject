@@ -57,9 +57,9 @@ export function resetFlowsSub(flows: Flow[], flowcontainer: HTMLDivElement){
     showFlows(flows, "forSubtheme",flowcontainer);
 }
 
-export async function getProjectId(subthemeId: number) {
+export function getStylingTemplate(subthemeId: number) {
 
-    await fetch("/api/SubThemes/GetProjectId/" + subthemeId, {
+    fetch("/api/SubThemes/GetProjectId/" + subthemeId, {
         method: "GET",
         headers: {
             "Accept": "application/json",
@@ -68,8 +68,24 @@ export async function getProjectId(subthemeId: number) {
     })
         .then(response => response.json())
         .then(data => {
-            return data
+            getTemplate(data);
         })
-        .catch(error => console.error("Error:", error));
+        .catch(error => {
+            console.error("Error:", error);
+        });
+}
+
+function getTemplate(projectId:number) {
+    fetch(`/Project/GetStylingTemplate/${projectId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data) {
+                document.documentElement.style.setProperty('--primary-color', data.customPrimaryColor);
+                document.documentElement.style.setProperty('--secondary-color', data.customSecondaryColor);
+                document.documentElement.style.setProperty('--accent-color', data.customAccentColor);
+                document.documentElement.style.setProperty('--background-color', data.customBackgroundColor)
+            }
+        })
+        .catch(error => console.error('Error fetching styling template:', error));
 }
     

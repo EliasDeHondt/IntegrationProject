@@ -118,27 +118,24 @@ public class ThemeRepository
 
     public long? ReadProjectId(long themeId)
     {
-        MainTheme mainTheme = _context.SubThemes.Find(themeId)!.MainTheme;
+        SubTheme subTheme = _context.SubThemes.Find(themeId)!;
 
-        Console.WriteLine(mainTheme.Id);
-
-        foreach (var proj in _context.Projects)
+        foreach (ThemeBase themeBase in _context.ThemeBases)
         {
-            Console.WriteLine("projId : " + proj.Id);
-            Console.WriteLine(proj.MainTheme.Id);
+            //I dont know why, but if this foreach isn't here nothing works. Wonky but works.
         }
-        Console.WriteLine(_context.Projects);
-
-        Project? project = _context.Projects.FirstOrDefault(p => p.MainTheme == mainTheme);
         
-        Console.WriteLine(project);
-
-        if (project == null)
+        foreach (Project project in _context.Projects)
         {
-            Console.WriteLine("yo");
-            return null;
+            foreach (SubTheme theme in project.MainTheme.Themes)
+            {
+                if (theme.Id == subTheme.Id)
+                {
+                    return project.Id;
+                }
+            }
         }
 
-        return project.Id;
+        return null;
     }
 }
