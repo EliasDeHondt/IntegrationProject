@@ -3,6 +3,7 @@ using Business_Layer;
 using Domain.Accounts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MVC.Models;
 
 namespace MVC.Controllers;
 
@@ -24,7 +25,7 @@ public class SharedPlatformController : Controller
         try
         {
             long platId = id;
-            if (platId == null)
+            if (platId == 0)
             {
                 SpAdmin admin = _customUserManager.GetPlatformAdminWithSharedPlatform(User.FindFirstValue(ClaimTypes.Email));
                 platId = admin.SharedPlatform.Id;
@@ -35,7 +36,10 @@ public class SharedPlatformController : Controller
         catch (Exception e)
         {
             Console.WriteLine(e);
-            return View("Error");
+            return View("Error", new ErrorViewModel
+            {
+                RequestId = e.Source
+            });
         }
     }
 
@@ -51,7 +55,10 @@ public class SharedPlatformController : Controller
         catch (Exception e)
         {
             Console.WriteLine(e);
-            return View("Error");
+            return View("Error", new ErrorViewModel
+            {
+                RequestId = e.Source
+            });
         }
     }
     
