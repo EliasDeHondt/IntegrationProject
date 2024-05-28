@@ -11,6 +11,7 @@ import {PostIdea} from "./Ideas";
 import {IsValidIdea} from "./Moderation";
 import {delay, readFileAsBase64} from "../Util";
 import {Modal} from "bootstrap";
+import {subscribe, unsubscribe} from "./Subscriber";
 
 const ideaContainer = document.getElementById("ideaContainer") as HTMLDivElement;
 const navContainer = document.getElementById("navContainer") as HTMLDivElement;
@@ -21,6 +22,8 @@ const imageContainer = document.getElementById("imageContainer") as HTMLDivEleme
 const webappImage = document.getElementById("webapp-idea-image") as HTMLDivElement;
 const btnRemoveImage = document.getElementById("btnRemoveImage") as HTMLButtonElement;
 const textArea = document.getElementById("textIdea") as HTMLTextAreaElement;
+const btnSub = document.getElementById("btnSub") as HTMLButtonElement;
+const subscribable = document.getElementById("subscribable") as HTMLLIElement;
 
 const modalInvalidIdea = new Modal(document.getElementById("modalInvalidIdea") as HTMLDivElement, {
     keyboard: true,
@@ -56,7 +59,7 @@ btnPlaceIdea.onclick = async () => {
                 delay(3000).then(() => modalInvalidIdea.hide());
             }
         })
-    }   
+    }
 }
 
 btnRemoveImage.onclick = () => {
@@ -80,9 +83,9 @@ fileInput.onchange = async () => {
     }
 }
 
-if(feedNumber.textContent){
+if (feedNumber.textContent) {
     feedId = parseInt(feedNumber.textContent);
-    if(feedId > 0){
+    if (feedId > 0) {
         GetFeed(feedId).then(feed => {
             generateIdeas(feed);
             titleHeader.innerHTML = feed.title
@@ -101,6 +104,13 @@ GetFeedIds().then(feeds => {
         navContainer.appendChild(generateNavButton(feed));
         addGetFeedButtons();
     })
+    feedId = parseInt(feedNumber.textContent!)
+    if (feeds.filter(feed => feed.id == feedId).length == 0) {
+        generateSubscribeButton(feedId)
+    } else {
+        generateUnsubscribeButton(feedId)
+    }
+
 })
 
 function addGetFeedButtons() {
@@ -112,6 +122,7 @@ function addGetFeedButtons() {
                 generateIdeas(feed);
                 titleHeader.innerHTML = feed.title
                 feedId = feed.id
+                generateUnsubscribeButton(id)
             })
         }
     }
@@ -125,4 +136,45 @@ async function generateIdeas(feed: Feed) {
         addReactionFunctionality();
         addLikeFunctionality();
     })
+}
+
+function generateSubscribeButton(feedId: number) {
+    btnSub.onclick = () => subscribe(feedId).then(() => {
+        GetFeedIds().then(feeds => {
+            navContainer.innerHTML = "";
+            feeds.forEach(feed => {
+                navContainer.appendChild(generateNavButton(feed));
+                addGetFeedButtons();
+            })
+        })
+        generateUnsubscribeButton(feedId);
+    });
+    if(subscribable.innerHTML.includes("Unsubscribe")){
+        subscribable.innerHTML = subscribable.innerHTML.replace("Unsubscribe", "Subscribe")
+    } else {
+        if(!subscribable.innerHTML.includes("Subscribe")){
+            subscribable.innerHTML += "Subscribe";
+        }
+        
+    }
+}
+
+function generateUnsubscribeButton(feedId: number) {
+    btnSub.onclick = () => unsubscribe(feedId).then(() => {
+        GetFeedIds().then(feeds => {
+            navContainer.innerHTML = "";
+            feeds.forEach(feed => {
+                navContainer.appendChild(generateNavButton(feed));
+                addGetFeedButtons();
+            })
+        })
+        generateSubscribeButton(feedId);
+    });
+    if(subscribable.innerHTML.includes("Subscribe")){
+        subscribable.innerHTML = subscribable.innerHTML.replace("Subscribe", "Unsubscribe")
+    } else {
+        if(!subscribable.innerHTML.includes("Unsubscribe")){
+            subscribable.innerHTML += "Unsubscribe";
+        }
+    }
 }

@@ -16,11 +16,13 @@ public class FeedsController : Controller
     private readonly FeedManager _manager;
     private readonly CustomUserManager _userManager;
     private static readonly Random Rng = new();
+    private readonly UnitOfWork _uow;
 
     public FeedsController(FeedManager feedManager, CustomUserManager userManager, UnitOfWork uow)
     {
         _manager = feedManager;
         _userManager = userManager;
+        _uow = uow;
     }
     
     [HttpGet("{id}")]
@@ -91,6 +93,31 @@ public class FeedsController : Controller
             return StatusCode(500);
         }
     }
+
+    [HttpPost("subscribe/{id}")]
+    public IActionResult Subscribe(long id)
+    {
+        
+        _uow.BeginTransaction();
+
+        _userManager.SubscribeToFeed(id, User.FindFirstValue(ClaimTypes.Email)!);
+        
+        _uow.Commit();
+        
+        return Ok();
+    }
+    
+    [HttpDelete("unsubscribe/{id}")]
+    public IActionResult Unsubscribe(long id)
+    {
+        _uow.BeginTransaction();
+
+        _userManager.UnsubscribeToFeed(id, User.FindFirstValue(ClaimTypes.Email)!);
+        
+        _uow.Commit();
+        
+        return Ok();
+    }
     
     private List<IdeaModel> CreateIdeaModels(ICollection<Idea> ideas)
     {
@@ -114,6 +141,5 @@ public class FeedsController : Controller
             image = idea.Image?.Base64
         }).ToList();
     }
-    
     
 }

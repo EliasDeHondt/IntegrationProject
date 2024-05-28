@@ -1,5 +1,4 @@
-﻿@using System.Security.Claims
-@using Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model long
 
 @{
@@ -70,6 +69,13 @@
                 <li class="navbar-nameuser">
                     <h5>Hi, @(User.Identity!.Name ?? "User")</h5>
                 </li>
+                <a id="btnSub">
+                    <li class="navbar-menu-item" id="subscribable">
+                        <i class="bi bi-table">
+
+                        </i>
+                    </li>
+                </a>
                 <li class="navbar-menu-item-logout">
                     <form id="logoutForm" class="w-100 h-100" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                         <button id="logout" class="w-100 h-100" type="submit">Logout</button>
@@ -81,8 +87,13 @@
         {
             <ul class="navbar-menu nav" id="maincontent">
                 <li class="navbar-menu-item-logout">
+                    <form id="loginForm" class="w-100 h-100" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Feed", "WebApp", new { id = Model })">
+                        <button id="login" class="w-100 h-100" type="submit">Login</button>
+                    </form>
+                </li>
+                <li class="navbar-menu-item-logout">
                     <form id="registerForm" class="w-100 h-100" asp-action="Register" asp-route-id="@Model">
-                        <button id="logout" class="w-100 h-100" type="submit">Register</button>
+                        <button id="register" class="w-100 h-100" type="submit">Register</button>
                     </form>
                 </li>
             </ul>

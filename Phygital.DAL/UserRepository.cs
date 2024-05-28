@@ -45,5 +45,18 @@ public class UserRepository
         return _ctx.Feeds.Include(feed => feed.Project)
             .Where(feed => feedIds.Contains(feed.Id));
     }
-    
+
+    public void AddFeedToUser(LongValue feed, string email)
+    {
+        var user = _ctx.Users.Single(u => u.Email == email) as WebAppUser;
+        user!.FeedIds.Add(feed);
+    }
+
+    public void DeleteFeedFromUser(LongValue feedValue, string email)
+    {
+        var user = _ctx.Users.Single(u => u.Email == email) as WebAppUser;
+        _ctx.Entry(user!).Collection(u => u.FeedIds).Load();
+        var value = user!.FeedIds.Single(l => l.Value == feedValue.Value);
+        user.FeedIds.Remove(value);
+    }
 }

@@ -32,4 +32,25 @@ public class CustomUserManager
     {
         return _repo.ReadFeedsFromUserIncludingProject(email);
     }
+    
+    public void SubscribeToFeed(long feedId, string email)
+    {
+        var feedValue = new LongValue
+        {
+            Value = feedId
+        };
+        
+        _repo.AddFeedToUser(feedValue, email);
+    }
+    
+    public void UnsubscribeToFeed(long feedId, string email)
+    {
+        var feedValue = new LongValue
+        {
+            Value = feedId
+        };
+        
+        _repo.DeleteFeedFromUser(feedValue, email);
+    }
+    
 }
