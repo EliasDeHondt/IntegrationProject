@@ -320,7 +320,6 @@ public class UsersController : Controller
     }
 
     [HttpGet("GetLoggedInUser")]
-    [Authorize]
     public async Task<IActionResult> GetLoggedInUser()
     {
         try

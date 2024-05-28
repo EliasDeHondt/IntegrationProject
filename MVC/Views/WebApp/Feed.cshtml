@@ -1,4 +1,6 @@
-﻿@model long
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model long
 
 @{
     ViewBag.Title = "title";
@@ -62,13 +64,29 @@
         </div>
     </div>
     <div class="col-2 bg-elias-kleurtje-1">
-        <li id="tohideLO" class="nav-nav-item nav-bgAccent nav-bhover" >
-            <form id="logoutForm" class="nav-form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <a class="d-block nav-text-dark">
-                    <button id="logout" type="submit" class="nav-btn nav-text-dark nav-w-100 nav-text-decoration-none" >Sign Out</button>
-                </a>
-            </form>
-        </li>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <ul class="navbar-menu nav" id="maincontent">
+                <li class="navbar-nameuser">
+                    <h5>Hi, @(User.Identity!.Name ?? "User")</h5>
+                </li>
+                <li class="navbar-menu-item-logout">
+                    <form id="logoutForm" class="w-100 h-100" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button id="logout" class="w-100 h-100" type="submit">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        }
+        else
+        {
+            <ul class="navbar-menu nav" id="maincontent">
+                <li class="navbar-menu-item-logout">
+                    <form id="registerForm" class="w-100 h-100" asp-action="Register" asp-route-id="@Model">
+                        <button id="logout" class="w-100 h-100" type="submit">Register</button>
+                    </form>
+                </li>
+            </ul>
+        }
     </div>
 </div>
 </body>
