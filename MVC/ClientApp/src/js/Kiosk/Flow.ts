@@ -1,11 +1,8 @@
-﻿import * as kiosk from "./Kiosk";
-import * as signalR from "@microsoft/signalr";
-import {Modal} from "bootstrap";
+﻿import {Modal} from "bootstrap";
 import {generateQrCode} from "../Util";
 import * as stepAPI from "../Flow/StepAPI";
 import SignalRConnectionManager from "./ConnectionManager";
 
-const currFlow = document.getElementById("flowId") as HTMLSpanElement;
 const modal = new Modal(document.getElementById("pausedFlowModal") as HTMLDivElement, {
     backdrop: 'static',
     keyboard: false

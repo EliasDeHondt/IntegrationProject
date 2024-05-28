@@ -12,11 +12,11 @@ import {Modal, Toast} from "bootstrap";
 import {Flow, Participation} from "../Flow/FlowObjects";
 import {readFileAsBase64} from "../Util";
 import {
-    AddChoice,
-    AddInformation, GetStepByNumber, GetStepId,
-    GetStepsFromFlow,
-    UpdateInformationStep, UpdateInfoStepByNumber,
-    UpdateQuestionStep, UpdateQuestionStepByNumber
+    addChoice,
+    addInformation, getStepByNumber, getStepId,
+    getStepsFromFlow,
+    updateInformationStep, updateInfoStepByNumber,
+    updateQuestionStep, updateQuestionStepByNumber
 } from "./API/FlowEditorAPI";
 
 const saveFlowToast = new Toast(document.getElementById("saveFlowToast")!);
@@ -42,7 +42,7 @@ let clicked: boolean;
 
 document.addEventListener("DOMContentLoaded", () => {    
     flowId = getFlowId();
-    GetStepsFromFlow(flowId)
+    getStepsFromFlow(flowId)
         .then(steps => updateStepList(steps))
         .then(() => initializeCardLinks())
         .then(() => toggleButtons());
@@ -52,8 +52,8 @@ restartsteps.onclick = async () => {
     window.location.reload();
 }
 btnAddChoice.onclick = async () => {
-    await AddChoice(flowId,currentStep.stepNumber)
-        .then(() => GetStepsFromFlow(flowId))
+    await addChoice(flowId,currentStep.stepNumber)
+        .then(() => getStepsFromFlow(flowId))
         .then(() => updateStepList(currentStepList))
         .then(() => initializeCardLinks());
     let index = currentStepList.findIndex(s => s.stepNumber == currentStep.stepNumber);
@@ -61,8 +61,8 @@ btnAddChoice.onclick = async () => {
 }
 
 btnAddText.onclick = async () => {
-    await AddInformation(flowId,currentStep.stepNumber, 'Text')
-        .then(() => GetStepsFromFlow(flowId))
+    await addInformation(flowId,currentStep.stepNumber, 'Text')
+        .then(() => getStepsFromFlow(flowId))
         .then(() => updateStepList(currentStepList))
         .then(() => initializeCardLinks());
     let index = currentStepList.findIndex(s => s.stepNumber == currentStep.stepNumber);
@@ -70,8 +70,8 @@ btnAddText.onclick = async () => {
 }
 
 btnAddLink.onclick = async () => {
-    await AddInformation(flowId,currentStep.stepNumber, 'Hyperlink')
-        .then(() => GetStepsFromFlow(flowId))
+    await addInformation(flowId,currentStep.stepNumber, 'Hyperlink')
+        .then(() => getStepsFromFlow(flowId))
         .then(() => updateStepList(currentStepList))
         .then(() => initializeCardLinks());
     let index = currentStepList.findIndex(s => s.stepNumber == currentStep.stepNumber);
@@ -79,8 +79,8 @@ btnAddLink.onclick = async () => {
 }
 
 btnAddImage.onclick = async () => {
-    await AddInformation(flowId,currentStep.stepNumber, 'Image')
-        .then(() => GetStepsFromFlow(flowId))
+    await addInformation(flowId,currentStep.stepNumber, 'Image')
+        .then(() => getStepsFromFlow(flowId))
         .then(() => updateStepList(currentStepList))
         .then(() => initializeCardLinks());
     let index = currentStepList.findIndex(s => s.stepNumber == currentStep.stepNumber);
@@ -88,8 +88,8 @@ btnAddImage.onclick = async () => {
 }
 
 btnAddVideo.onclick = async () => {
-    await AddInformation(flowId,currentStep.stepNumber, 'Video')
-        .then(() => GetStepsFromFlow(flowId))
+    await addInformation(flowId,currentStep.stepNumber, 'Video')
+        .then(() => getStepsFromFlow(flowId))
         .then(() => updateStepList(currentStepList))
         .then(() => initializeCardLinks());
     let index = currentStepList.findIndex(s => s.stepNumber == currentStep.stepNumber);
@@ -100,9 +100,9 @@ async function saveFlow(){
     await readStepInContainer();
     for (const step of currentStepList) {
         if (isQuestionStep(step))
-            await UpdateQuestionStep(step);
+            await updateQuestionStep(step);
         if (isInformationStep(step))
-            await UpdateInformationStep(step);
+            await updateInformationStep(step);
     }
     saveFlowToast.show();
 
@@ -182,13 +182,13 @@ function updateStepCardheader(cardHeader: HTMLHeadingElement, stepCard: HTMLAnch
 }
 async function updatehelp(step: Step, stepId: number, stepNumber: number) {
     if (isQuestionStep(step))
-        await UpdateQuestionStepByNumber(stepId, stepNumber)
+        await updateQuestionStepByNumber(stepId, stepNumber)
     if (isInformationStep(step))
-        await UpdateInfoStepByNumber(stepId, stepNumber)
+        await updateInfoStepByNumber(stepId, stepNumber)
 }
 async function updateStepList(steps: Step[]) {
     for (const step of steps) {
-        await GetStepByNumber(flowId, step.stepNumber).then(s => currentStepList[s.stepNumber - 1] = s);
+        await getStepByNumber(flowId, step.stepNumber).then(s => currentStepList[s.stepNumber - 1] = s);
     }
     
     const stepsList = document.getElementById("steps-list") as HTMLDivElement;
@@ -538,7 +538,7 @@ async function fillConditionalPoints(select: HTMLSelectElement, nextStepId?: num
 
     for (const step of currentStepList) {
         let option = document.createElement("option");
-        await GetStepId(flowId,step.stepNumber).then(id => option.value = id.toString());
+        await getStepId(flowId,step.stepNumber).then(id => option.value = id.toString());
         option.innerText = `Step ${step.stepNumber}`
         select.appendChild(option);
         if (parseInt(option.value) == nextStepId)
@@ -615,27 +615,27 @@ butConfirmCreateStep.onclick = () => {
     let newStepNumber = currentStepList.length == 0 ? 1 : currentStepList[currentStepList.length - 1].stepNumber + 1
     if (infographic.checked) {
         AddStep(newStepNumber, "Information")
-            .then(() => GetStepsFromFlow(flowId)
+            .then(() => getStepsFromFlow(flowId)
                 .then(steps => updateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (singleQ.checked) {
         AddStep(newStepNumber, "Single Choice Question")
-            .then(() => GetStepsFromFlow(flowId)
+            .then(() => getStepsFromFlow(flowId)
                 .then(steps => updateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (multipleQ.checked) {
         AddStep(newStepNumber, "Multiple Choice Question")
-            .then(() => GetStepsFromFlow(flowId)
+            .then(() => getStepsFromFlow(flowId)
                 .then(steps => updateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (rangeQ.checked) {
         AddStep(newStepNumber, "Ranged Question")
-            .then(() => GetStepsFromFlow(flowId)
+            .then(() => getStepsFromFlow(flowId)
                 .then(steps => updateStepList(steps)))
             .then(() => initializeCardLinks());
     } else if (openQ.checked) {
         AddStep(newStepNumber, "Open Question")
-            .then(() => GetStepsFromFlow(flowId)
+            .then(() => getStepsFromFlow(flowId)
                 .then(steps => updateStepList(steps)))
             .then(() => initializeCardLinks());
     }

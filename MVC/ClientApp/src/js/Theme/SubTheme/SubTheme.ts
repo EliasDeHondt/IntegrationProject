@@ -1,6 +1,6 @@
 import {createSubthemeFlow, loadFlowsSub, resetFlowsSub, updateSubTheme} from "./API/SubThemeAPI";
 import {showNotificationToast} from "../../Toast/NotificationToast";
-import {GetFlows} from "../../CreateFlow/FlowCreator";
+import {getFlows} from "../../CreateFlow/FlowCreator";
 import {showFlows} from "../../Project/API/CreateProjectFlowAPI";
 import {Modal, Toast} from "bootstrap";
 import {createProjectFlow, getIdProject, loadFlowsProject, resetFlowsProject} from "../../Project/API/ProjectAPI";

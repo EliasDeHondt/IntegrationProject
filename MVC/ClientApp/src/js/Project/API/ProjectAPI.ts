@@ -1,9 +1,6 @@
 import {Project} from "../../Types/ProjectObjects";
 import {Flow} from "../../Flow/FlowObjects";
 import {showFlows} from "./CreateProjectFlowAPI";
-import {initializeDeleteButtons} from "../../CreateFlow/DeleteFlowModal";
-import {Note} from "../../Flow/Step/StepObjects";
-import {initChoicesNames} from "../../Statistics/Statistics";
 
 export function fillExisting(project: Project, inputTitle: HTMLInputElement, inputText: HTMLInputElement): void{
     inputTitle.value = project.title

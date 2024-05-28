@@ -1,6 +1,6 @@
 import {Step} from "../../Flow/Step/StepObjects";
 
-export async function GetStepsFromFlow(flowId: number): Promise<Step[]> {
+export async function getStepsFromFlow(flowId: number): Promise<Step[]> {
     return await fetch(`/api/Steps/GetStepsFromFlow/${flowId}`, {
         method: "GET",
         headers: {
@@ -14,7 +14,7 @@ export async function GetStepsFromFlow(flowId: number): Promise<Step[]> {
         })
 }
 
-export async function GetStepByNumber(flowId: number, stepNr: number): Promise<Step> {
+export async function getStepByNumber(flowId: number, stepNr: number): Promise<Step> {
     return await fetch(`/api/Steps/GetNextStep/${flowId}/${stepNr}`, {
         method: "GET",
         headers: {
@@ -28,7 +28,7 @@ export async function GetStepByNumber(flowId: number, stepNr: number): Promise<S
         })
 }
 
-export async function GetStepId(flowId: number,stepNr: number): Promise<number> {
+export async function getStepId(flowId: number, stepNr: number): Promise<number> {
     return await fetch(`/EditFlows/GetStepId/${flowId}/${stepNr}`, {
         method: "GET",
         headers: {
@@ -42,7 +42,7 @@ export async function GetStepId(flowId: number,stepNr: number): Promise<number> 
         })
 }
 
-export async function AddChoice(flowId: number,stepNr: number) {
+export async function addChoice(flowId: number, stepNr: number) {
     await fetch(`/EditFlows/CreateChoice/${flowId}/${stepNr}`, {
         method: "POST",
         headers: {
@@ -54,7 +54,7 @@ export async function AddChoice(flowId: number,stepNr: number) {
         .catch(error => console.error("Error:", error))
 }
 
-export async function AddInformation(flowId: number,stepNr: number, type: string) {
+export async function addInformation(flowId: number, stepNr: number, type: string) {
     await fetch(`/EditFlows/CreateInformation/${flowId}/${stepNr}/${type}`, {
         method: "POST",
         headers: {
@@ -66,7 +66,7 @@ export async function AddInformation(flowId: number,stepNr: number, type: string
         .catch(error => console.error("Error:", error))
 }
 
-export async function UpdateInformationStep(step: Step) {
+export async function updateInformationStep(step: Step) {
     await fetch(`/api/Steps/UpdateInformationStep`, {
         method: "PUT",
         headers: {
@@ -77,7 +77,7 @@ export async function UpdateInformationStep(step: Step) {
     })
 }
 
-export async function UpdateQuestionStep(step: Step) {
+export async function updateQuestionStep(step: Step) {
     await fetch(`/api/Steps/UpdateQuestionStep`, {
         method: "PUT",
         headers: {
@@ -87,7 +87,7 @@ export async function UpdateQuestionStep(step: Step) {
         body: JSON.stringify(step)
     })
 }
-export async function UpdateQuestionStepByNumber(stepId: number,stepNumber: number){//flowId: number, stepNr: number) {
+export async function updateQuestionStepByNumber(stepId: number, stepNumber: number){//flowId: number, stepNr: number) {
     await fetch(`/api/Steps/UpdateQuestionStepByNumber/${stepId}/${stepNumber}`, {
         method: "PUT",
         headers: {
@@ -96,7 +96,7 @@ export async function UpdateQuestionStepByNumber(stepId: number,stepNumber: numb
         }
     })
 }
-export async function UpdateInfoStepByNumber(stepId: number,stepNumber: number){//flowId: number, stepNr: number) {
+export async function updateInfoStepByNumber(stepId: number, stepNumber: number){//flowId: number, stepNr: number) {
     await fetch(`/api/Steps/UpdateInfoStepByNumber/${stepId}/${stepNumber}`, {
         method: "PUT",
         headers: {

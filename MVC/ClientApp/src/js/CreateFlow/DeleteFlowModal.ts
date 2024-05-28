@@ -1,6 +1,6 @@
 import {Modal} from "bootstrap";
 import {deleteFlow} from "./API/DeleteFlowAPI";
-import {GetFlows} from "./FlowCreator";
+import {getFlows} from "./FlowCreator";
 
 let deleteButtons: NodeListOf<HTMLButtonElement>;
 let id: number;
@@ -27,7 +27,7 @@ export function initializeDeleteButtons() {
 butConfirmDeleteFlow.onclick = () => {
     deleteFlow(id)
         .then(() => {
-            GetFlows(0);
+            getFlows(0);
             deleteFlowModal.hide();
         });
 }

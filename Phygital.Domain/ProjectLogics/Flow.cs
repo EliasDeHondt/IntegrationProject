@@ -52,35 +52,10 @@ public class Flow
         Theme = new MainTheme();
         State = FlowState.Inactive;
     }
-
-    public void StartFlow()
-    {
-        PlayFlow();
-        if (FlowType == FlowType.Circular && !FlowStopped)
-        {
-            StartFlow();
-        }
-
-        FlowStopped = false;
-    }
-
-    private void PlayFlow()
-    {
-        using var stepEnumerator = Steps.GetEnumerator();
-        while (stepEnumerator.MoveNext() && !FlowStopped)
-        {
-            //TODO
-        }
-    }
     
-    public void StopFlow()
+    public int GetStepCount()
     {
-        FlowStopped = true;
-    }
-
-    public int getStepCount()
-    {
-        //return Steps.Count; //todo --> dit in de step.cshtml doen
+ 
         int stepsCount = 0;
         foreach (var step in Steps)
         {

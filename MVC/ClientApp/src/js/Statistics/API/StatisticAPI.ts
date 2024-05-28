@@ -49,20 +49,7 @@ export async function GetNamesPerFlow(){
         } )
         .catch(error => console.error("Error:", error))
 }
-// export async function GetQuestionNames(flowname: string){
-//     await fetch("/api/Statistics/GetQuestionNames/" + flowname, {
-//         method: "GET",
-//         headers: {
-//             "Accept": "application/json",
-//             "Content-Type": "application/json"
-//         }
-//     })
-//         .then(response => response.json())
-//         .then(labels => {
-//             initQuestionNames(labels)
-//         } )
-//         .catch(error => console.error("Error:", error))
-// }
+
 export async function GetQuestionNames(flowname: string): Promise<void> {
     try {
         const response = await fetch("/api/Statistics/GetQuestionNames/" + flowname, {

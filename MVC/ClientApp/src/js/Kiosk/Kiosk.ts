@@ -1,5 +1,4 @@
-﻿import * as signalR from "@microsoft/signalr";
-import {GenerateCards, GetFlowById} from "./FlowAPI";
+﻿import {GenerateCards, GetFlowById} from "./FlowAPI";
 import {Flow} from "../Flow/FlowObjects"
 import SignalRConnectionManager from "./ConnectionManager";
 

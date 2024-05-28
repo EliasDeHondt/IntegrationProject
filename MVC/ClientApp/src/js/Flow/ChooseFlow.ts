@@ -4,7 +4,7 @@ import SignalRConnectionManager from "../Kiosk/ConnectionManager";
 let totalFlows: number;
 let flowType: string;
 
-function GenerateOption(flow: Flow): HTMLDivElement {
+function generateOption(flow: Flow): HTMLDivElement {
     const optionsContainer = document.createElement("div");
     optionsContainer.classList.add("form-check");
 
@@ -29,7 +29,7 @@ function GenerateOption(flow: Flow): HTMLDivElement {
     return optionsContainer;
 }
 
-export function GenerateOptions(flows: Flow[], flowContainer: HTMLDivElement, type: string) {
+export function generateOptions(flows: Flow[], flowContainer: HTMLDivElement, type: string) {
     flowContainer.innerHTML = "";
     totalFlows = 0;
     flowType = type;
@@ -37,7 +37,7 @@ export function GenerateOptions(flows: Flow[], flowContainer: HTMLDivElement, ty
     let options: HTMLDivElement[] = [];
     flows.forEach(flows => {
         if(flows.flowType.toUpperCase() == type.toUpperCase()){
-            options.push(GenerateOption(flows));
+            options.push(generateOption(flows));
         }
     })
 
@@ -48,7 +48,7 @@ export function GenerateOptions(flows: Flow[], flowContainer: HTMLDivElement, ty
     })
 }
 
-export function SubmitFlows(code: string) {
+export function submitFlows(code: string) {
     const selectedFlows: number[] = [];
     if (flowType == "linear") {
         const options = document.querySelectorAll<HTMLInputElement>('.form-check-input[type="checkbox"]:checked');

@@ -6,7 +6,6 @@ import {delay} from "../Util";
 import {Timer} from "../Util/Timer";
 import * as kiosk from "../Kiosk/Kiosk"
 import SignalRConnectionManager from "../Kiosk/ConnectionManager";
-import {code} from "../Kiosk/Kiosk";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
@@ -31,7 +30,7 @@ hideDigitalElements();
 let conditionalAnswer: number = 0;
 
 //email checken
-function CheckEmail(inputEmail: string): boolean {
+function checkEmail(inputEmail: string): boolean {
     const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     let p = document.getElementById("errorMsg") as HTMLElement;
     if (emailRegex.test(inputEmail)) {
@@ -49,7 +48,7 @@ function CheckEmail(inputEmail: string): boolean {
 }
 
 //email doorsturen
-async function SetRespondentEmail(flowId: number, inputEmail: string) {
+async function setRespondentEmail(flowId: number, inputEmail: string) {
     try {
         const response = await fetch("/api/Flows/SetRespondentEmail/" + flowId + "/" + inputEmail, {
             method: "POST",
@@ -97,10 +96,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         const inputEmail = emailInput.value.trim();
         const inputElement = emailInput as HTMLInputElement;
 
-        if (CheckEmail(inputEmail)) {
+        if (checkEmail(inputEmail)) {
             console.log("Correct Email.");
             if (inputEmail !== "") {
-                SetRespondentEmail(flowId, inputEmail);
+                setRespondentEmail(flowId, inputEmail);
 
                 if (inputElement !== null) {
                     inputElement.value = "";
@@ -113,7 +112,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     };
 });
 
-async function GetNextStep(stepNumber: number, flowId: number): Promise<Step> {
+async function getNextStep(stepNumber: number, flowId: number): Promise<Step> {
     return fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
         method: "GET",
         headers: {
@@ -124,11 +123,11 @@ async function GetNextStep(stepNumber: number, flowId: number): Promise<Step> {
         .then(response => response.json())
         .then(async (data): Promise<Step> => {
             if (!data.visible) {
-                await GetNextStep(++currentStepNumber, flowId)
+                await getNextStep(++currentStepNumber, flowId)
             } else if (flowtype.toUpperCase() == "PHYSICAL") {
                 await showPhysicalStep(data);
             } else {
-                await ShowStep(data);
+                await showStep(data);
             }
 
             return data;
@@ -383,7 +382,7 @@ function showQuestionStep(data: Question) {
     }
 }
 
-async function ShowStep(data: Step) {
+async function showStep(data: Step) {
     (document.getElementById("stepNr") as HTMLSpanElement).innerText = currentStepNumber.toString();
     informationContainer.innerHTML = "";
     questionContainer.innerHTML = "";
@@ -441,7 +440,7 @@ async function hideDigitalElements() {
         let model = await phyAPI.loadModel();
         phyAPI.startPhysical(model).then(async () => {
             await delay(2500);
-            await GetNextStep(++currentStepNumber, flowId);
+            await getNextStep(++currentStepNumber, flowId);
             startTimers();
         });
     } else {
@@ -475,15 +474,15 @@ async function nextStep(save: boolean = true) {
     }
     if (flowtype && (flowtype.toUpperCase() == "CIRCULAR" || flowtype.toUpperCase() == "PHYSICAL") && currentStepNumber >= stepTotal) {
         currentStepNumber = 0;
-        await GetNextStep(++currentStepNumber, flowId);
+        await getNextStep(++currentStepNumber, flowId);
     } else if (conditionalAnswer > 0) {
         await GetConditionalNextStep(conditionalAnswer).then(step => {
             conditionalAnswer = 0;
             currentStepNumber = step.stepNumber
-            GetNextStep(currentStepNumber, flowId);
+            getNextStep(currentStepNumber, flowId);
         })
     } else {
-        await GetNextStep(++currentStepNumber, flowId);
+        await getNextStep(++currentStepNumber, flowId);
     }
     time = 30;
 }
@@ -506,6 +505,6 @@ btnRestartFlow.onclick = async () => {
 
 export async function restartFlow() {
     currentStepNumber = 0;
-    await GetNextStep(++currentStepNumber, flowId);
+    await getNextStep(++currentStepNumber, flowId);
     time = 30;
 }

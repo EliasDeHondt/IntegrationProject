@@ -3,7 +3,7 @@ import {initializeDeleteButtons} from "./DeleteFlowModal";
 
 const btnCreateFlow = document.getElementById("btnCreateFlow") as HTMLButtonElement;
 
-export async function GetFlows(projectId: number) {
+export async function getFlows(projectId: number) {
     console.log("Fetching flows...")
     await fetch("CreateFlow/GetFlows", {
         method: "GET",
@@ -13,13 +13,13 @@ export async function GetFlows(projectId: number) {
         }
     })
         .then(response => response.json())
-        .then(data => UpdateFlowList(Object.values(data)))
+        .then(data => updateFlowList(Object.values(data)))
         .then(() => initializeDeleteButtons())
         .catch(error => console.error("Error:", error))
     
 }
 
-export function UpdateFlowList(flows: Flow[]) {
+export function updateFlowList(flows: Flow[]) {
     
     const flowContainer = document.getElementById("flow-cards") as HTMLElement;
     flowContainer.innerHTML = "";
@@ -90,7 +90,7 @@ btnCreateFlow.onclick = async() => {
         console.error("Error:", error);
     }
     
-    GetFlows(0);
+    getFlows(0);
 }
 
 function initializeCardLinks() {
@@ -136,7 +136,7 @@ function initializeViewLinks() {
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    GetFlows(0).then(response => { initializeCardLinks(); }
+    getFlows(0).then(response => { initializeCardLinks(); }
         
     );
 });

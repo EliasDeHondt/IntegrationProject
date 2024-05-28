@@ -1,5 +1,5 @@
 ﻿import {Modal} from "bootstrap";
-import {GenerateOptions, SubmitFlows} from "./ChooseFlow";
+import {generateOptions, submitFlows} from "./ChooseFlow";
 import {code} from "./Facilitator";
 import {Flow} from "./FlowObjects";
 import {GetFlowsForProject} from "../Kiosk/FlowAPI";
@@ -19,13 +19,13 @@ let flows: Flow[];
 
 if (btnSubmitFlows)
     btnSubmitFlows.onclick = () => {
-        SubmitFlows(code)
+        submitFlows(code)
         flowTypeModal.hide();
     }
 
 
 function FillOptions(type: string) {
-    GenerateOptions(flows, divFlows, type)
+    generateOptions(flows, divFlows, type)
 }
 
 radioLinear.onchange = () => {

@@ -10,17 +10,17 @@
   src: url('https://fonts.googleapis.com/css?family=Trirong:700|Trirong:400');
 }
 
-@import "Login/login";
+@import "login";
 @import "variables";
 @import "statistics";
 @import "flowcards";
 @import "flowEditor";
-@import "Flow/kiosk";
-@import "SystemPlatform/systemPlatform";
+@import "kiosk";
+@import "systemPlatform";
 @import "facilitator";
 @import "notes";
 @import "home";
-@import "webApp/webapp";
+@import "webapp";
 @import "navbar";
 @import "statistics";
 
