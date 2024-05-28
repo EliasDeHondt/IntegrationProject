@@ -25,7 +25,7 @@ public class FlowController : Controller
         _manager = manager;
     }
     
-    [Authorize(Roles = UserRoles.Facilitator)]
+    [Authorize(policy: "flowAccess")]
     public IActionResult Step(long id)
     {
         try
