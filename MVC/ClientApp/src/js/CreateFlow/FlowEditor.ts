@@ -307,12 +307,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const lastPart = parts[parts.length - 1];
     const btnViewFlow = document.getElementById("viewFlow") as HTMLAnchorElement;
     flowId = parseInt(lastPart, 10);
-    
+
     getStylingTemplate();
 
     if (isNaN(flowId)) {
         console.error("The ID provided in the URL is not a number.")
     }
+})
 
 function getFlowId(): number {
     let href = window.location.href;
@@ -740,3 +741,4 @@ function checkURLValidity(url: string): boolean {
 
     return urlRegex.test(url);
 }
+

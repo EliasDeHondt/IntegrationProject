@@ -114,7 +114,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         }
     };
-});
 
 async function GetNextStep(stepNumber: number, flowId: number): Promise<Step> {
     return fetch("/api/Steps/GetNextStep/" + flowId + "/" + stepNumber, {
