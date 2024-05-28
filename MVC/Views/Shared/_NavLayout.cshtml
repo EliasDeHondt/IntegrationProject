@@ -22,12 +22,12 @@
 
         @if (User.IsInRole(UserRoles.SystemAdmin)) // If the user is a SystemAdmin
         {
-            <a asp-action="Dashboard" asp-controller="SystemPlatform" aria-current="page" class="text-decoration-none">
+            <a asp-action="Dashboard" asp-controller="SystemPlatform" aria-current="page" class="text-decoration-none w-100">
                 <li class="navbar-menu-item toHide">
                     <i class="bi bi-table"> Dashboard</i>
                 </li>
             </a>
-            <a asp-controller="Statistics" asp-action="Statistics" aria-current="page" class="text-decoration-none">
+            <a asp-controller="Statistics" asp-action="Statistics" aria-current="page" class="text-decoration-none w-100">
                 <li class="navbar-menu-item toHide">
                     <i class="bi bi-pie-chart-fill"> Statistics</i>
                 </li>
@@ -44,12 +44,12 @@
         }
         else if (User.IsInRole((UserRoles.PlatformAdmin))) // If the user is a PlatformAdmin
         {
-            <a asp-action="Dashboard" asp-controller="SharedPlatform" aria-current="page" class="text-decoration-none">
+            <a asp-action="Dashboard" asp-controller="SharedPlatform" aria-current="page" class="text-decoration-none w-100">
                 <li class="navbar-menu-item toHide">
                     <i class="bi bi-table"> Dashboard</i>
                 </li>
             </a>
-            <a asp-controller="Statistics" asp-action="Statistics" aria-current="page" class="text-decoration-none">
+            <a asp-controller="Statistics" asp-action="Statistics" aria-current="page" class="text-decoration-none w-100">
                 <li class="navbar-menu-item toHide">
                     <i class="bi bi-pie-chart-fill"> Statistics</i>
                 </li>
@@ -63,14 +63,14 @@
         }
         else if (User.IsInRole(UserRoles.Facilitator)) // If the user is a Facilitator
         {
-            <a asp-action="Dashboard" asp-controller="Facilitator" aria-current="page" class="text-decoration-none">
+            <a asp-action="Dashboard" asp-controller="Facilitator" aria-current="page" class="text-decoration-none w-100">
                 <li class="navbar-menu-item toHide">
                     <i class="bi bi-table">
                         Dashboard
                     </i>
                 </li>
             </a>
-            <a asp-action="Facilitator" asp-controller="Flow" aria-current="page" class="text-decoration-none">
+            <a asp-action="Facilitator" asp-controller="Flow" aria-current="page" class="text-decoration-none w-100">
                 <li class="navbar-menu-item toHide">
                     <i class="bi bi-tv-fill">
                         Connect to kiosk
@@ -80,7 +80,7 @@
         }
         else
         {
-            <a asp-action="Dashboard" asp-controller="SharedPlatform" aria-current="page" class="text-decoration-none">
+            <a asp-action="Dashboard" asp-controller="SharedPlatform" aria-current="page" class="text-decoration-none w-100">
                 <li class="navbar-menu-item toHide">
                     <i class="bi bi-table">
                         Dashboard
