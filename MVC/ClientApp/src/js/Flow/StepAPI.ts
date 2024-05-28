@@ -1,49 +1,33 @@
-import {Information, Question, Step} from "./Step/StepObjects";
+import {Information, isInformationStep, isQuestionStep, Question, Step} from "./Step/StepObjects";
 import {downloadVideoFromBucket} from "../StorageAPI";
 import * as phyAPI from "../Webcam/WebCamDetection";
 import {detectionCanvas, drawChoiceBoundaries, getResult} from "../Webcam/WebCamDetection";
 import {delay} from "../Util";
 import {Timer} from "../Util/Timer";
-import {Flow} from "./FlowObjects";
-import {Modal} from "bootstrap";
 import * as kiosk from "../Kiosk/Kiosk"
-import * as signalR from "@microsoft/signalr";
-
-const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/hub")
-    .build();
+import SignalRConnectionManager from "../Kiosk/ConnectionManager";
+import {code} from "../Kiosk/Kiosk";
 
 const questionContainer = document.getElementById("questionContainer") as HTMLDivElement;
 const informationContainer = document.getElementById("informationContainer") as HTMLDivElement;
 const btnNextStep = document.getElementById("btnNextStep") as HTMLButtonElement;
 const btnRestartFlow = document.getElementById("btnRestartFlow") as HTMLButtonElement;
-const btnPauseFlow = document.getElementById("btnPauseFlow") as HTMLButtonElement;
-const btnUnPauseFlow = document.getElementById("btnUnPauseFlow") as HTMLButtonElement;
 const btnEmail = document.getElementById("btnEmail") as HTMLButtonElement;
-const btnExitFlow = document.getElementById("butExitFlow") as HTMLButtonElement;
-const modal = new Modal(document.getElementById("pausedFlowModal") as HTMLDivElement, {
-    backdrop: 'static',
-    keyboard: false
-});
-const btnShowFlows = document.getElementById("flowDropdownBtn") as HTMLButtonElement;
-const ddFlows = document.getElementById("flowDropdown") as HTMLUListElement;
 let currentStepNumber: number = 0;
 let userAnswers: string[] = []; // Array to store user answers
 let openUserAnswer: string = "";
-let flowId :number = Number((document.getElementById("flowId") as HTMLSpanElement).innerText);
+let flowId: number = Number((document.getElementById("flowId") as HTMLSpanElement).innerText);
 let stepTotal = Number((document.getElementById("stepTotal") as HTMLSpanElement).innerText);
 let flowtype = sessionStorage.getItem("flowType")!;
 let sessionCode = sessionStorage.getItem("connectionCode")!;
 
-export let stepTimer = new Timer(nextStep, 30000);
-export let clockTimer = new Timer(updateClock, 1000);
+export const stepTimer = new Timer(nextStep, 30000);
+export const clockTimer = new Timer(updateClock, 1000);
 
 let time: number = 29;
 let choices: string[] = [];
 
 hideDigitalElements();
-let prevFlowId = sessionStorage.getItem('prevFlowId');
-let currentState: string = "";
 let conditionalAnswer: number = 0;
 
 //email checken
@@ -89,13 +73,24 @@ async function SetRespondentEmail(flowId: number, inputEmail: string) {
 
 //button submit email 
 document.addEventListener("DOMContentLoaded", async function () {
-    await connection.start().then(() => {
-        connection.invoke("JoinConnection", kiosk.code).then(() => {
+    SignalRConnectionManager.startConnection().then(() => {
+        const connection = SignalRConnectionManager.getInstance();
+
+        SignalRConnectionManager.joinConnectionGroup(kiosk.code).then(() => {
+            connection.invoke("ActivateFlow", kiosk.code, flowId.toString())
             connection.invoke("SendCurrentStep", kiosk.code, currentStepNumber)
+        })
+        
+        connection.onreconnected(() => {
+            SignalRConnectionManager.joinConnectionGroup(kiosk.code).then(() => {
+                connection.invoke("ActivateFlow", kiosk.code, flowId.toString())
+                connection.invoke("SendCurrentStep", kiosk.code, currentStepNumber)
+            })
         })
     });
     
     getStylingTemplate();
+    })
 
     const emailInput = document.getElementById("inputEmail");
 
@@ -131,8 +126,9 @@ async function GetNextStep(stepNumber: number, flowId: number): Promise<Step> {
     })
         .then(response => response.json())
         .then(async (data): Promise<Step> => {
-            await connection.invoke("SendCurrentStep", kiosk.code, stepNumber);
-            if (flowtype.toUpperCase() == "PHYSICAL") {
+            if (!data.visible) {
+                await GetNextStep(++currentStepNumber, flowId)
+            } else if (flowtype.toUpperCase() == "PHYSICAL") {
                 await showPhysicalStep(data);
             } else {
                 await ShowStep(data);
@@ -157,7 +153,7 @@ async function GetConditionalNextStep(stepId: number): Promise<Step> {
         .then(response => response.json())
         .then(data => {
             return data
-    })
+        })
 }
 
 function getTemplate(projectId:number) {
@@ -194,17 +190,19 @@ function getStylingTemplate() {
 }
 
 
-async function showPhysicalStep(data: Step){
+async function showPhysicalStep(data: Step) {
     informationContainer.innerHTML = "";
     questionContainer.innerHTML = "";
-    if(data.informationViewModel != undefined && data.questionViewModel != undefined) nextStep(false).then(() => {
+    if (isInformationStep(data) && isQuestionStep(data)) nextStep(false).then(() => {
         return
     });
-    await showInformationStep(data.informationViewModel);
-    showPhysicalQuestionStep(data.questionViewModel);
+    if (isInformationStep(data))
+        await showInformationStep(data.informationViewModel);
+    if (isQuestionStep(data))
+        showPhysicalQuestionStep(data.questionViewModel);
 }
 
-async function showInformationStep(data: Information[]){
+async function showInformationStep(data: Information[]) {
     if (data != undefined) {
         const webcam = document.getElementById("webcamDiv") as HTMLDivElement;
         webcam.classList.add("visually-hidden");
@@ -226,11 +224,14 @@ async function showInformationStep(data: Information[]){
                 case "Video": {
                     let path = await downloadVideoFromBucket(infoStep.information);
                     let video = document.createElement("video");
+                    video.style.height = "25em";
+                    video.autoplay = true;
                     if (typeof path === "string") {
                         path = path.substring(1, path.length - 1);
                         video.src = path;
-                        
+
                     }
+                    informationContainer.appendChild(video);
                     break;
                 }
                 case "Hyperlink": {
@@ -246,12 +247,12 @@ async function showInformationStep(data: Information[]){
     }
 }
 
-function showPhysicalQuestionStep(data: Question){
+function showPhysicalQuestionStep(data: Question) {
     choices = [];
     if (data != undefined) {
         const webcam = document.getElementById("webcamDiv") as HTMLDivElement;
         webcam.classList.remove("visually-hidden");
-        switch(data.questionType){
+        switch (data.questionType) {
             case "RangeQuestion":
                 createQuestion(data)
                 break;
@@ -266,7 +267,7 @@ function showPhysicalQuestionStep(data: Question){
     }
 }
 
-function createQuestion(data: Question){
+function createQuestion(data: Question) {
     let p = document.createElement("p");
     p.innerText = data.question;
     p.classList.add("text-start");
@@ -282,7 +283,7 @@ function createQuestion(data: Question){
     for (const element of data.choices) {
         let colDiv = document.createElement("div");
         colDiv.classList.add("col");
-        
+
         let choice = document.createElement("p");
         choice.innerText = element.text;
         choice.style.fontSize = "24px";
@@ -293,9 +294,9 @@ function createQuestion(data: Question){
     questionContainer.appendChild(rowDiv);
 }
 
-function showQuestionStep(data: Question){
+function showQuestionStep(data: Question) {
     if (data != undefined) {
-        
+
         let p = document.createElement("p");
         p.innerText = data.question;
         p.classList.add("text-start");
@@ -394,8 +395,8 @@ function showQuestionStep(data: Question){
                 textInput.name = 'answer';
                 textInput.rows = 8;
                 textInput.cols = 75;
-                textInput.maxLength = 650;
-                textInput.placeholder = "Your answer here... (Max 650 characters)"
+                textInput.maxLength = 300;
+                textInput.placeholder = "Your answer here... (Max 300 characters)"
 
                 // Event listener that ensures the 650 character limit.
                 textInput.addEventListener('input', function () {
@@ -421,8 +422,10 @@ async function ShowStep(data: Step) {
     (document.getElementById("stepNr") as HTMLSpanElement).innerText = currentStepNumber.toString();
     informationContainer.innerHTML = "";
     questionContainer.innerHTML = "";
-    await showInformationStep(data.informationViewModel);
-    showQuestionStep(data.questionViewModel);
+    if (isInformationStep(data))
+        await showInformationStep(data.informationViewModel);
+    if (isQuestionStep(data))
+        showQuestionStep(data.questionViewModel);
 }
 
 async function saveAnswerToDatabase(answers: string[], openAnswer: string, flowId: number, stepNumber: number): Promise<void> {
@@ -447,11 +450,11 @@ async function saveAnswerToDatabase(answers: string[], openAnswer: string, flowI
     }
 }
 
-async function hideDigitalElements(){
-    if(flowtype.toUpperCase() == "PHYSICAL") {
+async function hideDigitalElements() {
+    if (flowtype && flowtype.toUpperCase() == "PHYSICAL") {
         const digitalElements = document.getElementsByClassName("digital-element");
-        for (let i = 0; i < digitalElements.length; i++) {
-            digitalElements[i].classList.add("visually-hidden");
+        for (const element of digitalElements) {
+            element.classList.add("visually-hidden");
         }
         const webcam = document.getElementById("webcamDiv") as HTMLDivElement;
         const topLeft = document.getElementById("topLeft") as HTMLDivElement;
@@ -465,11 +468,11 @@ async function hideDigitalElements(){
         centerDiv.style.top = "58%";
         const centerContainerDiv = document.getElementById("kioskContainerCenter") as HTMLDivElement;
         centerContainerDiv.style.height = "800px";
-        
+
         const timer = document.getElementById("timer") as HTMLDivElement;
         timer.classList.remove("visually-hidden");
         timer.innerText = "Loading physical setup...";
-        
+
         let model = await phyAPI.loadModel();
         phyAPI.startPhysical(model).then(async () => {
             await delay(2500);
@@ -484,11 +487,11 @@ async function hideDigitalElements(){
     }
 }
 
-async function nextStep(save: boolean = true){
-    if(save) {
-        if (flowtype.toUpperCase() == "PHYSICAL") {
+async function nextStep(save: boolean = true) {
+    if (save) {
+        if (flowtype && flowtype.toUpperCase() == "PHYSICAL") {
             let answers: number[] = getResult();
-            if(choices.length > 0){
+            if (choices.length > 0) {
                 answers.forEach(answer => {
                     userAnswers.push(choices[answer]);
                 })
@@ -498,46 +501,46 @@ async function nextStep(save: boolean = true){
                     userAnswers = [];
                 });
             }
-        } else {
-            if (userAnswers.length > 0 || openUserAnswer.length > 0) {
-                await saveAnswerToDatabase(userAnswers, openUserAnswer, flowId, currentStepNumber);
-                // Clear the userAnswers array for the next step
-                userAnswers = [];
-                openUserAnswer = "";
-            }
+        } else if (userAnswers.length > 0 || openUserAnswer.length > 0) {
+            await saveAnswerToDatabase(userAnswers, openUserAnswer, flowId, currentStepNumber);
+            // Clear the userAnswers array for the next step
+            userAnswers = [];
+            openUserAnswer = "";
         }
     }
-    if ((flowtype.toUpperCase() == "CIRCULAR" || flowtype.toUpperCase() == "PHYSICAL") && currentStepNumber >= stepTotal) {
+    if (flowtype && (flowtype.toUpperCase() == "CIRCULAR" || flowtype.toUpperCase() == "PHYSICAL") && currentStepNumber >= stepTotal) {
         currentStepNumber = 0;
         await GetNextStep(++currentStepNumber, flowId);
+    } else if (conditionalAnswer > 0) {
+        await GetConditionalNextStep(conditionalAnswer).then(step => {
+            conditionalAnswer = 0;
+            currentStepNumber = step.stepNumber
+            GetNextStep(currentStepNumber, flowId);
+        })
     } else {
-        if (conditionalAnswer > 0) {
-            await GetConditionalNextStep(conditionalAnswer).then(step => {
-                conditionalAnswer = 0;
-                currentStepNumber = step.stepNumber
-                GetNextStep(currentStepNumber, flowId);
-            })
-        } else {
-            await GetNextStep(++currentStepNumber, flowId);
-        }
+        await GetNextStep(++currentStepNumber, flowId);
     }
     time = 30;
 }
 
-function updateClock(){
+function updateClock() {
     const timer = document.getElementById("timer") as HTMLDivElement;
     time -= 1
     timer.innerText = time.toString();
 }
 
-function startTimers(){
+function startTimers() {
     clockTimer.start();
     stepTimer.start();
 }
 
 
-
 btnRestartFlow.onclick = async () => {
+    await restartFlow()
+};
+
+export async function restartFlow() {
     currentStepNumber = 0;
     await GetNextStep(++currentStepNumber, flowId);
-};
+    time = 30;
+}

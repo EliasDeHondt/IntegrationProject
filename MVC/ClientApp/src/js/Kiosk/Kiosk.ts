@@ -1,11 +1,7 @@
 ﻿import * as signalR from "@microsoft/signalr";
 import {GenerateCards, GetFlowById} from "./FlowAPI";
 import {Flow} from "../Flow/FlowObjects"
-import {getFlowType} from "../Flow/ChooseFlow";
-
-const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/hub")
-    .build();
+import SignalRConnectionManager from "./ConnectionManager";
 
 const divFlows = document.getElementById("flowContainer") as HTMLDivElement;
 
@@ -26,17 +22,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     const connectionCode = document.getElementById("connectionCode") as HTMLParagraphElement;
     if(!connectionCode) return;
     connectionCode.innerText = code;
+    
+    SignalRConnectionManager.startConnection().then(() => {
+        const connection = SignalRConnectionManager.getInstance();
 
     const projectId = Number.parseInt(document.getElementById("projectId")!.dataset.projectId!);
     console.log("Getting template after load...");
     getTemplate(projectId);
 
-    await connection.start().then(() => {
-        connection.invoke("JoinConnection", code).then(() => {
+        SignalRConnectionManager.joinConnectionGroup(code).then(() => {
             connection.invoke("SendFlowUpdate", code, "0", "Inactive");
         })
-    })
-})
 
 function getTemplate(projectId:number) {
 
@@ -53,15 +49,44 @@ function getTemplate(projectId:number) {
         .catch(error => console.error('Error fetching styling template:', error));
 }
 
-connection.on("ReceiveSelectedFlowIds", async (ids, flowType) => {
-    if(flowType != "physical"){
-        await GenerateFlowOptions(ids);
-    } else {
-        window.location.href = `/Flow/Step/${ids[0]}`
-    }
-    sessionStorage.setItem("flowType", flowType);
-    sessionStorage.setItem("flowOptions", ids);
-    storedFlows = sessionStorage.getItem("flowOptions")
+        connection.on("ReceiveSelectedFlowIds", async (ids, flowType) => {
+            if(flowType != "physical"){
+                await GenerateFlowOptions(ids);
+            } else {
+                window.location.href = `/Flow/Step/${ids[0]}`
+            }
+            sessionStorage.setItem("flowType", flowType);
+            sessionStorage.setItem("flowOptions", ids);
+            storedFlows = sessionStorage.getItem("flowOptions")
+        })
+
+        connection.on("UserLeftConnection", (message) => console.log(message))
+        connection.on("UserJoinedConnection", () => {
+            const projectId = Number.parseInt(document.getElementById("projectId")!.dataset.projectId!);
+
+            connection.invoke("SendProjectId", code, projectId)
+            if(storedFlows != null){
+                connection.invoke("OngoingFlow", code, true)
+            } else {
+                connection.invoke("OngoingFlow",code, false)
+            }
+        })
+
+        window.onclose = () => {
+            connection.invoke("LeaveConnection", code, code);
+        }
+
+        connection.on("FlowActivated", (id) => {
+            const projectId = Number.parseInt(document.getElementById("projectId")!.dataset.projectId!);
+            window.location.href = `/Flow/Step/${id}`
+        })
+        
+        connection.onreconnected(() => {
+            SignalRConnectionManager.joinConnectionGroup(code).then(() => {
+                connection.invoke("SendFlowUpdate", code, "0", "Inactive");
+            })
+        })
+    })
 })
 
 if (storedFlows) {
@@ -77,22 +102,3 @@ async function GenerateFlowOptions(ids: string) {
     if(!divFlows) return;
     GenerateCards(flows, divFlows);
 }
-
-connection.on("UserLeftConnection", (message) => console.log(message))
-connection.on("UserJoinedConnection", () => {
-    const projectId = Number.parseInt(document.getElementById("projectId")!.dataset.projectId!);
-    connection.invoke("SendProjectId", code, projectId)  
-    if(storedFlows != null){
-        connection.invoke("OngoingFlow", code, true)
-    } else {
-        connection.invoke("OngoingFlow",code, false)
-    }
-})
-
-window.onclose = () => {
-    connection.invoke("LeaveConnection", code, code);
-}
-
-connection.on("FlowActivated", (id) => {
-    window.location.href = `/Flow/Step/${id}`
-})

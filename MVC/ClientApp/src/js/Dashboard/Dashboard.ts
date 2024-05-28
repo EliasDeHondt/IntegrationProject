@@ -7,7 +7,6 @@ import {UserRoles} from "../Types/UserTypes";
 import "/node_modules/embla-carousel";
 import EmblaCarousel, {EmblaOptionsType} from "embla-carousel";
 import {addPrevNextBtnsClickHandlers} from '../EmblaCarouselArrowButtons'
-import '../../css/embla.scss'
 
 const userRoulette = document.getElementById("carouselContainer") as HTMLDivElement;
 const projectRoulette = document.getElementById("carouselPContainer") as HTMLDivElement;
@@ -43,7 +42,6 @@ let id: string = document.getElementById("platformId")!.textContent!
 document.addEventListener("DOMContentLoaded", async function() {
     let userPermission = await isUserInRole(UserRoles.UserPermission);
     let projectPermission = await isUserInRole(UserRoles.ProjectPermission);
-    let statisticPermission = await isUserInRole(UserRoles.StatisticPermission);
     let systemAdmin = await isUserInRole(UserRoles.SystemAdmin);
 
     dashboard.generateUserCards(id, userRoulette, userPermission || systemAdmin);

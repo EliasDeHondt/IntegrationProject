@@ -14,7 +14,7 @@ using Domain.ProjectLogics.Steps;
 using Domain.ProjectLogics.Steps.Information;
 using Domain.ProjectLogics.Steps.Questions;
 using Domain.ProjectLogics.Steps.Questions.Answers;
-using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Domain.WebApp;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -51,6 +51,12 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
     public DbSet<QuestionBase> Questions { get; set; } = null!;
     public DbSet<StylingTemplate> StylingTemplates { get; set; } = null!;
 
+    public DbSet<Feed> Feeds { get; set; } = null!;
+    public DbSet<Idea> Ideas { get; set; } = null!;
+    public DbSet<Like> Likes { get; set; } = null!;
+    public DbSet<Reaction> Reactions { get; set; } = null!;
+    public DbSet<LongValue> LongValues { get; set; } = null!;
+    
     public CodeForgeDbContext(DbContextOptions<CodeForgeDbContext> options) : base(options) {}
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -109,6 +115,8 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
         builder.Entity<OpenAnswer>(entity => entity.Property(e => e.Answer).IsRequired().HasMaxLength(300));
         builder.Entity<Hyperlink>(entity => entity.Property(e => e.URL).IsRequired().HasMaxLength(600));
         builder.Entity<Respondent>(entity => entity.Property(e => e.Email).IsRequired().HasMaxLength(320));
+        builder.Entity<Idea>(entity => entity.Property(e => e.Text).IsRequired().HasMaxLength(600));
+        builder.Entity<Reaction>(entity => entity.Property(e => e.Text).IsRequired().HasMaxLength(300));
         
         builder.Entity<MainTheme>()
             .HasMany(m => m.Themes)
@@ -135,8 +143,24 @@ public class CodeForgeDbContext : IdentityDbContext<IdentityUser>
             .WithMany(facilitator => facilitator.ManagedProjects)
             .HasForeignKey("FK_ProjectOrganizer_FacilitatorId");
         
+        builder.Entity<Like>()
+            .HasOne(like => like.Idea)
+            .WithMany(idea => idea.Likes)
+            .HasForeignKey("FK_Like_IdeaId");
+        
+        builder.Entity<Like>()
+            .HasOne(like => like.WebAppUser)
+            .WithMany(user => user.Likes)
+            .HasForeignKey("FK_Like_WebAppUserId");
+            
+        builder.Entity<Project>()
+            .HasOne(project => project.Feed)
+            .WithOne(feed => feed.Project)
+            .HasForeignKey<Feed>("FK_Feed_ProjectId").IsRequired();
+        
         builder.Entity<Selection>().HasKey("FK_Selection_AnswerId", "FK_Selection_ChoiceId");
         builder.Entity<ProjectOrganizer>().HasKey("FK_ProjectOrganizer_ProjectId", "FK_ProjectOrganizer_FacilitatorId");
+        builder.Entity<Like>().HasKey("FK_Like_IdeaId", "FK_Like_WebAppUserId");
     }
 
     public bool CreateDatabase(bool dropDatabase)

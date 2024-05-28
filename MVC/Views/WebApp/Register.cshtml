@@ -1,0 +1,20 @@
+﻿@model MVC.Models.userModels.RegisterDto
+
+@{
+    Layout = "_LoginLayout";
+}
+
+<!DOCTYPE html>
+
+<form asp-action="Register" method="post" asp-controller="WebApp">
+    <input asp-for="Name" aria-required="true" placeholder="Username"><br>
+    <span asp-validation-for="Name"></span><br>
+    <input asp-for="Email" aria-required="true" placeholder="Email"><br>
+    <span asp-validation-for="Email"></span><br>
+    <input asp-for="Password" type="password" aria-required="true" placeholder="Password"><br>
+    <span asp-validation-for="Password"></span><br>
+    <input asp-for="FeedId" value="@Model.FeedId" class="visually-hidden"><br>
+    <input class="button" id="login-submit" value="Register" type="submit">
+</form>
+
+<script src="~/dist/validation.entry.js" defer></script>

@@ -21,10 +21,18 @@ public class SubThemeController : Controller
         _manager = manager;
     }
     
-    [Authorize(Roles = UserRoles.ProjectPermission)]
+    [Authorize(policy: "projectAccess")]
     public IActionResult SubTheme(long id)
     {
-        var subTheme = _manager.GetSubThemeByIdWithMainThemeAndProject(id);
-        return View(subTheme);
+        try
+        {
+            var subTheme = _manager.GetSubThemeByIdWithMainThemeAndProject(id);
+            return View(subTheme);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return View("Error");
+        }
     }
 }

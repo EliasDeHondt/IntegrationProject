@@ -1,0 +1,216 @@
+/***************************************
+ *                                     *
+ * Created by CodeForge                *
+ * Visit https://codeforge.eliasdh.com *
+ *                                     *
+ ***************************************/
+
+/* NavBar */
+.navbar-container {
+  background: #7ca8c9;
+  font-family: 'Roboto', sans-serif;
+  width: 200px;
+  margin: 0;
+  padding: 0;
+  border-radius: 10px;
+}
+
+.navbar-logo {
+  margin-right: 15%;
+  margin-left: 15%;
+  padding-top: 10%;
+  padding-bottom: 10%;
+}
+
+.navbar-logo img {
+  width: 110%;
+  height: auto;
+}
+
+.navbar-nameuser {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 600;
+  padding-top: 5%;
+  padding-bottom: 10%;
+  text-align: center;
+}
+
+.navbar-menu {
+  list-style: none;
+  padding: 0;
+}
+
+.navbar-menu .navbar-menu-item {
+  font-size: 18px;
+  font-weight: 500;
+  padding: 10% 10% 10% 10%; /* Top Right Bottom Left */
+  border-radius: 10px;
+  transition: 0.5s;
+}
+
+.navbar-menu .navbar-menu-item i {
+  color: #ffffff;
+  font-style: normal;
+  text-decoration: none;
+}
+
+.navbar-menu .navbar-menu-item i a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.navbar-menu .navbar-menu-item:hover {
+  background: #d17d64;
+  color: #ffffff;
+}
+
+.navbar-menu-item-logout {
+  background: #e3a05e;
+  margin: 10%;
+  width: 85%;
+  height: 7.5vh;
+  border-radius: 10px;
+  transition: 0.5s;
+}
+
+.navbar-menu-item-logout:hover {
+  background: #d17d64;
+}
+
+.navbar-menu-item-logout form {
+  display: inline;
+}
+
+.navbar-menu-item-logout form button {
+  color: #ffffff;
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.navbar-menu-item-arrow-button {
+  background: #e3a05e;
+  font-size: 16px;
+  font-weight: 500;
+  margin-left: 330%;
+  margin-bottom: 10%;
+  border-radius: 10px;
+  transition: 0.5s;
+}
+
+.nav-btn-no-style {
+  display: block;
+  border: none;
+  all: unset!important;
+}
+.navbar-menu-item-export-button {
+  background: #e3a05e;
+  font-size: 16px;
+  color: white !important;
+  font-weight: 500;
+  border-radius: 10px;
+  transition: 0.5s;
+}
+.navbar-menu-item-export {
+  font-size: 18px;
+  font-weight: 500;
+  padding: 10% 10% 10% 10%;
+  border-radius: 10px;
+  transition: 0.5s;
+}
+.navbar-menu-item-export-button:hover {
+  background: #d17d64;
+  color: #ffffff;
+}
+
+.navbar-menu .navbar-menu-item {
+  font-size: 18px;
+  font-weight: 500;
+  padding: 10% 10% 10% 10%; /* Top Right Bottom Left */
+  border-radius: 10px;
+  transition: 0.5s;
+}
+
+.navbar-menu-item-language-button {
+  background: #e3a05e;
+  font-size: 16px;
+  font-weight: 500;
+  margin-left: 50%;
+  margin-bottom: 10%;
+  border-radius: 10px;
+  transition: 0.5s;
+}
+
+.navbar-language-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.navbar-language-dropdown-content {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  left: 15px;
+  background-color: #e3a05e;
+  min-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.navbar-language-dropdown-content a {
+  color: #ffffff;
+  padding: 10px 16px;
+  text-decoration: none;
+  display: block;
+  border-radius: 10px;
+  transition: background 0.3s;
+}
+
+.navbar-language-dropdown-content a:hover {
+  background-color: #d17d64;
+}
+
+.navbar-language-dropdown:hover .navbar-language-dropdown-content {
+  display: block;
+}
+
+.navbar-language-dropdown:hover .navbar-menu-item-language-button {
+  background-color: #d17d64;
+}
+
+#maincontent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+#tohideLO {
+  margin-top: auto;
+}
+
+#language, #collapseButton {
+  padding-top: 20px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.nav-button {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.nav-form-inline {
+  display: inline-block;
+}
+
+#nav-icon {
+  font-size: 20px;
+}

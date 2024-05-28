@@ -149,6 +149,83 @@ public class ProjectRepository
             .AsEnumerable();
     }
 
+    public int ReadRespondentCountFromProject(long id)
+    {
+        var totalRespondentsCount = _ctx.Projects
+            .Include(p => p.MainTheme)
+            .ThenInclude(t => t.Flows)
+            .ThenInclude(f => f.Participations)
+            .ThenInclude(p => p.Respondents)
+            .Include(p => p.MainTheme)
+            .ThenInclude(t => t.Themes)
+            .ThenInclude(t => t.Flows)
+            .ThenInclude(f => f.Participations)
+            .ThenInclude(p => p.Respondents)
+            .Where(p => p.Id == id)
+            .Select(p => new
+            {
+                MainThemeRespondents = p.MainTheme.Flows
+                    .SelectMany(f => f.Participations)
+                    .SelectMany(pt => pt.Respondents).Count(),
+                SubThemesRespondents = p.MainTheme.Themes
+                    .SelectMany(t => t.Flows)
+                    .SelectMany(f => f.Participations)
+                    .SelectMany(pt => pt.Respondents).Count()
+            })
+            .Select(x => x.MainThemeRespondents + x.SubThemesRespondents)
+            .Single();
+
+        return totalRespondentsCount;
+
+    }
+
+    public int ReadFlowCountFromProject(long id)
+    {
+        var totalFlowsCount = _ctx.Projects
+            .Include(p => p.MainTheme)
+            .ThenInclude(t => t.Flows)
+            .Include(p => p.MainTheme)
+            .ThenInclude(t => t.Themes)
+            .ThenInclude(t => t.Flows)
+            .Where(p => p.Id == id)
+            .Select(p => new
+            {
+                MainThemeFlows = p.MainTheme.Flows.Count,
+                SubThemesFlows = p.MainTheme.Themes.Count
+            })
+            .Select(x => x.MainThemeFlows + x.SubThemesFlows)
+            .Single();
+
+        return totalFlowsCount;
+    }
+
+    public int ReadSubThemeCountFromProject(long id)
+    {
+        var totalSubThemeCount = _ctx.Projects
+            .Include(p => p.MainTheme)
+            .ThenInclude(t => t.Themes)
+            .Where(p => p.Id == id)
+            .Select(p => p.MainTheme.Themes.Count)
+            .Single();
+
+        return totalSubThemeCount;
+    }
+
+    public void UpdateProjectClosed(long projectId,bool closeProject)
+    {
+        var proj = ReadProjectWithId(projectId);
+        proj.ProjectClosed = closeProject;
+        
+        _ctx.Projects.Update(proj); 
+        var a = _ctx.Projects;
+    }
+    
+    public bool ReadProjectClosed(long projectId)
+    {
+        var proj = ReadProjectIncludingSharedPlatformAndMainTheme(projectId);
+        return proj.ProjectClosed;
+    }
+
     public bool UpdateProjectStyling(StylingTemplate template)
     {
         StylingTemplate? stylingTemplate = _ctx.StylingTemplates.Find(template.ProjectId);

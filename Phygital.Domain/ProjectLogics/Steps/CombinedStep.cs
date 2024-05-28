@@ -24,6 +24,13 @@ public class CombinedStep : StepBase
         InformationBase = informationBase;
         QuestionBase = questionBase;
     }
+    
+    public CombinedStep(int stepNumber, InformationBase informationBase, QuestionBase questionBase, Flow flow, bool visible, long id = 0) : 
+        base(stepNumber, flow, visible, id)
+    {
+        InformationBase = informationBase;
+        QuestionBase = questionBase;
+    }
 
     public CombinedStep()
     {

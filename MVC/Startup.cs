@@ -27,14 +27,8 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        string bucketName = Environment.GetEnvironmentVariable("BUCKET_NAME_VIDEO") ?? "codeforge-video-bucket";
-
-        Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../service-account-key.json");
-
-        //REMOVE AFTER TESTING
-        Environment.SetEnvironmentVariable("ASPNETCORE_EMAIL", "codeforge.noreply@gmail.com");
-        Environment.SetEnvironmentVariable("ASPNETCORE_EMAIL_PASSWORD", "evqb lztz oqvu kgwc");
-
+        string bucketName = Environment.GetEnvironmentVariable("ASPNETCORE_STORAGE_BUCKET")!;
+        // Environment.SetEnvironmentVariable("GROQ_API_KEY", "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");
 
         var googleCloudOptions = new CloudStorageOptions
         {
@@ -59,6 +53,14 @@ public class Startup
         {
             options.AddPolicy("admin",
                 policy => policy.RequireRole(UserRoles.PlatformAdmin, UserRoles.SystemAdmin));
+            options.AddPolicy("systemAdmin",
+                policy => policy.RequireRole(UserRoles.SystemAdmin));
+            options.AddPolicy("flowAccess", 
+                policy => policy.RequireRole(UserRoles.Facilitator, UserRoles.PlatformAdmin, UserRoles.SystemAdmin));
+            options.AddPolicy("projectAccess",
+                policy => policy.RequireRole(UserRoles.SystemAdmin, UserRoles.ProjectPermission));
+            options.AddPolicy("userAccess",
+                policy => policy.RequireRole(UserRoles.SystemAdmin, UserRoles.UserPermission));
         });
 
         services.ConfigureApplicationCookie(cfg =>
@@ -112,6 +114,15 @@ public class Startup
 
         services.AddScoped<EmailManager>();
 
+        services.AddScoped<FeedRepository>();
+        services.AddScoped<FeedManager>();
+        
+        services.AddScoped<IdeaRepository>();
+        services.AddScoped<IdeaManager>();
+
+        services.AddScoped<ReactionRepository>();
+        services.AddScoped<ReactionManager>();
+        
         services.AddScoped<UnitOfWork, UnitOfWork>();
         services.AddSingleton(googleCloudOptions);
         services.AddSingleton(emailOptions);
@@ -121,8 +132,25 @@ public class Startup
             options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
+        
+        services.AddCors(options =>
+        {
+            options.AddPolicy("CorsPolicy",
+                builder =>
+                {
+                    builder
+                        .WithOrigins("https://codeforge.eliasdh.com", "http://localhost:5247")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+        });
 
-        services.AddSignalR();
+        services.AddSignalR(options =>
+        {
+            options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+            options.ClientTimeoutInterval = TimeSpan.FromSeconds(60);
+        });
     }
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env)
@@ -155,7 +183,7 @@ public class Startup
             }
             case "Production":
             {
-                if (dbContext.IsEmpty())
+                if (!dbContext.IsEmpty()) // TODO: Check if this is correct
                 {
                     dbContext.CreateDatabase(true);
                     SeedDatabase(uow, userManager, roleManager, dbContext);
@@ -168,6 +196,7 @@ public class Startup
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
+        app.UseCors("CorsPolicy");
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
@@ -185,7 +214,7 @@ public class Startup
         {
             Id = "HenkId",
             Email = "Henk@CodeForge.com",
-            UserName = "Bab",
+            UserName = "Henk",
             EmailConfirmed = true,
             SharedPlatform = new SharedPlatform()
         };
@@ -194,7 +223,7 @@ public class Startup
         {
             Id = "CodeForgeId",
             Email = "CodeForge.noreply@gmail.com",
-            UserName = "Bib",
+            UserName = "Bub",
             EmailConfirmed = true,
             SharedPlatform = new SharedPlatform()
         };
@@ -240,14 +269,22 @@ public class Startup
             EmailConfirmed = true,
             SharedPlatform = new SharedPlatform()
         };
-        
+
+        var webAppUserBib = new WebAppUser
+        {
+            Id = "BibId",
+            Email = "Bib@CodeForge.com",
+            UserName = "Bib",
+            EmailConfirmed = true
+        };
+            
         await roleManager.CreateAsync(new IdentityRole(UserRoles.Facilitator));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.PlatformAdmin));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.SystemAdmin));
+        await roleManager.CreateAsync(new IdentityRole(UserRoles.Respondent));
 
         await roleManager.CreateAsync(new IdentityRole(UserRoles.UserPermission));
         await roleManager.CreateAsync(new IdentityRole(UserRoles.ProjectPermission));
-        await roleManager.CreateAsync(new IdentityRole(UserRoles.StatisticPermission));
 
         await userManager.CreateAsync(sharedPlatformAdminHenk, "Henk!123");
         await userManager.CreateAsync(sharedPlatformAdminCodeForge, "Codeforge!123");
@@ -256,16 +293,15 @@ public class Startup
         await userManager.CreateAsync(facilitatorFred, "Fred!123");
         await userManager.CreateAsync(sharedPlatformAdminThomas, "Thomas!123");
         await userManager.CreateAsync(sharedPlatformAdminKdg, "Kdg!123");
+        await userManager.CreateAsync(webAppUserBib, "Bib!123");
 
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.PlatformAdmin);
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.UserPermission);
         await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.ProjectPermission);
-        await userManager.AddToRoleAsync(sharedPlatformAdminHenk, UserRoles.StatisticPermission);
         
         await userManager.AddToRoleAsync(sharedPlatformAdminThomas, UserRoles.PlatformAdmin);
         await userManager.AddToRoleAsync(sharedPlatformAdminThomas, UserRoles.UserPermission);
         await userManager.AddToRoleAsync(sharedPlatformAdminThomas, UserRoles.ProjectPermission);
-        await userManager.AddToRoleAsync(sharedPlatformAdminThomas, UserRoles.StatisticPermission);
 
         await userManager.AddToRoleAsync(sharedPlatformAdminCodeForge, UserRoles.PlatformAdmin);
         
@@ -276,6 +312,8 @@ public class Startup
         await userManager.AddToRoleAsync(facilitatorTom, UserRoles.Facilitator);
 
         await userManager.AddToRoleAsync(facilitatorFred, UserRoles.Facilitator);
+
+        await userManager.AddToRoleAsync(webAppUserBib, UserRoles.Respondent);
     }
 
     void SeedDatabase(UnitOfWork uow, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager,

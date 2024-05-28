@@ -23,3 +23,13 @@ export type SubTheme = {
     flows: Flow[];
     mainTheme: number;
 }
+
+export type Question = {
+    id: number;
+    question: string;
+}
+
+export type Answer = {
+    answers: string[];
+    answerText: string;
+}

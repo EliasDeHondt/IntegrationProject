@@ -9,6 +9,32 @@
 <head>
     <title>Flow Editor</title>
     <link rel="stylesheet" href="~/dist/site.css"/>
+    <style>
+        
+        .step-btns {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: center;
+          height: 100%;
+          
+          .bi{
+            color: #8d5353;
+            background-color: white;
+          }
+        }
+        
+        .arrow-button{
+          border-radius: 10px; 
+          padding: 20px;
+          text-decoration: none; 
+          border: 1px;
+          border-color: #000;
+          font-size: 18px;
+          gap: 60px;
+          margin-right: 20px;
+        }
+    </style>
 </head>
 <body class="row h-100 w-100">
 <div class="text-center col-lg-10">
@@ -23,6 +49,7 @@
                    <p style="font-size: 20px">View Flow</p>
                </button>
                
+               <button class="btn-primary btn-add-element bhover" id="btn-step-visibility" style="width: 150px; height: 150px; margin-right: 10px; border-radius: 5px; padding-top: 50px; padding-bottom: 40px;">Disable Step</button>
                <button class="btn-primary btn-add-element bhover" id="btn-add-choice" style="width: 150px; height: 150px; margin-right: 10px; border-radius: 5px; padding-top: 50px; padding-bottom: 40px;">Add choice</button>
                <button class="btn-primary btn-add-element bhover" id="btn-add-text" style="width: 150px; height: 150px; margin-right: 10px; border-radius: 5px; padding-top: 50px; padding-bottom: 40px;">Add Text</button>
                <button class="btn-primary btn-add-element bhover" id="btn-add-image" style="width: 150px; height: 150px; margin-right: 10px; border-radius: 5px; padding-top: 50px; padding-bottom: 40px;">Add Image</button>
@@ -44,6 +71,7 @@
             <div class="editor-shared-inner-container" id="steps-list"> <!--Wordt automatisch gevuld in FlowEditor.ts!-->
             </div>
             <button class="btn-primary" id="btn-add-step">Add Step</button>
+            <button class="overflow-hidden visually-hidden" id="restartsteps"></button>
         </div>
     </div>
 </div>
@@ -58,3 +86,5 @@
 
 <partial name="Modals/CreateStepModal"/>
 <partial name="Modals/ViewFlowModal"/>
+<partial name="Modals/RestartStepModal"/>
+<partial name="Toasts/_SaveFlowToast"/>

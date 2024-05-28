@@ -85,11 +85,19 @@
         <_ContentIncludedByDefault Remove="wwwroot\dist\flow.entry.js.map" />
         <_ContentIncludedByDefault Remove="wwwroot\dist\kiosk.entry.js" />
         <_ContentIncludedByDefault Remove="wwwroot\dist\kiosk.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\notes.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\notes.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\statistics.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\statistics.entry.js.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\webapp.entry.js" />
+        <_ContentIncludedByDefault Remove="wwwroot\dist\webapp.entry.js.map" />
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Chart.js" Version="3.7.1" />
         <PackageReference Include="Google.Apis.Gmail.v1" Version="1.68.0.3399" />
         <PackageReference Include="Google.Cloud.Storage.V1" Version="4.9.0" />
+<!--        <PackageReference Include="GrapeCity.DataVisualization.Chart" Version="0.4.136" />-->
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="7.0.16" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.17" />
         <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
@@ -101,6 +109,7 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.12" />
+        <PackageReference Include="QRCoder" Version="1.5.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -111,7 +120,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="ClientApp\src\js\Layout\API\" />
       <Folder Include="Views\Statistics\" />
     </ItemGroup>
 

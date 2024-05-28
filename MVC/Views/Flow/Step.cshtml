@@ -16,35 +16,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <!--Meta + Title-->
     <!--CSS-->
+    <script src="/dist/flow.entry.js" defer></script>
     <link rel="stylesheet" href="~/dist/site.css"/>
-    <style>
-        .kiosk-video {
-            position: absolute;
-            z-index: 0;
-            left: 2.5%;
-            width: 95%;
-            height: 600px;
-            object-fit: cover;
-        }
-
-        .kiosk-canvas-detection {
-            position: absolute;
-            z-index: 1;
-            left: 2.5%;
-            width: 95%;
-            height: 600px;
-            object-fit: cover;
-        }
-
-        .kiosk-canvas-choices {
-            position: absolute;
-            z-index: 2;
-            left: 2.5%;
-            width: 95%;
-            height: 600px;
-            object-fit: cover;
-        }
-    </style>
     <!--CSS-->
 </head>
 <body class="kiosk-background-colors-scheme kiosk-body overflow-hidden">
@@ -62,7 +35,7 @@
     </div>
 </div>
 <div class="kiosk-top-right">
-    <img class="kiosk-logo-img" src="/favicon.ico" alt="Logo"/>
+    <img class="kiosk-logo-img" id="qrcode" src="data:image/png;base64," alt=""/>
 </div>
 <div id="kioskCenter" class="kiosk-center-center">
     <div id="kioskContainerCenter" class="kiosk-container-center-center col">
@@ -105,5 +78,5 @@
 </body>
 </html>
 <!--JS-->
-<script src="/dist/flow.entry.js" defer></script>
+
 <!--JS-->

@@ -7,60 +7,111 @@
     <title>@ViewData["Title"] - CodeForge</title>
     <script src="~/dist/site.entry.js" defer></script>
     <link rel="stylesheet" href="~/dist/site.css"/>
+
 </head>
 <body>
-<div class="col-lg-2 bgPrimary h-100" id="navbar" style="padding-right: 2%; padding-left: 2%; margin-right: 0; margin-left: 0; padding-bottom: 100px; border-radius: 10px;">
-    <ul class="nav flex-column mb-auto" id="maincontent" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
-        <div class="logo">
+<div class="navbar-container col-lg-2 bgPrimary" id="navbar">
+    <ul class="navbar-menu nav flex-column mb-auto" id="maincontent">
+        <div class="logo" id="navbar-logo-id">
             <img src="/favicon.ico" alt="Logo">
         </div>
 
-        <li id="tohideAN" class="nav-item text-center" style="background: white; padding-bottom: 20px; padding-top: 20px; border-radius: 5px;">
-            <a>Welcome @User.Identity!.Name!</a>
+        <li class="navbar-nameuser toHide">
+            <a>Hi, @(User.Identity!.Name ?? "User")!</a>
         </li>
-        @if (User.IsInRole(UserRoles.SystemAdmin))
+
+        @if (User.IsInRole(UserRoles.SystemAdmin)) // If the user is a SystemAdmin
         {
-            <li id="tohideD" class="nav-item bgPrimary text-center" style="margin-bottom: 10px; margin-top: 20px;">
-                <a asp-action="Dashboard" asp-controller="SystemPlatform" class="bhover nav-link active  text-dark bgAccent" aria-current="page" style="display: block; padding: 20px 0; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">Dashboard</a>
-            </li>
+            <a asp-action="Dashboard" asp-controller="SystemPlatform" aria-current="page" class="text-decoration-none">
+                <li class="navbar-menu-item toHide">
+                    <i class="bi bi-table"> Dashboard</i>
+                </li>
+            </a>
+            <a asp-controller="Statistics" asp-action="Statistics" aria-current="page" class="text-decoration-none">
+                <li class="navbar-menu-item toHide">
+                    <i class="bi bi-pie-chart-fill"> Statistics</i>
+                </li>
+            </a>
+            @if (ViewContext.HttpContext.Request.Path.StartsWithSegments("/Statistics/Statistics"))
+            {
+                <li class="navbar-menu-item-export toHide">
+                    <button id="exportAllCSV" class="navbar-menu-item-export-button">Download All CSV's</button>
+                </li>
+                @* <li id="tohideC" class="navbar-menu-item nav-nav-item bgPrimary text-center"> *@
+                @*     <button id="exportAllCSV" class="bNewHover nav-nav-link active text-dark bgNewAccent">Download all CSV's</button> *@
+                @* </li> *@
+            }
         }
-        else if (User.IsInRole(UserRoles.Facilitator))
+        else if (User.IsInRole((UserRoles.PlatformAdmin))) // If the user is a PlatformAdmin
         {
-            <li id="tohideD" class="nav-item bgPrimary text-center" style="margin-bottom: 10px; margin-top: 20px;">
-                <a asp-action="Dashboard" asp-controller="Facilitator" class="bhover nav-link active  text-dark bgAccent" aria-current="page" style="display: block; padding: 20px 0; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">Dashboard</a>
-            </li>
-            <li id="tohideS" class="nav-item bgPrimary text-center" style="margin-bottom: 10px; margin-top: 20px;">
-                <a asp-action="Facilitator" asp-controller="Flow" class="bhover nav-link active text-dark bgAccent" aria-current="page" style="display: block; padding: 20px 0; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">Connect to kiosk</a>
-            </li>
-        } else
-        {
-            <li id="tohideD" class="nav-item bgPrimary text-center" style="margin-bottom: 10px; margin-top: 20px;">
-                <a asp-action="Dashboard" asp-controller="SharedPlatform" class="bhover nav-link active  text-dark bgAccent" aria-current="page" style="display: block; padding: 20px 0; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">Dashboard</a>
-            </li>
-            <li id="tohideS" class="nav-item bgPrimary text-center" style="margin-bottom: 10px; margin-top: 10px;">
-                <a asp-controller="Statistics" asp-action="Statistics" class="bhover nav-link active text-dark bgAccent" aria-current="page" style="display: block; padding: 20px 0; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">Statistics</a>
-            </li>
+            <a asp-action="Dashboard" asp-controller="SharedPlatform" aria-current="page" class="text-decoration-none">
+                <li class="navbar-menu-item toHide">
+                    <i class="bi bi-table"> Dashboard</i>
+                </li>
+            </a>
+            <a asp-controller="Statistics" asp-action="Statistics" aria-current="page" class="text-decoration-none">
+                <li class="navbar-menu-item toHide">
+                    <i class="bi bi-pie-chart-fill"> Statistics</i>
+                </li>
+            </a>
+            @if (ViewContext.HttpContext.Request.Path.StartsWithSegments("/Statistics/Statistics"))
+            {
+                <li class="navbar-menu-item-export toHide">
+                    <button id="exportUserInput" class="navbar-menu-item-export-button">Download User Input</button>
+                </li>
+            }
         }
-        <li id="tohideLO" class="nav-item bgAccent bhover" style="padding: 10px 0; margin-top: auto;  border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">
-            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <a class="d-block text-dark">
-                    <button id="logout" type="submit" class="btn btn-link text-dark w-100 text-decoration-none" style="font-size: 20px;">Sign Out</button>
-                </a>
+        else if (User.IsInRole(UserRoles.Facilitator)) // If the user is a Facilitator
+        {
+            <a asp-action="Dashboard" asp-controller="Facilitator" aria-current="page" class="text-decoration-none">
+                <li class="navbar-menu-item toHide">
+                    <i class="bi bi-table">
+                        Dashboard
+                    </i>
+                </li>
+            </a>
+            <a asp-action="Facilitator" asp-controller="Flow" aria-current="page" class="text-decoration-none">
+                <li class="navbar-menu-item toHide">
+                    <i class="bi bi-tv-fill">
+                        Connect to kiosk
+                    </i>
+                </li>
+            </a>
+        }
+        else
+        {
+            <a asp-action="Dashboard" asp-controller="SharedPlatform" aria-current="page" class="text-decoration-none">
+                <li class="navbar-menu-item toHide">
+                    <i class="bi bi-table">
+                        Dashboard
+                    </i>
+                </li>
+            </a>
+        }
+        <li class="navbar-menu-item-logout toHide">
+            <form id="logoutForm" class="w-100 h-100" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button id="logout" class="w-100 h-100" type="submit">Logout</button>
             </form>
         </li>
+        <!--Buttons to navigate-->
 
-        <div class="d-flex justify-content-between">
-            <div class="nav-item" id="language" style="padding-top: 20px;">
-                <button class="bhover text-dark w-100 bgAccent" style="padding: 20px; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">NED</button>
+        <div class="d-flex">
+            <div id="language" class="navbar-language-dropdown toHide">
+                <button class="navbar-menu-item-language-button">NL</button>
+                <div class="navbar-language-dropdown-content">
+                    <a href="#">NL</a>
+                    <a href="#">EN</a>
+                    <a href="#">FR</a>
+                    <a href="#">DE</a>
+                </div>
             </div>
 
-            <div class="nav-item" id="collapseButton" style="padding-top: 20px;">
-                <button class="bhover text-dark w-100 bgAccent" style="padding: 20px; border-radius: 5px; border: 1px solid black; transition: opacity 0.3s;">
-                    <i id="icon" class="bi bi-caret-left-fill" style="font-size: 20px;"></i>
+            <div id="collapseButton">
+                <button class="navbar-menu-item-arrow-button" id="arrow-button">
+                    <i id="nav-icon" class="bi bi-caret-left-fill"></i>
                 </button>
             </div>
         </div>
-
     </ul>
 </div>
 
@@ -69,5 +120,5 @@
 </body>
 </html>
 @await RenderSectionAsync("Scripts", required: false)
-
 <script src="~/dist/navigation.entry.js" defer></script>
+<script src="~/dist/site.entry.js" defer></script>

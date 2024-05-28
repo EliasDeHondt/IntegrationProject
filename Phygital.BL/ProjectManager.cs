@@ -109,6 +109,29 @@ public class ProjectManager
         return _repo.ReadNotesForProjectById(id);
     }
 
+    public int GetRespondentCountFromProject(long id)
+    {
+        return _repo.ReadRespondentCountFromProject(id);
+    }
+
+    public int GetFlowCountFromProject(long id)
+    {
+        return _repo.ReadFlowCountFromProject(id);
+    }
+
+    public int GetSubThemeCountFromProject(long id)
+    {
+        return _repo.ReadSubThemeCountFromProject(id);
+    }
+    public void UpdateProjectClosed(long id, bool closeProject)
+    { 
+        _repo.UpdateProjectClosed(id, closeProject);
+    }
+    public bool GetProjectClosed(long id)
+    { 
+        return _repo.ReadProjectClosed(id);
+    }
+
     public bool UpdateStylingSettings(StylingTemplate template)
     {
         return _repo.UpdateProjectStyling(template);
