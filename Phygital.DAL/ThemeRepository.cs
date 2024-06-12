@@ -18,7 +18,6 @@ public class ThemeRepository
     public ThemeRepository(CodeForgeDbContext context)
     {
         _context = context;
-        
     }
 
     public IEnumerable<MainTheme> ReadAllMainThemes()
@@ -69,12 +68,17 @@ public class ThemeRepository
 
     public IEnumerable<SubTheme> ReadSubthemesForProject(long id)
     {
+        var mainThemeId = _context.Projects
+            .Include(project => project.MainTheme)
+            .Single(project => project.Id == id)
+            .MainTheme.Id;
+        
         var subThemes = _context.SubThemes
             .AsNoTracking()
             .Include(theme => theme.MainTheme)
-            .Where(theme => theme.MainTheme.Id == id)
+            .Where(theme => theme.MainTheme.Id == mainThemeId)
             .ToList();
-        
+
         return subThemes;
     }
 
@@ -90,6 +94,7 @@ public class ThemeRepository
 
         return flow;
     }
+
     public SubTheme ReadSubThemeById(long themeId)
     {
         return _context.SubThemes.Find(themeId)!;
@@ -98,21 +103,19 @@ public class ThemeRepository
     public void DeleteSubTheme(long id)
     {
         SubTheme subTheme = _context.SubThemes.Find(id)!;
-        
-        _context.SubThemes.Remove(subTheme);
 
+        _context.SubThemes.Remove(subTheme);
     }
 
     public IEnumerable<long> ReadSubThemeFlows(long id)
     {
-
         var flowIds = _context.SubThemes
             .AsNoTracking()
             .Where(theme => theme.Id == id)
             .SelectMany(theme => theme.Flows)
             .Select(flow => flow.Id)
             .ToList();
-        
+
         return flowIds;
     }
 }

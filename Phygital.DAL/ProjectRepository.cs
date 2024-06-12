@@ -123,7 +123,10 @@ public class ProjectRepository
 
     public IEnumerable<Flow> ReadFlowsForProjectById(long projectId)
     {
-        return _ctx.Flows.Where(project => project.Theme.Id == projectId);
+        return _ctx.Projects.Include(project => project.MainTheme)
+            .ThenInclude(theme => theme.Flows)
+            .Where(project => project.Id == projectId)
+            .SelectMany(project => project.MainTheme.Flows);
     }
 
     public Flow CreateFlowForProject(FlowType type, long themeId)

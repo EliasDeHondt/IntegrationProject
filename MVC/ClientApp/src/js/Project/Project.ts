@@ -16,9 +16,8 @@ let inputText = (document.getElementById("inputText") as HTMLInputElement);
 const btnPublishProject = document.getElementById("btnPublishProject") as HTMLButtonElement;
 const subThemeRoulette = document.getElementById("carouselContainer") as HTMLDivElement;
 // load flows for project
-const parts = window.location.pathname.split('/');
-const projectIdString = parts[parts.length - 1]; //laatste
-const projectId = parseInt(projectIdString, 10);
+const projectData = document.getElementById("projectData") as HTMLDivElement;
+const projectId = parseInt(projectData.getAttribute("data-project-id")!, 10);
 
 const projectFlowToast = new Toast(document.getElementById("projectFlowToast")!);
 const toastBody = document.getElementById('toastprojtext') as HTMLDivElement;
@@ -44,14 +43,14 @@ const projFlowModal = new Modal(document.getElementById('createprojFlowModal')!,
     backdrop: "static"
 });
 
-loadFlowsProject(getIdProject()).then(flows => {
+loadFlowsProject(projectId).then(flows => {
     showFlows(flows,"forProject",flowContainer);
 })
 
 btnCreateFlowProject.onclick = async() => {
     projFlowModal.show();
     function reset() {
-        loadFlowsProject(getIdProject())
+        loadFlowsProject(projectId)
             .then(flows => resetFlowsProject(flows, flowContainer));
     }
     butConfirmCreateprojFlow.onclick = async() => {
@@ -103,8 +102,7 @@ async function projectOverlay() {
 document.addEventListener("DOMContentLoaded", async function () {
     await projectOverlay()
 
-    const projectIdNumber = getIdProject();
-    const project = await getProjectWithId(projectIdNumber);
+    const project = await getProjectWithId(projectId);
     fillExisting(project, inputTitle, inputText);
     getSubThemesForProject(project.id).then(subThemes => generateCards(subThemes, subThemeRoulette));
     btnPublishProject.onclick = function () {
