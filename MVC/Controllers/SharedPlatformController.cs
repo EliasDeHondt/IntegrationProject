@@ -19,17 +19,17 @@ public class SharedPlatformController : Controller
     }
 
     [Authorize(policy: "admin")]
-    public IActionResult Dashboard(long id)
+    public IActionResult Dashboard(long? id)
     {
         try
         {
-            long platId = id;
+            long? platId = id;
             if (platId == null)
             {
                 SpAdmin admin = _customUserManager.GetPlatformAdminWithSharedPlatform(User.FindFirstValue(ClaimTypes.Email));
                 platId = admin.SharedPlatform.Id;
             }
-            var sharedPlatform = _sharedPlatformManager.GetSharedPlatformWithProjects(platId);
+            var sharedPlatform = _sharedPlatformManager.GetSharedPlatformWithProjects(platId.Value);
             return View(sharedPlatform);
         }
         catch (Exception e)

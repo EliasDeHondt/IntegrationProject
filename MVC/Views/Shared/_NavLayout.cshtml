@@ -44,7 +44,7 @@
         }
         else if (User.IsInRole((UserRoles.PlatformAdmin))) // If the user is a PlatformAdmin
         {
-            <a asp-action="Dashboard" asp-controller="SharedPlatform" aria-current="page" class="text-decoration-none w-100">
+            <a asp-action="Dashboard" asp-controller="SharedPlatform" asp-route-id="null" aria-current="page" class="text-decoration-none w-100">
                 <li class="navbar-menu-item toHide">
                     <i class="bi bi-table"> Dashboard</i>
                 </li>
